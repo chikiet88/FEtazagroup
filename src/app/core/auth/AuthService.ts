@@ -3,14 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
-import { collectExternalReferences } from '@angular/compiler';
 import Utf8 from 'crypto-js/enc-utf8';
 import { HmacSHA256 } from 'crypto-js';
 import Base64 from 'crypto-js/enc-base64';
 import { User } from 'app/core/user/user.types';
+
 @Injectable()
-export class AuthService
-{
+export class AuthService {
     private readonly _secret: any;
     private _authenticated: boolean = false;
     private currentUserSubject: BehaviorSubject<User>;
@@ -20,10 +19,9 @@ export class AuthService
      */
     constructor(
         private _httpClient: HttpClient,
-        private _userService: UserService,
-  
-    )
-    {
+        private _userService: UserService
+
+    ) {
         this._secret = 'YOUR_VERY_CONFIDENTIAL_SECRET_FOR_SIGNING_JWT_TOKENS!!!';
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
@@ -35,31 +33,26 @@ export class AuthService
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
-
     /**
      * Setter & getter for access token
      */
-    set accessToken(token: string)
-    {
+    set accessToken(token: string) {
         localStorage.setItem('accessToken', token);
     }
 
-    get accessToken(): string
-    {
+    get accessToken(): string {
         return localStorage.getItem('accessToken') ?? '';
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
     /**
      * Forgot password
      *
      * @param email
      */
-    forgotPassword(email: string): Observable<any>
-    {
+    forgotPassword(email: string): Observable<any> {
         return this._httpClient.post('api/auth/forgot-password', email);
     }
 
@@ -68,13 +61,11 @@ export class AuthService
      *
      * @param password
      */
-    resetPassword(password: string): Observable<any>
-    {
+    resetPassword(password: string): Observable<any> {
         return this._httpClient.post('api/auth/reset-password', password);
     }
 
-    private _base64url(source: any): string
-    {
+    private _base64url(source: any): string {
         // Encode in classical base64
         let encodedSource = Base64.stringify(source);
 
@@ -89,8 +80,7 @@ export class AuthService
         return encodedSource;
     }
 
-    private _generateJWTToken(idUser:number): string
-    {
+    private _generateJWTToken(idUser: number): string {
         const header = {
             alg: 'HS256',
             typ: 'JWT'
@@ -100,7 +90,7 @@ export class AuthService
         const exp = Math.floor((date.setDate(date.getDate() + 7)) / 1000);
         const payload = {
             iat: iat,
-            iss: 'idUser:'+idUser,
+            iss: 'idUser:' + idUser,
             exp: exp
         };
         const stringifiedHeader = Utf8.parse(JSON.stringify(header));
@@ -119,11 +109,9 @@ export class AuthService
      *
      * @param credentials
      */
-    signIn(credentials: { email: string; password: string }): Observable<any>
-    {
+    signIn(credentials: { email: string; password: string; }): Observable<any> {
         // Throw error, if the user is already logged in
-        if ( this._authenticated )
-        {
+        if (this._authenticated) {
             return throwError('User is already logged in.');
         }
 
@@ -152,7 +140,6 @@ export class AuthService
     //     {
     //         return throwError('User is already logged in.');
     //     }
-
     //     return this._httpClient.get(`https://tazagroup.vn/index.php?option=com_users&task=user.loginAjax&username=${credentials.email}&password=${credentials.password}&format=json`).pipe(
     //         switchMap((response: any) => {
     //           console.log(response);
@@ -161,7 +148,6 @@ export class AuthService
     //             localStorage.setItem('currentUser', JSON.stringify(response.User));
     //             this.currentUserSubject.next(response.User);
     //           //  return user;
-
     //           this.accessToken = this._generateJWTToken(response.User.id);
     //           this._authenticated = true;
     //           this._userService.user = response.User;
@@ -178,18 +164,15 @@ export class AuthService
     //     //     })
     //     // );
     // }
-
     /**
      * Sign in using the access token
      */
-    signInUsingToken(): Observable<any>
-    {
+    signInUsingToken(): Observable<any> {
         // Renew token
         return this._httpClient.post('api/auth/refresh-access-token', {
             accessToken: this.accessToken
         }).pipe(
             catchError(() =>
-
                 // Return false
                 of(false)
             ),
@@ -213,8 +196,7 @@ export class AuthService
     /**
      * Sign out
      */
-    signOut(): Observable<any>
-    {
+    signOut(): Observable<any> {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
 
@@ -230,8 +212,7 @@ export class AuthService
      *
      * @param user
      */
-    signUp(user: { name: string; email: string; password: string; company: string }): Observable<any>
-    {
+    signUp(user: { name: string; email: string; password: string; company: string; }): Observable<any> {
         return this._httpClient.post('api/auth/sign-up', user);
     }
 
@@ -240,36 +221,30 @@ export class AuthService
      *
      * @param credentials
      */
-    unlockSession(credentials: { email: string; password: string }): Observable<any>
-    {
+    unlockSession(credentials: { email: string; password: string; }): Observable<any> {
         return this._httpClient.post('api/auth/unlock-session', credentials);
     }
 
     /**
      * Check the authentication status
      */
-    check(): Observable<boolean>
-    {
+    check(): Observable<boolean> {
         // Check if the user is logged in
-        if ( this._authenticated )
-        {
+        if (this._authenticated) {
             return of(true);
         }
 
         // Check the access token availability
-        if ( !this.accessToken )
-        {
+        if (!this.accessToken) {
             return of(false);
         }
 
         // Check the access token expire date
-        if ( AuthUtils.isTokenExpired(this.accessToken) )
-        {
+        if (AuthUtils.isTokenExpired(this.accessToken)) {
             return of(false);
         }
 
         // If the access token exists and it didn't expire, sign in using it
-        return of(true);
-        //this.signInUsingToken();
+         return this.signInUsingToken();
     }
 }
