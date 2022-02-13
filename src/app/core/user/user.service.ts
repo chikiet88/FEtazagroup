@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -46,20 +47,13 @@ export class UserService
      */
     get(): Observable<User>
     {
-        return this._httpClient.get<User>('http://localhost:3100/auth/profile').pipe(
+        return this._httpClient.get<User>(`${environment.ApiURL}/auth/profile`).pipe(
             tap((user) => {
                 this._user.next(user);
                 console.log(this._user);
                 console.log(user);
             })
         );
-        // return this._httpClient.get<any>('https://tazagroup.vn/api/index.php/v1/users/72').pipe(
-        //     tap((user) => {
-        //         this._user.next(user.data.attributes);
-        //         console.log(user.data.attributes);
-        //         console.log(this._user);
-        //     })
-        // );
     }
 
     /**

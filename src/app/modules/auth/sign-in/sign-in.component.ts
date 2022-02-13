@@ -45,8 +45,8 @@ export class AuthSignInComponent implements OnInit
     {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email     : ['admin', [Validators.required]],
-            password  : ['admin', Validators.required],
+            SDT     : ['0977272969', [Validators.required]],
+            password  : ['Password@123', Validators.required],
             rememberMe: ['']
         });
     }
@@ -76,7 +76,7 @@ export class AuthSignInComponent implements OnInit
         this._authService.signIn(this.signInForm.value)
             .subscribe(
                 (data) => {
-                   // console.log(data.User.id);
+                    console.log(data);
                     // Set the redirect url.
                     // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
                     // to the correct page after a successful sign in. This way, that url can be set via

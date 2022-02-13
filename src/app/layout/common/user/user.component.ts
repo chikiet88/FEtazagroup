@@ -15,10 +15,10 @@ import { AuthService } from 'app/core/auth/auth.service';
 export class UserComponent implements OnInit, OnDestroy
 {
     /* eslint-disable @typescript-eslint/naming-convention */
-    static ngAcceptInputType_showAvatar: BooleanInput;
+    static ngAcceptInputType_showHinhanh: BooleanInput;
     /* eslint-enable @typescript-eslint/naming-convention */
 
-    @Input() showAvatar: boolean = true;
+    @Input() showHinhanh: boolean = true;
     user: User;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();

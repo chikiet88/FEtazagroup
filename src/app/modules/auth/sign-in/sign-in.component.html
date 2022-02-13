@@ -35,16 +35,13 @@
 
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Email address</mat-label>
+                    <mat-label>Số Điện Thoại</mat-label>
                     <input
-                        id="email"
+                        id="SDT"
                         matInput
-                        [formControlName]="'email'">
-                    <mat-error *ngIf="signInForm.get('email').hasError('required')">
-                        Email address is required
-                    </mat-error>
-                    <mat-error *ngIf="signInForm.get('email').hasError('email')">
-                        Please enter a valid email address
+                        [formControlName]="'SDT'">
+                    <mat-error *ngIf="signInForm.get('SDT').hasError('required')">
+                        Vui Lòng Nhập Số Điện Thoại
                     </mat-error>
                 </mat-form-field>
 

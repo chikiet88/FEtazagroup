@@ -20,7 +20,7 @@
             <!-- Components -->
             <div class="flex items-center ml-auto">
                 <notifications></notifications>
-                <user [showAvatar]="false"></user>
+                <user [showHinhanh]="false"></user>
             </div>
         </div>
         <!-- User -->
@@ -28,12 +28,12 @@
             <div class="relative w-24 h-24">
                 <img
                     class="w-full h-full rounded-full"
-                    *ngIf="user.avatar"
-                    [src]="user.avatar"
+                    *ngIf="user.hinhanh"
+                    [src]="user.hinhanh"
                     alt="User avatar">
                 <mat-icon
                     class="icon-size-24"
-                    *ngIf="!user.avatar"
+                    *ngIf="!user.hinhanh"
                     [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
             </div>
             <div class="flex flex-col items-center justify-center w-full mt-6">
