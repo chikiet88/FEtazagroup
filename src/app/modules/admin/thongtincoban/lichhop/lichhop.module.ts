@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LichhopComponent } from './lichhop.component';
-import { LichhopRoutingModule } from './lichhop-routing.module';
-
-
+import { RouterModule, Routes } from '@angular/router';
+const LichhopRoutes: Routes = [
+  {
+      path  : '',
+      component: LichhopComponent,
+  }
+];
 @NgModule({
-  declarations: [],
+  declarations: [LichhopComponent],
   imports: [
-    LichhopRoutingModule,
+    RouterModule.forChild(LichhopRoutes),
     CommonModule,
   ]
 })

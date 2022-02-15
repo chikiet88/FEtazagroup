@@ -80,12 +80,17 @@ export const appRoutes: Route[] = [
                 {path: 'cauhoi', loadChildren: () => import('app/modules/admin/wellcome/cauhoi/cauhoi.module').then(m => m.CauhoiModule)},
 
             ]},
-            {path: 'thongtincanhan', children: [
+            {path: 'thongtin', children: [
                 {path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule)},
                 {path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule)},
                 {path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule)},
 
             ]},
+            {path: 'tuyendung', children: [
+                {path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule)},
+                {path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule)},
+
+            ]},         
             {path: 'daotao', children: [
                 {path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule)},
                 {path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule)},

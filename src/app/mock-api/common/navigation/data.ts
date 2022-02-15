@@ -169,7 +169,29 @@ export const defaultNavigation: FuseNavigationItem[] = [
            }
 
         ]
-    },    
+    }, 
+    {
+        id      : 'tuyendung',
+        title   : 'Tuyển Dụng',
+        subtitle: '',
+        type    : 'group',
+        icon    : 'heroicons_outline:home',
+        children: [
+            {
+                id   : 'tuyendung.vetuyendung',
+                title: 'Vé Tuyển Dụng',
+                type : 'basic',
+                icon : 'dashboard',
+                link : '/tuyendung/vetuyendung'
+            },            {
+                id   : 'tuyendung.hosotuyendung',
+                title: 'Hồ Sơ Tuyển Dụng',
+                type : 'basic',
+                icon : 'heroicons_outline:document-text',
+                link : '/tuyendung/hosotuyendung'
+            }
+        ]
+    },      
     {
         id      : 'daotao',
         title   : 'Đào Tạo',
