@@ -18,7 +18,7 @@ export interface Vetuyendung {
 }
 
 export interface Vitri {
-    id?: string;
-    TenVitri?: string;
-    Trangthai?: string;
+    id?: number;
+    Thuoctinh?: string;
+    Trangthai?: number;
 }

@@ -47,6 +47,7 @@
                             ]
                         },
                         "styles": [
+                            "src/styles.scss",
                             "src/@fuse/styles/tailwind.scss",
                             "src/@fuse/styles/themes.scss",
                             "src/styles/vendors.scss",
@@ -124,6 +125,7 @@
                             "src/manifest.webmanifest"
                         ],
                         "styles": [
+                            "src/styles.scss",
                             "src/styles/styles.scss"
                         ],
                         "scripts": []

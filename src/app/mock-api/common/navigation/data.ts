@@ -73,7 +73,15 @@ export const compactNavigation: FuseNavigationItem[] = [
         type    : 'aside',
         icon    : 'heroicons_outline:academic-cap',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },   
+    },  
+    {
+        id      : 'cauhinh',
+        title   : 'Cấu Hình',
+        tooltip : 'Cấu Hình',
+        type    : 'basic',
+        icon    : 'heroicons_outline:academic-cap',
+        link : '/cauhinh'
+    },     
     {
         id      : 'dashboards',
         title   : 'Dashboards',
@@ -213,6 +221,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link : '/daotao/tailieunguon'
             }
         ]
+    },
+    {
+        id      : 'cauhinh',
+        title   : 'Cấu Hình',
+        subtitle: '',
+        type    : 'basic',
+        icon    : 'heroicons_outline:home',
     },
     {
         id      : 'dashboards',

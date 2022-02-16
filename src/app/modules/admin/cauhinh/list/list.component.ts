@@ -1,38 +1,32 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { VesComponent } from '../ves/ves.component';
-import { Vetuyendung, Vitri } from '../vetuyendung';
-import { VetuyendungService } from '../vetuyendung.service';
-import { VitriComponent } from '../vitri/vitri.component';
+import { combineLatest, distinctUntilChanged, map, Observable, Subject, takeUntil } from 'rxjs';
+import { CauhinhService } from '../cauhinh.service';
+import { Cauhinh } from '../cauhinh.types';
+import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-
   drawerMode: 'over' | 'side' = 'side';
   drawerOpened: boolean = true;
-  Vitris$: Observable<Vitri[]> ;
-  //Vetuyendungs$: Observable<Vetuyendung[]>;
-  Vetuyendungs$ = [];
+  Cauhinhs$: Observable<Cauhinh[]> ;
   masonryColumns: number = 4;
-private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(       
-    private _changeDetectorRef: ChangeDetectorRef,
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  constructor(   
+   private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _matDialog: MatDialog,
-    private _VetuyendungService: VetuyendungService
-    ) { }
-
+    private _CauhinhService: CauhinhService) { }
     ngOnInit(): void
     {
-       // this.Vetuyendungs = this.Vetuyendungs
-
-
-       
+      this._CauhinhService.getCauhinhs().subscribe();
+      
+      this.Cauhinhs$ = this._CauhinhService.Cauhinhs$;
        this._fuseMediaWatcherService.onMediaChange$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe(({matchingAliases}) => {
@@ -85,9 +79,11 @@ private _unsubscribeAll: Subject<any> = new Subject<any>();
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-    openEditVesDialog(): void
+    openEditDialog(): void
     {
-        this._matDialog.open(VitriComponent, {autoFocus: false});
+        this._matDialog.open(EditcauhinhComponent, {autoFocus: false});
     }
 
+  
 }
+

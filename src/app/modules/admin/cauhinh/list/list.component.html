@@ -11,20 +11,17 @@
             <div class="p-6 lg:py-8 lg:pl-4 lg:pr-0">
                 <!-- Filters -->
                 <div class="space-y-2">
-                                       <!-- Notes -->
-                    <div
-                        class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
-                        matRipple
-                        >
+                                       <!-- Cauhinhs -->
+                    <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"  (click)="openEditDialog()" matRipple>
                         <mat-icon
                             class="text-current"
                             [svgIcon]="'heroicons_outline:pencil-alt'"></mat-icon>
-                        <div class="ml-3 leading-5 select-none text-default">Vé Tuyển Dụng</div>
+                        <div class="ml-3 leading-5 select-none text-default">Cấu Hình</div>
                     </div>
 
                     <!-- Labels -->
-                    <ng-container>
-                        <ng-container *ngFor="let label of Vetuyendungs$">
+                    <ng-container *ngIf="(Cauhinhs$ | async) as Cauhinhs">
+                        <ng-container *ngFor="let item of Cauhinhs">
                             <div
                                 class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
                                 matRipple
@@ -32,20 +29,21 @@
                                 <mat-icon
                                     class="text-current"
                                     [svgIcon]="'heroicons_outline:tag'"></mat-icon>
-                                <div class="ml-3 leading-5 select-none text-default">{{label.idVitri}}</div>
+                                <div class="ml-3 leading-5 select-none text-default">{{item.title}}</div>
                             </div>
                         </ng-container>
                     </ng-container>
 
-                    <div
+                    <!-- <div
                     class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer hover:bg-hover"
-                    (click)="openEditVesDialog()"
+                    (click)="openEditDialog()"
                     matRipple>
                     <mat-icon
                         class="text-hint"
                         [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
-                    <div class="ml-3 leading-5 select-none">Thêm Vị Trí</div>
-                </div>
+                    <div class="ml-3 leading-5 select-none">Thêm Cấu Hình</div>
+                </div> -->
+
                 </div>
             </div>
         </mat-drawer>
@@ -72,11 +70,11 @@
                             <input
                                 matInput
                                 [autocomplete]="'off'"
-                                [placeholder]="'Tìm Phiếu Tuyển Dụng'"
+                                [placeholder]="'Tìm Cấu Hình'"
                                 #searchInput>
                         </mat-form-field>
                     </div>
-                    <!-- New note -->
+                    <!-- New cauhinh -->
                     <button
                         class="ml-4 px-1 sm:px-4 min-w-10"
                         mat-flat-button
@@ -85,10 +83,27 @@
                         <mat-icon
                             class="icon-size-5"
                             [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                        <span class="hidden sm:inline-block ml-2">Thêm Phiếu</span>
+                        <span class="hidden sm:inline-block ml-2">Thêm Thuộc Tính</span>
                     </button>
                     
                 </div>
+     
+                <!-- Loading template -->
+                <ng-template #loading>
+                    <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Loading...</div>
+                    </div>
+                </ng-template>
+
+                <!-- No cauhinhs template -->
+                <ng-template #noCauhinhs>
+                    <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                        <mat-icon
+                            class="icon-size-24"
+                            [svgIcon]="'iconsmind:file_hide'"></mat-icon>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Chưa Có Thuộc Tính</div>
+                    </div>
+                </ng-template>
 
 
             </div>

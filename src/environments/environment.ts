@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    ApiURL:'https://v2api.tazagroup.vn'
-    //ApiURL:'http://localhost:3000'
+   // ApiURL:'https://v2api.tazagroup.vn'
+    ApiURL:'http://localhost:3000'
 };
 
 /*
