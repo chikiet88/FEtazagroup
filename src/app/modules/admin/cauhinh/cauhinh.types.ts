@@ -1,7 +1,7 @@
 export interface Cauhinh {
     id?:string
     title?:string
-    detail?:Detail[]
+    detail?:object
     Trangthai?:number
     Ordering?:number
     Ngaytao?:Date

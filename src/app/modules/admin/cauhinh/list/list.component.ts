@@ -7,7 +7,7 @@ import { CauhinhService } from '../cauhinh.service';
 import { Cauhinh, Detail } from '../cauhinh.types';
 import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
 import { ThuoctinhComponent } from '../thuoctinh/thuoctinh.component';
-
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -42,7 +42,7 @@ export class ListComponent implements OnInit {
             debounceTime(500),
             switchMap(selectCauhinh => this._CauhinhService.updateCauhinh(selectCauhinh)))
         .subscribe(() => {
-
+            
             // Mark for check
             this._changeDetectorRef.markForCheck();
         });
@@ -120,36 +120,30 @@ export class ListComponent implements OnInit {
     }
     addDetailToCauhinh(cauhinh: Cauhinh, thuoctinh: string): void
     {
-        console.log(cauhinh);
-        const num = cauhinh.detail.length;
-        const data:Detail = {id:num+1,Thuoctinh:thuoctinh};
-        cauhinh.detail.push(data);
-        console.log(cauhinh);
-        if (thuoctinh)
-        {
-            return;
-        }
-       // this._CauhinhService.updateCauhinh(id, detail).subscribe();
+        cauhinh.detail[uuidv4()] = thuoctinh;
+        // if (thuoctinh)
+        // {
+        //     return;
+        // }
+        this._CauhinhService.updateCauhinh(cauhinh).subscribe();
     }
-    removeThuoctinh(selectCauhinh: Cauhinh, detail: Detail): void
+    removeThuoctinh(selectCauhinh: Cauhinh, thuoctinh: object): void
     {
-        selectCauhinh.detail = selectCauhinh.detail.filter(item => item.id !== detail.id);
+        delete selectCauhinh.detail[thuoctinh['key']]
         this.detailChanged.next(selectCauhinh);
     }
-    updateThuoctinh(selectCauhinh: Cauhinh, detail: Detail): void
+    updateThuoctinh(selectCauhinh: Cauhinh, thuoctinh: object): void
     {
-        if ( detail.id )
-        {
-            this.detailChanged.next(selectCauhinh);
-        }
+       selectCauhinh.detail[thuoctinh['key']] = thuoctinh['value']
+       this.detailChanged.next(selectCauhinh);
     }
     ChosenCauhinh(id: string): void
     {
+
         this._CauhinhService.selectCauhinh(id)
             .subscribe((cauhinh) => {
                this.selectCauhinh = cauhinh;
                 //this.selectDetail = cauhinh.detail;
-                console.log(this.selectCauhinh);
                 this._changeDetectorRef.markForCheck();
             });
     }

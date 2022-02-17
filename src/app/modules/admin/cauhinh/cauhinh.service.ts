@@ -27,14 +27,6 @@ export class CauhinhService {
   {
       return this._Cauhinh.asObservable();
   } 
-  get Details$(): Observable<Detail[]>
-  {
-      return this._Details.asObservable();
-  }
-  get Detail$(): Observable<Detail>
-  {
-      return this._Detail.asObservable();
-  }
 
   getCauhinhs(): Observable<Cauhinh[]>
   {
@@ -49,7 +41,6 @@ export class CauhinhService {
       return this._httpClient.post<Cauhinh[]>(`${environment.ApiURL}/cauhinh`, {title}).pipe(
           tap((cauhinhs) => {
               console.log(cauhinhs);
-               //this._Cauhinhs.next(cauhinhs[0].Ngaytao);
                this.notifier.notify('success', 'Thêm Thành Công');
                this.getCauhinhs().subscribe();
           })
@@ -57,11 +48,10 @@ export class CauhinhService {
   }
   updateCauhinh(cauhinh: Cauhinh): Observable<Cauhinh[]>
   {
-      console.log(cauhinh);
-      return this._httpClient.patch<Cauhinh[]>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`, {cauhinh}).pipe(
+      return this._httpClient.patch<Cauhinh[]>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`, cauhinh).pipe(
           tap((cauhinhs) => {
-            this._Cauhinhs.next(cauhinhs);
-           this.notifier.notify('success', 'Cập Nhật Thành Công');
+           //  this._Cauhinhs.next(cauhinhs);
+              this.notifier.notify('success', 'Cập Nhật Thành Công');
               this.getCauhinhs().subscribe();
           })
       );

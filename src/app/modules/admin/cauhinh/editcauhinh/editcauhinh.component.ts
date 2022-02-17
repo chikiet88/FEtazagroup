@@ -12,7 +12,6 @@ import { Cauhinh } from '../cauhinh.types';
 export class EditcauhinhComponent implements OnInit {
   cauhinhs$: Observable<Cauhinh[]>;
   cauhinh$: Observable<Cauhinh>;
-
   cauhinhChanged: Subject<Cauhinh> = new Subject<Cauhinh>();
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -21,7 +20,7 @@ export class EditcauhinhComponent implements OnInit {
    */
   constructor(
       private _changeDetectorRef: ChangeDetectorRef,
-      private _cauhinhsService: CauhinhService
+      private _cauhinhsService: CauhinhService,
   )
   {
   }
