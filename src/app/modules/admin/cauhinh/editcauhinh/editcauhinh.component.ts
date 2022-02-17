@@ -46,7 +46,7 @@ export class EditcauhinhComponent implements OnInit {
               filter(cauhinh => cauhinh.title.trim() !== ''),
               switchMap(cauhinh => this._cauhinhsService.updateCauhinh(cauhinh)))
           .subscribe(() => {
-
+                
               // Mark for check
               this._changeDetectorRef.markForCheck();
           });
@@ -76,6 +76,7 @@ export class EditcauhinhComponent implements OnInit {
    */
   updateCauhinh(cauhinh: Cauhinh): void
   {
+      console.log(cauhinh);
       this.cauhinhChanged.next(cauhinh);
   }
 
@@ -87,7 +88,6 @@ export class EditcauhinhComponent implements OnInit {
   deleteCauhinh(cauhinh: Cauhinh): void
   {
       this._cauhinhsService.deleteCauhinh(cauhinh).subscribe(() => {
-
           this._changeDetectorRef.markForCheck();
       });
   }

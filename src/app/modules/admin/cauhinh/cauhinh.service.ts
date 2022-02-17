@@ -4,13 +4,15 @@ import { NotifierService } from 'angular-notifier';
 import { environment } from 'environments/environment';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, Observable, tap, take, map, switchMap, throwError, of } from 'rxjs';
-import { Cauhinh } from './cauhinh.types';
+import { Cauhinh, Detail } from './cauhinh.types';
 @Injectable({
   providedIn: 'root'
 })
 export class CauhinhService {
   private _Cauhinhs: BehaviorSubject<Cauhinh[] | null> = new BehaviorSubject(null);
   private _Cauhinh: BehaviorSubject<Cauhinh | null> = new BehaviorSubject(null);
+  private _Details: BehaviorSubject<Detail[] | null> = new BehaviorSubject(null);
+  private _Detail: BehaviorSubject<Detail | null> = new BehaviorSubject(null);
   private readonly notifier: NotifierService;
   constructor(
     private _httpClient: HttpClient,
@@ -24,7 +26,16 @@ export class CauhinhService {
   get Cauhinh$(): Observable<Cauhinh>
   {
       return this._Cauhinh.asObservable();
+  } 
+  get Details$(): Observable<Detail[]>
+  {
+      return this._Details.asObservable();
   }
+  get Detail$(): Observable<Detail>
+  {
+      return this._Detail.asObservable();
+  }
+
   getCauhinhs(): Observable<Cauhinh[]>
   {
       return this._httpClient.get<Cauhinh[]>(`${environment.ApiURL}/cauhinh`).pipe(
@@ -33,71 +44,87 @@ export class CauhinhService {
           })
       );
   }
-  getCauhinhById(id: number): Observable<Cauhinh>
+  addCauhinh(title: string): Observable<Cauhinh[]>
   {
-      return this._Cauhinhs.pipe(
-          take(1),
-          map((cauhinhs) => {
-              const cauhinh = cauhinhs.find(value => value.id === id) || null;
-              this._Cauhinh.next(cauhinh);
-              return cauhinh;
-          }),
-          switchMap((cauhinh) => {
-
-              if ( !cauhinh )
-              {
-                  return throwError('Could not found the cauhinh with id of ' + id + '!');
-              }
-
-              return of(cauhinh);
-          })
-      );
-  }
-  addTask(cauhinh: Cauhinh, task: string): Observable<Cauhinh>
-  {
-      return this._httpClient.post<Cauhinh>('api/apps/cauhinhs/tasks', {
-          cauhinh,
-          task
-      }).pipe(switchMap(() => this.getCauhinhs().pipe(
-          switchMap(() => this.getCauhinhById(cauhinh.id))
-      )));
-  }
-   addCauhinh(title: string): Observable<Cauhinh[]>
-   {
-       return this._httpClient.post<Cauhinh[]>(`${environment.ApiURL}/cauhinh`, {title}).pipe(
-           tap((cauhinhs) => {
-               console.log(cauhinhs);
-                //this._Cauhinhs.next(cauhinhs[0].Ngaytao);
-                this.notifier.notify('success', 'Thêm Thành Công');
-                this.getCauhinhs().subscribe();
-           })
-       );
-   }
-
-   updateCauhinh(cauhinh: Cauhinh): Observable<Cauhinh[]>
-   {
-       console.log(cauhinh);
-       return this._httpClient.patch<Cauhinh[]>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`, {cauhinh}).pipe(
-           tap((cauhinhs) => {
-            this.notifier.notify('success', 'Cập Nhật Thành Công');
-               this.getCauhinhs().subscribe();
-               //this._Cauhinhs.next(cauhinhs);
-           })
-       );
-   }
-
-
-
-  deleteCauhinh(cauhinh: Cauhinh): Observable<Cauhinh[]>
-  {
-      return this._httpClient.delete<Cauhinh[]>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`).pipe(
+      return this._httpClient.post<Cauhinh[]>(`${environment.ApiURL}/cauhinh`, {title}).pipe(
           tap((cauhinhs) => {
               console.log(cauhinhs);
-              this.notifier.notify('success', `Xóa Thành Công`);
-              this.getCauhinhs().subscribe();
-             // this._Cauhinhs.next(cauhinhs);
+               //this._Cauhinhs.next(cauhinhs[0].Ngaytao);
+               this.notifier.notify('success', 'Thêm Thành Công');
+               this.getCauhinhs().subscribe();
           })
       );
   }
+  updateCauhinh(cauhinh: Cauhinh): Observable<Cauhinh[]>
+  {
+      console.log(cauhinh);
+      return this._httpClient.patch<Cauhinh[]>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`, {cauhinh}).pipe(
+          tap((cauhinhs) => {
+            this._Cauhinhs.next(cauhinhs);
+           this.notifier.notify('success', 'Cập Nhật Thành Công');
+              this.getCauhinhs().subscribe();
+          })
+      );
+  }
+ deleteCauhinh(cauhinh: Cauhinh): Observable<Cauhinh>
+ {
+     return this._httpClient.delete<Cauhinh>(`${environment.ApiURL}/cauhinh/${cauhinh.id}`).pipe(
+         tap((cauhinhs) => {
+             console.log(cauhinhs);
+             this.notifier.notify('success', `Xóa Thành Công`);
+             this.getCauhinhs().subscribe();
+         })
+     );
+ }
+ selectCauhinh(id:string): Observable<Cauhinh>
+ {
+    return this._Cauhinhs.pipe(
+        take(1),
+        map((cauhinhs) => {
+            const cauhinh = cauhinhs.find(item => item.id === id) || null;
+            this._Cauhinh.next(cauhinh);
+            return cauhinh;
+        }),
+        switchMap((cauhinh) => {
+            if ( !cauhinh )
+            {
+                return throwError('Could not found product with id of ' + id + '!');
+            }
+            return of(cauhinh);
+        })
+    );
+}
+
+//   createDetail(detail: Detail): Observable<Detail>
+//   {
+//       return this._httpClient.post<Detail>('api/apps/notes', {detail}).pipe(
+//           switchMap(response => this.getDetails().pipe(
+//               switchMap(() => this.getNoteById(response.id).pipe(
+//                   map(() => response)
+//               ))
+//           )));
+//   }
+//   updateDetail(detail: Detail): Observable<Detail>
+//   {
+//       const updatedDetail = cloneDeep(detail) as any;
+//       if ( updatedDetail.cauhinhs.length )
+//       {
+//         updatedDetail.cauhinhs = updatedDetail.cauhinhs.map(cauhinh => cauhinh.id);
+//       }
+//       return this._httpClient.patch<Detail>('api/apps/notes', {updatedDetail}).pipe(
+//           tap((response) => {
+//               this.getDetails().subscribe();
+//           })
+//       );
+//   }
+//   deleteDetail(detail: Detail): Observable<boolean>
+//   {
+//       return this._httpClient.delete<boolean>('api/apps/notes', {params: {id: detail.id}}).pipe(
+//           map((isDeleted: boolean) => {
+//               this.getDetails().subscribe();
+//               return isDeleted;
+//           })
+//       );
+//   }
 
 }

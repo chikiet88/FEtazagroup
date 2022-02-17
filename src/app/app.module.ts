@@ -16,6 +16,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { TuychinhPipe } from './tuychinh.pipe';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -66,6 +67,7 @@ const customNotifierOptions: NotifierOptions = {
     declarations: [
         AppComponent,
         CauhinhComponent,
+        TuychinhPipe,
     ],
     imports     : [
         NotifierModule.withConfig(customNotifierOptions),

@@ -127,6 +127,7 @@ export class NotesService
         return this._httpClient.get<Note[]>('api/apps/notes/all').pipe(
             tap((response: Note[]) => {
                 this._notes.next(response);
+                console.log(this._notes);
             })
         );
     }

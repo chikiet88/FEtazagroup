@@ -21,11 +21,12 @@
 
                     <!-- Labels -->
                     <ng-container *ngIf="(Cauhinhs$ | async) as Cauhinhs">
-                        <ng-container *ngFor="let item of Cauhinhs">
-                            <div
-                                class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
-                                matRipple
-                               >
+                        <ng-container *ngFor="let item of Cauhinhs; trackBy: trackByFn">
+        <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+                [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': 'item:' + item.id === filterStatus,
+                                'text-hint hover:bg-hover': 'item:' + item.id !== filterStatus}"
+                            (click)="ChosenCauhinh(item.id)"
+                                matRipple [matRippleDisabled]="'item:' + item.id === filterStatus">
                                 <mat-icon
                                     class="text-current"
                                     [svgIcon]="'heroicons_outline:tag'"></mat-icon>
@@ -33,6 +34,8 @@
                             </div>
                         </ng-container>
                     </ng-container>
+
+
 
                     <!-- <div
                     class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer hover:bg-hover"
@@ -53,45 +56,40 @@
             <div class="flex flex-col flex-auto p-6 md:p-8">
 
                 <!-- Header -->
-                <div class="flex items-center">
-                    <div class="flex items-center flex-auto">
-                        <button
-                            class="flex lg:hidden -ml-2"
-                            mat-icon-button
-                            (click)="drawer.toggle()">
-                            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
-                        </button>
-
-                        <mat-form-field class="fuse-mat-rounded fuse-mat-dense fuse-mat-no-subscript flex-auto ml-4 lg:ml-0">
+                <ng-container *ngIf="selectCauhinh">
+                    <div class="mx-2 mt-4 space-y-1.5">
+                        <ng-container *ngFor="let item of selectCauhinh.detail; trackBy: trackByFn">
+                            <div class="group flex items-center">
+                                {{item.id}}
+                                <input
+                                    class="w-full px-1 py-0.5"
+                                    [placeholder]="'Thuộc Tính'"
+                                    [(ngModel)]="item.Thuoctinh"
+                                    (input)="updateThuoctinh(selectCauhinh, item)">
+                                <mat-icon
+                                    class="hidden group-hover:flex ml-auto icon-size-5 cursor-pointer"
+                                    [svgIcon]="'heroicons_solid:x'"
+                                    (click)="removeThuoctinh(selectCauhinh, item)"></mat-icon>
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center">
                             <mat-icon
-                                class="icon-size-5"
-                                [svgIcon]="'heroicons_solid:search'"
-                                matPrefix></mat-icon>
+                                class="-ml-0.5 icon-size-5 text-hint"
+                                [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                             <input
-                                matInput
-                                [autocomplete]="'off'"
-                                [placeholder]="'Tìm Cấu Hình'"
-                                #searchInput>
-                        </mat-form-field>
+                                class="w-full ml-1.5 px-1 py-0.5"
+                                [placeholder]="'Thêm Thuộc Tính'"
+                                (keydown.enter)="addDetailToCauhinh(selectCauhinh, newTaskInput.value); newTaskInput.value = ''"
+                                #newTaskInput>
+                        </div>
                     </div>
-                    <!-- New cauhinh -->
-                    <button
-                        class="ml-4 px-1 sm:px-4 min-w-10"
-                        mat-flat-button
-                        [color]="'primary'"
-                        >
-                        <mat-icon
-                            class="icon-size-5"
-                            [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                        <span class="hidden sm:inline-block ml-2">Thêm Thuộc Tính</span>
-                    </button>
-                    
-                </div>
-     
+                </ng-container>
+
+
                 <!-- Loading template -->
                 <ng-template #loading>
                     <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
-                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Loading...</div>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Đang Tải...</div>
                     </div>
                 </ng-template>
 
