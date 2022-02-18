@@ -6,7 +6,6 @@ import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map
 import { CauhinhService } from '../cauhinh.service';
 import { Cauhinh, Detail } from '../cauhinh.types';
 import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
-import { ThuoctinhComponent } from '../thuoctinh/thuoctinh.component';
 import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-list',
@@ -104,15 +103,6 @@ export class ListComponent implements OnInit {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-    }
-    openNoteDialog(detail: Detail): void
-    {
-        this._matDialog.open(ThuoctinhComponent, {
-            autoFocus: false,
-            data     : {
-                note: cloneDeep(detail)
-            }
-        });
     }
     openEditDialog(): void
     {

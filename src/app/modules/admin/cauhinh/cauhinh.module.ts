@@ -15,7 +15,6 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CauhinhComponent } from './cauhinh.component';
 import { ListComponent } from './list/list.component';
 import { EditcauhinhComponent } from './editcauhinh/editcauhinh.component';
-import { ThuoctinhComponent } from './thuoctinh/thuoctinh.component';
 const CauhinhRoutes: Route[] = [
   {
       path     : '',
@@ -34,7 +33,6 @@ const CauhinhRoutes: Route[] = [
   declarations: [
        ListComponent,
        EditcauhinhComponent,
-       ThuoctinhComponent
   ],
   imports: [
     RouterModule.forChild(CauhinhRoutes),

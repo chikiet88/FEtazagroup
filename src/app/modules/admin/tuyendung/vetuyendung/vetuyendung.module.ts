@@ -13,25 +13,31 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FuseMasonryModule } from '@fuse/components/masonry';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from 'app/shared/shared.module';
-import { VesComponent } from './ves/ves.component';
-import { VitriComponent } from './vitri/vitri.component';
-
+import { DetailsComponent } from './details/details.component';
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',
       component: VetuyendungComponent,
       children : [
-        {
-            path     : '',
-            component: ListComponent
-        }
-    ]
+          {
+              path     : '',
+              component: ListComponent,
+              children : [
+                  {
+                      path         : ':id',
+                      component    : DetailsComponent,
+                      canDeactivate: []
+                  }
+              ]
+          }
+      ]
   }
 ];
-
 @NgModule({
-  declarations: [VetuyendungComponent, ListComponent, VesComponent, VitriComponent],
+  declarations: [VetuyendungComponent, ListComponent,DetailsComponent],
   imports: [
     RouterModule.forChild(VetuyendungRoutes),
     CommonModule,
@@ -45,7 +51,9 @@ const VetuyendungRoutes: Route[] = [
     MatRippleModule,
     MatSidenavModule,
     FuseMasonryModule,
-    SharedModule
+    MatTooltipModule,
+    SharedModule,
+    MatTabsModule
   ]
 })
 export class VetuyendungModule { }

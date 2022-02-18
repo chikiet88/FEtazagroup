@@ -1,83 +1,71 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { VesComponent } from '../ves/ves.component';
-import { Vetuyendung, Vitri } from '../vetuyendung';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
+import { Vetuyendung} from '../vetuyendung.types';
 import { VetuyendungService } from '../vetuyendung.service';
-import { VitriComponent } from '../vitri/vitri.component';
+import { MatDrawer } from '@angular/material/sidenav';
+import { DOCUMENT } from '@angular/common';
+import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+    @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
+    contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
+    selectedVetuyendung: Vetuyendung;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+   vetuyendungs$: Observable<Vetuyendung[]>;
+  vetuyendungsCount: number = 0;
+  drawerMode: 'over' | 'side';
+  searchInputControl: FormControl = new FormControl();
+  constructor(    
 
-  drawerMode: 'over' | 'side' = 'side';
-  drawerOpened: boolean = true;
-  Vitris$: Observable<Vitri[]> ;
-  //Vetuyendungs$: Observable<Vetuyendung[]>;
-  Vetuyendungs$ = [];
-  masonryColumns: number = 4;
-private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(       
+    @Inject(DOCUMENT) private _document: any,   
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router,
     private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
-    private _matDialog: MatDialog,
     private _VetuyendungService: VetuyendungService
+    
     ) { }
 
     ngOnInit(): void
     {
-       // this.Vetuyendungs = this.Vetuyendungs
+        this._VetuyendungService.getVetuyendungs().subscribe();
+        this.vetuyendungs$ = this._VetuyendungService.vetuyendungs$;
+        this._VetuyendungService.vetuyendungs$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((vetuyendungs: Vetuyendung[]) => {
+                this.vetuyendungsCount = vetuyendungs.length;
+                this._changeDetectorRef.markForCheck();
+            });
 
+            this.matDrawer.openedChange.subscribe((opened) => {
+                if ( !opened )
+                {
+                    this.selectedVetuyendung = null;
+                    this._changeDetectorRef.markForCheck();
+                }
+            });            
+            this._fuseMediaWatcherService.onMediaChange$
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe(({matchingAliases}) => {
+                    if ( matchingAliases.includes('lg') )
+                    {
+                        this.drawerMode = 'side';
+                    }
+                    else
+                    {
+                        this.drawerMode = 'over';
+                    }
+        
+                    this._changeDetectorRef.markForCheck();
+                });
 
-       
-       this._fuseMediaWatcherService.onMediaChange$
-       .pipe(takeUntil(this._unsubscribeAll))
-       .subscribe(({matchingAliases}) => {
-
-           // Set the drawerMode and drawerOpened if the given breakpoint is active
-           if ( matchingAliases.includes('lg') )
-           {
-               this.drawerMode = 'side';
-               this.drawerOpened = true;
-           }
-           else
-           {
-               this.drawerMode = 'over';
-               this.drawerOpened = false;
-           }
-
-           // Set the masonry columns
-           //
-           // This if block structured in a way so that only the
-           // biggest matching alias will be used to set the column
-           // count.
-           if ( matchingAliases.includes('xl') )
-           {
-               this.masonryColumns = 5;
-           }
-           else if ( matchingAliases.includes('lg') )
-           {
-               this.masonryColumns = 4;
-           }
-           else if ( matchingAliases.includes('md') )
-           {
-               this.masonryColumns = 3;
-           }
-           else if ( matchingAliases.includes('sm') )
-           {
-               this.masonryColumns = 2;
-           }
-           else
-           {
-               this.masonryColumns = 1;
-           }
-
-           // Mark for check
-           this._changeDetectorRef.markForCheck();
-       });
     }
     ngOnDestroy(): void
     {
@@ -85,9 +73,22 @@ private _unsubscribeAll: Subject<any> = new Subject<any>();
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-    openEditVesDialog(): void
-    {
-        this._matDialog.open(VitriComponent, {autoFocus: false});
-    }
 
+    onBackdropClicked(): void
+    {
+        this._router.navigate(['./'], {relativeTo: this._activatedRoute});
+        this._changeDetectorRef.markForCheck();
+    }
+    createYeucau(): void
+    {
+        this._VetuyendungService.createVetuyendung().subscribe((newVe) => {
+            console.log(newVe);
+            this._router.navigate(['./', newVe.uuid], {relativeTo: this._activatedRoute});
+            this._changeDetectorRef.markForCheck();
+        });
+    }    
+    trackByFn(index: number, item: any): any
+    {
+        return item.id || index;
+    }
 }

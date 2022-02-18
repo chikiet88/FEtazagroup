@@ -4,15 +4,13 @@ import { NotifierService } from 'angular-notifier';
 import { environment } from 'environments/environment';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, Observable, tap, take, map, switchMap, throwError, of } from 'rxjs';
-import { Cauhinh, Detail } from './cauhinh.types';
+import { Cauhinh } from './cauhinh.types';
 @Injectable({
   providedIn: 'root'
 })
 export class CauhinhService {
   private _Cauhinhs: BehaviorSubject<Cauhinh[] | null> = new BehaviorSubject(null);
   private _Cauhinh: BehaviorSubject<Cauhinh | null> = new BehaviorSubject(null);
-  private _Details: BehaviorSubject<Detail[] | null> = new BehaviorSubject(null);
-  private _Detail: BehaviorSubject<Detail | null> = new BehaviorSubject(null);
   private readonly notifier: NotifierService;
   constructor(
     private _httpClient: HttpClient,
