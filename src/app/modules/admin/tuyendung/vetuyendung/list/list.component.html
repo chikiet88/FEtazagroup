@@ -1,22 +1,6 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
-    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
-        <div class="w-full max-w-screen-xl mx-auto">
-            <!-- Tabs -->
-            <mat-tab-group
-                class="sm:px-2"
-                [animationDuration]="'0'">
-                <mat-tab label="Home">
-                </mat-tab>
-                <mat-tab label="Budget">
-                </mat-tab>
-                <mat-tab label="Team">
-                </mat-tab>
-            </mat-tab-group>            
-        </div>
-    </div>
-
         <mat-drawer-container
-            class="flex-auto h-full bg-card dark:bg-transparent">
+            class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
             <!-- Drawer -->
             <mat-drawer
                 class="w-full md:w-160 dark:bg-gray-900"
@@ -78,6 +62,15 @@
                                 <span class="ml-2 mr-1">Thêm Yêu Cầu</span>
                             </button>
                         </div>
+                        <div class="flex-auto border-t -mt-px pt-4">
+                            <div class="w-full max-w-screen-xl mx-auto">
+                                    <button mat-button>Basic</button>
+                                    <button mat-button color="primary">Primary</button>
+                                    <button mat-button color="accent">Accent</button>
+                                    <button mat-button color="warn">Warn</button>
+                                    <button mat-button disabled>Disabled</button>
+                            </div>
+                        </div>            
                     </div>
     
                     <!-- Contacts list -->

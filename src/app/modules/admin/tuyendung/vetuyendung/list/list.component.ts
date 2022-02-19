@@ -40,7 +40,10 @@ export class ListComponent implements OnInit {
         this._VetuyendungService.vetuyendungs$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((vetuyendungs: Vetuyendung[]) => {
+                if(vetuyendungs)
+                {
                 this.vetuyendungsCount = vetuyendungs.length;
+                }
                 this._changeDetectorRef.markForCheck();
             });
 

@@ -17,6 +17,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from 'app/shared/shared.module';
 import { DetailsComponent } from './details/details.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { CanDeactivateVetuyendungsDetails } from './vetuyendung.guard';
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',
@@ -29,7 +31,7 @@ const VetuyendungRoutes: Route[] = [
                   {
                       path         : ':id',
                       component    : DetailsComponent,
-                      canDeactivate: []
+                      canDeactivate: [CanDeactivateVetuyendungsDetails]
                   }
               ]
           }
@@ -41,6 +43,7 @@ const VetuyendungRoutes: Route[] = [
   imports: [
     RouterModule.forChild(VetuyendungRoutes),
     CommonModule,
+    MatButtonToggleModule,
     MatButtonModule,
     MatCheckboxModule,
     MatDialogModule,

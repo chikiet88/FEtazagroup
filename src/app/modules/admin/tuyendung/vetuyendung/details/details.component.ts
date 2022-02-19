@@ -69,7 +69,7 @@ export class DetailsComponent implements OnInit {
     this._vetuyendungService.vetuyendung$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((vetuyendung: Vetuyendung) => {
-             this._ListComponent.matDrawer.open();
+            this._ListComponent.matDrawer.open();
             this.vetuyendung = vetuyendung;
 
             // // Clear the emails and phoneNumbers form arrays

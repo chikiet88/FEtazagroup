@@ -56,7 +56,7 @@ export class ContactsListComponent implements OnInit, OnDestroy
         this._contactsService.contacts$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((contacts: Contact[]) => {
-
+                
                 // Update the counts
                 this.contactsCount = contacts.length;
 
