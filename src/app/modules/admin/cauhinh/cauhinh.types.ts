@@ -5,10 +5,6 @@ export interface Cauhinh {
     Trangthai?:number
     Ordering?:number
     Ngaytao?:Date
-    idTao?:number
-}
-export interface Detail {
-    id?:number
-    Thuoctinh?:string
+    idTao?:string
 }
 

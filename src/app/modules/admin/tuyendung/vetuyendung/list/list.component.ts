@@ -8,6 +8,7 @@ import { VetuyendungService } from '../vetuyendung.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DOCUMENT } from '@angular/common';
 import { FormControl } from '@angular/forms';
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -15,13 +16,15 @@ import { FormControl } from '@angular/forms';
 })
 export class ListComponent implements OnInit {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
-    contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
-    selectedVetuyendung: Vetuyendung;
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
-   vetuyendungs$: Observable<Vetuyendung[]>;
+ contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
+ selectedVetuyendung: Vetuyendung;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  vetuyendungs$: Observable<Vetuyendung[]>;
+  vetuyendungs: Vetuyendung[];
   vetuyendungsCount: number = 0;
   drawerMode: 'over' | 'side';
   searchInputControl: FormControl = new FormControl();
+
   constructor(    
 
     @Inject(DOCUMENT) private _document: any,   
@@ -29,21 +32,19 @@ export class ListComponent implements OnInit {
     private _router: Router,
     private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
-    private _VetuyendungService: VetuyendungService
-    
+    private _VetuyendungService: VetuyendungService,
+    private _notifierService: NotifierService,
     ) { }
 
     ngOnInit(): void
     {
-        this._VetuyendungService.getVetuyendungs().subscribe();
         this.vetuyendungs$ = this._VetuyendungService.vetuyendungs$;
         this._VetuyendungService.vetuyendungs$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((vetuyendungs: Vetuyendung[]) => {
-                if(vetuyendungs)
-                {
+                console.log(vetuyendungs)
                 this.vetuyendungsCount = vetuyendungs.length;
-                }
+                this.vetuyendungs = vetuyendungs;
                 this._changeDetectorRef.markForCheck();
             });
 
@@ -84,11 +85,29 @@ export class ListComponent implements OnInit {
     }
     createYeucau(): void
     {
-        this._VetuyendungService.createVetuyendung().subscribe((newVe) => {
-            console.log(newVe);
-            this._router.navigate(['./', newVe.uuid], {relativeTo: this._activatedRoute});
+    if(this.vetuyendungs.length==0)
+       { this._VetuyendungService.createVetuyendung().subscribe((newVe) => {
+            this._router.navigate(['./', newVe.id], {relativeTo: this._activatedRoute});
             this._changeDetectorRef.markForCheck();
-        });
+         });
+    }
+    else
+    {
+        const Vitri = this.vetuyendungs[0].Vitri;
+     if(!Vitri)
+        {
+            this._notifierService.notify('error', 'Có Phiếu Trống Chưa Điền');
+            
+        }
+        else {
+            this._notifierService.notify('success', 'Tạo mới');
+            this._VetuyendungService.createVetuyendung().subscribe((newVe) => {
+                this._router.navigate(['./', newVe.id], {relativeTo: this._activatedRoute});
+                this._changeDetectorRef.markForCheck();
+        });   
+        }
+    }
+
     }    
     trackByFn(index: number, item: any): any
     {

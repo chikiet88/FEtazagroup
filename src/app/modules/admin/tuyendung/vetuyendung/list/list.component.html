@@ -49,7 +49,7 @@
                                         matInput
                                         [formControl]="searchInputControl"
                                         [autocomplete]="'off'"
-                                        [placeholder]="'Search contacts'">
+                                        [placeholder]="'Tìm Phiếu Tuyển Dụng'">
                                 </mat-form-field>
                             </div>
                             <!-- Thêm Vé button -->
@@ -59,16 +59,19 @@
                                 [color]="'primary'"
                                 (click)="createYeucau()">
                                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                                <span class="ml-2 mr-1">Thêm Yêu Cầu</span>
+                                <span class="ml-2 mr-1">Thêm</span>
                             </button>
                         </div>
                         <div class="flex-auto border-t -mt-px pt-4">
                             <div class="w-full max-w-screen-xl mx-auto">
-                                    <button mat-button>Basic</button>
-                                    <button mat-button color="primary">Primary</button>
-                                    <button mat-button color="accent">Accent</button>
-                                    <button mat-button color="warn">Warn</button>
-                                    <button mat-button disabled>Disabled</button>
+                                    <button mat-button>Bước 1</button>
+                                    <button mat-button>Bước 2</button>
+                                    <button mat-button>Bước 3</button>
+                                    <button mat-button>Bước 4</button>
+                                    <button mat-button>Bước 5</button>
+                                    <button mat-button>Bước 6</button>
+                                    <button mat-button>Bước 7</button>
+                                    <button mat-button>Bước 8</button>               
                             </div>
                         </div>            
                     </div>
@@ -82,14 +85,20 @@
                                         class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
                                         [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedVetuyendung || selectedVetuyendung.id !== contact.id,
                                                     'bg-primary-50 dark:bg-hover': selectedVetuyendung && selectedVetuyendung.id === contact.id}"
-                                        [routerLink]="['./', contact.uuid]">
+                                        [routerLink]="['./', contact.id]">
                                         <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
-                                            <ng-container *ngIf="contact.avatar">
+                                                            <ng-container *ngIf="contact.avatar">
                                                 <img
                                                     class="object-cover w-full h-full"
                                                     [src]="contact.avatar"
                                                     alt="Contact avatar"/>
                                             </ng-container>
+                                            <ng-container *ngIf="!contact.avatar">
+                                                <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                    {{contact.id.charAt(0)}}
+                                                </div>
+                                            </ng-container>
+
                                         </div>
                                         <div class="min-w-0 ml-4">
                                             <div class="font-medium leading-5 truncate">{{contact.id}}</div>

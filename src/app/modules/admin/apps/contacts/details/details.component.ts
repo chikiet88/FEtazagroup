@@ -83,7 +83,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((contacts: Contact[]) => {
                 this.contacts = contacts;
-
+                console.log(this.contacts)
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
@@ -92,7 +92,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         this._contactsService.contact$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((contact: Contact) => {
-
+                console.log(this.contact)
                 // Open the drawer in case it is closed
                 this._contactsListComponent.matDrawer.open();
 

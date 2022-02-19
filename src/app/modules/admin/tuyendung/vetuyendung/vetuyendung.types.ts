@@ -1,7 +1,6 @@
 export interface Vetuyendung {
-    id?: number;
-    uuid?: string;
-    idVitri?: number;
+    id?: string;
+    Vitri?: string;
     SLHT?: number;
     SLCT?: number;
     LuongDK?: object;

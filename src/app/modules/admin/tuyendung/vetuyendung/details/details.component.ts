@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +13,9 @@ import { Vetuyendung } from '../vetuyendung.types';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+  styleUrls: ['./details.component.scss'],
+  encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent implements OnInit {
   
@@ -25,6 +27,7 @@ export class DetailsComponent implements OnInit {
   vetuyendung: Vetuyendung;
   contactForm: FormGroup;
   vetuyendungs: Vetuyendung[];
+  Vitri:any;
   private _tagsPanelOverlayRef: OverlayRef;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -43,6 +46,7 @@ export class DetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this._ListComponent.matDrawer.open();
        // Create the contact form
     //    this.contactForm = this._formBuilder.group({
@@ -58,7 +62,7 @@ export class DetailsComponent implements OnInit {
     //     notes       : [null],
     //     tags        : [[]]
     // });
-
+    this.Vitri = {"eceb6560-47b2-480f-b876-857e48f7d723":"CEO","4aebb23f-0009-4765-8616-2ec0bc3bf721":"Front End","d9dfcd17-3bdb-4ef7-9675-336e33d0592b":"SEO","30941412-66c5-4676-8862-7de27aa86c85":"Leader IT"};
     this._vetuyendungService.vetuyendungs$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((vetuyendungs: Vetuyendung[]) => {
@@ -71,7 +75,6 @@ export class DetailsComponent implements OnInit {
         .subscribe((vetuyendung: Vetuyendung) => {
             this._ListComponent.matDrawer.open();
             this.vetuyendung = vetuyendung;
-
             // // Clear the emails and phoneNumbers form arrays
             // (this.contactForm.get('emails') as FormArray).clear();
             // (this.contactForm.get('phoneNumbers') as FormArray).clear();
@@ -622,12 +625,6 @@ toggleEditMode(editMode: boolean | null = null): void
 //     return this.countries.find(country => country.iso === iso);
 // }
 
-/**
- * Track by function for ngFor loops
- *
- * @param index
- * @param item
- */
 trackByFn(index: number, item: any): any
 {
     return item.id || index;

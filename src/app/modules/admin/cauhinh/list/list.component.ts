@@ -4,7 +4,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { CauhinhService } from '../cauhinh.service';
-import { Cauhinh, Detail } from '../cauhinh.types';
+import { Cauhinh } from '../cauhinh.types';
 import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
 import { v4 as uuidv4 } from 'uuid';
 @Component({
@@ -18,7 +18,6 @@ export class ListComponent implements OnInit {
   Cauhinhs$: Observable<Cauhinh[]>;
   selectCauhinh:Cauhinh|null=null;
   ThisCauhinh: any;
-  selectDetail:Detail[] =[];
   filter$: BehaviorSubject<string> = new BehaviorSubject('cauhinhs');
   searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
   masonryColumns: number = 4;
@@ -124,6 +123,7 @@ export class ListComponent implements OnInit {
     }
     updateThuoctinh(selectCauhinh: Cauhinh, thuoctinh: object): void
     {
+        console.log(thuoctinh);
        selectCauhinh.detail[thuoctinh['key']] = thuoctinh['value']
        this.detailChanged.next(selectCauhinh);
     }
@@ -133,7 +133,6 @@ export class ListComponent implements OnInit {
         this._CauhinhService.selectCauhinh(id)
             .subscribe((cauhinh) => {
                this.selectCauhinh = cauhinh;
-                //this.selectDetail = cauhinh.detail;
                 this._changeDetectorRef.markForCheck();
             });
     }

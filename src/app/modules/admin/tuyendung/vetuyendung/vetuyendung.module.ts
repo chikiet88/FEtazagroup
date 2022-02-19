@@ -19,6 +19,8 @@ import { SharedModule } from 'app/shared/shared.module';
 import { DetailsComponent } from './details/details.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { CanDeactivateVetuyendungsDetails } from './vetuyendung.guard';
+import { VetuyendungResolver, VetuyendungsResolver } from './vetuyendung.resolver';
+import { MatSelectModule } from '@angular/material/select';
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',
@@ -27,10 +29,16 @@ const VetuyendungRoutes: Route[] = [
           {
               path     : '',
               component: ListComponent,
+              resolve  : {
+                tasks    : VetuyendungsResolver,
+              },
               children : [
                   {
                       path         : ':id',
                       component    : DetailsComponent,
+                      resolve  : {
+                        tasks    : VetuyendungResolver,
+                      },
                       canDeactivate: [CanDeactivateVetuyendungsDetails]
                   }
               ]
@@ -55,6 +63,7 @@ const VetuyendungRoutes: Route[] = [
     MatSidenavModule,
     FuseMasonryModule,
     MatTooltipModule,
+    MatSelectModule,
     SharedModule,
     MatTabsModule
   ]

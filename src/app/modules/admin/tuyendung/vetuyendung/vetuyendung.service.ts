@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { Identifiers } from '@angular/compiler/src/render3/r3_identifiers';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { cloneDeep } from 'lodash';
@@ -26,7 +27,6 @@ export class VetuyendungService {
   {
       return this._httpClient.get<Vetuyendung[]>(`${environment.ApiURL}/vetuyendung`).pipe(
           tap((ves:Vetuyendung[]) => {
-              console.log(ves)
               this._vetuyendungs.next(ves);
           })
       );
@@ -37,11 +37,28 @@ export class VetuyendungService {
           take(1),
           switchMap(vetuyendung => this._httpClient.post<Vetuyendung>(`${environment.ApiURL}/vetuyendung`,{}).pipe(
               map((newVe) => {
-                  console.log(newVe);
                   this._vetuyendungs.next([newVe, ...vetuyendung]);
                   return newVe;
               })
           ))
+      );
+  }
+  getVeById(id: string): Observable<Vetuyendung>
+  {
+      return this._vetuyendungs.pipe(
+          take(1),
+          map((vetuyendungs) => {
+              const vetuyendung = vetuyendungs.find(item => item.id === id) || null;
+              this._vetuyendung.next(vetuyendung);
+              return vetuyendung;
+          }),
+          switchMap((vetuyendung) => {
+              if ( !vetuyendung )
+              {
+                  return throwError('Could not found vetuyendung with id of ' + id + '!');
+              }
+              return of(vetuyendung);
+          })
       );
   }
 
