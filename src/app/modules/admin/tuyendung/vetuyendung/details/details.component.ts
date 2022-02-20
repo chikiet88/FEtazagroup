@@ -5,11 +5,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { clone, cloneDeep } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
 import { ListComponent } from '../list/list.component';
 import { VetuyendungService } from '../vetuyendung.service';
 import { Vetuyendung } from '../vetuyendung.types';
-
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -18,14 +18,14 @@ import { Vetuyendung } from '../vetuyendung.types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent implements OnInit {
-  
+
   @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
   @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
   @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
 
   editMode: boolean = false;
   vetuyendung: Vetuyendung;
-  contactForm: FormGroup;
+  vetuyendungForm: FormGroup;
   vetuyendungs: Vetuyendung[];
   Vitri:any;
   private _tagsPanelOverlayRef: OverlayRef;
@@ -48,25 +48,30 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
 
     this._ListComponent.matDrawer.open();
-       // Create the contact form
-    //    this.contactForm = this._formBuilder.group({
-    //     id          : [''],
-    //     avatar      : [null],
-    //     name        : ['', [Validators.required]],
-    //     emails      : this._formBuilder.array([]),
-    //     phoneNumbers: this._formBuilder.array([]),
-    //     title       : [''],
-    //     company     : [''],
-    //     birthday    : [null],
-    //     address     : [null],
-    //     notes       : [null],
-    //     tags        : [[]]
-    // });
+       // Create the vetuyendung form
+    this.vetuyendungForm = this._formBuilder.group({
+        id          : [''],
+        idVitri        : ['', [Validators.required]],
+        TGThuviec        : [''],
+        SLHT        : [''],
+        SLCT        : [''],
+        LuongDK        : [''],
+        TNNS        : [{}],
+        Mota        : [''],
+        Lydo        : [''],
+        Yeucau        : [''],
+        Pheduyet        : [{}],
+        Trangthai        : [''],
+        published        : [''],
+        ordering        : [''],
+        Ngaytao        : [''],
+        idTao        : [''],
+    });
     this.Vitri = {"eceb6560-47b2-480f-b876-857e48f7d723":"CEO","4aebb23f-0009-4765-8616-2ec0bc3bf721":"Front End","d9dfcd17-3bdb-4ef7-9675-336e33d0592b":"SEO","30941412-66c5-4676-8862-7de27aa86c85":"Leader IT"};
     this._vetuyendungService.vetuyendungs$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((vetuyendungs: Vetuyendung[]) => {
-            this.vetuyendungs = vetuyendungs;
+           this.vetuyendungs = vetuyendungs;
             this._changeDetectorRef.markForCheck();
         });
 
@@ -79,8 +84,7 @@ export class DetailsComponent implements OnInit {
             // (this.contactForm.get('emails') as FormArray).clear();
             // (this.contactForm.get('phoneNumbers') as FormArray).clear();
 
-            // // Patch values to the form
-            // this.contactForm.patchValue(contact);
+            this.vetuyendungForm.patchValue(vetuyendung);
 
             // // Setup the emails form array
             // const emailFormGroups = [];
@@ -215,75 +219,55 @@ toggleEditMode(editMode: boolean | null = null): void
     }
     this._changeDetectorRef.markForCheck();
 }
-// updateContact(): void
-// {
-//     const contact = this.contactForm.getRawValue();
-//     contact.emails = contact.emails.filter(email => email.email);
-//     contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
-//     this._contactsService.updateContact(contact.id, contact).subscribe(() => {
+updateVetuyendung(): void
+{
+    const vetuyendung = this.vetuyendungForm.getRawValue();
+    this._vetuyendungService.updateVetuyendung(vetuyendung.id, vetuyendung).subscribe(() => {
+        // Toggle the edit mode off
+        this.toggleEditMode(false);
+    });
+}
 
-//         // Toggle the edit mode off
-//         this.toggleEditMode(false);
-//     });
-// }
+deleteVetuyendung(): void
+{
+    // Open the confirmation dialog
+    const confirmation = this._fuseConfirmationService.open({
+        title  : 'Xóa Phiếu Yêu Cầu',
+        message: 'Bạn Có Chắc Chắn Muốn Xóa Phiếu Yêu Cầu Này Không?',
+        actions: {
+            confirm: {
+                label: 'Xóa'
+            }
+        }
+    });
+    confirmation.afterClosed().subscribe((result) => {
+        if ( result === 'confirmed' )
+        {
+            const id = this.vetuyendung.id;
+            const currentVetuyendungIndex = this.vetuyendungs.findIndex(item => item.id === id);
+            const nextVetuyendungIndex = currentVetuyendungIndex + ((currentVetuyendungIndex === (this.vetuyendungs.length - 1)) ? -1 : 1);
+            const nextVetuyendungId = (this.vetuyendungs.length === 1 && this.vetuyendungs[0].id === id) ? null : this.vetuyendungs[nextVetuyendungIndex].id;
+            this._vetuyendungService.deleteVetuyendung(id)
+                .subscribe((isDeleted) => {
+                    if ( !isDeleted )
+                    {
+                        return;
+                    }
+                    if ( nextVetuyendungId )
+                    {
+                        this._router.navigate(['../', nextVetuyendungId], {relativeTo: this._activatedRoute});
+                    }
+                    else
+                    {
+                        this._router.navigate(['../'], {relativeTo: this._activatedRoute});
+                    }
+                    this.toggleEditMode(false);
+                });
+            this._changeDetectorRef.markForCheck();
+        }
+    });
 
-// deleteContact(): void
-// {
-//     // Open the confirmation dialog
-//     const confirmation = this._fuseConfirmationService.open({
-//         title  : 'Delete contact',
-//         message: 'Are you sure you want to delete this contact? This action cannot be undone!',
-//         actions: {
-//             confirm: {
-//                 label: 'Delete'
-//             }
-//         }
-//     });
-//     // Subscribe to the confirmation dialog closed action
-//     confirmation.afterClosed().subscribe((result) => {
-
-//         // If the confirm button pressed...
-//         if ( result === 'confirmed' )
-//         {
-//             // Get the current contact's id
-//             const id = this.contact.id;
-
-//             // Get the next/previous contact's id
-//             const currentContactIndex = this.contacts.findIndex(item => item.id === id);
-//             const nextContactIndex = currentContactIndex + ((currentContactIndex === (this.contacts.length - 1)) ? -1 : 1);
-//             const nextContactId = (this.contacts.length === 1 && this.contacts[0].id === id) ? null : this.contacts[nextContactIndex].id;
-
-//             // Delete the contact
-//             this._contactsService.deleteContact(id)
-//                 .subscribe((isDeleted) => {
-
-//                     // Return if the contact wasn't deleted...
-//                     if ( !isDeleted )
-//                     {
-//                         return;
-//                     }
-
-//                     // Navigate to the next contact if available
-//                     if ( nextContactId )
-//                     {
-//                         this._router.navigate(['../', nextContactId], {relativeTo: this._activatedRoute});
-//                     }
-//                     // Otherwise, navigate to the parent
-//                     else
-//                     {
-//                         this._router.navigate(['../'], {relativeTo: this._activatedRoute});
-//                     }
-
-//                     // Toggle the edit mode off
-//                     this.toggleEditMode(false);
-//                 });
-
-//             // Mark for check
-//             this._changeDetectorRef.markForCheck();
-//         }
-//     });
-
-// }
+}
 
 // uploadAvatar(fileList: FileList): void
 // {

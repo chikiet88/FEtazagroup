@@ -15,12 +15,13 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-    @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
+@ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
  contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
- selectedVetuyendung: Vetuyendung;
+selectedVetuyendung: Vetuyendung;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   vetuyendungs$: Observable<Vetuyendung[]>;
   vetuyendungs: Vetuyendung[];
+  Vitri:any;
   vetuyendungsCount: number = 0;
   drawerMode: 'over' | 'side';
   searchInputControl: FormControl = new FormControl();
@@ -38,10 +39,14 @@ export class ListComponent implements OnInit {
 
     ngOnInit(): void
     {
+        this.Vitri = {"eceb6560-47b2-480f-b876-857e48f7d723":"CEO","4aebb23f-0009-4765-8616-2ec0bc3bf721":"Front End","d9dfcd17-3bdb-4ef7-9675-336e33d0592b":"SEO","30941412-66c5-4676-8862-7de27aa86c85":"Leader IT"};
         this.vetuyendungs$ = this._VetuyendungService.vetuyendungs$;
         this._VetuyendungService.vetuyendungs$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((vetuyendungs: Vetuyendung[]) => {
+                // vetuyendungs.forEach(item => {
+                //     item.Vitri = this.Vitri[item.idVitri]
+                // });
                 console.log(vetuyendungs)
                 this.vetuyendungsCount = vetuyendungs.length;
                 this.vetuyendungs = vetuyendungs;
@@ -93,14 +98,13 @@ export class ListComponent implements OnInit {
     }
     else
     {
-        const Vitri = this.vetuyendungs[0].Vitri;
-     if(!Vitri)
+        const idVitri = this.vetuyendungs[0].idVitri;
+     if(!idVitri)
         {
-            this._notifierService.notify('error', 'Có Phiếu Trống Chưa Điền');
+            this._notifierService.notify('error', 'Có Phiếu Mới Chưa Điền');
             
         }
         else {
-            this._notifierService.notify('success', 'Tạo mới');
             this._VetuyendungService.createVetuyendung().subscribe((newVe) => {
                 this._router.navigate(['./', newVe.id], {relativeTo: this._activatedRoute});
                 this._changeDetectorRef.markForCheck();

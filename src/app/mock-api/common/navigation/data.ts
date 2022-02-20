@@ -5,7 +5,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'wellcome',
         title   : 'Wellcomekit',
-        tooltip : 'Wellcomekit',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -13,7 +12,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'thongtin',
         title   : 'Thông Tin',
-        tooltip : 'Thông Tin',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -21,7 +19,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'sodo',
         title   : 'Sơ Đồ',
-        tooltip : 'Sơ Đồ',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -29,7 +26,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'quytrinh',
         title   : 'Quy Trình',
-        tooltip : 'Quy Trình',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -37,7 +33,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'thongbao',
         title   : 'Thông Báo',
-        tooltip : 'Thông Báo',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -45,7 +40,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'phaply',
         title   : 'Pháp Lý',
-        tooltip : 'Pháp Lý',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -53,7 +47,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'baocao',
         title   : 'Báo Cáo',
-        tooltip : 'Báo Cáo',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -61,7 +54,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'tuyendung',
         title   : 'Tuyển Dụng',
-        tooltip : 'Tuyển Dụng',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -69,7 +61,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'daotao',
         title   : 'Đào Tạo',
-        tooltip : 'Đào Tạo',
         type    : 'aside',
         icon    : 'heroicons_outline:academic-cap',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -77,7 +68,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'cauhinh',
         title   : 'Cấu Hình',
-        tooltip : 'Cấu Hình',
         type    : 'basic',
         icon    : 'heroicons_outline:academic-cap',
         link : '/cauhinh'
@@ -85,7 +75,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'dashboards',
         title   : 'Dashboards',
-        tooltip : 'Dashboards',
         type    : 'aside',
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -93,7 +82,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'apps',
         title   : 'Apps',
-        tooltip : 'Apps',
         type    : 'aside',
         icon    : 'heroicons_outline:qrcode',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -101,7 +89,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'pages',
         title   : 'Pages',
-        tooltip : 'Pages',
         type    : 'aside',
         icon    : 'heroicons_outline:document-duplicate',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -109,7 +96,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'user-interface',
         title   : 'UI',
-        tooltip : 'UI',
         type    : 'aside',
         icon    : 'heroicons_outline:collection',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -117,7 +103,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'navigation-features',
         title   : 'Navigation',
-        tooltip : 'Navigation',
         type    : 'aside',
         icon    : 'heroicons_outline:menu',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation

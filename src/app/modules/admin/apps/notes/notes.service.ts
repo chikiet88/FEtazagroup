@@ -128,6 +128,7 @@ export class NotesService
             tap((response: Note[]) => {
                 this._notes.next(response);
                 console.log(this._notes);
+                
             })
         );
     }

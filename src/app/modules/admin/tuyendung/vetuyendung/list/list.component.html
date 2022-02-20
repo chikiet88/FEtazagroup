@@ -62,7 +62,7 @@
                                 <span class="ml-2 mr-1">Thêm</span>
                             </button>
                         </div>
-                        <div class="flex-auto border-t -mt-px pt-4">
+                        <div class="flex-auto -mt-px pt-4">
                             <div class="w-full max-w-screen-xl mx-auto">
                                     <button mat-button>Bước 1</button>
                                     <button mat-button>Bước 2</button>
@@ -95,14 +95,16 @@
                                             </ng-container>
                                             <ng-container *ngIf="!contact.avatar">
                                                 <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                    {{contact.id.charAt(0)}}
+                                                    {{contact.Vitri}}
                                                 </div>
                                             </ng-container>
 
                                         </div>
                                         <div class="min-w-0 ml-4">
-                                            <div class="font-medium leading-5 truncate">{{contact.id}}</div>
-                                            <div class="leading-5 truncate text-secondary">{{contact.Ngaytao}}</div>
+                                            <div class="font-medium leading-5 truncate" [ngClass]="{'text-red-500': !contact.idVitri}">
+                                                {{(contact.idVitri|Custom:Vitri) || 'Phiếu Mới'}}
+                                            </div>
+                                            <div class="leading-5 truncate text-secondary">{{contact.Ngaytao| date:'dd/MM/yyyy'}}</div>
                                         </div>
                                     </a>
                                 </ng-container>
