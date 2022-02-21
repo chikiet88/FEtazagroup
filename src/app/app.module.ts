@@ -16,13 +16,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
-
 const customNotifierOptions: NotifierOptions = {
     position: {
           horizontal: {
@@ -70,10 +67,6 @@ const customNotifierOptions: NotifierOptions = {
         CauhinhComponent,
     ],
     imports     : [
-        CalendarModule.forRoot({
-          provide: DateAdapter,
-          useFactory: adapterFactory,
-        }),
         NotifierModule.withConfig(customNotifierOptions),
         BrowserModule,
         BrowserAnimationsModule,
