@@ -16,41 +16,41 @@ export const compactNavigation: FuseNavigationItem[] = [
         icon    : 'heroicons_outline:home',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },      
-    {
-        id      : 'sodo',
-        title   : 'Sơ Đồ',
-        type    : 'aside',
-        icon    : 'heroicons_outline:home',
-        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },
-    {
-        id      : 'quytrinh',
-        title   : 'Quy Trình',
-        type    : 'aside',
-        icon    : 'heroicons_outline:home',
-        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },  
-    {
-        id      : 'thongbao',
-        title   : 'Thông Báo',
-        type    : 'aside',
-        icon    : 'heroicons_outline:home',
-        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    }, 
-    {
-        id      : 'phaply',
-        title   : 'Pháp Lý',
-        type    : 'aside',
-        icon    : 'heroicons_outline:home',
-        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },
-    {
-        id      : 'baocao',
-        title   : 'Báo Cáo',
-        type    : 'aside',
-        icon    : 'heroicons_outline:home',
-        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },
+    // {
+    //     id      : 'sodo',
+    //     title   : 'Sơ Đồ',
+    //     type    : 'aside',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    // },
+    // {
+    //     id      : 'quytrinh',
+    //     title   : 'Quy Trình',
+    //     type    : 'aside',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    // },  
+    // {
+    //     id      : 'thongbao',
+    //     title   : 'Thông Báo',
+    //     type    : 'aside',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    // }, 
+    // {
+    //     id      : 'phaply',
+    //     title   : 'Pháp Lý',
+    //     type    : 'aside',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    // },
+    // {
+    //     id      : 'baocao',
+    //     title   : 'Báo Cáo',
+    //     type    : 'aside',
+    //     icon    : 'heroicons_outline:home',
+    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    // },
     {
         id      : 'tuyendung',
         title   : 'Tuyển Dụng',

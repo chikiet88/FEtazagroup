@@ -9,6 +9,7 @@ import { HmacSHA256 } from 'crypto-js';
 import Base64 from 'crypto-js/enc-base64';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
+import { NotifierService } from 'angular-notifier';
 @Injectable()
 export class AuthService
 {
@@ -16,18 +17,21 @@ export class AuthService
     private _authenticated: boolean = false;
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
+    private readonly notifier: NotifierService;
     /**
      * Constructor
      */
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
+        private _notifierService: NotifierService,
   
     )
     {
         this._secret = 'YOUR_VERY_CONFIDENTIAL_SECRET_FOR_SIGNING_JWT_TOKENS!!!';
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
+        this.notifier = _notifierService;
     }
 
     public get currentUserValue(): User {
@@ -74,23 +78,6 @@ export class AuthService
         return this._httpClient.post('api/auth/reset-password', password);
     }
 
-    private _base64url(source: any): string
-    {
-        // Encode in classical base64
-        let encodedSource = Base64.stringify(source);
-
-        // Remove padding equal characters
-        encodedSource = encodedSource.replace(/=+$/, '');
-
-        // Replace characters according to base64url specifications
-        encodedSource = encodedSource.replace(/\+/g, '-');
-        encodedSource = encodedSource.replace(/\//g, '_');
-
-        // Return the base64 encoded string
-        return encodedSource;
-    }
-
-
     /**
      * Sign in
      *
@@ -98,7 +85,6 @@ export class AuthService
      */
     signIn(credentials: { username: string; password: string }): Observable<any>
     {
-        // Throw error, if the user is already logged in
         if ( this._authenticated )
         {
             return throwError('User is already logged in.');
@@ -106,18 +92,24 @@ export class AuthService
 
         return this._httpClient.post(`${environment.ApiURL}/auth/login`, credentials).pipe(
             switchMap((response: any) => {
-
-                // Store the access token in the local storage
-                this.accessToken = response.result.access_token;
-
-                // Set the authenticated flag to true
+                if(response===1)
+                {
+                    this.notifier.notify('error', `Số Điện Thoại Không Tồn Tại`);
+                    return of(response);
+                }
+                else if(response===2)
+                {
+                    this.notifier.notify('error', `Mật Khẩu Không Đúng`);
+                    return of(response);
+                }
+                else 
+                {
+                this.accessToken = response.access_token;
                 this._authenticated = true;
-
-                // Store the user on the user service
-                this._userService.user = response.result.user;
-
-                // Return a new observable with the response
+                this._userService.user = response.user;
+                }
                 return of(response);
+               
             })
         );
     }
@@ -158,13 +150,8 @@ export class AuthService
      */
     signOut(): Observable<any>
     {
-        // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
-
-        // Set the authenticated flag to false
         this._authenticated = false;
-
-        // Return the observable
         return of(true);
     }
 
@@ -193,25 +180,19 @@ export class AuthService
      */
     check(): Observable<boolean>
     {
-        // Check if the user is logged in
         if ( this._authenticated )
         {
             return of(true);
         }
-
-        // Check the access token availability
-        if ( !this.accessToken )
+        if ( !this.accessToken || this.accessToken === 'undefined' )
         {
+            localStorage.removeItem('accessToken');
             return of(false);
         }
-
-        // Check the access token expire date
         if ( AuthUtils.isTokenExpired(this.accessToken) )
         {
             return of(false);
         }
-
-        // If the access token exists and it didn't expire, sign in using it
         return of(true);
         //this.signInUsingToken();
     }

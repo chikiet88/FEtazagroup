@@ -21,6 +21,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { CanDeactivateVetuyendungsDetails } from './vetuyendung.guard';
 import { VetuyendungResolver, VetuyendungsResolver } from './vetuyendung.resolver';
 import { MatSelectModule } from '@angular/material/select';
+import {MatBadgeModule} from '@angular/material/badge';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CustomPipe } from 'app/custom.pipe';
 CustomPipe
@@ -52,6 +53,7 @@ const VetuyendungRoutes: Route[] = [
 @NgModule({
   declarations: [VetuyendungComponent, ListComponent,DetailsComponent,CustomPipe],
   imports: [
+    MatBadgeModule,
     EditorModule,
     RouterModule.forChild(VetuyendungRoutes),
     CommonModule,

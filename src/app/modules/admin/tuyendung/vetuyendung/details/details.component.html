@@ -34,45 +34,115 @@
                     <div class="flex items-center ml-auto mb-1">
                         <button mat-stroked-button (click)="toggleEditMode(true)">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                            <span class="ml-2">Edit</span>
+                            <span class="ml-2">Chỉnh Sửa</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Name -->
-                <div class="mt-3 text-2xl font-bold truncate">{{vetuyendung.id.charAt(0)}}</div>
+                <div class="mt-3 text-2xl font-bold truncate">{{(vetuyendung.idVitri|Custom:Vitri) || 'Phiếu Mới'}} {{vetuyendung.id.charAt(0)}}</div>
 
+                <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
 
-                <ng-container *ngIf="vetuyendung.TNNS.length">
-                    <div class="flex flex-wrap items-center mt-2">
-                        <ng-container *ngFor="let tag of (contact.TNNS); trackBy: trackByFn">
-                            <div
-                                class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                <span class="text-sm font-medium whitespace-nowrap">{{tag.title}} sdadsad</span>
-                            </div>
-                        </ng-container>
-                    </div>
-                </ng-container>
-
-                <!-- <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
-      
-                
-                    <ng-container *ngIf="contact.title">
+                <div class="d-flex">
+                    <ng-container *ngIf="vetuyendung.idVitri">
                         <div class="flex sm:items-center">
-                            <mat-icon [svgIcon]="'heroicons_outline:briefcase'"></mat-icon>
-                            <div class="ml-6 leading-6">{{contact.title}}</div>
+                            <span>Vị Trí Cần Tuyển : </span>
+                            <div class="ml-6 leading-6">{{(vetuyendung.idVitri|Custom:Vitri) || 'Phiếu Mới'}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.TGThuviec" class="fuse-mat-no-subscript flex-auto">
+                        <div class="flex sm:items-center">
+                            <span>Thời Gian Thử Việc  : </span>
+                            <div class="ml-6 leading-6">{{vetuyendung.TGThuviec}}</div>
+                        </div>
+                    </ng-container>
+                      <ng-container *ngIf="vetuyendung.SLHT">
+                        <div class="flex sm:items-center">
+                            <span>Số Lượng Hiện Có</span>
+                            <div class="ml-6 leading-6">{{vetuyendung.SLHT}}</div>
                         </div>
                     </ng-container>
 
-    
-                    <ng-container *ngIf="contact.company">
+                    <ng-container *ngIf="vetuyendung.SLCT">
+                        <div class="flex sm:items-center">
+                            <span>Số Lượng Cần Tuyển</span>
+                            <div class="ml-6 leading-6">{{vetuyendung.SLCT}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.LuongDK">
+                        <div class="flex sm:items-center">
+                            <span>Mức Lương Dự Kiến</span>
+                            <div class="ml-6 leading-6">{{vetuyendung.LuongDK| currency:'VND'}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.TNNS">
                         <div class="flex sm:items-center">
                             <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
-                            <div class="ml-6 leading-6">{{contact.company}}</div>
+                            <div class="ml-6 leading-6">{{vetuyendung.TNNS}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.Mota">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6" [innerHTML]="vetuyendung.Mota"></div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.Lydo">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6" [innerHTML]="vetuyendung.Lydo"></div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.Yeucau">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6" [innerHTML]="vetuyendung.Yeucau"></div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="vetuyendung.Pheduyet">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.Pheduyet}}</div>
                         </div>
                     </ng-container>
 
-          
+                    <ng-container *ngIf="vetuyendung.Trangthai">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.Trangthai}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="vetuyendung.published">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.published}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="vetuyendung.ordering">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.ordering}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="vetuyendung.Ngaytao">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.Ngaytao}}</div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="vetuyendung.idTao">
+                        <div class="flex sm:items-center">
+                            <mat-icon [svgIcon]="'heroicons_outline:office-building'"></mat-icon>
+                            <div class="ml-6 leading-6">{{vetuyendung.idTao}}</div>
+                        </div>
+                    </ng-container>
+                </div>
+            <!-- 
                     <ng-container *ngIf="contact.emails.length">
                         <div class="flex">
                             <mat-icon [svgIcon]="'heroicons_outline:mail'"></mat-icon>
@@ -147,7 +217,8 @@
                                 [innerHTML]="contact.notes"></div>
                         </div>
                     </ng-container>
-                </div> -->
+                    -->
+                </div> 
 
             </div>
         </div>
