@@ -8,40 +8,40 @@
   
       <!-- ID Column -->
       <ng-container matColumnDef="TenKH">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> TenKH </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
         <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
       </ng-container>
        
       <!-- Progress Column -->
       <ng-container matColumnDef="SDT">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> SDT  </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
         <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
       </ng-container>
   
       <!-- Name Column -->
       <ng-container matColumnDef="TDS">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> TDS </th>
-        <td mat-cell *matCellDef="let row"> {{row.TDS}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tổng Doanh Số </th>
+        <td mat-cell *matCellDef="let row"> {{row.TDS|number:}} </td>
       </ng-container>
       <!-- Fruit Column -->
       <ng-container matColumnDef="TTT">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> TTT </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tổng Thực Thu </th>
         <td mat-cell *matCellDef="let row"> {{row.TTT}} </td>
       </ng-container>
       <ng-container matColumnDef="LMD">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> LMD </th>
-        <td mat-cell *matCellDef="let row"> {{row.LMD|date:'dd/MM/yyyy'}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lần Mua Đầu </th>
+        <td mat-cell *matCellDef="let row"> {{row.LMD}} </td>
       </ng-container>
       <ng-container matColumnDef="NMD">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> NMD </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nơi Mua Đầu </th>
         <td mat-cell *matCellDef="let row"> {{row.NMD}} </td>
       </ng-container>
       <ng-container matColumnDef="LMC">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> LMC </th>
-        <td mat-cell *matCellDef="let row"> {{row.LMC|date:'dd/MM/yyyy'}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lần Mua Cuối </th>
+        <td mat-cell *matCellDef="let row"> {{row.LMC}} </td>
       </ng-container>
       <ng-container matColumnDef="NMC">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> NMC </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nơi Mua Cuối </th>
         <td mat-cell *matCellDef="let row"> {{row.NMC}} </td>
       </ng-container>
   
@@ -54,6 +54,6 @@
       </tr>
     </table>
   
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,9999]" aria-label="Select page of users"></mat-paginator>
   </div>
 </div>

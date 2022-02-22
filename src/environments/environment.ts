@@ -5,7 +5,12 @@
 export const environment = {
     production: false,
    // ApiURL:'https://v2api.tazagroup.vn'
-    ApiURL:'http://localhost:3000'
+    ApiURL:'http://localhost:3000',
+    googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
+    characters: {
+      spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
+      worksheetName: 'Characters',
+    },
 };
 
 /*

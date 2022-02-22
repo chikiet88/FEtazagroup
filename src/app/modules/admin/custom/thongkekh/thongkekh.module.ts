@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
 import { ThongkekhComponent } from './thongkekh.component';
 import { MaterialExampleModule } from 'material.module';
+import { API_KEY, GoogleSheetsDbService } from 'ng-google-sheets-db';
+import { HttpClientModule } from '@angular/common/http';
+import { environment } from 'environments/environment';
 const thongkeRoutes: Route[] = [
   {
       path     : '',
@@ -13,9 +16,17 @@ const thongkeRoutes: Route[] = [
 @NgModule({
   declarations:  [ThongkekhComponent],
   imports: [
+    HttpClientModule,
     MaterialExampleModule,
     RouterModule.forChild(thongkeRoutes),
     CommonModule,
-  ]
+  ],
+  providers: [
+    {
+      provide: API_KEY,
+      useValue: environment.googleSheetsApiKey,
+    },
+    GoogleSheetsDbService
+  ],
 })
 export class ThongkekhModule { }
