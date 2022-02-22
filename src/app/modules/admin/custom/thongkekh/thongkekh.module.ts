@@ -11,7 +11,7 @@ const thongkeRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [],
+  declarations:  [ThongkekhComponent],
   imports: [
     MaterialExampleModule,
     RouterModule.forChild(thongkeRoutes),

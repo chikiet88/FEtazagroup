@@ -1,29 +1,59 @@
-<table cdk-table [dataSource]="dataSource">
-    <!-- Position Column -->
-    <ng-container cdkColumnDef="position">
-      <th cdk-header-cell *cdkHeaderCellDef> No. </th>
-      <td cdk-cell *cdkCellDef="let element"> {{element.position}} </td>
-    </ng-container>
+<div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
+<mat-form-field appearance="standard">
+    <mat-label>Tìm Kiếm</mat-label>
+    <input matInput (keyup)="applyFilter($event)" #input>
+  </mat-form-field>
+  <div class="mat-elevation-z8">
+    <table class="w-full" mat-table [dataSource]="dataKhachhang" matSort>
   
-    <!-- Name Column -->
-    <ng-container cdkColumnDef="name">
-      <th cdk-header-cell *cdkHeaderCellDef> Name </th>
-      <td cdk-cell *cdkCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+      <!-- ID Column -->
+      <ng-container matColumnDef="TenKH">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> TenKH </th>
+        <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
+      </ng-container>
+       
+      <!-- Progress Column -->
+      <ng-container matColumnDef="SDT">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> SDT  </th>
+        <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+      </ng-container>
   
-    <!-- Weight Column -->
-    <ng-container cdkColumnDef="weight">
-      <th cdk-header-cell *cdkHeaderCellDef> Weight </th>
-      <td cdk-cell *cdkCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="TDS">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> TDS </th>
+        <td mat-cell *matCellDef="let row"> {{row.TDS}} </td>
+      </ng-container>
+      <!-- Fruit Column -->
+      <ng-container matColumnDef="TTT">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> TTT </th>
+        <td mat-cell *matCellDef="let row"> {{row.TTT}} </td>
+      </ng-container>
+      <ng-container matColumnDef="LMD">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> LMD </th>
+        <td mat-cell *matCellDef="let row"> {{row.LMD|date:'dd/MM/yyyy'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="NMD">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> NMD </th>
+        <td mat-cell *matCellDef="let row"> {{row.NMD}} </td>
+      </ng-container>
+      <ng-container matColumnDef="LMC">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> LMC </th>
+        <td mat-cell *matCellDef="let row"> {{row.LMC|date:'dd/MM/yyyy'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="NMC">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> NMC </th>
+        <td mat-cell *matCellDef="let row"> {{row.NMC}} </td>
+      </ng-container>
   
-    <!-- Symbol Column -->
-    <ng-container cdkColumnDef="symbol">
-      <th cdk-header-cell *cdkHeaderCellDef> Symbol </th>
-      <td cdk-cell *cdkCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   
-    <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
-    <tr cdk-row *cdkRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
   
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
+</div>

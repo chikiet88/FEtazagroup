@@ -17,6 +17,7 @@ import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { ThongkekhComponent } from './modules/admin/custom/thongkekh/thongkekh.component';
+import { MaterialExampleModule } from 'material.module';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -66,9 +67,9 @@ const customNotifierOptions: NotifierOptions = {
     declarations: [
         AppComponent,
         CauhinhComponent,
-        ThongkekhComponent,
     ],
     imports     : [
+        MaterialExampleModule,
         NotifierModule.withConfig(customNotifierOptions),
         BrowserModule,
         BrowserAnimationsModule,
