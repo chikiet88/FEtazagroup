@@ -97,6 +97,9 @@ export const appRoutes: Route[] = [
 
             ]},
             {path: 'cauhinh', loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
+            {path: 'custom', children: [
+                {path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule)},
+            ]},
             // Dashboards
             {path: 'dashboards', children: [
                 {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},

@@ -24,7 +24,6 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CustomPipe } from 'app/custom.pipe';
-CustomPipe
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',

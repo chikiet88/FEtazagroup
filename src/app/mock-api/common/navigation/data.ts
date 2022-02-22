@@ -73,6 +73,14 @@ export const compactNavigation: FuseNavigationItem[] = [
         link : '/cauhinh'
     },     
     {
+        id      : 'custom',
+        title   : 'Mở Rộng',
+        type    : 'aside',
+        icon    : 'heroicons_outline:academic-cap',
+        link : '/custom',
+        children: []
+    },     
+    {
         id      : 'dashboards',
         title   : 'Dashboards',
         type    : 'aside',
@@ -213,6 +221,22 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: '',
         type    : 'basic',
         icon    : 'heroicons_outline:home',
+    },
+    {
+        id      : 'custom',
+        title   : 'Mở Rộng',
+        subtitle: '',
+        type    : 'group',
+        icon    : 'heroicons_outline:home',
+        children: [
+            {
+                id   : 'custom.thongkekh',
+                title: 'Thống Kê KH',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/custom/thongkekh'
+            }
+        ]
     },
     {
         id      : 'dashboards',

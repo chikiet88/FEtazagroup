@@ -16,6 +16,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { ThongkekhComponent } from './modules/admin/custom/thongkekh/thongkekh.component';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -65,6 +66,7 @@ const customNotifierOptions: NotifierOptions = {
     declarations: [
         AppComponent,
         CauhinhComponent,
+        ThongkekhComponent,
     ],
     imports     : [
         NotifierModule.withConfig(customNotifierOptions),

@@ -16,7 +16,6 @@ import {
   addHours,
 } from 'date-fns';
 import { Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -43,7 +42,7 @@ const colors: any = {
   styleUrls: ['./lichhop.component.scss']
 })
 export class LichhopComponent implements OnInit {
-
+  locale: string = 'vi';
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
 
@@ -119,9 +118,10 @@ export class LichhopComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor(private modal: NgbModal) {}
+  constructor() { }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+  
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -158,7 +158,7 @@ export class LichhopComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+   //this.modal.open(this.modalContent, { size: 'lg' });
   }
 
   addEvent(): void {
