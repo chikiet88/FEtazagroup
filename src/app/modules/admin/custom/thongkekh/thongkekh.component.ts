@@ -6,6 +6,7 @@ import { environment } from 'environments/environment';
 import { GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Character, characterAttributesMapping } from './character.model';
+import { ThongkekhService } from './thongkekh.service';
 @Component({
   selector: 'app-thongkekh',
   templateUrl: './thongkekh.component.html',
@@ -19,8 +20,10 @@ export class ThongkekhComponent implements OnInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private googleSheetsDbService: GoogleSheetsDbService,
+  constructor(
+    private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
+    private _ThongkekhService :ThongkekhService
     ) {
     // Create 100 users
     //const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
@@ -28,6 +31,7 @@ export class ThongkekhComponent implements OnInit{
    
   }
   ngOnInit(): void {
+    let i =0;
     this.characters$ = this.googleSheetsDbService.get<Character>(
       environment.characters.spreadsheetId, environment.characters.worksheetName, characterAttributesMapping);
       this.characters$
@@ -35,12 +39,16 @@ export class ThongkekhComponent implements OnInit{
       .subscribe((dataKH: Character[]) => {
         dataKH.forEach(v => {
           v.TDS = v.TDS.replace(/\,/g,''); 
-          v.TTT = v.TTT.replace(/\,/g,''); 
-            });
-          this.dataKhachhang = new MatTableDataSource(dataKH);
+          v.TTT = v.TTT.replace(/\,/g,'');
+        //  v.LMD = new Date(v.LMD);
+        //   v.LMC = new Date(v.LMC);
+    });
+    this.CreateData(dataKH); 
+            console.log(dataKH);
+           this.dataKhachhang = new MatTableDataSource(dataKH);
           this.dataKhachhang.paginator = this.paginator;
-          this.dataKhachhang.sort = this.sort;
-          this._changeDetectorRef.markForCheck();
+           this.dataKhachhang.sort = this.sort;
+           this._changeDetectorRef.markForCheck();
           
       });
 
@@ -51,6 +59,17 @@ export class ThongkekhComponent implements OnInit{
     if (this.dataKhachhang.paginator) {
       this.dataKhachhang.paginator.firstPage();
     }
+  }
+  CreateData(dulieu:any): void
+  {
+    console.log(dulieu)
+    dulieu.forEach(v => {
+      this._ThongkekhService.CreateData(v)
+      .subscribe((response) => {
+          console.log(response)
+      });
+      this._changeDetectorRef.markForCheck();
+    });
   }
 }
 
