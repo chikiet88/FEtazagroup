@@ -9,8 +9,22 @@ export const environment = {
     googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     characters: {
       spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
-      worksheetName: 'Characters',
+      worksheetName: 'Characters1',
     },
+    // googleSheetsApiKey: 'AIzaSyBWAabxkOgkJVIK3PVrWnXz3y2inylGiQo',
+    // characters: {
+    //   spreadsheetId: '1Z-7nH87Qslg_c1jPtuJna-PmzzKFtxNr1_Zt9OTD3eo',
+    //   worksheetName: '2021',
+    // },
+    // characters: {
+    //   spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
+    //   worksheetName: 'Characters1',
+    // },
+    // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
+    // characters: {
+    //   spreadsheetId: '1cwdN0a8Dx2N5QjOsjeVQu9yqOoKZGop2',
+    //   worksheetName: '2021',
+    // },
 };
 
 /*

@@ -70,7 +70,7 @@ const VetuyendungRoutes: Route[] = [
     MatTooltipModule,
     MatSelectModule,
     SharedModule,
-    MatTabsModule
+    MatTabsModule,
   ]
 })
 export class VetuyendungModule { }

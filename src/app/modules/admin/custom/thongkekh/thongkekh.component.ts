@@ -33,6 +33,10 @@ export class ThongkekhComponent implements OnInit{
       this.characters$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((dataKH: Character[]) => {
+        dataKH.forEach(v => {
+          v.TDS = v.TDS.replace(/\,/g,''); 
+          v.TTT = v.TTT.replace(/\,/g,''); 
+            });
           this.dataKhachhang = new MatTableDataSource(dataKH);
           this.dataKhachhang.paginator = this.paginator;
           this.dataKhachhang.sort = this.sort;

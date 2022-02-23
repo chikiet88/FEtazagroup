@@ -12,8 +12,8 @@ export const characterAttributesMapping = {
 export interface Character {
   TenKH: string,
   SDT: string,
-  TDS: number,
-  TTT: number,
+  TDS: string,
+  TTT: string,
   LMD: Date,
   NMD: string,
   LMC: Date,
