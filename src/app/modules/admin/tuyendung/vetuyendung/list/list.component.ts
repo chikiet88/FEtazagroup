@@ -10,6 +10,8 @@ import { DOCUMENT } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -41,6 +43,7 @@ selectedVetuyendung: Vetuyendung;
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _VetuyendungService: VetuyendungService,
     private _notifierService: NotifierService,
+    private _fuseConfirmationService: FuseConfirmationService,
     ) { }
 
     ngOnInit(): void
@@ -55,7 +58,7 @@ selectedVetuyendung: Vetuyendung;
             {id : '7',position: 65536,title:'Bước 7',mota:'Xác nhận thanh toán',vetd:[]},
             {id : '8',position: 65536,title:'Bước 8',mota:'Thực hiện tuyển dụng',vetd:[]},
         ]
-        console.log(this.lists);
+       // console.log(this.lists);
         this.Vitri = {"eceb6560-47b2-480f-b876-857e48f7d723":"CEO","4aebb23f-0009-4765-8616-2ec0bc3bf721":"Front End","d9dfcd17-3bdb-4ef7-9675-336e33d0592b":"SEO","30941412-66c5-4676-8862-7de27aa86c85":"Leader IT"};
         this.vetuyendungs$ = this._VetuyendungService.vetuyendungs$;
         this._VetuyendungService.vetuyendungs$
@@ -131,10 +134,37 @@ selectedVetuyendung: Vetuyendung;
 
     }   
     
-    listDropped(event: any): void
+    cardDropped(event: CdkDragDrop<any[]>): void
     {
-        
-    } 
+        const confirmation = this._fuseConfirmationService.open({
+            title  : 'Phê Duyệt Phiếu',
+            message: 'Chắc Chắn Phê Duyệt',
+            actions: {
+                confirm: {
+                    label: 'Phê Duyệt'
+                }
+            }
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if ( result === 'confirmed' )
+            {
+                if ( event.previousContainer === event.container )
+                {
+                    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+                }
+                else
+                {
+                    transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+                    event.container.data[event.currentIndex].listId = event.container.id;
+                }
+                // Delete the list
+              //  this._scrumboardService.deleteList(id).subscribe();
+            }
+        });
+       // const updated = this._calculatePositions(event);
+        //this._scrumboardService.updateCards(updated).subscribe();
+    }
+
 
     trackByFn(index: number, item: any): any
     {

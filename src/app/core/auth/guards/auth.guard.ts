@@ -73,7 +73,6 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad
         return this._authService.check()
                    .pipe(
                        switchMap((authenticated) => {
-
                            // If the user is not authenticated...
                            if ( !authenticated )
                            {

@@ -119,27 +119,15 @@ export class AuthService
      */
     signInUsingToken(): Observable<any>
     {
-        // Renew token
-        return this._httpClient.post('api/auth/refresh-access-token', {
-            accessToken: this.accessToken
-        }).pipe(
+        return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, this.accessToken).pipe(
             catchError(() =>
-
                 // Return false
                 of(false)
             ),
             switchMap((response: any) => {
-
-                // Store the access token in the local storage
-                this.accessToken = response.result.access_token;
-
-                // Set the authenticated flag to true
+                this.accessToken = response.access_token;
                 this._authenticated = true;
-
-                // Store the user on the user service
-                this._userService.user = response.result.user;
-
-                // Return true
+                this._userService.user = response.user;
                 return of(true);
             })
         );
@@ -193,7 +181,7 @@ export class AuthService
         {
             return of(false);
         }
-        return of(true);
-        //this.signInUsingToken();
+        //return of(true);
+        return this.signInUsingToken();
     }
 }

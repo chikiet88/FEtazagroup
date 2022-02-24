@@ -47,10 +47,7 @@
 
                 <!-- List -->
                 <ng-container *ngFor="let list of lists; trackBy: trackByFn">
-                    <div
-                        class="flex-0 w-72 p-2 rounded-2xl bg-default"
-                        cdkDrag
-                        [cdkDragLockAxis]="'x'">
+                    <div class="flex-0 w-72 p-2 rounded-2xl bg-default">
 
                         <div
                             class="flex items-center justify-between"
@@ -62,7 +59,7 @@
                                {{list.vetd.length}}
                             </div>
                         </div>
-                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+                        <div class="mt-2 py-4 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
                             <div
                                 [id]="list.id"
                                 class="p-3 pb-0"

@@ -14,8 +14,8 @@ export interface Character {
   SDT: string,
   TDS: string,
   TTT: string,
-  LMD: string,
+  LMD: Date,
   NMD: string,
-  LMC: string,
+  LMC: Date,
   NMC: string,
 }
