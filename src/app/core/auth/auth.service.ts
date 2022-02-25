@@ -119,16 +119,16 @@ export class AuthService
      */
     signInUsingToken(): Observable<any>
     {
-        return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, this.accessToken).pipe(
-            catchError(() =>
-                // Return false
-                of(false)
-            ),
+        return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, {access_token:this.accessToken}).pipe(
             switchMap((response: any) => {
-                this.accessToken = response.access_token;
-                this._authenticated = true;
-                this._userService.user = response.user;
-                return of(true);
+                if(response!==false)
+                {
+                    this._authenticated = true;
+                    this._userService.user = response.user;
+                    return of(true)
+                }
+                else return of(false)
+
             })
         );
     }
