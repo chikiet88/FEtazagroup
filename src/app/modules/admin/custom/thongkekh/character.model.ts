@@ -19,3 +19,29 @@ export interface Character {
   LMC: Date,
   NMC: string,
 }
+
+export const KhachhangMapping = {
+  NgayTaoDV:"NgayTaoDV",
+  TenKH: "TenKH",
+  SDT: "SDT",
+  SDT2: "SDT2",
+  Dichvu: "Dichvu",
+  Doanhso: "Doanhso",
+  Tonglieutrinh: "Tonglieutrinh",
+  Dathu: "Dathu",
+  Ghichu: "Ghichu",
+  Chinhanh:"Chinhanh"
+
+};
+export interface Khachhang {
+  NgayTaoDV:Date,
+  TenKH: string,
+  SDT: string,
+  SDT2: string,
+  Dichvu: string,
+  Doanhso: string,
+  Tonglieutrinh: string,
+  Dathu: string,
+  Ghichu: string,
+  Chinhanh: string,
+}

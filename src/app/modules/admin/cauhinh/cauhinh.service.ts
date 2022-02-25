@@ -38,7 +38,7 @@ export class CauhinhService {
   {
       return this._httpClient.post<Cauhinh[]>(`${environment.ApiURL}/cauhinh`, {title}).pipe(
           tap((cauhinhs) => {
-              console.log(cauhinhs);
+                //  console.log(cauhinhs);
                this.notifier.notify('success', 'Thêm Thành Công');
                this.getCauhinhs().subscribe();
           })

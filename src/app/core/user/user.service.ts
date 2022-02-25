@@ -50,8 +50,6 @@ export class UserService
         return this._httpClient.get<User>(`${environment.ApiURL}/auth/profile`).pipe(
             tap((user) => {
                 this._user.next(user);
-                console.log(this._user);
-                console.log(user);
             })
         );
     }
