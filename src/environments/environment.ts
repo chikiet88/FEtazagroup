@@ -9,7 +9,7 @@ export const environment = {
     googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     characters: {
       spreadsheetId: '1qBzPZ6AbiJZCQp8gsiioZRNRmGRwoq_agx5Q5DK05EY',
-      worksheetName: 'Formmau',
+      worksheetName: 'Import',
     },
     // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     // characters: {

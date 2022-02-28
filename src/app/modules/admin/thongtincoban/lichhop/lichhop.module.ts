@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialExampleModule } from 'material.module';
+import { FuseDrawerModule } from '@fuse/components/drawer';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
@@ -17,6 +18,7 @@ const LichhopRoutes: Routes = [
 @NgModule({
   declarations: [LichhopComponent],
   imports: [
+    FuseDrawerModule,
     MaterialExampleModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

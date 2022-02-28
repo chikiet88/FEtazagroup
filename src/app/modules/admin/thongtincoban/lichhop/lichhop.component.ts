@@ -4,6 +4,7 @@ import {
   ViewChild,
   TemplateRef,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   startOfDay,
@@ -22,6 +23,8 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
+import { FuseDrawerService } from '@fuse/components/drawer';
+import { MatDialog } from '@angular/material/dialog';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -39,9 +42,27 @@ const colors: any = {
 @Component({
   selector: 'app-lichhop',
   templateUrl: './lichhop.component.html',
-  styleUrls: ['./lichhop.component.scss']
+  styles: ['.cal-month-view {.cal-day-cell {min-height: 80px !important;}}']
+  //styleUrls: ['./lichhop.component.scss'],
 })
 export class LichhopComponent implements OnInit {
+
+  constructor( private _fuseDrawerService: FuseDrawerService,
+    public dialog: MatDialog) { }
+    @ViewChild('Themmoi', { static: true }) secondDialog: TemplateRef<any>;  
+  openDialog() {
+      const dialogRef = this.dialog.open(this.secondDialog);
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+      });
+    }
+
+toggleDrawerOpen(drawerName): void
+{
+    const drawer = this._fuseDrawerService.getComponent(drawerName);
+    drawer.toggle();
+}
   locale: string = 'vi';
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
@@ -116,9 +137,8 @@ export class LichhopComponent implements OnInit {
     },
   ];
 
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen: boolean = false;
 
-  constructor() { }
 
   ngOnInit(): void {
   
@@ -130,9 +150,9 @@ export class LichhopComponent implements OnInit {
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
         events.length === 0
       ) {
-        this.activeDayIsOpen = false;
+      this.activeDayIsOpen = false;
       } else {
-        this.activeDayIsOpen = true;
+      this.activeDayIsOpen = true;
       }
       this.viewDate = date;
     }
@@ -157,6 +177,9 @@ export class LichhopComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
+   // this.toggleDrawerOpen('drawer');
+   this.openDialog()
+  // this.toggleDrawerOpen('drawer');
     this.modalData = { event, action };
    //this.modal.open(this.modalContent, { size: 'lg' });
   }

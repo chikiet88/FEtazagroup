@@ -100,6 +100,9 @@ export const appRoutes: Route[] = [
             {path: 'custom', children: [
                 {path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule)},
             ]},
+            {path: 'baocao', children: [
+                {path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule)},
+            ]},           
             // Dashboards
             {path: 'dashboards', children: [
                 {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},

@@ -18,6 +18,8 @@ import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { ThongkekhComponent } from './modules/admin/custom/thongkekh/thongkekh.component';
 import { MaterialExampleModule } from 'material.module';
+import { NhanvienComponent } from './modules/admin/baocao/nhanvien/nhanvien.component';
+import { FormControl } from '@angular/forms';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'

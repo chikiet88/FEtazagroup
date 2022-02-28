@@ -66,7 +66,7 @@ export class ThongkekhComponent implements OnInit{
                   let x = v.NgayTaoDV.toString().split("/");
                   v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
             }); 
-       //     this.CreateData(Khachhang);
+          // this.CreateData(Khachhang);
            this.Khachhang = new MatTableDataSource(Khachhang);
           this.Khachhang.paginator = this.paginator;
            this.Khachhang.sort = this.sort;

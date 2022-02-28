@@ -44,13 +44,6 @@ export const compactNavigation: FuseNavigationItem[] = [
     //     icon    : 'heroicons_outline:home',
     //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     // },
-    // {
-    //     id      : 'baocao',
-    //     title   : 'Báo Cáo',
-    //     type    : 'aside',
-    //     icon    : 'heroicons_outline:home',
-    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    // },
     {
         id      : 'tuyendung',
         title   : 'Tuyển Dụng',
@@ -64,7 +57,14 @@ export const compactNavigation: FuseNavigationItem[] = [
         type    : 'aside',
         icon    : 'heroicons_outline:academic-cap',
         children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },  
+    }, 
+    {
+        id      : 'baocao',
+        title   : 'Báo Cáo',
+        type    : 'aside',
+        icon    : 'heroicons_outline:home',
+        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    }, 
     {
         id      : 'cauhinh',
         title   : 'Cấu Hình',
@@ -212,6 +212,22 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:document-text',
                 link : '/daotao/tailieunguon'
+            }
+        ]
+    },
+    {
+        id      : 'baocao',
+        title   : 'Báo Cáo',
+        subtitle: '',
+        type    : 'group',
+        icon    : 'heroicons_outline:home',
+        children: [
+            {
+                id   : 'baocao.nhanvien',
+                title: 'Danh Sách Nhân Viên',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/baocao/nhanvien'
             }
         ]
     },

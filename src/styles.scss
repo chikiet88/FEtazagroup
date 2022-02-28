@@ -1,3 +1,8 @@
 /* Add application styles & imports to this file! */
 @import "~angular-notifier/styles";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+.cal-month-view {
+	.cal-day-cell {
+		min-height: 50px !important;
+	}
+}
