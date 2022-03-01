@@ -68,7 +68,7 @@ export class ThongkekhComponent implements OnInit{
             }); 
           // this.CreateData(Khachhang);
            this.Khachhang = new MatTableDataSource(Khachhang);
-          this.Khachhang.paginator = this.paginator;
+           this.Khachhang.paginator = this.paginator;
            this.Khachhang.sort = this.sort;
            this._changeDetectorRef.markForCheck();
           

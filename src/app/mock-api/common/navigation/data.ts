@@ -87,13 +87,13 @@ export const compactNavigation: FuseNavigationItem[] = [
     //     icon    : 'heroicons_outline:home',
     //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     // },
-    // {
-    //     id      : 'apps',
-    //     title   : 'Apps',
-    //     type    : 'aside',
-    //     icon    : 'heroicons_outline:qrcode',
-    //     children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    // },
+    {
+        id      : 'apps',
+        title   : 'Apps',
+        type    : 'aside',
+        icon    : 'heroicons_outline:qrcode',
+        children: [] // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
+    },
     // {
     //     id      : 'pages',
     //     title   : 'Pages',

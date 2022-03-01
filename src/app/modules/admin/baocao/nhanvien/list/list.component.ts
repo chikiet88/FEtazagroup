@@ -15,14 +15,17 @@
 // }
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { MatDrawer } from '@angular/material/sidenav';
-import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { catchError, filter, fromEvent, Observable, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Contact, Country } from 'app/modules/admin/apps/contacts/contacts.types';
 import { ContactsService } from 'app/modules/admin/apps/contacts/contacts.service';
 import { FormControl } from '@angular/forms';
-
+import { Nhanvien } from '../nhanvien.type';
+import { NhanvienService } from '../nhanvien.service';
+import { NotifierService } from 'angular-notifier';
+import { User } from '../users';
 // @Component({
 //     selector       : 'contacts-list',
 //     templateUrl    : './list.component.html',
@@ -41,13 +44,17 @@ export class ListComponent implements OnInit, OnDestroy
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
     contacts$: Observable<Contact[]>;
-
+    nhanviens$: Observable<Nhanvien[]>;
+    nhaviens:Nhanvien[];
+    nhanviensCount: number = 0;
+    Users:any
     contactsCount: number = 0;
     contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
     countries: Country[];
     drawerMode: 'side' | 'over';
     searchInputControl: FormControl = new FormControl();
     selectedContact: Contact;
+    selectedNhanvien: Nhanvien;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -57,9 +64,11 @@ export class ListComponent implements OnInit, OnDestroy
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
         private _contactsService: ContactsService,
+        private _nhanviensService: NhanvienService,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _notifierService: NotifierService,
     )
     {
     }
@@ -73,73 +82,38 @@ export class ListComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        // Get the contacts
-        this.contacts$ = this._contactsService.contacts$;
-        this._contactsService.contacts$
+        this.nhanviens$ = this._nhanviensService.nhanviens$;
+        this._nhanviensService.nhanviens$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((nhanviens: Nhanvien[]) => {
+            this.nhanviensCount = nhanviens.length;
+            this.nhaviens = nhanviens;
+            this._changeDetectorRef.markForCheck();
+        });
+        this._nhanviensService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((contacts: Contact[]) => {
-                
-                // Update the counts
-                this.contactsCount = contacts.length;
-
-                // Mark for check
+            .subscribe((nhanvien: Nhanvien) => {
+                this.selectedNhanvien = nhanvien;
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Get the contact
-        this._contactsService.contact$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((contact: Contact) => {
-
-                // Update the selected contact
-                this.selectedContact = contact;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the countries
-        this._contactsService.countries$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((countries: Country[]) => {
-
-                // Update the countries
-                this.countries = countries;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Subscribe to search input field value changes
         this.searchInputControl.valueChanges
             .pipe(
                 takeUntil(this._unsubscribeAll),
                 switchMap(query =>
-
-                    // Search
-                    this._contactsService.searchContacts(query)
+                    this._nhanviensService.searchNhanviens(query)
                 )
             )
             .subscribe();
-
-        // Subscribe to MatDrawer opened change
         this.matDrawer.openedChange.subscribe((opened) => {
             if ( !opened )
             {
-                // Remove the selected contact when drawer closed
-                this.selectedContact = null;
-
-                // Mark for check
+                this.selectedNhanvien = null;
                 this._changeDetectorRef.markForCheck();
             }
         });
-
-        // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({matchingAliases}) => {
-
-                // Set the drawerMode if the given breakpoint is active
                 if ( matchingAliases.includes('lg') )
                 {
                     this.drawerMode = 'side';
@@ -148,12 +122,8 @@ export class ListComponent implements OnInit, OnDestroy
                 {
                     this.drawerMode = 'over';
                 }
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Listen for shortcuts
         fromEvent(this._document, 'keydown')
             .pipe(
                 takeUntil(this._unsubscribeAll),
@@ -163,7 +133,7 @@ export class ListComponent implements OnInit, OnDestroy
                 )
             )
             .subscribe(() => {
-                this.createContact();
+                this.createNhanvien();
             });
     }
 
@@ -192,21 +162,46 @@ export class ListComponent implements OnInit, OnDestroy
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
-
-    /**
-     * Create contact
-     */
-    createContact(): void
+    ImportNhanvien(): void
     {
-        // Create the contact
-        this._contactsService.createContact().subscribe((newContact) => {
-
-            // Go to the new contact
-            this._router.navigate(['./', newContact.id], {relativeTo: this._activatedRoute});
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
+        this.Users.forEach(v => {
+            const user ={name:v.name,SDT:v.username,email:v.email,profile:v.Profile,password:"12345678"};
+                this._nhanviensService.ImportNhanvien(user).subscribe((data) => {
+                        console.log(data);
+                        this._changeDetectorRef.markForCheck();
+                    });
         });
+ 
+    }
+
+
+    createNhanvien(): void
+    {
+    if(this.nhaviens.length==0)
+        {
+            this._nhanviensService.createNhanvien().subscribe((newNhanvien) => {
+                this._router.navigate(['./', newNhanvien.id], {relativeTo: this._activatedRoute});
+                this._changeDetectorRef.markForCheck();
+            });
+     }
+     else
+     {
+         const name = this.nhaviens[0].name;
+      if(name=="Mới")
+         {
+             this._notifierService.notify('error', 'Có Nhân Sự Mới Chưa Điền');
+             
+         }
+         else {
+            this._nhanviensService.createNhanvien().subscribe((newNhanvien) => {
+                this._router.navigate(['./', newNhanvien.id], {relativeTo: this._activatedRoute});
+                this._changeDetectorRef.markForCheck();
+            }); 
+         }
+     }
+
+
+
     }
 
     /**

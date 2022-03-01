@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
+import { NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
+import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
@@ -32,19 +34,17 @@ const nhanvienRoutes: Route[] = [
         {
             path     : '',
             component: ListComponent,
-            // resolve  : {
-            //     tasks    : ContactsResolver,
-            //     countries: ContactsCountriesResolver
-            // },
+            resolve  : {
+                tasks    : NhanviensResolver,
+            },
             children : [
                 {
                     path         : ':id',
                     component    : DetailsComponent,
                     resolve      : {
-                     //   task     : ContactsContactResolver,
-                     //   countries: ContactsCountriesResolver
+                       task     : NhanviensNhanvienResolver
                     },
-                    //canDeactivate: [CanDeactivateContactsDetails]
+                    canDeactivate: [CanDeactivateNhanviensDetails]
                 }
             ]
         }

@@ -6,6 +6,7 @@ export const environment = {
     production: false,
    // ApiURL:'https://v2api.tazagroup.vn'
     ApiURL:'http://localhost:3000',
+   // ApiURL1:'https://tazagroup.vn/api/index.php/v1/users?page[limit]=*',
     googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     characters: {
       spreadsheetId: '1qBzPZ6AbiJZCQp8gsiioZRNRmGRwoq_agx5Q5DK05EY',
@@ -30,6 +31,10 @@ export const environment = {
     //   spreadsheetId: '1cwdN0a8Dx2N5QjOsjeVQu9yqOoKZGop2',
     //   worksheetName: '2021',
     // },
+
+
+
+    
 };
 
 /*
