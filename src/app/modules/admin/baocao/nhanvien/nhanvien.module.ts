@@ -26,6 +26,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { NhanvienService } from './nhanvien.service';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
@@ -59,6 +61,7 @@ const nhanvienRoutes: Route[] = [
     NhanvienComponent
   ],
   imports: [
+    Ng2SearchPipeModule,
     RouterModule.forChild(nhanvienRoutes),
     CommonModule,
     MatButtonModule,
@@ -78,6 +81,6 @@ const nhanvienRoutes: Route[] = [
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-  ]
+  ],
 })
 export class NhanvienModule { }

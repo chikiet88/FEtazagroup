@@ -31,9 +31,9 @@
                                 {{nhanviensCount}}
                             </ng-container>
                             {{nhanviensCount | i18nPlural: {
-                            '=0'   : 'No contacts',
-                            '=1'   : 'contact',
-                            'other': 'contacts'
+                            '=0'   : '0 Nhân Viên',
+                            '=1'   : '1 Nhân Viên',
+                            'other': 'Nhân Viên'
                         } }}
                         </div>
                     </div>
@@ -47,11 +47,12 @@
                                     class="icon-size-5"
                                     matPrefix
                                     [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                                <input
+                              <input
                                     matInput
-                          
                                     [autocomplete]="'off'"
-                                    [placeholder]="'Search contacts'">
+                                    [placeholder]="'Tìm Kiếm'"
+                                    (input)="filterByQuery(searchInput.value)"
+                                    #searchInput>
                             </mat-form-field>
                         </div>
                         <!-- Add contact button -->
@@ -63,14 +64,14 @@
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add</span>
                         </button>
-                        <button
+                        <!-- <button
                         class="ml-4"
                         mat-flat-button
                         [color]="'primary'"
                         (click)="ImportNhanvien()">
                         <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                         <span class="ml-2 mr-1">Import</span>
-                    </button>                   
+                    </button>                    -->
                     </div>
                 </div>
 
@@ -115,7 +116,7 @@
 
                     <!-- No contacts -->
                     <ng-template #noContacts>
-                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no contacts!</div>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không Có Nhân Viên Nào</div>
                     </ng-template>
 
                 </div>

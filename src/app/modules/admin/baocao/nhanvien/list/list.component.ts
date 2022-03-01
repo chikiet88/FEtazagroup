@@ -17,7 +17,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestro
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { MatDrawer } from '@angular/material/sidenav';
-import { catchError, filter, fromEvent, Observable, Subject, switchMap, takeUntil, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, distinctUntilChanged, filter, fromEvent, map, Observable, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Contact, Country } from 'app/modules/admin/apps/contacts/contacts.types';
 import { ContactsService } from 'app/modules/admin/apps/contacts/contacts.service';
@@ -42,7 +42,8 @@ import { User } from '../users';
 export class ListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
-
+    searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
+    searchText:string;
     contacts$: Observable<Contact[]>;
     nhanviens$: Observable<Nhanvien[]>;
     nhaviens:Nhanvien[];
@@ -52,7 +53,6 @@ export class ListComponent implements OnInit, OnDestroy
     contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
     countries: Country[];
     drawerMode: 'side' | 'over';
-    searchInputControl: FormControl = new FormControl();
     selectedContact: Contact;
     selectedNhanvien: Nhanvien;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -82,7 +82,26 @@ export class ListComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this.nhanviens$ = this._nhanviensService.nhanviens$;
+       // this.nhanviens$ = this._nhanviensService.nhanviens$;
+
+        this.nhanviens$ = combineLatest([this._nhanviensService.nhanviens$, this.searchQuery$]).pipe(
+            distinctUntilChanged(),
+            map(([nhanviens, searchQuery]) => {
+                if ( !nhanviens || !nhanviens.length )
+                {
+                    return;
+                }
+                let filteredNotes = nhanviens;
+                if ( searchQuery )
+                {
+                    searchQuery = searchQuery.trim().toLowerCase();
+                    filteredNotes = filteredNotes.filter(nhanvien => nhanvien.name.toLowerCase().includes(searchQuery) || nhanvien.SDT.toLowerCase().includes(searchQuery)|| nhanvien.email.toLowerCase().includes(searchQuery));
+                }
+                return filteredNotes;
+            })
+        );
+
+        
         this._nhanviensService.nhanviens$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((nhanviens: Nhanvien[]) => {
@@ -96,14 +115,6 @@ export class ListComponent implements OnInit, OnDestroy
                 this.selectedNhanvien = nhanvien;
                 this._changeDetectorRef.markForCheck();
             });
-        this.searchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                switchMap(query =>
-                    this._nhanviensService.searchNhanviens(query)
-                )
-            )
-            .subscribe();
         this.matDrawer.openedChange.subscribe((opened) => {
             if ( !opened )
             {
@@ -135,6 +146,10 @@ export class ListComponent implements OnInit, OnDestroy
             .subscribe(() => {
                 this.createNhanvien();
             });
+    }
+    filterByQuery(query: string): void
+    {
+        this.searchQuery$.next(query);
     }
 
     /**
@@ -190,6 +205,7 @@ export class ListComponent implements OnInit, OnDestroy
       if(name=="Mới")
          {
              this._notifierService.notify('error', 'Có Nhân Sự Mới Chưa Điền');
+             this.filterByQuery("Mới");
              
          }
          else {

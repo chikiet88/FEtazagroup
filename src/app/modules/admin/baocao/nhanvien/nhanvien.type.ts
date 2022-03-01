@@ -4,6 +4,7 @@ export class Nhanvien {
     name: string;
     email: string;
     password: string;
+    avatar:string;
     profile: object;
     Ngaytao: Date;
     Role:string

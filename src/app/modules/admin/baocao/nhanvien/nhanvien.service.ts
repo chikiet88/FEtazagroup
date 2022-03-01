@@ -29,7 +29,6 @@ export class NhanvienService {
      {
          return this._httpClient.get<Nhanvien[]>(`${environment.ApiURL}/users`).pipe(
              tap((data) => {
-               console.log(data)
                  this._nhanviens.next(data);
              })
          );
@@ -48,7 +47,6 @@ export class NhanvienService {
          return this._nhanviens.pipe(
              take(1),
              map((nhanviens) => {
-               console.log(nhanviens)
                  const nhanvien = nhanviens.find(item => item.id === id) || null;
                  this._nhanvien.next(nhanvien);
                  return nhanvien;
@@ -79,7 +77,7 @@ export class NhanvienService {
      {
          return this.nhanviens$.pipe(
              take(1),
-             switchMap(nhanviens => this._httpClient.post<any>(`${environment.ApiURL}/users`, {SDT:"0987654321",password:"12345678",name:"Mới"}).pipe(
+             switchMap(nhanviens => this._httpClient.post<any>(`${environment.ApiURL}/users`, {SDT:"0999999999",password:"12345678",name:"Mới"}).pipe(
                  map((result) => {
                    console.log(result)
                    const newNhanvien = result;
