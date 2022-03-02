@@ -167,63 +167,194 @@
 
   <h2 mat-dialog-title>Install Angular</h2>
 <mat-dialog-content class="mat-typography">
-  <h3>Develop across all platforms</h3>
-  <p>Learn one way to build applications with Angular and reuse your code and abilities to build
-    apps for any deployment target. For web, mobile web, native mobile and native desktop.</p>
+  <form [formGroup]="accountForm">
 
-  <h3>Speed &amp; Performance</h3>
-  <p>Achieve the maximum speed possible on the Web Platform today, and take it further, via Web
-    Workers and server-side rendering. Angular puts you in control over scalability. Meet huge
-    data requirements by building data models on RxJS, Immutable.js or another push-model.</p>
+    <!-- Section -->
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <!-- Name -->
+        <div class="sm:col-span-1">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div
+                class="text-secondary"
+                matPrefix>
+                Loại Hình
+            </div>
+            <input type="text"
+            placeholder="Vui Lòng Chọn"
+            matInput
+            [formControlName]="'Congty'"
+            [matAutocomplete]="autoCongty">
+     <mat-autocomplete #autoCongty="matAutocomplete">
+       <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+       {{item.value}} 
+       </mat-option>
+     </mat-autocomplete>
+        </mat-form-field>
+      </div>
 
-  <h3>Incredible tooling</h3>
-  <p>Build features quickly with simple, declarative templates. Extend the template language with
-    your own components and use a wide array of existing components. Get immediate Angular-specific
-    help and feedback with nearly every IDE and editor. All this comes together so you can focus
-    on building amazing apps rather than trying to make the code work.</p>
+        <!-- Username -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                <div
+                    class="text-secondary"
+                    matPrefix>
+                    Tiêu Đề
+                </div>
+                <input
+                    [formControlName]="'username'"
+                    matInput>
+            </mat-form-field>
+        </div>
+        <div class="sm:col-span-1">
+            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                <div
+                    class="text-secondary"
+                    matPrefix>
+                    Công Ty
+                </div>
+                <input type="text"
+                placeholder="Vui Lòng Chọn"
+                matInput
+                [formControlName]="'Congty'"
+                [matAutocomplete]="autoCongty">
+         <mat-autocomplete #autoCongty="matAutocomplete">
+           <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+           {{item.value}} 
+           </mat-option>
+         </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <!-- Title -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Title</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:briefcase'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'title'"
+                    matInput>
+            </mat-form-field>
+        </div>
+        <!-- Company -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Company</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:office-building'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'company'"
+                    matInput>
+            </mat-form-field>
+        </div>
+        <!-- About -->
+        <div class="sm:col-span-4">
+            <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+                <mat-label>About</mat-label>
+                <textarea
+                    matInput
+                    [formControlName]="'about'"
+                    cdkTextareaAutosize
+                    [cdkAutosizeMinRows]="5"></textarea>
+            </mat-form-field>
+            <div class="mt-1 text-md text-hint">Brief description for your profile. Basic HTML and Emoji are allowed.</div>
+        </div>
+    </div>
 
-  <h3>Loved by millions</h3>
-  <p>From prototype through global deployment, Angular delivers the productivity and scalable
-    infrastructure that supports Google's largest applications.</p>
+    <!-- Divider -->
+    <div class="my-10 border-t"></div>
 
-  <h3>What is Angular?</h3>
+    <!-- Section -->
+    <div class="w-full">
+        <div class="text-xl">Personal Information</div>
+        <div class="text-secondary">Communication details in case we want to connect with you. These will be kept private.</div>
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+        <!-- Email -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Email</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:mail'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'email'"
+                    matInput>
+            </mat-form-field>
+        </div>
+        <!-- Phone -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Phone</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:phone'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'phone'"
+                    matInput>
+            </mat-form-field>
+        </div>
+        <!-- Country -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Country</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:location-marker'"
+                    matPrefix></mat-icon>
+                <mat-select [formControlName]="'country'">
+                    <mat-option [value]="'usa'">United States</mat-option>
+                    <mat-option [value]="'canada'">Canada</mat-option>
+                    <mat-option [value]="'mexico'">Mexico</mat-option>
+                    <mat-option [value]="'france'">France</mat-option>
+                    <mat-option [value]="'germany'">Germany</mat-option>
+                    <mat-option [value]="'italy'">Italy</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- Language -->
+        <div class="sm:col-span-2">
+            <mat-form-field class="fuse-mat-no-subscript w-full">
+                <mat-label>Language</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:globe-alt'"
+                    matPrefix></mat-icon>
+                <mat-select [formControlName]="'language'">
+                    <mat-option [value]="'english'">English</mat-option>
+                    <mat-option [value]="'french'">French</mat-option>
+                    <mat-option [value]="'spanish'">Spanish</mat-option>
+                    <mat-option [value]="'german'">German</mat-option>
+                    <mat-option [value]="'italian'">Italian</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
 
-  <p>Angular is a platform that makes it easy to build applications with the web. Angular
-    combines declarative templates, dependency injection, end to end tooling, and integrated
-    best practices to solve development challenges. Angular empowers developers to build
-    applications that live on the web, mobile, or the desktop</p>
+    <!-- Divider -->
+    <div class="mt-11 mb-10 border-t"></div>
 
-  <h3>Architecture overview</h3>
+    <!-- Actions -->
+    <div class="flex items-center justify-end">
+        <button
+            mat-stroked-button
+            type="button">
+            Cancel
+        </button>
+        <button
+            class="ml-4"
+            mat-flat-button
+            type="button"
+            [color]="'primary'">Save
+        </button>
+    </div>
+</form>
 
-  <p>Angular is a platform and framework for building client applications in HTML and TypeScript.
-  Angular is itself written in TypeScript. It implements core and optional functionality as a
-  set of TypeScript libraries that you import into your apps.</p>
-
-  <p>The basic building blocks of an Angular application are NgModules, which provide a compilation
-  context for components. NgModules collect related code into functional sets; an Angular app is
-  defined by a set of NgModules. An app always has at least a root module that enables
-  bootstrapping, and typically has many more feature modules.</p>
-
-  <p>Components define views, which are sets of screen elements that Angular can choose among and
-  modify according to your program logic and data. Every app has at least a root component.</p>
-
-  <p>Components use services, which provide specific functionality not directly related to views.
-  Service providers can be injected into components as dependencies, making your code modular,
-  reusable, and efficient.</p>
-
-  <p>Both components and services are simply classes, with decorators that mark their type and
-  provide metadata that tells Angular how to use them.</p>
-
-  <p>The metadata for a component class associates it with a template that defines a view. A
-  template combines ordinary HTML with Angular directives and binding markup that allow Angular
-  to modify the HTML before rendering it for display.</p>
-
-  <p>The metadata for a service class provides the information Angular needs to make it available
-  to components through Dependency Injection (DI).</p>
-
-  <p>An app's components typically define many views, arranged hierarchically. Angular provides
-  the Router service to help you define navigation paths among views. The router provides
-  sophisticated in-browser navigational capabilities.</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>

@@ -7,11 +7,15 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialExampleModule } from 'material.module';
 import { FuseDrawerModule } from '@fuse/components/drawer';
+import { LichhopResolver } from './lichhop.resolver';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
       path  : '',
-      component: LichhopComponent,
+      component: LichhopComponent,           
+      resolve  : {
+        tasks    : LichhopResolver,
+    },
   }
 ];
 
