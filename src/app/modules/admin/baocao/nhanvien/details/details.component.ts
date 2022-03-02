@@ -4,11 +4,13 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Nhanvien } from '../nhanvien.type';
 import { ListComponent } from '../list/list.component';
 import { NhanvienService } from '../nhanvien.service';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 
 @Component({
   selector: 'app-details',
@@ -22,14 +24,20 @@ export class DetailsComponent implements OnInit, OnDestroy
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
     @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
-
     editMode: boolean = false;
     tagsEditMode: boolean = false;
     nhanvien: Nhanvien;
     contactForm: FormGroup;
     nhanviens: Nhanvien[];
+    Phongban: object;
+    Khoi: object;
+    Congty: object;
+    Bophan: object;
+    Vitri: object;
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    cauhinh:Cauhinh[];
+    Cauhinhs$:Observable<Cauhinh[]>;
 
     /**
      * Constructor
@@ -39,6 +47,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _ListComponent: ListComponent,
         private _nhanvienService: NhanvienService,
+        private _cauhinhService: CauhinhService,
         private _formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
         private _renderer2: Renderer2,
@@ -50,6 +59,18 @@ export class DetailsComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
+       this._cauhinhService.Cauhinhs$
+       .pipe(takeUntil(this._unsubscribeAll))
+       .subscribe((data: Cauhinh[]) => {
+            console.log(data);
+            this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+            this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+            this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+            this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+            this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+           this._changeDetectorRef.markForCheck();
+       });
+
         // Open the drawer
         this._ListComponent.matDrawer.open();
 
@@ -72,19 +93,18 @@ export class DetailsComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanviens: Nhanvien[]) => {
                 this.nhanviens = nhanviens;
-                console.log(this.nhanviens)
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
-                console.log(this.nhanvien)
                 this._ListComponent.matDrawer.open();
                 this.nhanvien = nhanvien;
                 this.toggleEditMode(false);
                 this._changeDetectorRef.markForCheck();
             });
+
     }
     ngOnDestroy(): void
     {

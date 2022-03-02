@@ -20,6 +20,7 @@ import { ThongkekhComponent } from './modules/admin/custom/thongkekh/thongkekh.c
 import { MaterialExampleModule } from 'material.module';
 import { NhanvienComponent } from './modules/admin/baocao/nhanvien/nhanvien.component';
 import { FormControl } from '@angular/forms';
+import { CustomPipe } from './custom.pipe';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -69,6 +70,7 @@ const customNotifierOptions: NotifierOptions = {
     declarations: [
         AppComponent,
         CauhinhComponent,
+        CustomPipe
     ],
     imports     : [
         MaterialExampleModule,

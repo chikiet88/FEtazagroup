@@ -23,7 +23,6 @@ import { VetuyendungResolver, VetuyendungsResolver } from './vetuyendung.resolve
 import { MatSelectModule } from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
 import { EditorModule } from '@tinymce/tinymce-angular';
-import { CustomPipe } from 'app/custom.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 const VetuyendungRoutes: Route[] = [
   {
@@ -51,7 +50,7 @@ const VetuyendungRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [VetuyendungComponent, ListComponent,DetailsComponent,CustomPipe],
+  declarations: [VetuyendungComponent, ListComponent,DetailsComponent],
   imports: [
     DragDropModule,
     MatBadgeModule,

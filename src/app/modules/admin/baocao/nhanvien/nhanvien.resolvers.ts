@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
+import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { NhanvienService } from './nhanvien.service';
 import { Nhanvien } from './nhanvien.type';
 
@@ -40,5 +42,21 @@ export class NhanviensNhanvienResolver implements Resolve<any>
                            return throwError(error);
                        })
                    );
+    }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class NhanviensCauhinhResolver implements Resolve<any>
+{
+    constructor(
+        private _cauhinhsService: CauhinhService,
+        private _router: Router
+    )
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Cauhinh[]>
+    {
+        return this._cauhinhsService.getCauhinhs();
     }
 }

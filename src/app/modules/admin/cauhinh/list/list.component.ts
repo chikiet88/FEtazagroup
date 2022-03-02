@@ -21,6 +21,8 @@ export class ListComponent implements OnInit {
   filter$: BehaviorSubject<string> = new BehaviorSubject('cauhinhs');
   searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
   masonryColumns: number = 4;
+  Cauhinh:any;
+  Thuoctinh:any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(   
    private _changeDetectorRef: ChangeDetectorRef,
@@ -34,27 +36,18 @@ export class ListComponent implements OnInit {
     }
     ngOnInit(): void
     {
-
      this.detailChanged.pipe(
             takeUntil(this._unsubscribeAll),
             debounceTime(500),
             switchMap(selectCauhinh => this._CauhinhService.updateCauhinh(selectCauhinh)))
         .subscribe(() => {
-            
-            // Mark for check
             this._changeDetectorRef.markForCheck();
         });
-        
-        
-      this._CauhinhService.getCauhinhs().subscribe();
-      //this._CauhinhService.getDetails().subscribe();
-      
+      this._CauhinhService.getCauhinhs().subscribe();     
       this.Cauhinhs$ = this._CauhinhService.Cauhinhs$;
        this._fuseMediaWatcherService.onMediaChange$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe(({matchingAliases}) => {
-
-           // Set the drawerMode and drawerOpened if the given breakpoint is active
            if ( matchingAliases.includes('lg') )
            {
                this.drawerMode = 'side';
@@ -65,12 +58,6 @@ export class ListComponent implements OnInit {
                this.drawerMode = 'over';
                this.drawerOpened = false;
            }
-
-           // Set the masonry columns
-           //
-           // This if block structured in a way so that only the
-           // biggest matching alias will be used to set the column
-           // count.
            if ( matchingAliases.includes('xl') )
            {
                this.masonryColumns = 1;
@@ -92,6 +79,95 @@ export class ListComponent implements OnInit {
                this.masonryColumns = 1;
            }
 
+            this.Cauhinh = {
+                "id": "1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d",
+                "title": "Phòng",
+                "detail": {},
+                "Trangthai": 0,
+                "Ordering": 0,
+                "Ngaytao": "2022-03-02T03:16:41.749Z",
+                "idTao": 0
+            }
+            this.Thuoctinh = [
+                {
+                    "id": 1,
+                    "Thuoctinh": "Ban Tổng Giám Đốc",
+                    "$$hashKey": "object:506"
+                },
+                {
+                    "id": 2,
+                    "Thuoctinh": "Ban điều hành",
+                    "$$hashKey": "object:507"
+                },
+                {
+                    "id": 3,
+                    "Thuoctinh": "QTRR và KSNB",
+                    "$$hashKey": "object:508"
+                },
+                {
+                    "id": 4,
+                    "Thuoctinh": "QTN Nhân lực",
+                    "$$hashKey": "object:509"
+                },
+                {
+                    "Thuoctinh": "Tài chính kế toán",
+                    "id": 5,
+                    "$$hashKey": "object:510"
+                },
+                {
+                    "Thuoctinh": "Kinh doanh Taza",
+                    "id": 6,
+                    "$$hashKey": "object:511"
+                },
+                {
+                    "Thuoctinh": "Marketing",
+                    "id": 7,
+                    "$$hashKey": "object:512"
+                },
+                {
+                    "Thuoctinh": "Sale online",
+                    "id": 8,
+                    "$$hashKey": "object:513"
+                },
+                {
+                    "id": 9,
+                    "Thuoctinh": "CSKH/QC",
+                    "$$hashKey": "object:514"
+                },
+                {
+                    "id": 10,
+                    "Thuoctinh": "Kinh doanh Sharyn",
+                    "$$hashKey": "object:515"
+                },
+                {
+                    "id": 11,
+                    "Thuoctinh": "Kinh doanh Timona",
+                    "$$hashKey": "object:516"
+                },
+                {
+                    "id": 12,
+                    "Thuoctinh": "Giáo vụ",
+                    "$$hashKey": "object:517"
+                },
+                {
+                    "id": 13,
+                    "Thuoctinh": "Hội đồng chuyên môn",
+                    "$$hashKey": "object:518"
+                },
+                {
+                    "id": 14,
+                    "Thuoctinh": "Đào Tạo",
+                    "$$hashKey": "object:519"
+                },
+                {
+                    "$$hashKey": "object:534",
+                    "id": 15,
+                    "Thuoctinh": "Hỗ trợ"
+                }
+            ]
+          //this.ImportDetailToCauhinh(this.Cauhinh,this.Thuoctinh);
+
+
            // Mark for check
            this._changeDetectorRef.markForCheck();
        });
@@ -109,12 +185,17 @@ export class ListComponent implements OnInit {
     }
     addDetailToCauhinh(cauhinh: Cauhinh, thuoctinh: string): void
     {
+
         cauhinh.detail[uuidv4()] = thuoctinh;
-        // if (thuoctinh)
-        // {
-        //     return;
-        // }
         this._CauhinhService.updateCauhinh(cauhinh).subscribe();
+    }
+    ImportDetailToCauhinh(cauhinh: Cauhinh, thuoctinh: any): void
+    {
+        thuoctinh.forEach(v => {
+            cauhinh.detail[uuidv4()] = v.Thuoctinh;
+            this._CauhinhService.updateCauhinh(cauhinh).subscribe(); 
+        });
+
     }
     removeThuoctinh(selectCauhinh: Cauhinh, thuoctinh: object): void
     {
@@ -132,6 +213,7 @@ export class ListComponent implements OnInit {
 
         this._CauhinhService.selectCauhinh(id)
             .subscribe((cauhinh) => {
+                console.log(cauhinh)
                this.selectCauhinh = cauhinh;
                 this._changeDetectorRef.markForCheck();
             });

@@ -24,9 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
-import { NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
+import { NhanviensCauhinhResolver, NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NhanvienService } from './nhanvien.service';
 const nhanvienRoutes: Route[] = [
   {
@@ -38,13 +37,15 @@ const nhanvienRoutes: Route[] = [
             component: ListComponent,
             resolve  : {
                 tasks    : NhanviensResolver,
+                cauhinhs :NhanviensCauhinhResolver,
             },
             children : [
                 {
                     path         : ':id',
                     component    : DetailsComponent,
                     resolve      : {
-                       task     : NhanviensNhanvienResolver
+                       task     : NhanviensNhanvienResolver,
+                       cauhinhs :NhanviensCauhinhResolver,
                     },
                     canDeactivate: [CanDeactivateNhanviensDetails]
                 }
@@ -58,10 +59,9 @@ const nhanvienRoutes: Route[] = [
   declarations: [
     ListComponent,
     DetailsComponent,
-    NhanvienComponent
+    NhanvienComponent,
   ],
   imports: [
-    Ng2SearchPipeModule,
     RouterModule.forChild(nhanvienRoutes),
     CommonModule,
     MatButtonModule,
