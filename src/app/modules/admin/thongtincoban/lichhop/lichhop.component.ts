@@ -30,6 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -47,13 +48,34 @@ const colors: any = {
 @Component({
   selector: 'app-lichhop',
   templateUrl: './lichhop.component.html',
-  styles: ['.cal-month-view {.cal-day-cell {min-height: 80px !important;}}'],
-  //styleUrls: ['./lichhop.component.scss'],
+  styleUrls: ['./lichhop.component.scss'],
+  //styles: ['.cal-month-view {.cal-day-cell {min-height: 80px !important;}}'],
+  encapsulation: ViewEncapsulation.None,
+
 })
 export class LichhopComponent implements OnInit {
     
   @ViewChild('Themmoi', { static: true }) secondDialog: TemplateRef<any>;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  @ViewChild('picker') picker: any;
+
+  public date: moment.Moment;
+  public disabled = false;
+  public showSpinners = true;
+  public showSeconds = false;
+  public touchUi = false;
+  public enableMeridian = false;
+  public minDate: moment.Moment;
+  public maxDate: moment.Moment;
+  public stepHour = 1;
+  public stepMinute = 1;
+  public stepSecond = 1;
+  public stepHours = [1, 2, 3, 4, 5];
+  public stepMinutes = [1, 5, 10, 15, 20, 25];
+  public stepSeconds = [1, 5, 10, 15, 20, 25];
+
+  
+  
   view: CalendarView = CalendarView.Month;
   locale: string = 'vi';
   CalendarView = CalendarView;
@@ -121,13 +143,14 @@ export class LichhopComponent implements OnInit {
     },
   ];
   activeDayIsOpen: boolean = false;
-  Lichhop: FormGroup;
+  LichhopForm: FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   Phongban: object;
   Khoi: object;
   Congty: object;
   Bophan: object;
   Vitri: object;
+  Title:string;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
     public dialog: MatDialog,
@@ -136,7 +159,20 @@ export class LichhopComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     ){}
     options: string[] = ['One', 'Two', 'Three'];
+    @ViewChild('tabGroup', { static: false }) public tabGroup: any;
+    public activeTabIndex: number | undefined = undefined;
+  
+    public handleTabChange(e: MatTabChangeEvent) {
+      this.activeTabIndex = e.index;
+    }
+  
+    // public ngAfterViewInit() {
+    //   this.activeTabIndex = this.tabGroup.selectedIndex;
+    // }
+
   ngOnInit(): void {
+    this.activeTabIndex = 0;
+    this.Title = "Thêm Mới"
      this._CauhinhService.Cauhinhs$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((data: Cauhinh[]) => {
@@ -148,21 +184,27 @@ export class LichhopComponent implements OnInit {
             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
            this._changeDetectorRef.markForCheck();
        });
-    this.Lichhop = this._formBuilder.group({
-      name    : ['Brian Hughes'],
-      username: ['brianh'],
-      title   : ['Senior Frontend Developer'],
-      company : ['YXZ Software'],
-      about   : ['Hey! This is Brian; husband, father and gamer. I\'m mostly passionate about bleeding edge tech and chocolate! 🍫'],
-      email   : ['hughes.brian@mail.com', Validators.email],
-      phone   : ['121-490-33-12'],
-      country : ['usa'],
-      language: ['english']
+    this.LichhopForm = this._formBuilder.group({
+      Loaihinh    : [''],
+      Tieude: [''],
+      Congty: [''],
+      Chutri: [''],
+      Thamgia: [''],
+      Ngansach: [''],
+      Batdau: [''],
+      Ketthuc: [''],
+      Noidung: [''],
+      Trienkhai: [''],
+      Ketqua: [''],
+      Mongdoi: [''],
+      Dieuchinh: [''],
+      Dieukienkhac: [''],
+      Nguyennhan: [''],
   });
   }
+
   openDialog() {
     const dialogRef = this.dialog.open(this.secondDialog);
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
@@ -202,6 +244,7 @@ export class LichhopComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
   handleEvent(action: string, event: CalendarEvent): void {
+    this.Title = "Cập Nhật";
     // this.toggleDrawerOpen('drawer');
     this.openDialog()
     // this.toggleDrawerOpen('drawer');
@@ -235,6 +278,12 @@ export class LichhopComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+
+
+  closePicker() {
+    this.picker.cancel();
   }
 
 }

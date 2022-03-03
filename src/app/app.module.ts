@@ -16,11 +16,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
-import { ThongkekhComponent } from './modules/admin/custom/thongkekh/thongkekh.component';
 import { MaterialExampleModule } from 'material.module';
-import { NhanvienComponent } from './modules/admin/baocao/nhanvien/nhanvien.component';
-import { FormControl } from '@angular/forms';
 import { CustomPipe } from './custom.pipe';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -73,6 +73,9 @@ const customNotifierOptions: NotifierOptions = {
         CustomPipe
     ],
     imports     : [
+      BrowserModule,
+      HttpClientModule,
+      BrowserAnimationsModule,
         MaterialExampleModule,
         NotifierModule.withConfig(customNotifierOptions),
         BrowserModule,

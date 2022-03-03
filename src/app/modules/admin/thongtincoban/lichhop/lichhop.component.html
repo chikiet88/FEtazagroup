@@ -1,142 +1,31 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between border-b">
   <div class="relative flex overflow-hidden border min-h-60">
-
-    <fuse-drawer [name]="'drawer'" [opened]="false" [mode]="'over'" [position]="'left'">
-      <div class="p-4">
-        Left drawer
-      </div>
-    </fuse-drawer>
-
-    <!-- <div class="w-1/5 p-4 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
-  <div *ngFor="let event of events">
-    <span (click)="toggleDrawerOpen('drawer')">{{event.title}}</span>
-  </div>
-</div> -->
-
     <div class="flex-auto bg-gray-100 md:p-4">
       <div class="flex justify-center">
-        <div class="md:text-3xl text-1xl font-extrabold my-auto mr-2">{{ viewDate | calendarDate:(view + 'ViewTitle'):'vi' }}</div>
+        <div class="md:text-3xl text-1xl font-extrabold my-auto mr-2">{{ viewDate | calendarDate:(view +
+          'ViewTitle'):'vi' }}</div>
         <div class="my-2">
           <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color">
             <mat-button-toggle value="red" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-              (viewDateChange)="closeOpenMonthViewDay()"><</mat-button-toggle>
-            <mat-button-toggle value="green" mwlCalendarToday [(viewDate)]="viewDate">Hôm Nay</mat-button-toggle>
-            <mat-button-toggle value="blue" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-              (viewDateChange)="closeOpenMonthViewDay()">></mat-button-toggle>
-            <mat-button-toggle value="blue" (click)="openDialog()"> <mat-icon>add_circle</mat-icon></mat-button-toggle>
-          </mat-button-toggle-group>
+              (viewDateChange)="closeOpenMonthViewDay()"> < </mat-button-toggle>
+                <mat-button-toggle value="green" mwlCalendarToday [(viewDate)]="viewDate">Hôm Nay</mat-button-toggle>
+                <mat-button-toggle value="blue" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay()">></mat-button-toggle>
+                <mat-button-toggle value="blue" (click)="openDialog()">
+                  <mat-icon>add_circle</mat-icon>
+                </mat-button-toggle>
+             </mat-button-toggle-group>
         </div>
       </div>
 
-<div class="flex flex-col">
-      <div class="w-full md:w-8/12 md:p-3 m-auto">
-        <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
-          [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
-          (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-        </mwl-calendar-month-view>
+      <div class="flex flex-col">
+        <div class="w-full md:w-8/12 md:p-3 m-auto">
+          <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
+            [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+            (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-month-view>
+        </div>
       </div>
-</div>
-
-
-
-
-      <!-- <div [ngSwitch]="view">
-        <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
-          [locale]="locale" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen"
-          (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-          [locale]="locale" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
-          [locale]="locale" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-          (eventTimesChanged)="eventTimesChanged($event)">
-        </mwl-calendar-day-view>
-      </div> -->
-    </div>
-  </div>
-  <!-- Edit events
-  <button class="btn btn-primary float-right" (click)="addEvent()">
-    Add new
-  </button>
-  <div class="table-responsive">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Primary color</th>
-          <th>Secondary color</th>
-          <th>Starts at</th>
-          <th>Ends at</th>
-          <th>Remove</th>
-        </tr>
-      </thead>
-  
-      <tbody>
-        <tr *ngFor="let event of events">
-          <td>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="event.title"
-              (keyup)="refresh.next()"
-            />
-          </td>
-          <td>
-            <input
-              type="color"
-              [(ngModel)]="event.color.primary"
-              (change)="refresh.next()"
-            />
-          </td>
-          <td>
-            <input
-              type="color"
-              [(ngModel)]="event.color.secondary"
-              (change)="refresh.next()"
-            />
-          </td>
-          <td>
-            <input
-              class="form-control"
-              type="text"
-              mwlFlatpickr
-              [(ngModel)]="event.start"
-              (ngModelChange)="refresh.next()"
-              [altInput]="true"
-              [convertModelValue]="true"
-              [enableTime]="true"
-              dateFormat="Y-m-dTH:i"
-              altFormat="F j, Y H:i"
-              placeholder="Not set"
-            />
-          </td>
-          <td>
-            <input
-              class="form-control"
-              type="text"
-              mwlFlatpickr
-              [(ngModel)]="event.end"
-              (ngModelChange)="refresh.next()"
-              [altInput]="true"
-              [convertModelValue]="true"
-              [enableTime]="true"
-              dateFormat="Y-m-dTH:i"
-              altFormat="F j, Y H:i"
-              placeholder="Not set"
-            />
-          </td>
-          <td>
-            <button class="btn btn-danger" (click)="deleteEvent(event)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
 </div>
 
 
@@ -165,200 +54,205 @@
 </ng-template>
 <ng-template #Themmoi>
 
-  <h2 mat-dialog-title>Install Angular</h2>
-<mat-dialog-content class="mat-typography">
-  <form [formGroup]="accountForm">
+  <h2 mat-dialog-title>{{Title}}</h2>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="LichhopForm">
 
-    <!-- Section -->
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+      <!-- Section -->
+      <div class="grid sm:grid-cols-12 gap-6 w-full mt-8">
         <!-- Name -->
-        <div class="sm:col-span-1">
+        <div class="sm:col-span-3">
           <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-            <div
-                class="text-secondary"
-                matPrefix>
-                Loại Hình
+            <div class="text-secondary" matPrefix>
+              Loại Hình
             </div>
-            <input type="text"
-            placeholder="Vui Lòng Chọn"
-            matInput
-            [formControlName]="'Congty'"
-            [matAutocomplete]="autoCongty">
-     <mat-autocomplete #autoCongty="matAutocomplete">
-       <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
-       {{item.value}} 
-       </mat-option>
-     </mat-autocomplete>
-        </mat-form-field>
+            <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Loaihinh'"
+              [matAutocomplete]="autoCongty" [disabled]="true">
+            <mat-autocomplete #autoCongty="matAutocomplete">
+              <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+                {{item.value}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+              Tiêu Đề
+            </div>
+            <input [formControlName]="'Tieude'" matInput>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-3">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+              Công Ty
+            </div>
+            <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Congty'"
+              [matAutocomplete]="autoCongty">
+            <mat-autocomplete #autoCongty="matAutocomplete">
+              <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+                {{item.value}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-3">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+              Chủ Trì
+            </div>
+            <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Chutri'"
+              [matAutocomplete]="autoCongty">
+            <mat-autocomplete #autoCongty="matAutocomplete">
+              <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+                {{item.value}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+              Tham Gia
+            </div>
+            <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Thamgia'"
+              [matAutocomplete]="autoCongty">
+            <mat-autocomplete #autoCongty="matAutocomplete">
+              <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
+                {{item.value}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-3">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+              Ngân Sách
+            </div>
+            <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'">
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix> Bắt Đầu </div>
+            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Chọn Ngày Bắt Đầu" [formControlName]="'Batdau'"
+              [min]="minDate" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [enableMeridian]="enableMeridian">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix> Kết Thúc </div>
+            <input matInput [ngxMatDatetimePicker]="pickerketthuc" placeholder="Chọn Ngày Kết Thúc"
+              [formControlName]="'Ketthuc'" [min]="minDate" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerketthuc"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #pickerketthuc [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [enableMeridian]="enableMeridian">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix> Review </div>
+            <input matInput [ngxMatDatetimePicker]="pickerreview" placeholder="Chọn Ngày" [formControlName]="'Batdau'"
+              [min]="minDate" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerreview"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #pickerreview [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [enableMeridian]="enableMeridian">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-6">
+          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix> Hoàn Thành </div>
+            <input matInput [ngxMatDatetimePicker]="pickerhoanthanh" placeholder="Chọn Ngày"
+              [formControlName]="'Ketthuc'" [min]="minDate" [max]="maxDate">
+            <mat-datepicker-toggle [for]="pickerhoanthanh"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #pickerhoanthanh [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [enableMeridian]="enableMeridian">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="sm:col-span-12">
+          <mat-tab-group class="min-h-96" #tabGroup (selectedTabChange)="handleTabChange($event)">
+            <mat-tab label="Nội Dung">
+              <editor *ngIf="activeTabIndex===0" [formControlName]="'Noidung'" id="Noidung"
+                class="border rounded p-3 fuse-mat-no-subscript flex-auto w-full"
+                apiKey="1cdi3qs7qw7nogvpu6poxqc6z7bf4a4hurwyao0kdbd741dl" [init]="{
+                      inline: true,
+                      entity_encoding: 'raw',
+                      menubar: false,
+                      placeholder:'Nhập Nội Dung',
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar:
+                        'formatselect | backcolor | \
+                        alignleft aligncenter alignright | \
+                        bullist numlist | removeformat | link image fullscreen'
+                }"></editor>
+            </mat-tab>
+            <mat-tab label="Triển Khai">
+              <editor inline *ngIf="activeTabIndex===1" [formControlName]="'Trienkhai'" id="Trienkhai"
+                class="border rounded p-3 fuse-mat-no-subscript flex-auto w-full"
+                apiKey="1cdi3qs7qw7nogvpu6poxqc6z7bf4a4hurwyao0kdbd741dl" [init]="{
+entity_encoding: 'raw',
+menubar: false,
+plugins: [
+'advlist autolink lists link image charmap print preview anchor',
+'searchreplace visualblocks code fullscreen',
+'insertdatetime media table paste code help wordcount'
+],
+toolbar:
+'formatselect | backcolor | \
+alignleft aligncenter alignright | \
+bullist numlist | removeformat | link image fullscreen'
+}" placeholder="Nhập Nội Dung Triển Khai"></editor>
+            </mat-tab>
+            <mat-tab label="Kết Quả">
+              <editor *ngIf="activeTabIndex===2" [formControlName]="'Ketqua'" id="Ketqua"
+                class="border rounded p-3 fuse-mat-no-subscript flex-auto w-full"
+                apiKey="1cdi3qs7qw7nogvpu6poxqc6z7bf4a4hurwyao0kdbd741dl" [init]="{
+inline: false,
+entity_encoding: 'raw',
+menubar: false,
+plugins: [
+'advlist autolink lists link image charmap print preview anchor',
+'searchreplace visualblocks code fullscreen',
+'insertdatetime media table paste code help wordcount'
+],
+toolbar:
+'formatselect | backcolor | \
+alignleft aligncenter alignright | \
+bullist numlist | removeformat | link image fullscreen'
+}"></editor>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+
+
       </div>
-
-        <!-- Username -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                <div
-                    class="text-secondary"
-                    matPrefix>
-                    Tiêu Đề
-                </div>
-                <input
-                    [formControlName]="'username'"
-                    matInput>
-            </mat-form-field>
-        </div>
-        <div class="sm:col-span-1">
-            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                <div
-                    class="text-secondary"
-                    matPrefix>
-                    Công Ty
-                </div>
-                <input type="text"
-                placeholder="Vui Lòng Chọn"
-                matInput
-                [formControlName]="'Congty'"
-                [matAutocomplete]="autoCongty">
-         <mat-autocomplete #autoCongty="matAutocomplete">
-           <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
-           {{item.value}} 
-           </mat-option>
-         </mat-autocomplete>
-            </mat-form-field>
-        </div>
-        <!-- Title -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Title</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:briefcase'"
-                    matPrefix></mat-icon>
-                <input
-                    [formControlName]="'title'"
-                    matInput>
-            </mat-form-field>
-        </div>
-        <!-- Company -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Company</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:office-building'"
-                    matPrefix></mat-icon>
-                <input
-                    [formControlName]="'company'"
-                    matInput>
-            </mat-form-field>
-        </div>
-        <!-- About -->
-        <div class="sm:col-span-4">
-            <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                <mat-label>About</mat-label>
-                <textarea
-                    matInput
-                    [formControlName]="'about'"
-                    cdkTextareaAutosize
-                    [cdkAutosizeMinRows]="5"></textarea>
-            </mat-form-field>
-            <div class="mt-1 text-md text-hint">Brief description for your profile. Basic HTML and Emoji are allowed.</div>
-        </div>
-    </div>
-
-    <!-- Divider -->
-    <div class="my-10 border-t"></div>
-
-    <!-- Section -->
-    <div class="w-full">
-        <div class="text-xl">Personal Information</div>
-        <div class="text-secondary">Communication details in case we want to connect with you. These will be kept private.</div>
-    </div>
-    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-        <!-- Email -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Email</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:mail'"
-                    matPrefix></mat-icon>
-                <input
-                    [formControlName]="'email'"
-                    matInput>
-            </mat-form-field>
-        </div>
-        <!-- Phone -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Phone</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:phone'"
-                    matPrefix></mat-icon>
-                <input
-                    [formControlName]="'phone'"
-                    matInput>
-            </mat-form-field>
-        </div>
-        <!-- Country -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Country</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:location-marker'"
-                    matPrefix></mat-icon>
-                <mat-select [formControlName]="'country'">
-                    <mat-option [value]="'usa'">United States</mat-option>
-                    <mat-option [value]="'canada'">Canada</mat-option>
-                    <mat-option [value]="'mexico'">Mexico</mat-option>
-                    <mat-option [value]="'france'">France</mat-option>
-                    <mat-option [value]="'germany'">Germany</mat-option>
-                    <mat-option [value]="'italy'">Italy</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <!-- Language -->
-        <div class="sm:col-span-2">
-            <mat-form-field class="fuse-mat-no-subscript w-full">
-                <mat-label>Language</mat-label>
-                <mat-icon
-                    class="icon-size-5"
-                    [svgIcon]="'heroicons_solid:globe-alt'"
-                    matPrefix></mat-icon>
-                <mat-select [formControlName]="'language'">
-                    <mat-option [value]="'english'">English</mat-option>
-                    <mat-option [value]="'french'">French</mat-option>
-                    <mat-option [value]="'spanish'">Spanish</mat-option>
-                    <mat-option [value]="'german'">German</mat-option>
-                    <mat-option [value]="'italian'">Italian</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-    </div>
-
-    <!-- Divider -->
-    <div class="mt-11 mb-10 border-t"></div>
-
-    <!-- Actions -->
-    <div class="flex items-center justify-end">
-        <button
-            mat-stroked-button
-            type="button">
-            Cancel
+      <div class="flex items-center justify-end mt-3">
+        <button mat-stroked-button type="button">
+          Hủy
         </button>
-        <button
-            class="ml-4"
-            mat-flat-button
-            type="button"
-            [color]="'primary'">Save
+        <button class="ml-4" mat-flat-button type="button" [color]="'primary'">Tạo Mới
         </button>
-    </div>
-</form>
+        <button class="ml-4" mat-flat-button type="button" [color]="'primary'">Cập Nhật
+        </button>
+      </div>
+    </form>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
-</mat-dialog-actions>
+  </mat-dialog-content>
 </ng-template>
-
