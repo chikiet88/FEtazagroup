@@ -31,6 +31,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import { MatSidenav } from '@angular/material/sidenav';
+import { LichhopService } from './lichhop.service';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -49,18 +53,24 @@ const colors: any = {
   selector: 'app-lichhop',
   templateUrl: './lichhop.component.html',
   styleUrls: ['./lichhop.component.scss'],
-  //styles: ['.cal-month-view {.cal-day-cell {min-height: 80px !important;}}'],
   encapsulation: ViewEncapsulation.None,
 
 })
 export class LichhopComponent implements OnInit {
-    
-  @ViewChild('Themmoi', { static: true }) secondDialog: TemplateRef<any>;
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  public Editor = InlineEditor;
+  public config = {
+		placeholder: 'Vui lòng nhập nội dung'
+	};
+//   public onReady( editor ) {
+//     editor.ui.getEditableElement().parentElement.insertBefore(
+//         editor.ui.view.toolbar.element,
+//         editor.ui.getEditableElement()
+//     );
+// }
   @ViewChild('picker') picker: any;
-
+  @ViewChild('sidenav') sidenav: MatSidenav;
   public date: moment.Moment;
-  public disabled = false;
+  public is_disabled = false;
   public showSpinners = true;
   public showSeconds = false;
   public touchUi = false;
@@ -73,9 +83,6 @@ export class LichhopComponent implements OnInit {
   public stepHours = [1, 2, 3, 4, 5];
   public stepMinutes = [1, 5, 10, 15, 20, 25];
   public stepSeconds = [1, 5, 10, 15, 20, 25];
-
-  
-  
   view: CalendarView = CalendarView.Month;
   locale: string = 'vi';
   CalendarView = CalendarView;
@@ -101,6 +108,7 @@ export class LichhopComponent implements OnInit {
       },
     },
   ];
+
   refresh = new Subject<void>();
   events: CalendarEvent[] = [
     {
@@ -142,6 +150,7 @@ export class LichhopComponent implements OnInit {
       draggable: true,
     },
   ];
+
   activeDayIsOpen: boolean = false;
   LichhopForm: FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -157,6 +166,7 @@ export class LichhopComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _CauhinhService: CauhinhService,
     private _changeDetectorRef: ChangeDetectorRef,
+    private _lichhopService:LichhopService,
     ){}
     options: string[] = ['One', 'Two', 'Three'];
     @ViewChild('tabGroup', { static: false }) public tabGroup: any;
@@ -169,7 +179,9 @@ export class LichhopComponent implements OnInit {
     // public ngAfterViewInit() {
     //   this.activeTabIndex = this.tabGroup.selectedIndex;
     // }
-
+  toggle() {
+      this.sidenav.toggle();
+    }
   ngOnInit(): void {
     this.activeTabIndex = 0;
     this.Title = "Thêm Mới"
@@ -184,15 +196,18 @@ export class LichhopComponent implements OnInit {
             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
            this._changeDetectorRef.markForCheck();
        });
+
     this.LichhopForm = this._formBuilder.group({
-      Loaihinh    : [''],
-      Tieude: [''],
+      Loaihinh    : [{value: '', disabled: this.is_disabled}],
+      Tieude: [{value: '', disabled: this.is_disabled}],
       Congty: [''],
       Chutri: [''],
       Thamgia: [''],
       Ngansach: [''],
       Batdau: [''],
       Ketthuc: [''],
+      Review: [''],
+      Hoanthanh: [''],
       Noidung: [''],
       Trienkhai: [''],
       Ketqua: [''],
@@ -201,17 +216,6 @@ export class LichhopComponent implements OnInit {
       Dieukienkhac: [''],
       Nguyennhan: [''],
   });
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(this.secondDialog);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-  toggleDrawerOpen(drawerName): void {
-    const drawer = this._fuseDrawerService.getComponent(drawerName);
-    drawer.toggle();
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -245,11 +249,7 @@ export class LichhopComponent implements OnInit {
   }
   handleEvent(action: string, event: CalendarEvent): void {
     this.Title = "Cập Nhật";
-    // this.toggleDrawerOpen('drawer');
-    this.openDialog()
-    // this.toggleDrawerOpen('drawer');
-    this.modalData = { event, action };
-    //this.modal.open(this.modalContent, { size: 'lg' });
+    this.toggle();   
   }
   addEvent(): void {
     this.events = [
@@ -275,15 +275,25 @@ export class LichhopComponent implements OnInit {
   setView(view: CalendarView) {
     this.view = view;
   }
-
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
 
-
-
   closePicker() {
     this.picker.cancel();
   }
+  CreateLichhop(): void
+  {
+    this.toggle();
+    const Lichhop = this.LichhopForm.getRawValue();
+    console.log(Lichhop);
+    // contact.emails = contact.emails.filter(email => email.email);
+    // contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
+      this._lichhopService.CreateLichhop(Lichhop).subscribe((data) => {
+        console.log(data);
+        this.toggle();   
+      });
+  }
+
 
 }

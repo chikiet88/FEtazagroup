@@ -1,25 +1,31 @@
-    /* Styles for tab labels */
-	.mat-tab-label {
-		min-width: 25px !important;
-		padding: 5px;
-		background-color: transparent;
-		color: red!important;
-		font-weight: 700;
+.cal-month-view 
+{
+	.cal-day-cell {min-height: 50px !important;}
+}
+.ck.ck-content
+	{
+		border: 1px dotted lightskyblue;
 	}
-	
-	/* Styles for the active tab label */
-	.mat-tab-label.mat-tab-label-active {
-		min-width: 25px !important;
-		padding: 5px;
-		background-color: transparent;
-		color: red!important;
-		font-weight: 700;
+.ck.ck-editor__editable > .ck-placeholder::before {
+		color: lightskyblue;
+		font-family: Georgia;
+}
+.ck.ck-content a
+	{
+	color: blue;
+    text-decoration: underline;
 	}
-	
-	/* Styles for the ink bar */
-	.mat-ink-bar {
-		background-color: green!important;
+
+.mat-tab-header {
+	.mat-tab-label-container {
+		.mat-tab-list {
+			.mat-tab-labels {
+				.mat-tab-label {
+					&.mat-tab-label-active {
+						background-color:lightskyblue!important ;
+					}
+				}
+			}
+		}
 	}
-	.tox.tox-tinymce-inline, .tox.tox-tinymce-aux {
-		z-index: 1001; // at least one more than NG-ZORRO
-	}
+}

@@ -13,7 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { CustomPipe } from 'app/custom.pipe';
+import { TimkiemPipe } from 'app/timkiem.pipe';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
@@ -26,9 +29,14 @@ const LichhopRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [LichhopComponent],
+  declarations: [
+    LichhopComponent,
+    CustomPipe,
+    TimkiemPipe
+  ],
   imports: [
-    EditorModule,
+    FuseScrollbarModule,
+    CKEditorModule,
     MatDatepickerModule,
     MatInputModule,
     NgxMatDatetimePickerModule,

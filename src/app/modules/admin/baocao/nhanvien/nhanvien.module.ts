@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NhanvienComponent } from './nhanvien.component';
 import { Route, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { MaterialExampleModule } from 'material.module';
 import { ListComponent } from './list/list.component';
 import { DetailsComponent } from './details/details.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,7 +24,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { NhanviensCauhinhResolver, NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
-import { NhanvienService } from './nhanvien.service';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',

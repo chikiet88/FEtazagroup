@@ -17,7 +17,6 @@ import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MaterialExampleModule } from 'material.module';
-import { CustomPipe } from './custom.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
@@ -69,8 +68,7 @@ const customNotifierOptions: NotifierOptions = {
 @NgModule({
     declarations: [
         AppComponent,
-        CauhinhComponent,
-        CustomPipe
+        CauhinhComponent
     ],
     imports     : [
       BrowserModule,
