@@ -4,9 +4,9 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
-import { Cauhinh } from '../../cauhinh/cauhinh.types';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,14 @@ import { Cauhinh } from '../../cauhinh/cauhinh.types';
 export class LichhopResolver implements Resolve<any> {
   constructor(
     private _cauhinhsService: CauhinhService,
-    private _router: Router
+    private _NhanvienService: NhanvienService,
     ){}
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Cauhinh[]> {
-    return this._cauhinhsService.getCauhinhs();
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+
+    return forkJoin([
+      this._cauhinhsService.getCauhinhs(),
+      this._NhanvienService.getNhanviens(),
+    ]);
   }
 }
+

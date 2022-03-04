@@ -35,6 +35,9 @@ import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { MatSidenav } from '@angular/material/sidenav';
 import { LichhopService } from './lichhop.service';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
+import { user } from 'app/mock-api/common/user/data';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -155,16 +158,19 @@ export class LichhopComponent implements OnInit {
   LichhopForm: FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   Phongban: object;
+  Nhanvien: Nhanvien[];
   Khoi: object;
   Congty: object;
   Bophan: object;
   Vitri: object;
   Title:string;
+  user:any;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
     public dialog: MatDialog,
     private _formBuilder: FormBuilder,
     private _CauhinhService: CauhinhService,
+    private _NhanvienService: NhanvienService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _lichhopService:LichhopService,
     ){}
@@ -184,7 +190,14 @@ export class LichhopComponent implements OnInit {
     }
   ngOnInit(): void {
     this.activeTabIndex = 0;
-    this.Title = "Thêm Mới"
+    this.Title = "Thêm Mới";
+    this._NhanvienService.nhanviens$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((nhanvien: Nhanvien[]) => {
+         this.Nhanvien = nhanvien;
+         console.log(nhanvien);
+        this._changeDetectorRef.markForCheck();
+    });
      this._CauhinhService.Cauhinhs$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((data: Cauhinh[]) => {
@@ -201,7 +214,7 @@ export class LichhopComponent implements OnInit {
       Loaihinh    : [{value: '', disabled: this.is_disabled}],
       Tieude: [{value: '', disabled: this.is_disabled}],
       Congty: [''],
-      Chutri: [''],
+      Chutri: [{value:user.id, disabled: true}],
       Thamgia: [''],
       Ngansach: [''],
       Batdau: [''],
@@ -216,6 +229,9 @@ export class LichhopComponent implements OnInit {
       Dieukienkhac: [''],
       Nguyennhan: [''],
   });
+  this.user=user;
+  console.log(this.user)
+  
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {

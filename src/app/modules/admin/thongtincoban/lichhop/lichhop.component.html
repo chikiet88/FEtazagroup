@@ -27,6 +27,9 @@
                   <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchLoaihinh.value" [value]="item.key">
                     {{item.value}}
                   </mat-option>
+                  <mat-option *ngIf="(Congty | keyvalue| timkiem : searchLoaihinh.value).length==0">
+                   Không Tìm Thấy
+                  </mat-option>
                 </mat-select>
             </mat-form-field>
           </div>
@@ -35,13 +38,15 @@
               <div class="text-secondary" matPrefix>
                 Công Ty
               </div>
-              <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Congty'"
-                [matAutocomplete]="autoCongty">
-              <mat-autocomplete #autoCongty="matAutocomplete">
-                <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
-                  {{item.value}}
-                </mat-option>
-              </mat-autocomplete>
+              <mat-select [formControlName]="'Congty'" placeholder="Vui Lòng Chọn">
+                <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchCongty></div>
+              <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty:'value'" [value]="item.key">
+                {{item.value}}
+              </mat-option>
+              <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty:'value').length==0">
+               Không Tìm Thấy
+              </mat-option>
+            </mat-select>
             </mat-form-field>
           </div>
           <div class="sm:col-span-3">
@@ -49,13 +54,8 @@
               <div class="text-secondary" matPrefix>
                 Chủ Trì
               </div>
-              <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Chutri'"
-                [matAutocomplete]="autoCongty">
-              <mat-autocomplete #autoCongty="matAutocomplete">
-                <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
-                  {{item.value}}
-                </mat-option>
-              </mat-autocomplete>
+              <input type="text" matInput [formControlName]="'Chutri'" hidden ="true">
+              <span>{{LichhopForm.get('Chutri').value}}</span>
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
@@ -63,13 +63,15 @@
               <div class="text-secondary" matPrefix>
                 Tham Gia
               </div>
-              <input type="text" placeholder="Vui Lòng Chọn" matInput [formControlName]="'Thamgia'"
-                [matAutocomplete]="autoCongty">
-              <mat-autocomplete #autoCongty="matAutocomplete">
-                <mat-option *ngFor="let item of Congty| keyvalue" [value]="item.value">
-                  {{item.value}}
-                </mat-option>
-              </mat-autocomplete>
+              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple>
+                <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchThamgia></div>
+              <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia:'name'" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+              <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia:'name').length==0">
+               Không Tìm Thấy
+              </mat-option>
+            </mat-select>  
             </mat-form-field>
           </div>
           <div class="sm:col-span-3">
