@@ -17,6 +17,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { CustomPipe } from 'app/custom.pipe';
 import { TimkiemPipe } from 'app/timkiem.pipe';
+import { FindbyidPipe } from 'app/findbyid.pipe';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
@@ -32,7 +33,8 @@ const LichhopRoutes: Routes = [
   declarations: [
     LichhopComponent,
     CustomPipe,
-    TimkiemPipe
+    TimkiemPipe,
+    FindbyidPipe
   ],
   imports: [
     FuseScrollbarModule,

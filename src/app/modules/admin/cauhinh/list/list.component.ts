@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { cloneDeep } from 'lodash';
@@ -7,10 +7,12 @@ import { CauhinhService } from '../cauhinh.service';
 import { Cauhinh } from '../cauhinh.types';
 import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
 import { v4 as uuidv4 } from 'uuid';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+  styleUrls: ['./list.component.scss'],
+  encapsulation:ViewEncapsulation.None,
 })
 export class ListComponent implements OnInit {
   drawerMode: 'over' | 'side' = 'side';
@@ -28,12 +30,18 @@ export class ListComponent implements OnInit {
    private _changeDetectorRef: ChangeDetectorRef,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _matDialog: MatDialog,
-    private _CauhinhService: CauhinhService) { }
+    private _CauhinhService: CauhinhService,
+    private _snackBar: MatSnackBar
+    ) { }
     detailChanged: Subject<Cauhinh> = new Subject<Cauhinh>();
     get filterStatus(): string
     {
         return this.filter$.value;
     }
+    openSnackBar(message: string, action: string) {
+      this._snackBar.open(message, action);
+    }
+
     ngOnInit(): void
     {
      this.detailChanged.pipe(

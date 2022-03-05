@@ -18,11 +18,12 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
+  CalendarEventTitleFormatter,
   CalendarView,
 } from 'angular-calendar';
 import { FuseDrawerService } from '@fuse/components/drawer';
@@ -38,6 +39,12 @@ import { LichhopService } from './lichhop.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
 import { user } from 'app/mock-api/common/user/data';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import { Lichhop } from './lichhop.type';
+import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { NotifierService } from 'angular-notifier';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -56,20 +63,26 @@ const colors: any = {
   selector: 'app-lichhop',
   templateUrl: './lichhop.component.html',
   styleUrls: ['./lichhop.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-
+  providers: [
+    {
+      provide: CalendarEventTitleFormatter,
+      useClass: CustomEventTitleFormatter,
+    },
+  ],
 })
 export class LichhopComponent implements OnInit {
   public Editor = InlineEditor;
   public config = {
-		placeholder: 'Vui lòng nhập nội dung'
-	};
-//   public onReady( editor ) {
-//     editor.ui.getEditableElement().parentElement.insertBefore(
-//         editor.ui.view.toolbar.element,
-//         editor.ui.getEditableElement()
-//     );
-// }
+    placeholder: 'Vui lòng nhập nội dung'
+  };
+  //   public onReady( editor ) {
+  //     editor.ui.getEditableElement().parentElement.insertBefore(
+  //         editor.ui.view.toolbar.element,
+  //         editor.ui.getEditableElement()
+  //     );
+  // }
   @ViewChild('picker') picker: any;
   @ViewChild('sidenav') sidenav: MatSidenav;
   public date: moment.Moment;
@@ -90,131 +103,79 @@ export class LichhopComponent implements OnInit {
   locale: string = 'vi';
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
+  // modalData: {
+  //   action: string;
+  //   event: CalendarEvent;
+  // };
+  // actions: CalendarEventAction[] = [
+  //   {
+  //     label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+  //     a11yLabel: 'Edit',
+  //     onClick: ({ event }: { event: CalendarEvent }): void => {
+  //       this.handleEvent('Edited', event);
+  //     },
+  //   },
+  //   {
+  //     label: '<i class="fas fa-fw fa-trash-alt"></i>',
+  //     a11yLabel: 'Delete',
+  //     onClick: ({ event }: { event: CalendarEvent }): void => {
+  //       this.events = this.events.filter((iEvent) => iEvent !== event);
+  //       this.handleEvent('Deleted', event);
+  //     },
+  //   },
+  // ];
 
   refresh = new Subject<void>();
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
 
+  events: CalendarEvent[] = [];
   activeDayIsOpen: boolean = false;
   LichhopForm: FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   Phongban: object;
   Nhanvien: Nhanvien[];
+  Lichhops: Lichhop[];
+  Lichhop: Lichhop;
   Khoi: object;
   Congty: object;
   Bophan: object;
   Vitri: object;
-  Title:string;
-  user:any;
+  Loaihinhhop: object;
+  Title: string;
+  user: any;
+  CRUD: any;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
     public dialog: MatDialog,
     private _formBuilder: FormBuilder,
     private _CauhinhService: CauhinhService,
     private _NhanvienService: NhanvienService,
+    private _UserService: UserService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _lichhopService:LichhopService,
-    ){}
-    options: string[] = ['One', 'Two', 'Three'];
-    @ViewChild('tabGroup', { static: false }) public tabGroup: any;
-    public activeTabIndex: number | undefined = undefined;
-  
-    public handleTabChange(e: MatTabChangeEvent) {
-      this.activeTabIndex = e.index;
-    }
-  
-    // public ngAfterViewInit() {
-    //   this.activeTabIndex = this.tabGroup.selectedIndex;
-    // }
-  toggle() {
-      this.sidenav.toggle();
-    }
-  ngOnInit(): void {
-    this.activeTabIndex = 0;
-    this.Title = "Thêm Mới";
-    this._NhanvienService.nhanviens$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((nhanvien: Nhanvien[]) => {
-         this.Nhanvien = nhanvien;
-         console.log(nhanvien);
-        this._changeDetectorRef.markForCheck();
-    });
-     this._CauhinhService.Cauhinhs$
-       .pipe(takeUntil(this._unsubscribeAll))
-       .subscribe((data: Cauhinh[]) => {
-            console.log(data);
-            this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
-            this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
-            this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
-            this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
-            this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
-           this._changeDetectorRef.markForCheck();
-       });
+    private _lichhopService: LichhopService,
+    private _fuseConfirmationService: FuseConfirmationService,
+    private readonly notifier: NotifierService,
+  ) { }
+  options: string[] = ['One', 'Two', 'Three'];
+  @ViewChild('tabGroup', { static: false }) public tabGroup: any;
+  public activeTabIndex: number | undefined = undefined;
 
+  public handleTabChange(e: MatTabChangeEvent) {
+    this.activeTabIndex = e.index;
+  }
+
+  // public ngAfterViewInit() {
+  //   this.activeTabIndex = this.tabGroup.selectedIndex;
+  // }
+  toggle() {
+    //this.sidenav.toggle();
+  }
+  Opentoggle() {
     this.LichhopForm = this._formBuilder.group({
-      Loaihinh    : [{value: '', disabled: this.is_disabled}],
-      Tieude: [{value: '', disabled: this.is_disabled}],
+      id: [''],
+      Loaihinh: [{ value: '', disabled: this.is_disabled }],
+      Tieude: [{ value: '', disabled: this.is_disabled }],
       Congty: [''],
-      Chutri: [{value:user.id, disabled: true}],
+      Chutri: [{ value: this.user.id, disabled: true }],
       Thamgia: [''],
       Ngansach: [''],
       Batdau: [''],
@@ -228,10 +189,72 @@ export class LichhopComponent implements OnInit {
       Dieuchinh: [''],
       Dieukienkhac: [''],
       Nguyennhan: [''],
-  });
-  this.user=user;
-  console.log(this.user)
-  
+    });
+    this.sidenav.toggle();
+  }
+  ngOnInit(): void {
+    this.activeTabIndex = 0;
+    this.Title = "Thêm Mới";
+    this.CRUD = 1;
+    this._NhanvienService.nhanviens$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((nhanvien: Nhanvien[]) => {
+       // console.log(nhanvien);
+        this.Nhanvien = nhanvien;
+        this._changeDetectorRef.markForCheck();
+      });
+    this._CauhinhService.Cauhinhs$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data: Cauhinh[]) => {
+        this.Phongban = data.find(v => v.id == "1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+        this.Khoi = data.find(v => v.id == "295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+        this.Congty = data.find(v => v.id == "bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+        this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+        this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+        this.Loaihinhhop = data.find(v => v.id == "6b72e969-aefe-4a67-902f-4948929f3b01").detail;
+        this._changeDetectorRef.markForCheck();
+      });
+
+    this._UserService.user$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data: User) => {
+        this.user = data;
+        this._changeDetectorRef.markForCheck();
+      });
+
+    this._lichhopService.lichhops$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((lichhops: Lichhop[]) => {
+        this.Lichhops = lichhops;
+        this._changeDetectorRef.markForCheck();
+      });
+    this._lichhopService.events$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((events: any[]) => {
+       // console.log(events)
+        this.events = events;
+        this._changeDetectorRef.markForCheck();
+      });
+    this.LichhopForm = this._formBuilder.group({
+      id: [''],
+      Loaihinh: [{ value: '', disabled: this.is_disabled }],
+      Tieude: [{ value: '', disabled: this.is_disabled }],
+      Congty: [''],
+      Chutri: [{ value: this.user.id, disabled: true }],
+      Thamgia: [''],
+      Ngansach: [''],
+      Batdau: [''],
+      Ketthuc: [''],
+      Review: [''],
+      Hoanthanh: [''],
+      Noidung: [''],
+      Trienkhai: [''],
+      Ketqua: [''],
+      Mongdoi: [''],
+      Dieuchinh: [''],
+      Dieukienkhac: [''],
+      Nguyennhan: [''],
+    });
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -264,24 +287,11 @@ export class LichhopComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
   handleEvent(action: string, event: CalendarEvent): void {
+    this.sidenav.toggle();
+    this.Lichhop = this.Lichhops.find(v => v.id == event.id);
+    this.LichhopForm.patchValue(this.Lichhop);
     this.Title = "Cập Nhật";
-    this.toggle();   
-  }
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
+    this.CRUD = 2;
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
@@ -298,18 +308,63 @@ export class LichhopComponent implements OnInit {
   closePicker() {
     this.picker.cancel();
   }
-  CreateLichhop(): void
-  {
-    this.toggle();
+  // addEvent(): void {
+  //   this.events = [
+  //     ...this.events,
+  //     {
+  //       title: 'New event',
+  //       start: startOfDay(new Date()),
+  //       end: endOfDay(new Date()),
+  //       color: colors.red,
+  //       draggable: true,
+  //       resizable: {
+  //         beforeStart: true,
+  //         afterEnd: true,
+  //       },
+  //     },
+  //   ];
+  // }
+  CreateLichhop(): void {
+    this.sidenav.toggle();
     const Lichhop = this.LichhopForm.getRawValue();
-    console.log(Lichhop);
-    // contact.emails = contact.emails.filter(email => email.email);
-    // contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
-      this._lichhopService.CreateLichhop(Lichhop).subscribe((data) => {
-        console.log(data);
-        this.toggle();   
+    this._lichhopService.CreateLichhop(Lichhop).subscribe(
+      () => {
+        this.notifier.notify('success', `Tạo Mới Thành Công`);
+        this._changeDetectorRef.markForCheck();
       });
   }
-
+  UpdateLichhop(): void {
+    this.sidenav.toggle();
+    const updateLichhop = this.LichhopForm.getRawValue();
+    this._lichhopService.UpdateLichhop(updateLichhop).subscribe(
+      () => {
+        this.notifier.notify('success', 'Cập Nhật Thành Công');
+        this._changeDetectorRef.markForCheck();
+      }
+    );
+  }
+  DeleteLichhop(): void {
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Xóa Lịch',
+      message: 'Bạn Có Chắc Chắn Xóa Lịch Không?',
+      actions: {
+        confirm: {
+          label: 'Xóa'
+        }
+      }
+    });
+    confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        const deleteLichhop = this.LichhopForm.getRawValue();
+        this._lichhopService.DeleteLichhop(deleteLichhop).subscribe(
+          () => {
+            this.notifier.notify('success', 'Xóa Thành Công');
+            this.sidenav.toggle();
+            this._changeDetectorRef.markForCheck();
+          }
+        );
+      }
+    });
+  }
 
 }

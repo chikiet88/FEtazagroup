@@ -7,7 +7,7 @@
 		border: 1px dotted lightskyblue;
 	}
 .ck.ck-editor__editable > .ck-placeholder::before {
-		color: lightskyblue;
+		color: rgb(59 130 246)!important ;
 		font-family: Georgia;
 }
 .ck.ck-content a
@@ -28,4 +28,9 @@
 			}
 		}
 	}
+}
+.mat-select-value-text
+{
+	color: rgb(59 130 246)!important ;
+	font-weight: 600;
 }

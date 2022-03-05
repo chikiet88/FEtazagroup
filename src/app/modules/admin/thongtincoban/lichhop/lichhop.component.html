@@ -3,7 +3,7 @@
     <mat-drawer #sidenav class="flex flex-col sm:w-3/4 w-full p-3" mode="over">
       <div class="flex justify-between">      
         <h2 mat-dialog-title>{{Title}}</h2>
-          <span class="material-icons pr-4" (click)="toggle()">
+          <span class="material-icons pr-4" (click)="sidenav.toggle()">
             cancel
             </span>
       </div>
@@ -14,7 +14,7 @@
               <div class="text-secondary" matPrefix>
                 Tiêu Đề
               </div>
-              <input [formControlName]="'Tieude'" matInput>
+              <input [formControlName]="'Tieude'" matInput class="mat-select-value-text">
             </mat-form-field>
           </div> 
           <div class="sm:col-span-3">          
@@ -24,10 +24,10 @@
               </div>
                 <mat-select [formControlName]="'Loaihinh'">
                     <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchLoaihinh></div>
-                  <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchLoaihinh.value" [value]="item.key">
+                  <mat-option *ngFor="let item of Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value'" [value]="item.key">
                     {{item.value}}
                   </mat-option>
-                  <mat-option *ngIf="(Congty | keyvalue| timkiem : searchLoaihinh.value).length==0">
+                  <mat-option *ngIf="(Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value').length==0">
                    Không Tìm Thấy
                   </mat-option>
                 </mat-select>
@@ -40,10 +40,10 @@
               </div>
               <mat-select [formControlName]="'Congty'" placeholder="Vui Lòng Chọn">
                 <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchCongty></div>
-              <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty:'value'" [value]="item.key">
+              <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty.value:'value'" [value]="item.key">
                 {{item.value}}
               </mat-option>
-              <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty:'value').length==0">
+              <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty.value:'value').length==0">
                Không Tìm Thấy
               </mat-option>
             </mat-select>
@@ -55,7 +55,7 @@
                 Chủ Trì
               </div>
               <input type="text" matInput [formControlName]="'Chutri'" hidden ="true">
-              <span>{{LichhopForm.get('Chutri').value}}</span>
+              <span class="text-red-500">{{LichhopForm.get('Chutri').value | findbyid:Nhanvien:'name'}}</span>
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
@@ -63,12 +63,12 @@
               <div class="text-secondary" matPrefix>
                 Tham Gia
               </div>
-              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple>
+              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple class="text-blue-500">
                 <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchThamgia></div>
-              <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia:'name'" [value]="item.id">
+              <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia.value:'name'" [value]="item.id">
                 {{item.name}}
               </mat-option>
-              <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia:'name').length==0">
+              <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia.value:'name').length==0">
                Không Tìm Thấy
               </mat-option>
             </mat-select>  
@@ -79,14 +79,14 @@
               <div class="text-secondary" matPrefix>
                 Ngân Sách
               </div>
-              <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'">
+              <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'" class="mat-select-value-text">
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix> Bắt Đầu </div>
               <input matInput [ngxMatDatetimePicker]="picker" placeholder="Chọn Ngày Bắt Đầu" [formControlName]="'Batdau'"
-                [min]="minDate" [max]="maxDate">
+                [min]="minDate" [max]="maxDate" class="mat-select-value-text">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -98,7 +98,7 @@
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix> Kết Thúc </div>
               <input matInput [ngxMatDatetimePicker]="pickerketthuc" placeholder="Chọn Ngày Kết Thúc"
-                [formControlName]="'Ketthuc'" [min]="minDate" [max]="maxDate">
+                [formControlName]="'Ketthuc'" [min]="minDate" [max]="maxDate" class="mat-select-value-text">
               <mat-datepicker-toggle matSuffix [for]="pickerketthuc"></mat-datepicker-toggle>
               <ngx-mat-datetime-picker #pickerketthuc [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -110,7 +110,7 @@
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix> Review </div>
               <input matInput [ngxMatDatetimePicker]="pickerreview" placeholder="Chọn Ngày" [formControlName]="'Review'"
-                [min]="minDate" [max]="maxDate">
+                [min]="minDate" [max]="maxDate" class="mat-select-value-text">
               <mat-datepicker-toggle matSuffix [for]="pickerreview"></mat-datepicker-toggle>
               <ngx-mat-datetime-picker #pickerreview [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -122,7 +122,7 @@
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix> Hoàn Thành </div>
               <input matInput [ngxMatDatetimePicker]="pickerhoanthanh" placeholder="Chọn Ngày"
-                [formControlName]="'Hoanthanh'" [min]="minDate" [max]="maxDate">
+                [formControlName]="'Hoanthanh'" [min]="minDate" [max]="maxDate" class="mat-select-value-text">
               <mat-datepicker-toggle matSuffix [for]="pickerhoanthanh"></mat-datepicker-toggle>
               <ngx-mat-datetime-picker #pickerhoanthanh [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -131,7 +131,7 @@
             </mat-form-field>
           </div>
        <div class="sm:col-span-12">
-            <mat-tab-group class="min-h-96 max-w-90 sm:max-w-full" #tabGroup>
+            <mat-tab-group class="min-h-48 max-w-90 sm:max-w-full" #tabGroup>
               <mat-tab label="Nội Dung">
                 <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Noidung'"></ckeditor>
               </mat-tab>
@@ -156,15 +156,14 @@
               </mat-tab>
             </mat-tab-group>
           </div>
-  
-  
-  
         </div>
         <div class="flex items-center justify-end mt-3">
-          <button class="ml-4" mat-flat-button type="button" [color]="'primary'" (click)="CreateLichhop()">Tạo Mới
+          <button class="ml-4" *ngIf="CRUD==1" mat-flat-button type="button" [color]="'primary'" (click)="CreateLichhop()">Tạo Mới
           </button>
-          <button class="ml-4" mat-flat-button type="button" [color]="'accent'">Cập Nhật
+          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'accent'" (click)="UpdateLichhop()">Cập Nhật
           </button>
+          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'warn'" (click)="DeleteLichhop()">Xóa Lịch
+          </button>         
         </div>
       </form>
     </mat-drawer>
@@ -180,8 +179,7 @@
                 <mat-button-toggle value="green" mwlCalendarToday [(viewDate)]="viewDate">Hôm Nay</mat-button-toggle>
                 <mat-button-toggle value="blue" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
                   (viewDateChange)="closeOpenMonthViewDay()">></mat-button-toggle>
-                <!-- <mat-button-toggle value="blue" (click)="openDialog();drawer.toggle()"> -->
-                <mat-button-toggle value="blue" (click)="sidenav.toggle()">
+                <mat-button-toggle value="blue" (click)="Opentoggle()">
                   <mat-icon>add_circle</mat-icon>
                 </mat-button-toggle>
              </mat-button-toggle-group>
@@ -190,8 +188,7 @@
 
       <div class="flex flex-col">
         <div class="w-full md:w-8/12 md:p-3 m-auto">
-          <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [refresh]="refresh"
-            [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+          <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
             (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
           </mwl-calendar-month-view>
         </div>
