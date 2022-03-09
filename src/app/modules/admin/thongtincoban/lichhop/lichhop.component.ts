@@ -128,7 +128,7 @@ export class LichhopComponent implements OnInit {
   refresh = new Subject<void>();
 
   events: CalendarEvent[] = [];
-  activeDayIsOpen: boolean = false;
+  activeDayIsOpen: boolean = true;
   LichhopForm: FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   Phongban: object;
@@ -274,21 +274,14 @@ export class LichhopComponent implements OnInit {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd,
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
+    this.handleEvent('Dropped or resized', event,newStart,newEnd);
   }
-  handleEvent(action: string, event: CalendarEvent): void {
+
+  handleEvent(action: string, event: CalendarEvent,snew:any,enew:any): void {
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);
+    if(snew!=''){this.Lichhop.Batdau=new Date(snew)};
+    if(enew!=''){this.Lichhop.Ketthuc=new Date(enew)};
     this.LichhopForm.patchValue(this.Lichhop);
     this.Title = "Cập Nhật";
     this.CRUD = 2;

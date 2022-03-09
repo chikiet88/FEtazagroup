@@ -60,10 +60,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        // Open the drawer
         this._contactsListComponent.matDrawer.open();
-
-        // Create the contact form
         this.contactForm = this._formBuilder.group({
             id          : [''],
             avatar      : [null],

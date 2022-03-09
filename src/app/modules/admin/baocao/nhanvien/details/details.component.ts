@@ -24,10 +24,9 @@ export class DetailsComponent implements OnInit, OnDestroy
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
     @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
-    editMode: boolean = false;
     tagsEditMode: boolean = false;
     nhanvien: Nhanvien;
-    contactForm: FormGroup;
+    NhanvienForm: FormGroup;
     nhanviens: Nhanvien[];
     Phongban: object;
     Khoi: object;
@@ -62,7 +61,6 @@ export class DetailsComponent implements OnInit, OnDestroy
        this._cauhinhService.Cauhinhs$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((data: Cauhinh[]) => {
-            console.log(data);
             this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
             this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
             this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
@@ -70,22 +68,32 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
            this._changeDetectorRef.markForCheck();
        });
-
-        // Open the drawer
         this._ListComponent.matDrawer.open();
-
-        this.contactForm = this._formBuilder.group({
+        this.NhanvienForm = this._formBuilder.group({
             id          : [''],
             avatar      : [null],
             name        : ['', [Validators.required]],
-            emails      : this._formBuilder.array([]),
-            phoneNumbers: this._formBuilder.array([]),
-            title       : [''],
-            company     : [''],
-            birthday    : [null],
-            address     : [null],
-            notes       : [null],
-            tags        : [[]]
+            email       : ['', [Validators.required]],
+            SDT         : ['', [Validators.required]],
+            profile: this._formBuilder.group({
+                Congty: [''],
+                Khoi: [''],
+                Phongban: [''],
+                Bophan: [''],
+                Vitri: [''],
+                TTLV: [''],
+                MaNV: [''],
+                CMND: [''],
+                Datein: [''],
+                Dateout: [''],
+                Diachi: [''],
+                Fb: [''],
+                Gioitinh: [''],
+                Ngaysinh: [''],
+                PQDT: [''],
+                PQTD: [''],
+                Zalo: [''],
+              }),    
         });
 
         // Get the contacts
@@ -99,11 +107,38 @@ export class DetailsComponent implements OnInit, OnDestroy
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
+                console.log(nhanvien);
+                this.NhanvienForm.patchValue({
+                    id: nhanvien.id,
+                    avatar: nhanvien.avatar,
+                    name: nhanvien.name,
+                    email: nhanvien.email,
+                    SDT: nhanvien.SDT,
+                    profile: {
+                        Congty: nhanvien.profile.Congty,
+                        Khoi: nhanvien.profile.Khoi,
+                        Phongban: nhanvien.profile.Phongban,
+                        Bophan: nhanvien.profile.Bophan,
+                        Vitri: nhanvien.profile.Vitri,
+                        TTLV: nhanvien.profile.TTLV,
+                        MaNV: nhanvien.profile.MaNV,
+                        CMND: nhanvien.profile.CMND,
+                        Datein: nhanvien.profile.Datein,
+                        Dateout: nhanvien.profile.Dateout,
+                        Diachi: nhanvien.profile.Diachi,
+                        Fb: nhanvien.profile.Fb,
+                        Gioitinh: nhanvien.profile.Gioitinh,
+                        Ngaysinh: nhanvien.profile.Ngaysinh,
+                        PQDT: nhanvien.profile.PQDT,
+                        PQTD: nhanvien.profile.PQTD,
+                        Zalo: nhanvien.profile.Zalo,
+                    }
+                  });
                 this._ListComponent.matDrawer.open();
                 this.nhanvien = nhanvien;
-                this.toggleEditMode(false);
                 this._changeDetectorRef.markForCheck();
             });
+            this.NhanvienForm.disable();
 
     }
     ngOnDestroy(): void
@@ -122,26 +157,21 @@ export class DetailsComponent implements OnInit, OnDestroy
     {
         return this._ListComponent.matDrawer.close();
     }
-    toggleEditMode(editMode: boolean | null = null): void
-    {
-        if ( editMode === null )
-        {
-            this.editMode = !this.editMode;
-        }
-        else
-        {
-            this.editMode = editMode;
-        }
-
+    editNhanvien() {
+        this.NhanvienForm.enable();
+        this._changeDetectorRef.markForCheck();
+    }
+    Cancel() {
+        this.NhanvienForm.disable();
         this._changeDetectorRef.markForCheck();
     }
     updateNhanvien(): void
     {
-        const contact = this.contactForm.getRawValue();
+        const contact = this.NhanvienForm.getRawValue();
         contact.emails = contact.emails.filter(email => email.email);
         contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
         this._nhanvienService.updateNhanvien(contact.id, contact).subscribe(() => {
-            this.toggleEditMode(false);
+            this.editNhanvien();
         });
     }
     deleteNhanvien(): void
@@ -176,7 +206,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                         {
                             this._router.navigate(['../'], {relativeTo: this._activatedRoute});
                         }
-                        this.toggleEditMode(false);
+                        this.editNhanvien();
                     });
 
                 // Mark for check

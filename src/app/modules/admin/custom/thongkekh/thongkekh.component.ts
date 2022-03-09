@@ -108,10 +108,11 @@ export class ThongkekhComponent implements OnInit{
   {
     console.log(dulieu)
     dulieu.forEach(v => {
-      this._ThongkekhService.CreateData(v)
-      .subscribe((response) => {
-          console.log(response)
-      });
+      setTimeout(() => {
+        this._ThongkekhService.CreateData(v)
+        .subscribe((response) => {
+        });
+      },30000);
       this._changeDetectorRef.markForCheck();
     });
   }

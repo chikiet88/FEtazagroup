@@ -17,6 +17,7 @@ import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
 import { UserModule } from 'app/layout/common/user/user.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { CompactLayoutComponent } from 'app/layout/layouts/vertical/compact/compact.component';
+import { VersionModule } from 'app/layout/common/version/version.module';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import { CompactLayoutComponent } from 'app/layout/layouts/vertical/compact/comp
         SearchModule,
         ShortcutsModule,
         UserModule,
+        VersionModule,
         SharedModule
     ],
     exports     : [

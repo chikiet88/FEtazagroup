@@ -24,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { NhanviensCauhinhResolver, NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
+import { ReactiveFormsModule } from '@angular/forms';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
@@ -60,6 +61,7 @@ const nhanvienRoutes: Route[] = [
   ],
   imports: [
     RouterModule.forChild(nhanvienRoutes),
+    ReactiveFormsModule,
     CommonModule,
     MatButtonModule,
     MatCheckboxModule,

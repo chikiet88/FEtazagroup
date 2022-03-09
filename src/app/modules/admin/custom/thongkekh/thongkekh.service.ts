@@ -35,7 +35,7 @@ export class ThongkekhService {
       return this._httpClient.get(`${environment.ApiURL}/thongkekh`).pipe(
           tap((Character: Character[]) => {
             this._data.next(Character);
-            console.log(Character);
+           // console.log(Character);
           })
       );
   }
@@ -44,7 +44,7 @@ export class ThongkekhService {
       return this._httpClient.get(`${environment.ApiURL}/thongkekh`).pipe(
           tap((Khachhang: Khachhang[]) => {
             this._Khachhang.next(Khachhang);
-            console.log(Khachhang);
+            //console.log(Khachhang);
           })
       );
   }
