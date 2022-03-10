@@ -49,8 +49,8 @@ export class ThongkekhComponent implements OnInit{
           this._changeDetectorRef.markForCheck();
         });
 
-    this.characters$ = this.googleSheetsDbService.get<Character>(
-      environment.characters.spreadsheetId, environment.characters.worksheetName, characterAttributesMapping);
+    // this.characters$ = this.googleSheetsDbService.get<Character>(
+    //   environment.characters.spreadsheetId, environment.characters.worksheetName, characterAttributesMapping);
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
       environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
 
@@ -107,12 +107,12 @@ export class ThongkekhComponent implements OnInit{
   CreateData(dulieu:any): void
   {
     console.log(dulieu)
-    dulieu.forEach(v => {
+    dulieu.forEach((v,k) => {
       setTimeout(() => {
-        this._ThongkekhService.CreateData(v)
-        .subscribe((response) => {
+       this._ThongkekhService.CreateData(v)
+        .subscribe((response) => {   
         });
-      },30000);
+      },300*k);
       this._changeDetectorRef.markForCheck();
     });
   }

@@ -18,7 +18,7 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -45,6 +45,43 @@ import { Lichhop } from './lichhop.type';
 import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
+// const v1lichhop = require('app/v1json/lichhop.json');
+// const v1loai = require('app/v1json/loaihinhhop.json');
+// const v1nhanvien = require('app/v1json/nhanvien.json');
+// const congty = require('app/v1json/congty.json');
+//const v2nhanvien = require('app/v1json/v2nhanvien.json');
+//console.log(v1nhanvien); 
+// let x= []
+// v1lichhop.forEach(v => {
+// v.Congty = congty.detail[v.Congty];
+// });
+// console.log(x);
+// Nối 2 Array
+// const profiles = {};
+// function addToProfiles(arr, profiles) {
+//   for (let obj of arr) {
+//     if (obj.SDT != null) {
+//       const profile = profiles[obj.SDT] || {};
+//       profiles[obj.SDT] = { ...profile, ...obj };
+//     }
+//   }
+// }
+// addToProfiles(v1nhanvien, profiles);
+// addToProfiles(v2nhanvien, profiles);
+// const third = Object.values(profiles);
+// console.log(third);
+//  v1lichhop.forEach(v => {
+//    v.idLoaihinh = v1loai.detail[v.idLoaihinh];
+//  });
+
+// const x ={};
+// console.log(Object.entries(congty.detail));
+// Object.entries(congty.detail).forEach((v) => {
+//   const key = ""+v[1];
+//   const obj = {[key]:v[0]};
+//   Object.assign(x, obj);
+// });
+// console.log(x);
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -103,30 +140,7 @@ export class LichhopComponent implements OnInit {
   locale: string = 'vi';
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  // modalData: {
-  //   action: string;
-  //   event: CalendarEvent;
-  // };
-  // actions: CalendarEventAction[] = [
-  //   {
-  //     label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-  //     a11yLabel: 'Edit',
-  //     onClick: ({ event }: { event: CalendarEvent }): void => {
-  //       this.handleEvent('Edited', event);
-  //     },
-  //   },
-  //   {
-  //     label: '<i class="fas fa-fw fa-trash-alt"></i>',
-  //     a11yLabel: 'Delete',
-  //     onClick: ({ event }: { event: CalendarEvent }): void => {
-  //       this.events = this.events.filter((iEvent) => iEvent !== event);
-  //       this.handleEvent('Deleted', event);
-  //     },
-  //   },
-  // ];
-
   refresh = new Subject<void>();
-
   events: CalendarEvent[] = [];
   activeDayIsOpen: boolean = true;
   LichhopForm: FormGroup;
@@ -162,24 +176,17 @@ export class LichhopComponent implements OnInit {
   public handleTabChange(e: MatTabChangeEvent) {
     this.activeTabIndex = e.index;
   }
-
-  // public ngAfterViewInit() {
-  //   this.activeTabIndex = this.tabGroup.selectedIndex;
-  // }
-  toggle() {
-    //this.sidenav.toggle();
-  }
   Opentoggle() {
+    this.CRUD =1;
     this.LichhopForm = this._formBuilder.group({
-      id: [''],
-      Loaihinh: [{ value: '', disabled: this.is_disabled }],
-      Tieude: [{ value: '', disabled: this.is_disabled }],
+      Loaihinh: [''],
+      Tieude: [''],
       Congty: [''],
       Chutri: [{ value: this.user.id, disabled: true }],
       Thamgia: [''],
       Ngansach: [''],
-      Batdau: [''],
-      Ketthuc: [''],
+      Batdau: [new Date()],
+      Ketthuc: [new Date()],
       Review: [''],
       Hoanthanh: [''],
       Noidung: [''],
@@ -193,13 +200,13 @@ export class LichhopComponent implements OnInit {
     this.sidenav.toggle();
   }
   ngOnInit(): void {
+   // this.ImportLichhop(v1lichhop);
     this.activeTabIndex = 0;
     this.Title = "Thêm Mới";
     this.CRUD = 1;
     this._NhanvienService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((nhanvien: Nhanvien[]) => {
-       // console.log(nhanvien);
         this.Nhanvien = nhanvien;
         this._changeDetectorRef.markForCheck();
       });
@@ -231,20 +238,20 @@ export class LichhopComponent implements OnInit {
     this._lichhopService.events$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((events: any[]) => {
-       // console.log(events)
         this.events = events;
+
         this._changeDetectorRef.markForCheck();
       });
     this.LichhopForm = this._formBuilder.group({
-      id: [''],
-      Loaihinh: [{ value: '', disabled: this.is_disabled }],
-      Tieude: [{ value: '', disabled: this.is_disabled }],
-      Congty: [''],
+      id          : [''],
+      Loaihinh: [{ value: '', disabled: true }],
+      Tieude: [{ value: '', disabled: true }],
+      Congty: [{ value: '', disabled: true }],
       Chutri: [{ value: this.user.id, disabled: true }],
-      Thamgia: [''],
-      Ngansach: [''],
-      Batdau: [''],
-      Ketthuc: [''],
+      Thamgia: [{ value: '', disabled: true }],
+      Ngansach: [{ value: '', disabled: true }],
+      Batdau: [{ value: '', disabled: true }],
+      Ketthuc: [{ value: '', disabled: true }],
       Review: [''],
       Hoanthanh: [''],
       Noidung: [''],
@@ -274,50 +281,57 @@ export class LichhopComponent implements OnInit {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    this.handleEvent('Dropped or resized', event,newStart,newEnd);
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Chuyển Lịch',
+      message: 'Bạn Có Chắc Chắn Chuyển Lịch Không?',
+      actions: {
+        confirm: {
+          label: 'Có'
+        }
+      }
+    });
+    confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this.Lichhop = this.Lichhops.find(v => v.id == event.id);
+        this.Lichhop.Batdau=new Date(newStart)
+        this.Lichhop.Ketthuc=new Date(newEnd);
+          this._lichhopService.UpdateLichhop(this.Lichhop).subscribe(
+            () => {
+              this.notifier.notify('success', 'Dời Lịch Thành Công');
+              this._changeDetectorRef.markForCheck();
+            }
+          );
+      }
+    });
   }
 
-  handleEvent(action: string, event: CalendarEvent,snew:any,enew:any): void {
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);
-    if(snew!=''){this.Lichhop.Batdau=new Date(snew)};
-    if(enew!=''){this.Lichhop.Ketthuc=new Date(enew)};
+    (this.user.id!=this.Lichhop.Chutri)?this.LichhopForm.disable():this.LichhopForm.enable();
     this.LichhopForm.patchValue(this.Lichhop);
     this.Title = "Cập Nhật";
-    this.CRUD = 2;
   }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter((event) => event !== eventToDelete);
-  }
-
   setView(view: CalendarView) {
     this.view = view;
   }
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
-
   closePicker() {
     this.picker.cancel();
   }
-  // addEvent(): void {
-  //   this.events = [
-  //     ...this.events,
-  //     {
-  //       title: 'New event',
-  //       start: startOfDay(new Date()),
-  //       end: endOfDay(new Date()),
-  //       color: colors.red,
-  //       draggable: true,
-  //       resizable: {
-  //         beforeStart: true,
-  //         afterEnd: true,
-  //       },
-  //     },
-  //   ];
-  // }
-  CreateLichhop(): void {
+ ImportLichhop(data): void {
+  data.forEach(v => {
+    this._lichhopService.CreateLichhop(v).subscribe(
+      () => {
+        this.notifier.notify('success', `Tạo Mới Thành Công`);
+        this._changeDetectorRef.markForCheck();
+      });
+   });
+  }
+ CreateLichhop(): void {
     this.sidenav.toggle();
     const Lichhop = this.LichhopForm.getRawValue();
     this._lichhopService.CreateLichhop(Lichhop).subscribe(
@@ -329,6 +343,7 @@ export class LichhopComponent implements OnInit {
   UpdateLichhop(): void {
     this.sidenav.toggle();
     const updateLichhop = this.LichhopForm.getRawValue();
+    console.log(updateLichhop)
     this._lichhopService.UpdateLichhop(updateLichhop).subscribe(
       () => {
         this.notifier.notify('success', 'Cập Nhật Thành Công');

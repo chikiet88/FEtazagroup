@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
 import { Lichhop } from './lichhop.type';
@@ -29,6 +31,7 @@ export class LichhopService {
   constructor(
     private _httpClient: HttpClient,
     private _notifierService: NotifierService,
+    private _UserService: UserService,
   ) { this.notifier = _notifierService; }
 
   get lichhops$(): Observable<Lichhop[]> {
@@ -41,10 +44,12 @@ export class LichhopService {
   get events$(): Observable<any> {
     return this._events.asObservable();  
   }
-  getLichhops(): Observable<Lichhop[]> {
+ getLichhops(): Observable<Lichhop[]> {
     return this._httpClient.get<Lichhop[]>(`${environment.ApiURL}/lichhop`).pipe(
       tap((lichhops: Lichhop[]) => {
         const events = [];
+        this._UserService.user$.subscribe((data: User) => {
+          lichhops = lichhops.filter(v=>v.Chutri==data.id || v.Thamgia.some(v2=>v2==data.id))});
         lichhops.forEach(v => {
           let item1 = {id: v.id,start: new Date(v.Batdau),end: new Date(v.Ketthuc), color: colors.red,title: v.Tieude,allDay: true,draggable: true}
           let item2 = {id: v.id,start: new Date(v.Review),end: new Date(v.Review), color: colors.yellow,title: v.Tieude,allDay: true, draggable: true,}
@@ -55,15 +60,15 @@ export class LichhopService {
         });
         this._events.next(events);
         this._lichops.next(lichhops);
-
       })
     );
   }
-  CreateLichhop(Lichhop: Lichhop): Observable<Lichhop[]> {
+CreateLichhop(Lichhop: Lichhop): Observable<Lichhop[]> {
     console.log(Lichhop);
     return this._httpClient.post<Lichhop[]>(`${environment.ApiURL}/lichhop`, Lichhop).pipe(
       tap((lichhops) => {
         this._lichops.next(lichhops);
+        this.getLichhops().subscribe();
       })
     );
   }

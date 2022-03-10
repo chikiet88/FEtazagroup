@@ -8,19 +8,19 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
     super();
   }
   month(event: CalendarEvent): string {
-    return `${formatDate(event.start, 'h:m a', this.locale)} ${
+    return `${formatDate(event.start, 'HH:mm', this.locale)} ${
       event.title
     }`;
   }
 
   week(event: CalendarEvent): string {
-    return `${formatDate(event.start, 'h:m a', this.locale)} ${
+    return `${formatDate(event.start, 'HH:mm', this.locale)} ${
       event.title
     }`;
   }
 
   day(event: CalendarEvent): string {
-    return `${formatDate(event.start, 'h:m a', this.locale)} ${
+    return `${formatDate(event.start, 'HH:mm', this.locale)} ${
       event.title
     }`;
   }

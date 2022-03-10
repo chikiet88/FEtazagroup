@@ -4,7 +4,9 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { forkJoin, Observable, of } from 'rxjs';
+import { UserService } from 'app/core/user/user.service';
+import { user } from 'app/mock-api/common/user/data';
+import { forkJoin, Observable, of, takeUntil } from 'rxjs';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { LichhopService } from './lichhop.service';
@@ -19,7 +21,6 @@ export class LichhopResolver implements Resolve<any> {
     private _LichhopService: LichhopService,
     ){}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-
     return forkJoin([
       this._cauhinhsService.getCauhinhs(),
       this._NhanvienService.getNhanviens(),

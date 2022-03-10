@@ -14,10 +14,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 })
 export class UserComponent implements OnInit, OnDestroy
 {
-    /* eslint-disable @typescript-eslint/naming-convention */
     static ngAcceptInputType_showHinhanh: BooleanInput;
-    /* eslint-enable @typescript-eslint/naming-convention */
-
     @Input() showHinhanh: boolean = true;
     user: User;
 

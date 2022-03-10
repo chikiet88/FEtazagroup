@@ -189,7 +189,7 @@
       <div class="flex flex-col">
         <div class="w-full md:p-3 m-auto">
           <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
-            (eventClicked)="handleEvent('Clicked', $event.event,'','')" (eventTimesChanged)="eventTimesChanged($event)">
+            (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
           </mwl-calendar-month-view>
         </div>
       </div>
