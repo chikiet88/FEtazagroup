@@ -1,0 +1,33 @@
+<div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
+    <form [formGroup]="notification" class="columns space-y-3">
+
+        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+                Người Nhận
+            </div>
+                <mat-select  [formControlName]="'idTo'">
+                    <mat-option *ngFor="let item of nhanviens" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                
+        </mat-form-field>        
+        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+               Tiêu Đề
+            </div>
+            <input [formControlName]="'Tieude'" matInput class="mat-select-value-text">
+        </mat-form-field>        
+        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+               Nội Dung
+            </div>
+            <input [formControlName]="'Noidung'" matInput class="mat-select-value-text">
+        </mat-form-field>        
+        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+            <div class="text-secondary" matPrefix>
+               Link
+            </div>
+            <input [formControlName]="'Lienket'" matInput class="mat-select-value-text">
+        </mat-form-field>      
+        <button mat-flat-button (click)="CreateNoti()" color="primary">Gửi</button>  
+    </form>
+</div>

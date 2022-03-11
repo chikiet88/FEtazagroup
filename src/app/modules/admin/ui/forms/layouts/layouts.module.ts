@@ -18,7 +18,6 @@ export const routes: Route[] = [
         component: FormsLayoutsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         FormsLayoutsComponent

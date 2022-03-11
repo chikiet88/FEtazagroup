@@ -13,7 +13,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { CauhoiComponent } from './cauhoi.component'; 
 import { cauhoiRoutes } from './cauhoi.routing';
-
 @NgModule({
     declarations: [
         CauhoiComponent

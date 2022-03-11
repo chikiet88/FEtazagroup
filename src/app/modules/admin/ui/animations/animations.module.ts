@@ -14,7 +14,6 @@ export const routes: Route[] = [
         component: AnimationsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         AnimationsComponent

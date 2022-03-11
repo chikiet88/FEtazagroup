@@ -45,43 +45,8 @@ import { Lichhop } from './lichhop.type';
 import { CustomEventTitleFormatter } from './custom-event-title-formatter.provider';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
-// const v1lichhop = require('app/v1json/lichhop.json');
-// const v1loai = require('app/v1json/loaihinhhop.json');
-// const v1nhanvien = require('app/v1json/nhanvien.json');
-// const congty = require('app/v1json/congty.json');
-//const v2nhanvien = require('app/v1json/v2nhanvien.json');
-//console.log(v1nhanvien); 
-// let x= []
-// v1lichhop.forEach(v => {
-// v.Congty = congty.detail[v.Congty];
-// });
-// console.log(x);
-// Nối 2 Array
-// const profiles = {};
-// function addToProfiles(arr, profiles) {
-//   for (let obj of arr) {
-//     if (obj.SDT != null) {
-//       const profile = profiles[obj.SDT] || {};
-//       profiles[obj.SDT] = { ...profile, ...obj };
-//     }
-//   }
-// }
-// addToProfiles(v1nhanvien, profiles);
-// addToProfiles(v2nhanvien, profiles);
-// const third = Object.values(profiles);
-// console.log(third);
-//  v1lichhop.forEach(v => {
-//    v.idLoaihinh = v1loai.detail[v.idLoaihinh];
-//  });
-
-// const x ={};
-// console.log(Object.entries(congty.detail));
-// Object.entries(congty.detail).forEach((v) => {
-//   const key = ""+v[1];
-//   const obj = {[key]:v[0]};
-//   Object.assign(x, obj);
-// });
-// console.log(x);
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { Router } from '@angular/router';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -168,6 +133,8 @@ export class LichhopComponent implements OnInit {
     private _lichhopService: LichhopService,
     private _fuseConfirmationService: FuseConfirmationService,
     private readonly notifier: NotifierService,
+    private _notificationsService: NotificationsService,
+    private router:Router
   ) { }
   options: string[] = ['One', 'Two', 'Three'];
   @ViewChild('tabGroup', { static: false }) public tabGroup: any;
@@ -179,14 +146,14 @@ export class LichhopComponent implements OnInit {
   Opentoggle() {
     this.CRUD =1;
     this.LichhopForm = this._formBuilder.group({
-      Loaihinh: [''],
-      Tieude: [''],
-      Congty: [''],
+      Loaihinh: [{ value: '', disabled: false }],
+      Tieude: [{ value: '', disabled: false }],
+      Congty: [{ value: '', disabled: false }],
       Chutri: [{ value: this.user.id, disabled: true }],
-      Thamgia: [''],
-      Ngansach: [''],
-      Batdau: [new Date()],
-      Ketthuc: [new Date()],
+      Thamgia: [{ value: '', disabled: false }],
+      Ngansach: [{ value: '', disabled: false }],
+      Batdau: [{ value: new Date(), disabled: false }],
+      Ketthuc: [{ value: new Date(), disabled: false }],
       Review: [''],
       Hoanthanh: [''],
       Noidung: [''],
@@ -200,7 +167,6 @@ export class LichhopComponent implements OnInit {
     this.sidenav.toggle();
   }
   ngOnInit(): void {
-   // this.ImportLichhop(v1lichhop);
     this.activeTabIndex = 0;
     this.Title = "Thêm Mới";
     this.CRUD = 1;
@@ -244,14 +210,14 @@ export class LichhopComponent implements OnInit {
       });
     this.LichhopForm = this._formBuilder.group({
       id          : [''],
-      Loaihinh: [{ value: '', disabled: true }],
-      Tieude: [{ value: '', disabled: true }],
-      Congty: [{ value: '', disabled: true }],
+      Loaihinh: [{ value: '', disabled: false }],
+      Tieude: [{ value: '', disabled: false }],
+      Congty: [{ value: '', disabled: false }],
       Chutri: [{ value: this.user.id, disabled: true }],
-      Thamgia: [{ value: '', disabled: true }],
-      Ngansach: [{ value: '', disabled: true }],
-      Batdau: [{ value: '', disabled: true }],
-      Ketthuc: [{ value: '', disabled: true }],
+      Thamgia: [{ value: '', disabled: false }],
+      Ngansach: [{ value: '', disabled: false }],
+      Batdau: [{ value: '', disabled: false }],
+      Ketthuc: [{ value: '', disabled: false }],
       Review: [''],
       Hoanthanh: [''],
       Noidung: [''],
@@ -309,7 +275,16 @@ export class LichhopComponent implements OnInit {
     this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);
-    (this.user.id!=this.Lichhop.Chutri)?this.LichhopForm.disable():this.LichhopForm.enable();
+    if(this.user.id!=this.Lichhop.Chutri)
+    {
+      this.LichhopForm.get('Loaihinh').disable();
+      this.LichhopForm.get('Tieude').disable();
+      this.LichhopForm.get('Congty').disable();
+      this.LichhopForm.get('Thamgia').disable();
+      this.LichhopForm.get('Ngansach').disable();
+      this.LichhopForm.get('Batdau').disable();
+      this.LichhopForm.get('Ketthuc').disable();
+    }
     this.LichhopForm.patchValue(this.Lichhop);
     this.Title = "Cập Nhật";
   }
@@ -335,7 +310,19 @@ export class LichhopComponent implements OnInit {
     this.sidenav.toggle();
     const Lichhop = this.LichhopForm.getRawValue();
     this._lichhopService.CreateLichhop(Lichhop).subscribe(
-      () => {
+      (result) => {
+        console.log(result);
+        result.Thamgia.forEach(v => {
+          const notifi = {
+            idFrom: result.Chutri,
+            idTo: v,
+            Tieude: "Lịch Họp",
+            Noidung: result.Tieude,
+            Lienket: `${this.router.url}/${result.id}`,
+          };
+
+          this._notificationsService.create(notifi).subscribe();
+        });
         this.notifier.notify('success', `Tạo Mới Thành Công`);
         this._changeDetectorRef.markForCheck();
       });

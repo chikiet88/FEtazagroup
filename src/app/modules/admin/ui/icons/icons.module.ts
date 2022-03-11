@@ -30,7 +30,6 @@ export const routes: Route[] = [
         ]
     }
 ];
-
 @NgModule({
     declarations: [
         IconsComponent

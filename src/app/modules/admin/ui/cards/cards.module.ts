@@ -20,7 +20,6 @@ export const routes: Route[] = [
         component: CardsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         CardsComponent

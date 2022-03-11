@@ -28,7 +28,6 @@ const LichhopRoutes: Routes = [
     },
   }
 ];
-
 @NgModule({
   declarations: [
     LichhopComponent,

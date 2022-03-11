@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { QuanlycongviecRoutingModule } from './quanlycongviec-routing.module';
 
-
 @NgModule({
   declarations: [],
   imports: [

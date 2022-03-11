@@ -21,7 +21,6 @@ import { ApexChartsComponent } from 'app/modules/admin/ui/other-components/third
 import { NgxMarkdownComponent } from 'app/modules/admin/ui/other-components/third-party/ngx-markdown/ngx-markdown.component';
 import { QuillEditorComponent } from 'app/modules/admin/ui/other-components/third-party/quill-editor/quill-editor.component';
 import { otherComponentsRoutes } from 'app/modules/admin/ui/other-components/other-components.routing';
-
 @NgModule({
     declarations: [
         OtherComponentsComponent,

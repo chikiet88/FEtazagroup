@@ -16,9 +16,7 @@ import { SearchModule } from 'app/layout/common/search/search.module';
 import { ShortcutsModule } from 'app/layout/common/shortcuts/shortcuts.module';
 import { UserModule } from 'app/layout/common/user/user.module';
 import { SharedModule } from 'app/shared/shared.module';
-import { ModernLayoutComponent } from 'app/layout/layouts/horizontal/modern/modern.component';
-
-@NgModule({
+import { ModernLayoutComponent } from 'app/layout/layouts/horizontal/modern/modern.component';@NgModule({
     declarations: [
         ModernLayoutComponent
     ],

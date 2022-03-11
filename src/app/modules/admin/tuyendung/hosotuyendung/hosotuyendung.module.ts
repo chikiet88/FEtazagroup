@@ -10,7 +10,6 @@ const HosotuyendungRoutes: Route[] = [
   }
 ];
 
-
 @NgModule({
   declarations: [HosotuyendungComponent],
   imports: [

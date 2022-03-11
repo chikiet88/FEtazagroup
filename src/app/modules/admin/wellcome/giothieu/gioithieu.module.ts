@@ -13,7 +13,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { GioithieuComponent } from './gioithieu.component'; 
 import { gioithieuRoutes } from './gioithieu.routing';
-
 @NgModule({
     declarations: [
         GioithieuComponent

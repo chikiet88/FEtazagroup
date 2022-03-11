@@ -9,7 +9,6 @@ export const routes: Route[] = [
         component: TailwindCSSComponent
     }
 ];
-
 @NgModule({
     declarations: [
         TailwindCSSComponent

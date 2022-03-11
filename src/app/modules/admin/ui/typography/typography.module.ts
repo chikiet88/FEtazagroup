@@ -11,7 +11,6 @@ export const routes: Route[] = [
         component: TypographyComponent
     }
 ];
-
 @NgModule({
     declarations: [
         TypographyComponent

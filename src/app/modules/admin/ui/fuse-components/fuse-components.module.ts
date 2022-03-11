@@ -38,7 +38,6 @@ import { SplashScreenComponent } from 'app/modules/admin/ui/fuse-components/serv
 import { FindByKeyComponent } from 'app/modules/admin/ui/fuse-components/pipes/find-by-key/find-by-key.component';
 import { MustMatchComponent } from 'app/modules/admin/ui/fuse-components/validators/must-match/must-match.component';
 import { fuseComponentsRoutes } from 'app/modules/admin/ui/fuse-components/fuse-components.routing';
-
 @NgModule({
     declarations: [
         FuseComponentsComponent,

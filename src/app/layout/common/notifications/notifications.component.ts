@@ -3,8 +3,10 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { MatButton } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
-import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { NotificationEntity } from 'app/layout/common/notifications/notifications.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
     selector       : 'notifications',
@@ -18,8 +20,9 @@ export class NotificationsComponent implements OnInit, OnDestroy
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
 
-    notifications: Notification[];
+    notifications: NotificationEntity[];
     unreadCount: number = 0;
+    User:User;
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -29,6 +32,7 @@ export class NotificationsComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
+        private _userService: UserService,
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef
     )
@@ -43,123 +47,60 @@ export class NotificationsComponent implements OnInit, OnDestroy
      * On init
      */
     ngOnInit(): void
-    {
-        // Subscribe to notification changes
+    {        this._userService.user$.subscribe((data)=>this.User=data)
         this._notificationsService.notifications$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((notifications: Notification[]) => {
-
-                // Load the notifications
-                this.notifications = notifications;
-
-                // Calculate the unread count
+            .subscribe((notifications: NotificationEntity[]) => {
+                this.notifications = notifications.filter(v=>v.idTo==this.User.id);
                 this._calculateUnreadCount();
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
     }
-
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void
     {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-
-        // Dispose the overlay
         if ( this._overlayRef )
         {
             this._overlayRef.dispose();
         }
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Open the notifications panel
-     */
     openPanel(): void
     {
-        // Return if the notifications panel or its origin is not defined
         if ( !this._notificationsPanel || !this._notificationsOrigin )
         {
             return;
         }
-
-        // Create the overlay if it doesn't exist
         if ( !this._overlayRef )
         {
             this._createOverlay();
         }
-
-        // Attach the portal to the overlay
         this._overlayRef.attach(new TemplatePortal(this._notificationsPanel, this._viewContainerRef));
     }
-
-    /**
-     * Close the notifications panel
-     */
     closePanel(): void
     {
         this._overlayRef.detach();
     }
+    // markAllAsRead(): void
+    // {
+    //     this._notificationsService.markAllAsRead().subscribe();
+    // }
 
-    /**
-     * Mark all notifications as read
-     */
-    markAllAsRead(): void
+    toggleRead(notification: NotificationEntity): void
     {
-        // Mark all as read
-        this._notificationsService.markAllAsRead().subscribe();
+        notification.Status = !notification.Status;
+        this._notificationsService.update(notification).subscribe();
     }
-
-    /**
-     * Toggle read status of the given notification
-     */
-    toggleRead(notification: Notification): void
+    delete(notification: NotificationEntity): void
     {
-        // Toggle the read status
-        notification.read = !notification.read;
-
-        // Update the notification
-        this._notificationsService.update(notification.id, notification).subscribe();
-    }
-
-    /**
-     * Delete the given notification
-     */
-    delete(notification: Notification): void
-    {
-        // Delete the notification
         this._notificationsService.delete(notification.id).subscribe();
     }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Create the overlay
-     */
     private _createOverlay(): void
     {
-        // Create the overlay
         this._overlayRef = this._overlay.create({
             hasBackdrop     : true,
             backdropClass   : 'fuse-backdrop-on-mobile',
@@ -195,27 +136,17 @@ export class NotificationsComponent implements OnInit, OnDestroy
                                       }
                                   ])
         });
-
-        // Detach the overlay from the portal on backdrop click
         this._overlayRef.backdropClick().subscribe(() => {
             this._overlayRef.detach();
         });
     }
-
-    /**
-     * Calculate the unread count
-     *
-     * @private
-     */
     private _calculateUnreadCount(): void
     {
         let count = 0;
-
         if ( this.notifications && this.notifications.length )
         {
-            count = this.notifications.filter(notification => !notification.read).length;
+            count = this.notifications.filter(notification => !notification.Status).length;
         }
-
         this.unreadCount = count;
     }
 }

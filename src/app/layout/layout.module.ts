@@ -32,7 +32,6 @@ const layoutModules = [
     FuturisticLayoutModule,
     ThinLayoutModule
 ];
-
 @NgModule({
     declarations: [
         LayoutComponent

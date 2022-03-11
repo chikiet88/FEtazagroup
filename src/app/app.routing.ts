@@ -99,6 +99,7 @@ export const appRoutes: Route[] = [
             {path: 'cauhinh', loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
             {path: 'custom', children: [
                 {path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule)},
+                {path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule)},
             ]},
             {path: 'baocao', children: [
                 {path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule)},

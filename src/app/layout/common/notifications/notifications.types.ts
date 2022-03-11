@@ -1,12 +1,12 @@
-export interface Notification
+export interface NotificationEntity
 {
     id: string;
-    icon?: string;
-    image?: string;
-    title?: string;
-    description?: string;
-    time: string;
-    link?: string;
-    useRouter?: boolean;
-    read: boolean;
+    idFrom: string;
+    idTo: string;
+    Tieude: string;
+    Noidung: string;
+    Status: boolean;
+    Lienket: string;
+    Ngaydoc: Date;
+    Ngaytao: Date;
 }

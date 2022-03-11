@@ -251,6 +251,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:clipboard-check',
                 link : '/custom/thongkekh'
+            },
+            {
+                id   : 'custom.testing',
+                title: 'Kiểm Thử',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/custom/testing'
             }
         ]
     },

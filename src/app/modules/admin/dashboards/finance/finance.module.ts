@@ -11,7 +11,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { FinanceComponent } from 'app/modules/admin/dashboards/finance/finance.component';
 import { financeRoutes } from 'app/modules/admin/dashboards/finance/finance.routing';
-
 @NgModule({
     declarations: [
         FinanceComponent

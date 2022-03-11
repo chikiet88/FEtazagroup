@@ -5,7 +5,7 @@ import { ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild, Vi
 import { MatButton } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationsService } from '../notifications/notifications.service';
-import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { NotificationEntity } from 'app/layout/common/notifications/notifications.types';
 import { environment } from 'environments/environment.prod';
 
 @Component({
@@ -17,7 +17,7 @@ export class VersionComponent implements OnInit {
   @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
   @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
 
-  notifications: Notification[];
+  notifications: NotificationEntity[];
   unreadCount: number = 0;
   private _overlayRef: OverlayRef;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -38,14 +38,10 @@ export class VersionComponent implements OnInit {
   {
       this._notificationsService.notifications$
           .pipe(takeUntil(this._unsubscribeAll))
-          .subscribe((notifications: Notification[]) => {
+          .subscribe((notifications: NotificationEntity[]) => {
 
-              
+            
               this.notifications = notifications;
-
-              
-              this._calculateUnreadCount();
-
               
               this._changeDetectorRef.markForCheck();
           });
@@ -98,36 +94,6 @@ export class VersionComponent implements OnInit {
   closePanel(): void
   {
       this._overlayRef.detach();
-  }
-
-  /**
-   * Mark all notifications as read
-   */
-  markAllAsRead(): void
-  {
-      
-      this._notificationsService.markAllAsRead().subscribe();
-  }
-
-  /**
-   * Toggle read status of the given notification
-   */
-  toggleRead(notification: Notification): void
-  {
-      
-      notification.read = !notification.read;
-
-      
-      this._notificationsService.update(notification.id, notification).subscribe();
-  }
-
-  /**
-   * Delete the given notification
-   */
-  delete(notification: Notification): void
-  {
-      
-      this._notificationsService.delete(notification.id).subscribe();
   }
 
   /**
@@ -191,23 +157,6 @@ export class VersionComponent implements OnInit {
       this._overlayRef.backdropClick().subscribe(() => {
           this._overlayRef.detach();
       });
-  }
-
-  /**
-   * Calculate the unread count
-   *
-   * @private
-   */
-  private _calculateUnreadCount(): void
-  {
-      let count = 0;
-
-      if ( this.notifications && this.notifications.length )
-      {
-          count = this.notifications.filter(notification => !notification.read).length;
-      }
-
-      this.unreadCount = count;
   }
 
 }

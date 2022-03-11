@@ -17,7 +17,6 @@ export const routes: Route[] = [
         component: FormsWizardsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         FormsWizardsComponent

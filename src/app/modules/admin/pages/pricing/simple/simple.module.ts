@@ -6,7 +6,6 @@ import { FuseCardModule } from '@fuse/components/card';
 import { SharedModule } from 'app/shared/shared.module';
 import { PricingSimpleComponent } from 'app/modules/admin/pages/pricing/simple/simple.component';
 import { pricingSimpleRoutes } from 'app/modules/admin/pages/pricing/simple/simple.routing';
-
 @NgModule({
     declarations: [
         PricingSimpleComponent

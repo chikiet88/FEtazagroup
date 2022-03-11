@@ -13,7 +13,6 @@ export const routes: Route[] = [
         component: ColorsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         ColorsComponent

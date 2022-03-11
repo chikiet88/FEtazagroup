@@ -68,7 +68,7 @@ const customNotifierOptions: NotifierOptions = {
 @NgModule({
     declarations: [
         AppComponent,
-        CauhinhComponent
+        CauhinhComponent,
     ],
     imports     : [
       BrowserModule,

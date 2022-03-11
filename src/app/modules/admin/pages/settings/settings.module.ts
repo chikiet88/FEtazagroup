@@ -17,7 +17,6 @@ import { SettingsPlanBillingComponent } from 'app/modules/admin/pages/settings/p
 import { SettingsNotificationsComponent } from 'app/modules/admin/pages/settings/notifications/notifications.component';
 import { SettingsTeamComponent } from 'app/modules/admin/pages/settings/team/team.component';
 import { settingsRoutes } from 'app/modules/admin/pages/settings/settings.routing';
-
 @NgModule({
     declarations: [
         SettingsComponent,

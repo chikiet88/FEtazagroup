@@ -48,8 +48,7 @@ const VetuyendungRoutes: Route[] = [
           }
       ]
   }
-];
-@NgModule({
+];@NgModule({
   declarations: [VetuyendungComponent, ListComponent,DetailsComponent],
   imports: [
     DragDropModule,

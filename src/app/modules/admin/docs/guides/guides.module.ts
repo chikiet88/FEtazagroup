@@ -28,7 +28,6 @@ import { SplashScreenCustomizationComponent } from 'app/modules/admin/docs/guide
 import { MultiLanguageCustomizationComponent } from 'app/modules/admin/docs/guides/customization/multi-language/multi-language';
 import { JwtComponent } from 'app/modules/admin/docs/guides/authentication/jwt/jwt';
 import { guidesRoutes } from 'app/modules/admin/docs/guides/guides.routing';
-
 @NgModule({
     declarations: [
         GuidesComponent,

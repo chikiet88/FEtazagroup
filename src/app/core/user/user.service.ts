@@ -10,26 +10,11 @@ import { environment } from 'environments/environment';
 export class UserService
 {
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
-
-    /**
-     * Constructor
-     */
     constructor(private _httpClient: HttpClient)
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Setter & getter for user
-     *
-     * @param value
-     */
     set user(value: User)
     {
-        // Store the value
         this._user.next(value);
     }
 
@@ -37,14 +22,6 @@ export class UserService
     {
         return this._user.asObservable();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get the current logged in user data
-     */
     get(): Observable<User>
     {
         return this._httpClient.get<User>(`${environment.ApiURL}/auth/profile`).pipe(

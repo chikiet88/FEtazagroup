@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
@@ -27,12 +26,10 @@ export class LichhopService {
   private _lichops: BehaviorSubject<Lichhop[] | null> = new BehaviorSubject(null);
   private _lichhop: BehaviorSubject<Lichhop | null> = new BehaviorSubject(null);
   private _events: BehaviorSubject<any | null> = new BehaviorSubject(null);
-  private readonly notifier: NotifierService;
   constructor(
     private _httpClient: HttpClient,
-    private _notifierService: NotifierService,
     private _UserService: UserService,
-  ) { this.notifier = _notifierService; }
+  ) {}
 
   get lichhops$(): Observable<Lichhop[]> {
 
@@ -63,14 +60,38 @@ export class LichhopService {
       })
     );
   }
-CreateLichhop(Lichhop: Lichhop): Observable<Lichhop[]> {
-    console.log(Lichhop);
-    return this._httpClient.post<Lichhop[]>(`${environment.ApiURL}/lichhop`, Lichhop).pipe(
-      tap((lichhops) => {
-        this._lichops.next(lichhops);
-        this.getLichhops().subscribe();
-      })
-    );
+
+
+CreateLichhop(Lichhop: Lichhop): Observable<Lichhop> {
+    return this.lichhops$.pipe(
+          take(1),
+          switchMap(lichhops => this._httpClient.post(`${environment.ApiURL}/lichhop`, Lichhop).pipe(
+              map((result:Lichhop) => {
+                this._lichops.next([result, ...lichhops]);
+                  return result; 
+              })
+    ))
+  );
+
+    // return this._httpClient.post<Lichhop[]>(`${environment.ApiURL}/lichhop`, Lichhop).pipe(
+    //   tap((lichhops) => {
+    //     this.notifi.idFrom = Lichhop.Chutri;
+    //     this.notifi.Tieude = "Lịch Họp";
+    //     this.notifi.Noidung = Lichhop.Tieude;
+    //     this.notifi.Lienket = Lichhop.Tieude;
+    //     this.notifi.idTo = Lichhop.Thamgia;
+
+
+    //     this._notificationsService.create(this.notifi)
+    //     this._lichops.next(lichhops);
+    //     this.getLichhops().subscribe();
+    //   })
+    // );
+
+
+
+
+
   }
   UpdateLichhop(lichhop: Lichhop): Observable<Lichhop[]> {
     return this._httpClient.patch<Lichhop[]>(`${environment.ApiURL}/lichhop/${lichhop.id}`, lichhop).pipe(

@@ -15,7 +15,6 @@ export const routes: Route[] = [
         component: ConfirmationDialogComponent
     }
 ];
-
 @NgModule({
     declarations: [
         ConfirmationDialogComponent

@@ -9,7 +9,6 @@ export const routes: Route[] = [
         component: DatatableComponent
     }
 ];
-
 @NgModule({
     declarations: [
         DatatableComponent

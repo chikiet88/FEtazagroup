@@ -24,7 +24,6 @@ const HosoRoutes: Routes = [
       component: HosoComponent,           
   }
 ];
-
 @NgModule({
   declarations: [
     HosoComponent,

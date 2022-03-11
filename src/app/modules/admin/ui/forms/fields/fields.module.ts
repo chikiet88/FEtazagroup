@@ -21,7 +21,6 @@ export const routes: Route[] = [
         component: FormsFieldsComponent
     }
 ];
-
 @NgModule({
     declarations: [
         FormsFieldsComponent
