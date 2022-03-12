@@ -1,4 +1,5 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -21,22 +22,34 @@ export class ThongkekhComponent implements OnInit{
   data$: Observable<Character[]>;
   Khachhang: MatTableDataSource<Khachhang>;
   Khachhang$: Observable<Khachhang[]>;
+  FilterForm:FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
   constructor(
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _ThongkekhService :ThongkekhService
+    private _ThongkekhService :ThongkekhService,
+    private _formBuilder: FormBuilder
     ) {
     // Create 100 users
     //const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
    // this.dataSource = new MatTableDataSource(users);
-   
   }
   ngOnInit(): void {
-
+    this.FilterForm = this._formBuilder.group({
+      NgayTaoDV:[''],
+      Batdau:[''],
+      Ketthuc:[''],
+      TenKH: [''],
+      SDT: [''],
+      SDT2: [''],
+      Dichvu: [''],
+      Doanhso: [''],
+      Ghichu: [''],
+      Tonglieutrinh: [''],
+      Chinhanh: [''],
+    });
     this._ThongkekhService.GetData().subscribe();
     this._ThongkekhService.GetKhachhang().subscribe();
     this.data$ = this._ThongkekhService.data$;
@@ -54,7 +67,7 @@ export class ThongkekhComponent implements OnInit{
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
       environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
 
-
+    
   this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
@@ -72,8 +85,24 @@ export class ThongkekhComponent implements OnInit{
            this.Khachhang.sort = this.sort;
            this._changeDetectorRef.markForCheck();
           
-      });
+           this.Khachhang.filterPredicate = ((data, filter) => {
+            const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
+            const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+            const c = !filter.SDT2 || data.SDT2.toLowerCase().includes(filter.SDT2);
+            const d = !filter.Dichvu || data.Dichvu.toLowerCase().includes(filter.Dichvu);
+            const e = !filter.Doanhso || data.Doanhso.toLowerCase().includes(filter.Doanhso);
+            const f = !filter.Ghichu || data.Ghichu.toLowerCase().includes(filter.Ghichu);
+            const g = !filter.Tonglieutrinh || data.Tonglieutrinh.toLowerCase().includes(filter.Tonglieutrinh);
+            const h = !filter.Batdau && !filter.Ketthuc || data.NgayTaoDV >= filter.Batdau && data.NgayTaoDV <= filter.Ketthuc;
+            const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
+            return a && b && c && d && e && f&& g && h&& i;
+          }) as (PeriodicElement, string) => boolean;
+          this.FilterForm.valueChanges.subscribe(value => {
+            console.log(value);
+            this.Khachhang.filter = value;
+          });
 
+      });
 
 
   // this.characters$
@@ -112,7 +141,8 @@ export class ThongkekhComponent implements OnInit{
        this._ThongkekhService.CreateData(v)
         .subscribe((response) => {   
         });
-      },300*k);
+      },10*k);
+     // 100*k
       this._changeDetectorRef.markForCheck();
     });
   }

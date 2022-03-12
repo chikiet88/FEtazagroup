@@ -7,6 +7,7 @@ import { NotificationEntity } from 'app/layout/common/notifications/notification
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
+import { SwPush } from '@angular/service-worker';
 
 @Component({
     selector       : 'notifications',
@@ -17,37 +18,32 @@ import { User } from 'app/core/user/user.types';
 })
 export class NotificationsComponent implements OnInit, OnDestroy
 {
+    sub: PushSubscription;
+    readonly VAPID_PUBLIC_KEY = "BJe-03OtBqwjGbpangu282m8R_E5qtjanOUANBF-ID37Fq-V2hZoOJ5hZJlW0qeXt0prcfIsu63gNQ_xmXPCE3M";
+    //{"publicKey":"BJe-03OtBqwjGbpangu282m8R_E5qtjanOUANBF-ID37Fq-V2hZoOJ5hZJlW0qeXt0prcfIsu63gNQ_xmXPCE3M"
+    //"privateKey":"zLRVEtYggf-sYOJmkhdFp3-pMD67V9DhASO0xLR-QDw"}
+
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
-
     notifications: NotificationEntity[];
     unreadCount: number = 0;
     User:User;
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    /**
-     * Constructor
-     */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
         private _userService: UserService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
+        private swPush: SwPush,
     )
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
-    {        this._userService.user$.subscribe((data)=>this.User=data)
+    {   
+        this.subscribeToNotifications();   
+        this._userService.user$.subscribe((data)=>this.User=data)
         this._notificationsService.notifications$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((notifications: NotificationEntity[]) => {
@@ -55,6 +51,21 @@ export class NotificationsComponent implements OnInit, OnDestroy
                 this._calculateUnreadCount();
                 this._changeDetectorRef.markForCheck();
             });
+    }
+    subscribeToNotifications() {
+      this.swPush.requestSubscription({
+            serverPublicKey: this.VAPID_PUBLIC_KEY
+        })
+        .then(sub => {
+            this.sub = sub;
+            console.log("Notification Subscription: ", sub);
+            // this.newsletterService.addPushSubscriber(sub).subscribe(
+            //     () => console.log('Sent push subscription object to server.'),
+            //     err =>  console.log('Could not send subscription object to server, reason: ', err)
+            // );
+
+        })
+        .catch(err => console.error("Could not subscribe to notifications", err));
     }
     ngOnDestroy(): void
     {

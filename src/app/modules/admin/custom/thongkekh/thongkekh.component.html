@@ -1,12 +1,57 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
   <div class="flex justify-between" *ngIf="Khachhang$ | async as Khachhang1">
-    <mat-form-field appearance="standard">
+    <!-- <mat-form-field appearance="standard">
       <mat-label>Tìm Kiếm</mat-label>
       <input matInput (keyup)="applyFilter($event)" #input>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="CreateData(Khachhang1)">Cập Nhật (<span *ngIf="data$ | async as data">{{data.length}}</span>)</button>
+  </mat-form-field> -->
+  <!-- <button mat-raised-button color="primary" (click)="CreateData(Khachhang1)">Cập Nhật (<span *ngIf="data$ | async as data">{{data.length}}</span>)</button> -->
 </div>
 
+<form class="flex space-x-2" [formGroup]="FilterForm">
+
+  <mat-form-field>
+    <input matInput 
+      [matDatepicker]="fromDate" 
+      placeholder="Chọn Ngày" 
+      [formControlName]="'Batdau'">
+    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromDate></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput 
+      [matDatepicker]="toDate" 
+      placeholder="To Date" 
+      [formControlName]="'Ketthuc'">
+    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+    <mat-datepicker #toDate></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'SDT'" placeholder="SDT">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'SDT2'" placeholder="SDT 2">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'Dichvu'" placeholder="Dịch Vụ">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'Doanhso'" placeholder="Doanh Số">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'Tonglieutrinh'" placeholder="Tổng Liệu Trình">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'Ghichu'" placeholder="Ghi Chú">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [formControlName]="'Chinhanh'" placeholder="Chi Nhánh">
+  </mat-form-field>
+</form>
 
   <div class="mat-elevation-z8">
     <table class="w-full" mat-table [dataSource]="Khachhang" matSort>

@@ -6,6 +6,7 @@ import { MaterialExampleModule } from 'material.module';
 import { API_KEY, GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from 'environments/environment';
+import { ReactiveFormsModule } from '@angular/forms';
 const thongkeRoutes: Route[] = [
   {
       path     : '',
@@ -18,6 +19,7 @@ const thongkeRoutes: Route[] = [
   imports: [
     HttpClientModule,
     MaterialExampleModule,
+    ReactiveFormsModule,
     RouterModule.forChild(thongkeRoutes),
     CommonModule,
   ],
