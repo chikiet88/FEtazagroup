@@ -30,10 +30,10 @@ export class ThongkekhService {
           })
       );
   }
-  GetData():  Observable<Character[]>
+  GetData():  Observable<Khachhang[]>
   {
       return this._httpClient.get(`${environment.ApiURL}/thongkekh`).pipe(
-          tap((Character: Character[]) => {
+          tap((Character: Khachhang[]) => {
             this._data.next(Character);
            // console.log(Character);
           })

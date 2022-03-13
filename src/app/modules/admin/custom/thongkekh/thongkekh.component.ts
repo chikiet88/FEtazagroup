@@ -4,6 +4,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { environment } from 'environments/environment';
+import { forEach } from 'lodash';
 import { GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Character, characterAttributesMapping, Khachhang, KhachhangMapping } from './character.model';
@@ -14,18 +15,23 @@ import { ThongkekhService } from './thongkekh.service';
   styleUrls: ['./thongkekh.component.scss']
 })
 export class ThongkekhComponent implements OnInit{
-  characters$: Observable<Character[]>;
+  characters$: Observable<Khachhang[]>;
   //displayedColumns: string[] = ['TenKH', 'SDT', 'TDS', 'TTT','LMD','NMD','LMC','NMC'];
   displayedColumns: string[] = ['NgayTaoDV','TenKH', 'SDT', 'SDT2', 'Dichvu','Doanhso','Tonglieutrinh','Dathu','Ghichu','Chinhanh'];
-  dataKhachhang: MatTableDataSource<Character>;
-  data: MatTableDataSource<Character>;
-  data$: Observable<Character[]>;
+  thanhvienColumns: string[] = ['TenKH', 'SDT','Dathu','Chinhanh'];
+  dataKhachhang: MatTableDataSource<Khachhang>;
+  data: MatTableDataSource<Khachhang>;
+  Thanhvien: MatTableDataSource<any>;
+  data$: Observable<Khachhang[]>;
   Khachhang: MatTableDataSource<Khachhang>;
   Khachhang$: Observable<Khachhang[]>;
   FilterForm:FormGroup;
+  ThanhvienForm:FormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('ThanhvienPag', {static: true}) ThanhvienPag: MatPaginator;
+  @ViewChild('ThanvienSort', {static: true}) ThanvienSort: MatSort;
   constructor(
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -50,24 +56,83 @@ export class ThongkekhComponent implements OnInit{
       Tonglieutrinh: [''],
       Chinhanh: [''],
     });
+
+    this.ThanhvienForm = this._formBuilder.group({
+      TenKH: [''],
+      SDT: [''],
+      Doanhso: [''],
+      Chinhanh: [''],
+      Hanmuctu: [''],
+      Hanmucden: [''],
+    });
+
     this._ThongkekhService.GetData().subscribe();
     this._ThongkekhService.GetKhachhang().subscribe();
     this.data$ = this._ThongkekhService.data$;
+    //this.Khachhang$ = this._ThongkekhService.Khachhang$;
+    
     this.data$
         .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((data: Character[]) => {
+        .subscribe((data: Khachhang[]) => {
+          console.log(data);
           this.data = new MatTableDataSource(data);
           this.data.paginator = this.paginator;
           this.data.sort = this.sort;
           this._changeDetectorRef.markForCheck();
+          const Thanhvien = [];
+          const NewUnique = [... new Set(data.map(data => data.SDT))]
+          NewUnique.forEach(v => {
+            let Sum = 0;
+              const UniKH = data.filter(v1=>v1.SDT == v);
+              const getKH = data.find(v1=>v1.SDT == v);
+              UniKH.forEach(v1 => {
+                  Sum += parseInt(v1.Dathu);
+              });
+              Thanhvien.push({'TenKH':getKH.TenKH,'SDT':getKH.SDT,'Dathu':Sum,'Chinhanh':getKH.Chinhanh})
+              //console.log(UniKH);
+          });
+          console.log(Thanhvien);
+          this.Thanhvien = new MatTableDataSource(Thanhvien);
+          this.Thanhvien.paginator = this.ThanhvienPag;
+          this.Thanhvien.sort = this.ThanvienSort;
+
+
+          this.data.filterPredicate = ((data, filter) => {
+            const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
+            const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+            const c = !filter.SDT2 || data.SDT2.toLowerCase().includes(filter.SDT2);
+            const d = !filter.Dichvu || data.Dichvu.toLowerCase().includes(filter.Dichvu);
+            const e = !filter.Doanhso || data.Doanhso.toLowerCase().includes(filter.Doanhso);
+            const f = !filter.Ghichu || data.Ghichu.toLowerCase().includes(filter.Ghichu);
+            const g = !filter.Tonglieutrinh || data.Tonglieutrinh.toLowerCase().includes(filter.Tonglieutrinh);
+            const h = !filter.Batdau && !filter.Ketthuc || new Date(data.NgayTaoDV) >= filter.Batdau && new Date(data.NgayTaoDV) <= filter.Ketthuc;
+            const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
+            return a && b && c && d && e && f&& g && h&& i;
+          }) as (PeriodicElement, string) => boolean;
+
+          this.FilterForm.valueChanges.subscribe(value => {
+            console.log(value);
+            this.data.filter = value;
+          });
+
+          this.Thanhvien.filterPredicate = ((data, filter) => {
+            const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
+            const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+            const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
+            const e = !filter.Hanmuctu && !filter.Hanmucden || parseInt(data.Dathu) <= parseInt(filter.Hanmucden) && parseInt(data.Dathu) >= parseInt(filter.Hanmuctu);
+            return a && b && e && i;
+          }) as (PeriodicElement, string) => boolean;
+          
+          this.ThanhvienForm.valueChanges.subscribe(value => {
+            console.log(value);
+            this.Thanhvien.filter = value;
+          });
         });
 
     // this.characters$ = this.googleSheetsDbService.get<Character>(
     //   environment.characters.spreadsheetId, environment.characters.worksheetName, characterAttributesMapping);
-    this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
+ this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
       environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
-
-    
   this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
@@ -79,53 +144,20 @@ export class ThongkekhComponent implements OnInit{
                   let x = v.NgayTaoDV.toString().split("/");
                   v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
             }); 
-          // this.CreateData(Khachhang);
+          // this.CreateData(Khachhang);          
            this.Khachhang = new MatTableDataSource(Khachhang);
            this.Khachhang.paginator = this.paginator;
            this.Khachhang.sort = this.sort;
            this._changeDetectorRef.markForCheck();
-          
-           this.Khachhang.filterPredicate = ((data, filter) => {
-            const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
-            const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
-            const c = !filter.SDT2 || data.SDT2.toLowerCase().includes(filter.SDT2);
-            const d = !filter.Dichvu || data.Dichvu.toLowerCase().includes(filter.Dichvu);
-            const e = !filter.Doanhso || data.Doanhso.toLowerCase().includes(filter.Doanhso);
-            const f = !filter.Ghichu || data.Ghichu.toLowerCase().includes(filter.Ghichu);
-            const g = !filter.Tonglieutrinh || data.Tonglieutrinh.toLowerCase().includes(filter.Tonglieutrinh);
-            const h = !filter.Batdau && !filter.Ketthuc || data.NgayTaoDV >= filter.Batdau && data.NgayTaoDV <= filter.Ketthuc;
-            const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
-            return a && b && c && d && e && f&& g && h&& i;
-          }) as (PeriodicElement, string) => boolean;
-          this.FilterForm.valueChanges.subscribe(value => {
-            console.log(value);
-            this.Khachhang.filter = value;
-          });
 
       });
 
+  }
 
-  // this.characters$
-  //     .pipe(takeUntil(this._unsubscribeAll))
-  //     .subscribe((dataKH: Character[]) => {
-  //           dataKH.forEach(v => {
-  //                 v.TDS = v.TDS.replace(/\,/g,''); 
-  //                 v.TTT = v.TTT.replace(/\,/g,''); 
-  //                 let x = v.LMD.toString().split("/");
-  //                 v.LMD = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
-  //                 let y = v.LMC.toString().split("/");
-  //                 v.LMC = new Date(Number(y[2]),Number(y[1])-1,Number(y[0]));
-  //           }); 
-  //          this.dataKhachhang = new MatTableDataSource(dataKH);
-  //         this.dataKhachhang.paginator = this.paginator;
-  //          this.dataKhachhang.sort = this.sort;
-  //          this._changeDetectorRef.markForCheck();
-          
-  //     });
+  Loaddata() {
 
   }
 
-  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.Khachhang.filter = filterValue.trim().toLowerCase();

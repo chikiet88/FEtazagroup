@@ -8,7 +8,6 @@
 </div>
 
 <form class="flex space-x-2" [formGroup]="FilterForm">
-
   <mat-form-field>
     <input matInput 
       [matDatepicker]="fromDate" 
@@ -53,8 +52,8 @@
   </mat-form-field>
 </form>
 
-  <div class="mat-elevation-z8">
-    <table class="w-full" mat-table [dataSource]="Khachhang" matSort>
+  <div class="mat-elevation-z8 mb-8">
+    <table class="w-full" mat-table [dataSource]="data" matSort>
       
       <!-- ID Column -->
       <ng-container matColumnDef="NgayTaoDV">
@@ -134,4 +133,62 @@
   
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" aria-label="Select page of users"></mat-paginator>
   </div>
+
+
+
+
+  
+  <form class="flex space-x-2 my-2" [formGroup]="ThanhvienForm">
+    <mat-form-field>
+      <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [formControlName]="'SDT'" placeholder="SDT">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [formControlName]="'Doanhso'" placeholder="Đã Thu">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [formControlName]="'Chinhanh'" placeholder="Chi Nhánh">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [formControlName]="'Hanmuctu'" placeholder="Từ">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
+    </mat-form-field>
+  </form>
+  <div class="mat-elevation-z8">
+    <table class="w-full" mat-table [dataSource]="Thanhvien" #ThanvienSort="matSort" matSort>
+      <ng-container matColumnDef="TenKH">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
+        <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
+      </ng-container>
+   
+      <!-- Progress Column -->
+      <ng-container matColumnDef="SDT">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
+        <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+      </ng-container>
+ 
+      <ng-container matColumnDef="Dathu">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Đã Thu </th>
+        <td mat-cell *matCellDef="let row"> {{row.Dathu| currency: "VND"}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Chinhanh">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
+        <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="thanhvienColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: thanhvienColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #ThanhvienPag="matPaginator"></mat-paginator>
+  </div>
+  
+  
 </div>
