@@ -258,6 +258,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:clipboard-check',
                 link : '/custom/testing'
+            },
+            {
+                id   : 'custom.khachhangs',
+                title: 'Khách Hàng',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/custom/khachhangs'
             }
         ]
     },

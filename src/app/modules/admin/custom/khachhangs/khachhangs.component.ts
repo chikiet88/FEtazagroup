@@ -6,14 +6,14 @@ import {MatTableDataSource} from '@angular/material/table';
 import { environment } from 'environments/environment';
 import { GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { Character, characterAttributesMapping, Khachhang, KhachhangMapping } from './character.model';
-import { ThongkekhService } from './thongkekh.service';
+import { Khachhang, KhachhangMapping } from './khachhang.type';
+import { KhachhangsService } from './khachhangs.service';
 @Component({
-  selector: 'app-thongkekh',
-  templateUrl: './thongkekh.component.html',
-  styleUrls: ['./thongkekh.component.scss']
+  selector: 'app-khachhangs',
+  templateUrl: './khachhangs.component.html',
+  styleUrls: ['./khachhangs.component.scss']
 })
-export class ThongkekhComponent implements OnInit{
+export class KhachhangsComponent implements OnInit {
   characters$: Observable<Khachhang[]>;
   //displayedColumns: string[] = ['TenKH', 'SDT', 'TDS', 'TTT','LMD','NMD','LMC','NMC'];
   displayedColumns: string[] = ['NgayTaoDV','TenKH', 'SDT', 'SDT2', 'Dichvu','Doanhso','Tonglieutrinh','Dathu','Ghichu','Chinhanh'];
@@ -35,12 +35,9 @@ export class ThongkekhComponent implements OnInit{
   constructor(
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _ThongkekhService :ThongkekhService,
+    private _khachhangsService :KhachhangsService,
     private _formBuilder: FormBuilder
     ) {
-    // Create 100 users
-    //const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
-   // this.dataSource = new MatTableDataSource(users);
   }
   ngOnInit(): void {
     this.Member = [
@@ -74,11 +71,10 @@ export class ThongkekhComponent implements OnInit{
       Hanmucden: [''],
     });
 
-    this._ThongkekhService.GetData().subscribe();
-    this._ThongkekhService.GetKhachhang().subscribe();
-    this.data$ = this._ThongkekhService.data$;
-    //this.Khachhang$ = this._ThongkekhService.Khachhang$;
-    
+    this._khachhangsService.GetData().subscribe();
+    this._khachhangsService.GetKhachhang().subscribe();
+    this.data$ = this._khachhangsService.data$;
+    //this.Khachhang$ = this._khachhangsService.Khachhang$;
     this.data$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data: Khachhang[]) => {
@@ -144,15 +140,14 @@ export class ThongkekhComponent implements OnInit{
   this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
-        //console.log(Khachhang)
         Khachhang.forEach(v => {
                   v.Doanhso = v.Doanhso.replace(/\,/g,'').replace(/\./g,''); 
                   v.Tonglieutrinh = v.Tonglieutrinh.replace(/\,/g,'').replace(/\./g,''); 
                   v.Dathu = v.Dathu.replace(/\,/g,'').replace(/\./g,''); 
-                  let x = v.NgayTaoDV.toString().split("/");
-                  v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
+                  // let x = v.NgayTaoDV.toString().split("/");
+                  // v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
             }); 
-          // this.CreateData(Khachhang);          
+         console.log(Khachhang)   
            this.Khachhang = new MatTableDataSource(Khachhang);
            this.Khachhang.paginator = this.paginator;
            this.Khachhang.sort = this.sort;
@@ -161,7 +156,6 @@ export class ThongkekhComponent implements OnInit{
       });
 
   }
-
   Loaddata() {
 
   }
@@ -185,9 +179,13 @@ export class ThongkekhComponent implements OnInit{
   CreateData(dulieu:any): void
   {
     console.log(dulieu)
+    dulieu.forEach(v1 => {
+      let x = v1.NgayTaoDV.toString().split("/");
+      v1.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
+    });
     dulieu.forEach((v,k) => {
       setTimeout(() => {
-       this._ThongkekhService.CreateData(v)
+       this._khachhangsService.CreateData(v)
         .subscribe((response) => {   
         });
       },10*k);
@@ -195,5 +193,5 @@ export class ThongkekhComponent implements OnInit{
       this._changeDetectorRef.markForCheck();
     });
   }
-}
 
+}

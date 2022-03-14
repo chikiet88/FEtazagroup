@@ -20,6 +20,7 @@ import { MaterialExampleModule } from 'material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { KhachhangsComponent } from './modules/admin/custom/khachhangs/khachhangs.component';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
