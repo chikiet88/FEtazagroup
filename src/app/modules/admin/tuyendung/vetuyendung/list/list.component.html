@@ -2,7 +2,221 @@
 
     <mat-drawer-container autosize>
         <mat-drawer class="flex flex-col sm:w-3/4 w-full p-3" #drawer mode="over">
-           <div class="flex justify-between">          <p>Auto-resizing sidenav</p><span class="material-icons pr-4" (click)="drawer.toggle()">
+           <div class="flex justify-between">        
+            <form [formGroup]="VeTDForm">
+                <div class="grid sm:grid-cols-12 gap-6 w-full mt-8">
+
+                    <div class="sm:col-span-3">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                          <div class="text-secondary" matPrefix>
+                           Vị Trí
+                          </div>
+                          <mat-select [formControlName]="'Vitri'" placeholder="Vui Lòng Chọn">
+                            <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchCongty></div>
+                          <mat-option *ngFor="let item of Vitri | keyvalue| timkiem : searchCongty.value:'value'" [value]="item.key">
+                            {{item.value}}
+                          </mat-option>
+                          <mat-option *ngIf="(Vitri | keyvalue| timkiem : searchCongty.value:'value').length==0">
+                           Không Tìm Thấy
+                          </mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                      </div>
+                    
+                      <div class="sm:col-span-6">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                          <div class="text-secondary" matPrefix>
+                            Thời Gian Thử Việc
+                          </div>
+                          <input [formControlName]="'TGTV'" type="number" matInput class="mat-select-value-text">
+                          <div class="text-secondary" matsuffix>
+                            Tháng
+                          </div>
+                        </mat-form-field>
+                      </div> 
+                      <div class="sm:col-span-6">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                          <div class="text-secondary" matPrefix>
+                            Thời Gian Thử Việc
+                          </div>
+                          <div class="text-secondary" matSubfix>
+                            Tháng
+                          </div>
+                          <input [formControlName]="'TGTV'" type="number" matInput class="mat-select-value-text">
+                        </mat-form-field>
+                      </div> 
+                      <div class="sm:col-span-6">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                          <div class="text-secondary" matPrefix>
+                            Thời Gian Thử Việc
+                          </div>
+                          <div class="text-secondary" matSubfix>
+                            Tháng
+                          </div>
+                          <input [formControlName]="'TGTV'" type="number" matInput class="mat-select-value-text">
+                        </mat-form-field>
+                      </div> 
+                      
+<!--                       
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Tiêu Đề
+                      </div>
+                      <input [formControlName]="'Tieude'" matInput class="mat-select-value-text">
+                    </mat-form-field>
+                  </div> 
+                  <div class="sm:col-span-3">          
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Loại Hình
+                      </div>
+                        <mat-select [formControlName]="'Loaihinh'">
+                            <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchLoaihinh></div>
+                          <mat-option *ngFor="let item of Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value'" [value]="item.key">
+                            {{item.value}}
+                          </mat-option>
+                          <mat-option *ngIf="(Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value').length==0">
+                           Không Tìm Thấy
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-3">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Công Ty
+                      </div>
+                      <mat-select [formControlName]="'Congty'" placeholder="Vui Lòng Chọn">
+                        <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchCongty></div>
+                      <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty.value:'value'" [value]="item.key">
+                        {{item.value}}
+                      </mat-option>
+                      <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty.value:'value').length==0">
+                       Không Tìm Thấy
+                      </mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-3">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Chủ Trì
+                      </div>
+                      <input type="text" matInput [formControlName]="'Chutri'" hidden ="true">
+                      <span class="text-red-500">{{LichhopForm.get('Chutri').value | findbyid:Nhanvien:'name'}}</span>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Tham Gia
+                      </div>
+                      <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple class="text-blue-500">
+                        <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchThamgia></div>
+                      <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia.value:'name'" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                      <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia.value:'name').length==0">
+                       Không Tìm Thấy
+                      </mat-option>
+                    </mat-select>  
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-3">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix>
+                        Ngân Sách
+                      </div>
+                      <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'" class="mat-select-value-text">
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix> Bắt Đầu </div>
+                      <input matInput [ngxMatDatetimePicker]="picker" placeholder="Chọn Ngày Bắt Đầu" [formControlName]="'Batdau'"
+                        [min]="minDate" [max]="maxDate" class="mat-select-value-text">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                        [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                        [enableMeridian]="enableMeridian">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix> Kết Thúc </div>
+                      <input matInput [ngxMatDatetimePicker]="pickerketthuc" placeholder="Chọn Ngày Kết Thúc"
+                        [formControlName]="'Ketthuc'" [min]="minDate" [max]="maxDate" class="mat-select-value-text">
+                      <mat-datepicker-toggle matSuffix [for]="pickerketthuc"></mat-datepicker-toggle>
+                      <ngx-mat-datetime-picker #pickerketthuc [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                        [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                        [enableMeridian]="enableMeridian">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix> Review </div>
+                      <input matInput [ngxMatDatetimePicker]="pickerreview" placeholder="Chọn Ngày" [formControlName]="'Review'"
+                        [min]="minDate" [max]="maxDate" class="mat-select-value-text">
+                      <mat-datepicker-toggle matSuffix [for]="pickerreview"></mat-datepicker-toggle>
+                      <ngx-mat-datetime-picker #pickerreview [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                        [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                        [enableMeridian]="enableMeridian">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="sm:col-span-6">
+                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                      <div class="text-secondary" matPrefix> Hoàn Thành </div>
+                      <input matInput [ngxMatDatetimePicker]="pickerhoanthanh" placeholder="Chọn Ngày"
+                        [formControlName]="'Hoanthanh'" [min]="minDate" [max]="maxDate" class="mat-select-value-text">
+                      <mat-datepicker-toggle matSuffix [for]="pickerhoanthanh"></mat-datepicker-toggle>
+                      <ngx-mat-datetime-picker #pickerhoanthanh [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                        [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                        [enableMeridian]="enableMeridian">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+               <div class="sm:col-span-12">
+                    <mat-tab-group class="min-h-48 max-w-90 sm:max-w-full" #tabGroup>
+                      <mat-tab label="Nội Dung">
+                        <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Noidung'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Triển Khai">
+                        <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Trienkhai'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Kết Quả">
+                        <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Ketqua'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Mong Đợi">
+                        <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Mongdoi'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Điều Chỉnh">
+                        <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Dieuchinh'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Điều Kiện Khác">
+                        <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Dieukienkhac'"></ckeditor>
+                      </mat-tab>
+                      <mat-tab label="Nguyên Nhân">
+                        <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Nguyennhan'"></ckeditor>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </div>
+
+                   -->
+                </div>
+                <!-- <div class="flex items-center justify-end mt-3">
+                  <button class="ml-4" *ngIf="CRUD==1" mat-flat-button type="button" [color]="'primary'" (click)="CreateLichhop()">Tạo Mới
+                  </button>
+                  <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'accent'" (click)="UpdateLichhop()">Cập Nhật
+                  </button>
+                  <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'warn'" (click)="DeleteLichhop()">Xóa Lịch
+                  </button>         
+                </div> -->
+              </form>
+            <p>Auto-resizing sidenav</p><span class="material-icons pr-4" (click)="drawer.toggle()">
             cancel
             </span></div> 
 

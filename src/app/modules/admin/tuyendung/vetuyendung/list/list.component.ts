@@ -7,7 +7,7 @@ import { Vetuyendung} from '../vetuyendung.types';
 import { VetuyendungService } from '../vetuyendung.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DOCUMENT } from '@angular/common';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -20,10 +20,11 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 export class ListComponent implements OnInit {
 @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
  contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
-selectedVetuyendung: Vetuyendung;
+  selectedVetuyendung: Vetuyendung;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   vetuyendungs$: Observable<Vetuyendung[]>;
   vetuyendungs: Vetuyendung[];
+  VeTDForm:FormGroup;
   lists:any;
   Vitri:any;
   vetuyendungsCount: number = 0;
@@ -44,10 +45,15 @@ selectedVetuyendung: Vetuyendung;
     private _VetuyendungService: VetuyendungService,
     private _notifierService: NotifierService,
     private _fuseConfirmationService: FuseConfirmationService,
+    private _formbuilder:FormBuilder
     ) { }
 
     ngOnInit(): void
     {
+        this.VeTDForm = this._formbuilder.group({
+                Vitri:[''],
+                TGTV:[''],
+        })
         this.lists = [
             {id : '1',position: 65536,title:'Bước 1',mota:'Tạo Phiếu Tuyển Dụng',vetd:[{"id":"5d60e592-94fa-4ea2-8838-34b91e5f5f49","idVitri":"","SLHT":0,"SLCT":0,"LuongDK":0,"TGThuviec":0,"TNNS":{},"Lydo":0,"Mota":"","Yeucau":"","Pheduyet":{},"Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-21T02:00:10.177Z","idTao":0},{"id":"035e6e03-8bc1-4071-aa28-0d8ff7c96fe3","idVitri":"4aebb23f-0009-4765-8616-2ec0bc3bf721","SLHT":3,"SLCT":5,"LuongDK":2000000,"TGThuviec":1,"TNNS":{},"Lydo":1,"Mota":"6558","Yeucau":"<p style=\"text-align: center;\">Jsgsfnnshshsb</p>\n<p style=\"text-align: center;\">Đhshbushhshdbdbdbhhshsbsbjd</p>\n<p style=\"text-align: center;\"> </p>\n<p style=\"text-align: center;\">Dnbdbsn</p>\n<p style=\"text-align: center;\"> </p>\n<p style=\"text-align: center;\">Dnbdbsn</p>\n<p style=\"text-align: center;\">Bsgagahabc</p>\n<p style=\"text-align: center;\"> </p>","Pheduyet":"4aebb23f-0009-4765-8616-2ec0bc3bf721","Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T21:18:03.254Z","idTao":0},{"id":"b672557f-071d-43bf-8bbc-f3a5335f330a","idVitri":"d9dfcd17-3bdb-4ef7-9675-336e33d0592b","SLHT":0,"SLCT":0,"LuongDK":0,"TGThuviec":0,"TNNS":{},"Lydo":0,"Mota":"","Yeucau":"","Pheduyet":{},"Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T21:15:04.600Z","idTao":0},{"id":"84e6dce0-82ae-484d-a892-74a028f86915","idVitri":"4aebb23f-0009-4765-8616-2ec0bc3bf721","SLHT":0,"SLCT":0,"LuongDK":0,"TGThuviec":0,"TNNS":{},"Lydo":0,"Mota":"","Yeucau":"","Pheduyet":{},"Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T20:49:34.108Z","idTao":0},{"id":"18c17c2b-0e21-4551-ac80-c4bd370223dc","idVitri":"30941412-66c5-4676-8862-7de27aa86c85","SLHT":3,"SLCT":5,"LuongDK":1000000,"TGThuviec":2,"TNNS":{},"Lydo":1,"Mota":"1","Yeucau":"<p>Yêu Cầu : Thông Thạo Ngôn Ngữ Lập Trình</p>","Pheduyet":"d9dfcd17-3bdb-4ef7-9675-336e33d0592b","Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T20:39:56.109Z","idTao":0},{"id":"d4d239e1-1cbd-4034-9592-41fad170f830","idVitri":"30941412-66c5-4676-8862-7de27aa86c85","SLHT":0,"SLCT":0,"LuongDK":0,"TGThuviec":0,"TNNS":{},"Lydo":0,"Mota":"","Yeucau":"","Pheduyet":{},"Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T19:54:06.928Z","idTao":0},{"id":"70ff8150-d93f-4d99-8275-1a7bb1102138","idVitri":"eceb6560-47b2-480f-b876-857e48f7d723","SLHT":0,"SLCT":0,"LuongDK":0,"TGThuviec":0,"TNNS":{},"Lydo":0,"Mota":"","Yeucau":"","Pheduyet":{},"Trangthai":0,"published":0,"ordering":0,"Ngaytao":"2022-02-20T19:53:23.348Z","idTao":0}]},
             {id : '2',position: 65536,title:'Bước 2',mota:'Duyệt phiếu tuyển dụng',vetd:[]},
@@ -164,7 +170,6 @@ selectedVetuyendung: Vetuyendung;
        // const updated = this._calculatePositions(event);
         //this._scrumboardService.updateCards(updated).subscribe();
     }
-
 
     trackByFn(index: number, item: any): any
     {

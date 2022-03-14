@@ -11,7 +11,7 @@
   <mat-form-field>
     <input matInput 
       [matDatepicker]="fromDate" 
-      placeholder="Chọn Ngày" 
+      placeholder="Từ Ngày" 
       [formControlName]="'Batdau'">
     <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
     <mat-datepicker #fromDate></mat-datepicker>
@@ -20,7 +20,7 @@
   <mat-form-field>
     <input matInput 
       [matDatepicker]="toDate" 
-      placeholder="To Date" 
+      placeholder="Đến Ngày" 
       [formControlName]="'Ketthuc'">
     <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
     <mat-datepicker #toDate></mat-datepicker>
@@ -47,8 +47,19 @@
   <mat-form-field>
     <input matInput [formControlName]="'Ghichu'" placeholder="Ghi Chú">
   </mat-form-field>
-  <mat-form-field>
+  <!-- <mat-form-field>
     <input matInput [formControlName]="'Chinhanh'" placeholder="Chi Nhánh">
+  </mat-form-field> -->
+
+
+  <mat-form-field>
+    <mat-select [formControlName]="'Chinhanh'" matInput>
+      <mat-option value="Đà Nẵng">Đà Nẵng</mat-option>
+      <mat-option value="Gò Vấp">Gò Vấp</mat-option>
+      <mat-option value="thuduc" for>Thủ Đức</mat-option>
+      <mat-option value="quan10" for>Quận 10</mat-option>
+      <mat-option value="nhatrang" for>Nha Trang</mat-option>
+    </mat-select>
   </mat-form-field>
 </form>
 
@@ -160,6 +171,18 @@
     <mat-form-field>
       <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
     </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [formControlName]="'Chinhanh'" matInput (selectionChange)="ChonMember($event)">
+        <mat-option value="1">Normal</mat-option>
+        <mat-option value="2">Member</mat-option>
+        <mat-option value="3">Silver</mat-option>
+        <mat-option value="4">Gold</mat-option>
+        <mat-option value="5">Platinum</mat-option>
+        <mat-option value="6">Diamond</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </form>
   <div class="mat-elevation-z8">
     <table class="w-full" mat-table [dataSource]="Thanhvien" #ThanvienSort="matSort" matSort>

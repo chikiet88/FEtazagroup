@@ -4,6 +4,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { environment } from 'environments/environment';
+import _ from 'lodash';
 import { forEach } from 'lodash';
 import { GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { Observable, Subject, takeUntil } from 'rxjs';
@@ -27,6 +28,7 @@ export class ThongkekhComponent implements OnInit{
   Khachhang$: Observable<Khachhang[]>;
   FilterForm:FormGroup;
   ThanhvienForm:FormGroup;
+  Member:any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -43,6 +45,14 @@ export class ThongkekhComponent implements OnInit{
    // this.dataSource = new MatTableDataSource(users);
   }
   ngOnInit(): void {
+    this.Member = [
+      {id:1,tieude:"Normal",Tu:0,Den:50000000},
+      {id:2,tieude:"Member",Tu:50000000,Den:100000000},
+      {id:3,tieude:"Silver",Tu:100000000,Den:200000000},
+      {id:4,tieude:"Gold",Tu:200000000,Den:350000000},
+      {id:5,tieude:"Platinum",Tu:350000000,Den:500000000},
+      {id:6,tieude:"Diamond",Tu:500000000,Den:9900000000},
+    ]
     this.FilterForm = this._formBuilder.group({
       NgayTaoDV:[''],
       Batdau:[''],
@@ -75,12 +85,13 @@ export class ThongkekhComponent implements OnInit{
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data: Khachhang[]) => {
           console.log(data);
+         const NewUnique = [... new Set(data.map(v => v.SDT))];
+          const Thanhvien = [];
           this.data = new MatTableDataSource(data);
           this.data.paginator = this.paginator;
           this.data.sort = this.sort;
           this._changeDetectorRef.markForCheck();
-          const Thanhvien = [];
-          const NewUnique = [... new Set(data.map(data => data.SDT))]
+          console.log(NewUnique);
           NewUnique.forEach(v => {
             let Sum = 0;
               const UniKH = data.filter(v1=>v1.SDT == v);
@@ -89,13 +100,12 @@ export class ThongkekhComponent implements OnInit{
                   Sum += parseInt(v1.Dathu);
               });
               Thanhvien.push({'TenKH':getKH.TenKH,'SDT':getKH.SDT,'Dathu':Sum,'Chinhanh':getKH.Chinhanh})
-              //console.log(UniKH);
           });
+
           console.log(Thanhvien);
           this.Thanhvien = new MatTableDataSource(Thanhvien);
           this.Thanhvien.paginator = this.ThanhvienPag;
           this.Thanhvien.sort = this.ThanvienSort;
-
 
           this.data.filterPredicate = ((data, filter) => {
             const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
@@ -136,7 +146,7 @@ export class ThongkekhComponent implements OnInit{
   this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
-        console.log(Khachhang)
+        //console.log(Khachhang)
         Khachhang.forEach(v => {
                   v.Doanhso = v.Doanhso.replace(/\,/g,'').replace(/\./g,''); 
                   v.Tonglieutrinh = v.Tonglieutrinh.replace(/\,/g,'').replace(/\./g,''); 
@@ -156,6 +166,15 @@ export class ThongkekhComponent implements OnInit{
 
   Loaddata() {
 
+  }
+  ChonMember(ob) {
+        let currentMember = this.Member.filter(v=>v.id == ob);
+        console.log(currentMember);
+  }
+  onBookChange(ob) {
+    console.log('Book changed...');
+    let selectedBook = ob.value;
+    console.log(selectedBook);
   }
 
   applyFilter(event: Event) {

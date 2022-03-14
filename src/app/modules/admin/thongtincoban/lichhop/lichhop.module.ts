@@ -15,9 +15,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
-import { CustomPipe } from 'app/custom.pipe';
-import { TimkiemPipe } from 'app/timkiem.pipe';
-import { FindbyidPipe } from 'app/findbyid.pipe';
+import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
+import { FindbyidPipe } from 'app/pipes/findbyid/findbyid.pipe';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
@@ -30,12 +30,11 @@ const LichhopRoutes: Routes = [
 ];
 @NgModule({
   declarations: [
-    LichhopComponent,
-    CustomPipe,
-    TimkiemPipe,
-    FindbyidPipe
+    LichhopComponent
   ],
   imports: [
+    FindbyidModule,
+    TimkiemModule,
     FuseScrollbarModule,
     CKEditorModule,
     MatDatepickerModule,

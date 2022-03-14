@@ -11,7 +11,6 @@ const thongkeRoutes: Route[] = [
   {
       path     : '',
       component: ThongkekhComponent,
-
   }
 ];
 @NgModule({

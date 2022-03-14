@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',
@@ -49,8 +51,15 @@ const VetuyendungRoutes: Route[] = [
       ]
   }
 ];@NgModule({
-  declarations: [VetuyendungComponent, ListComponent,DetailsComponent],
+  declarations: 
+   [
+     VetuyendungComponent, 
+     ListComponent,
+     DetailsComponent,
+    ],
   imports: [
+    FindbyidModule,
+    TimkiemModule,
     DragDropModule,
     MatBadgeModule,
     EditorModule,
