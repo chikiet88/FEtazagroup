@@ -18,6 +18,7 @@ export class KhachhangsResolver implements Resolve<boolean> {
       this._khachhangsService.GetData(),
       this._khachhangsService.GetKhachhang(),
       this._khachhangsService.CountData(),
+      this._khachhangsService.GetMember(),
     ]);
   }
 }

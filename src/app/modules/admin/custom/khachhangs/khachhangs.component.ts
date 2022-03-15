@@ -20,20 +20,23 @@ export class KhachhangsComponent implements OnInit {
   thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh'];
   dataKhachhang: MatTableDataSource<Khachhang>;
   data: MatTableDataSource<Khachhang>;
+  datamember: MatTableDataSource<any>;
   Thanhvien: MatTableDataSource<any>;
   data$: Observable<Khachhang[]>;
+  datamember$: Observable<any>;
   count$: Observable<any>;
   Khachhang: MatTableDataSource<Khachhang>;
   Khachhang$: Observable<Khachhang[]>;
   FilterForm: FormGroup;
-  ThanhvienForm: FormGroup;
+  Filtermember: FormGroup;
   Member: any[];
   count:number;
+  Showchitiet:boolean=false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('ThanhvienPag', { static: true }) ThanhvienPag: MatPaginator;
-  @ViewChild('ThanvienSort', { static: true }) ThanvienSort: MatSort;
+  @ViewChild('MemberPag', { static: true }) MemberPag: MatPaginator;
+  @ViewChild('MemberSort', { static: true }) MemberSort: MatSort;
   constructor(
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -43,6 +46,7 @@ export class KhachhangsComponent implements OnInit {
   }
   ngOnInit(): void {
     this.Member = [
+      { id: 0, tieude: "All", Tu: '', Den: '' },
       { id: 1, tieude: "Normal", Tu: 0, Den: 50000000 },
       { id: 2, tieude: "Member", Tu: 50000000, Den: 100000000 },
       { id: 3, tieude: "Silver", Tu: 100000000, Den: 200000000 },
@@ -64,7 +68,7 @@ export class KhachhangsComponent implements OnInit {
       Chinhanh: [''],
     });
 
-    this.ThanhvienForm = this._formBuilder.group({
+    this.Filtermember = this._formBuilder.group({
       TenKH: [''],
       SDT: [''],
       Doanhso: [''],
@@ -73,6 +77,7 @@ export class KhachhangsComponent implements OnInit {
       Hanmucden: [''],
     });
     this.data$ = this._khachhangsService.data$;
+    this.datamember$ = this._khachhangsService.Member$;
     this.count$ = this._khachhangsService.count$;
     this.count$.subscribe((count) => {
         this.count = count;
@@ -88,10 +93,34 @@ export class KhachhangsComponent implements OnInit {
     )
   }
   LoadTable(data) {
+    
         this.data = new MatTableDataSource(data);
         this.data.paginator = this.paginator;
         this.data.sort = this.sort;
         this._changeDetectorRef.markForCheck();
+  } 
+  LoadMember() {
+
+    this.datamember$.subscribe((v)=>{
+        this.datamember = new MatTableDataSource(v);
+        this.datamember.paginator = this.MemberPag;
+        this.datamember.sort = this.MemberSort;
+        this._changeDetectorRef.markForCheck();
+       this.datamember.filterPredicate = ((data, filter) => {
+          const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
+          const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+          const i = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
+          const e = !filter.Hanmuctu && !filter.Hanmucden || data.Dathu <= filter.Hanmucden && data.Dathu >= filter.Hanmuctu;
+          return a && b && e && i;
+        }) as (PeriodicElement, string) => boolean;
+        this.Filtermember.valueChanges.subscribe(value => {
+          console.log(value);
+          this.datamember.filter = value;
+        });
+      }
+
+
+    )
   } 
   LoadDrive() {
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
@@ -143,14 +172,14 @@ export class KhachhangsComponent implements OnInit {
         });
         console.log(Thanhvien);
 
-        Thanhvien.forEach((v, k) => {
-          setTimeout(() => {
-            this._khachhangsService.CreateMember(v)
-              .subscribe(() => {
-              });
-          }, 10 * k);
-          this._changeDetectorRef.markForCheck();
-        });
+        // Thanhvien.forEach((v, k) => {
+        //   setTimeout(() => {
+        //     this._khachhangsService.CreateMember(v)
+        //       .subscribe(() => {
+        //       });
+        //   }, 10 * k);
+        //   this._changeDetectorRef.markForCheck();
+        // });
 
        
 
@@ -189,8 +218,23 @@ export class KhachhangsComponent implements OnInit {
       });
   }
   ChonMember(ob) {
-    let currentMember = this.Member.filter(v => v.id == ob);
-    console.log(currentMember);
+    let currentMember = this.Member.find(v => v.id == ob.value);
+    this.Filtermember.get('Hanmuctu').setValue(currentMember.Tu);
+    this.Filtermember.get('Hanmucden').setValue(currentMember.Den);
+  }
+  SelectMember(value) {
+    this.Showchitiet = true;
+    this.Filtermember.get('SDT').setValue(value.SDT);
+    this._khachhangsService.LoadBySDT(value.SDT).subscribe((v)=>
+    {
+      this.data = new MatTableDataSource(v);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+      this._changeDetectorRef.markForCheck();
+    }
+    );
+
+
   }
   onBookChange(ob) {
     console.log('Book changed...');

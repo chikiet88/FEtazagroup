@@ -9,6 +9,7 @@ import { Khachhang } from './khachhang.type';
 export class KhachhangsService {
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
   private _Khachhang: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _member: BehaviorSubject<any> = new BehaviorSubject(null);
   private _count: BehaviorSubject<any> = new BehaviorSubject(null);
  constructor(private _httpClient: HttpClient)
   {
@@ -26,6 +27,10 @@ export class KhachhangsService {
   {
       return this._data.asObservable();
   }
+  get Member$(): Observable<any>
+  {
+      return this._member.asObservable();
+  }
   CreateData(dulieu): Observable<any>
   {
       return this._httpClient.post(`${environment.ApiURL}/khachhangs/chitiet`,dulieu).pipe(
@@ -42,12 +47,30 @@ export class KhachhangsService {
           })
       );
   }
+  GetMember():  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang`).pipe(
+          tap((member: any) => {
+            this._member.next(member);
+           // console.log(Character);
+          })
+      );
+  }
   GetData():  Observable<Khachhang[]>
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
            // console.log(Character);
+          })
+      );
+  }
+  LoadBySDT(SDT):  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/${SDT}`).pipe(
+          tap((khachhang) => {
+            console.log(khachhang);
+            this._data.next(khachhang);
           })
       );
   }
