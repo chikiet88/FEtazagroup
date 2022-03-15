@@ -7,10 +7,14 @@ import { environment } from 'environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
+import { KhachhangsResolver } from './khachhangs.resolver';
 const khachhangsRoutes: Route[] = [
   {
       path     : '',
       component: KhachhangsComponent,
+      resolve  : {
+        tasks    : KhachhangsResolver,
+    },
   }
 ];
 @NgModule({

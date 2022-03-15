@@ -4,13 +4,20 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
-
+import { forkJoin, Observable, of } from 'rxjs';
+import { KhachhangsService } from './khachhangs.service';
 @Injectable({
   providedIn: 'root'
 })
 export class KhachhangsResolver implements Resolve<boolean> {
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return of(true);
+  constructor(
+    private _khachhangsService: KhachhangsService
+    ){}
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    return forkJoin([
+      this._khachhangsService.GetData(),
+      this._khachhangsService.GetKhachhang(),
+      this._khachhangsService.CountData(),
+    ]);
   }
 }

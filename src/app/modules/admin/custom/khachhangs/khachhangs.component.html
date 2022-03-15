@@ -1,11 +1,13 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
-    <div class="flex justify-between mb-2" *ngIf="Khachhang$ | async as Dulieu">
-      <!-- <mat-form-field appearance="standard">
-        <mat-label>Tìm Kiếm</mat-label>
-        <input matInput (keyup)="applyFilter($event)" #input>
-    </mat-form-field> -->
-    <button mat-raised-button color="primary" (click)="CreateData(Dulieu)">Cập Nhật 
-      (<span *ngIf="data$ | async as data">{{data.length}}</span>) / (<span>{{Dulieu.length}}</span>)</button>
+    <div class="flex justify-start mb-2">
+    <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
+    <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
+      (<span *ngIf="data$ | async as Data">{{Data.length}}/{{count}}</span>)
+    </button>
+    <button mat-raised-button color="primary" (click)="LoadDrive()" class="mr-2">Load Drive</button>
+
+    <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
+      (<span>{{Khachhang.length}}</span>)</button>
   </div>
   
   <form class="flex space-x-2" [formGroup]="FilterForm">
