@@ -63,7 +63,7 @@
               <div class="text-secondary" matPrefix>
                 Tham Gia
               </div>
-              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple class="text-blue-500">
+              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple class="text-blue-500" #Thamgia>
                 <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchThamgia></div>
               <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia.value:'name'" [value]="item.id">
                 {{item.name}}
@@ -71,7 +71,12 @@
               <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia.value:'name').length==0">
                Không Tìm Thấy
               </mat-option>
-            </mat-select>  
+            </mat-select> 
+              <ng-container>
+                  <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                      <span class="text-md font-medium whitespace-nowrap">{{Thamgia.value}}</span>
+                  </div>
+              </ng-container>         
             </mat-form-field>
           </div>
           <div class="sm:col-span-3">

@@ -33,10 +33,12 @@ export class KhachhangsComponent implements OnInit {
   count:number;
   Showchitiet:boolean=false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('MemberPag', { static: true }) MemberPag: MatPaginator;
-  @ViewChild('MemberSort', { static: true }) MemberSort: MatSort;
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
+  @ViewChild('DataSort', { static: false }) DataSort: MatSort;
+  @ViewChild('MemberPag', { static: false }) MemberPag: MatPaginator;
+  @ViewChild('MemberSort', { static: false }) MemberSort: MatSort;
   constructor(
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -93,14 +95,12 @@ export class KhachhangsComponent implements OnInit {
     )
   }
   LoadTable(data) {
-    
         this.data = new MatTableDataSource(data);
-        this.data.paginator = this.paginator;
-        this.data.sort = this.sort;
+        this.data.paginator = this.DataPag;
+        this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
   } 
   LoadMember() {
-
     this.datamember$.subscribe((v)=>{
         this.datamember = new MatTableDataSource(v);
         this.datamember.paginator = this.MemberPag;
@@ -137,8 +137,8 @@ export class KhachhangsComponent implements OnInit {
         });
         console.log(Khachhang)
         this.Khachhang = new MatTableDataSource(Khachhang);
-        this.Khachhang.paginator = this.paginator;
-        this.Khachhang.sort = this.sort;
+        this.Khachhang.paginator = this.DataPag;
+        this.Khachhang.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
       });
   }
@@ -150,8 +150,8 @@ export class KhachhangsComponent implements OnInit {
         const NewUnique = [... new Set(data.map(v => v.SDT))];
         const Thanhvien = [];
         this.data = new MatTableDataSource(data);
-        this.data.paginator = this.paginator;
-        this.data.sort = this.sort;
+        this.data.paginator = this.DataPag;
+        this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
         console.log(NewUnique);
         NewUnique.forEach(v => {
@@ -225,23 +225,17 @@ export class KhachhangsComponent implements OnInit {
   SelectMember(value) {
     this.Showchitiet = true;
     this.Filtermember.get('SDT').setValue(value.SDT);
-    this._khachhangsService.LoadBySDT(value.SDT).subscribe((v)=>
-    {
+    this._khachhangsService.LoadBySDT(value.SDT).subscribe();
+    this.data$.subscribe((v)=>{
       this.data = new MatTableDataSource(v);
-      this.data.paginator = this.paginator;
-      this.data.sort = this.sort;
+      this.data.paginator = this.DataPag;
+      this.data.sort = this.DataSort;
       this._changeDetectorRef.markForCheck();
     }
     );
 
 
   }
-  onBookChange(ob) {
-    console.log('Book changed...');
-    let selectedBook = ob.value;
-    console.log(selectedBook);
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.Khachhang.filter = filterValue.trim().toLowerCase();

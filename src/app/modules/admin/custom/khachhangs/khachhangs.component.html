@@ -139,7 +139,7 @@
   </form> -->
   
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
-      <table class="w-full" mat-table [dataSource]="data" matSort>
+      <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort>
         <ng-container matColumnDef="NgayTaoDV">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Tạo DV </th>
           <td mat-cell *matCellDef="let row"> {{row.NgayTaoDV|date:'dd/MM/yyyy'}} </td>
@@ -185,8 +185,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" aria-label="Select page of users"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #DataPag="matPaginator"></mat-paginator>
     </div>
 
   </div>
