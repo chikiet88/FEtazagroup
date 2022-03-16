@@ -106,11 +106,9 @@ export class NhanvienService {
      {
          return this.nhanviens$.pipe(
              take(1),
-             switchMap(nhanviens => this._httpClient.patch<Nhanvien>('api/apps/contacts/contact', {
-                 id,
-                 nhanvien
-             }).pipe(
+             switchMap(nhanviens => this._httpClient.patch<Nhanvien>(`${environment.ApiURL}/users/${id}`,nhanvien).pipe(
                  map((updatedNhanvien) => {
+                     console.log(updatedNhanvien);
                      const index = nhanviens.findIndex(item => item.id === id);
                      nhanviens[index] = updatedNhanvien;
                      this._nhanviens.next(nhanviens);

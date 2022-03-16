@@ -70,11 +70,12 @@ export class DetailsComponent implements OnInit, OnDestroy
        });
         this._ListComponent.matDrawer.open();
         this.NhanvienForm = this._formBuilder.group({
-            id          : [''],
+            id      : [''],
             avatar      : [null],
             name        : ['', [Validators.required]],
             email       : ['', [Validators.required]],
             SDT         : ['', [Validators.required]],
+            Role         : [''],
             profile: this._formBuilder.group({
                 Congty: [''],
                 Khoi: [''],
@@ -114,6 +115,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                     name: nhanvien.name,
                     email: nhanvien.email,
                     SDT: nhanvien.SDT,
+                    Role: nhanvien.Role,
                     profile: {
                         Congty: nhanvien.profile.Congty,
                         Khoi: nhanvien.profile.Khoi,
@@ -168,10 +170,9 @@ export class DetailsComponent implements OnInit, OnDestroy
     updateNhanvien(): void
     {
         const contact = this.NhanvienForm.getRawValue();
-        contact.emails = contact.emails.filter(email => email.email);
-        contact.phoneNumbers = contact.phoneNumbers.filter(phoneNumber => phoneNumber.phoneNumber);
+            console.log(contact);
         this._nhanvienService.updateNhanvien(contact.id, contact).subscribe(() => {
-            this.editNhanvien();
+            this.NhanvienForm.disable();
         });
     }
     deleteNhanvien(): void

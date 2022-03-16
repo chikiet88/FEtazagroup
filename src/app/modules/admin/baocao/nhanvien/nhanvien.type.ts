@@ -28,3 +28,8 @@ export class profile {
     PQTD: string[];
     Zalo: string;
 }
+export enum Role {
+    Admin = 'admin',
+    Manager = 'manager',
+    User = 'user',
+}

@@ -12,7 +12,7 @@ export class AcademyCategoriesResolver implements Resolve<any>
     /**
      * Constructor
      */
-    constructor(private _academyService: AcademyService)
+    constructor(private _academyService: AcademyService,)
     {
     }
 

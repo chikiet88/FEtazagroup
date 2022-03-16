@@ -59,25 +59,82 @@
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
-            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix>
                 Tham Gia
               </div>
-              <mat-select [formControlName]="'Thamgia'" placeholder="Vui Lòng Chọn" multiple class="text-blue-500" #Thamgia>
-                <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchThamgia></div>
-              <mat-option *ngFor="let item of Nhanvien | timkiem : searchThamgia.value:'name'" [value]="item.id">
-                {{item.name}}
-              </mat-option>
-              <mat-option *ngIf="(Nhanvien | timkiem : searchThamgia.value:'name').length==0">
-               Không Tìm Thấy
-              </mat-option>
-            </mat-select> 
-              <ng-container>
-                  <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                      <span class="text-md font-medium whitespace-nowrap">{{Thamgia.value}}</span>
-                  </div>
-              </ng-container>         
-            </mat-form-field>
+              <div class="flex flex-wrap items-center">
+                <ng-container *ngIf="LichhopForm.get('Thamgia').value as Thamgia">
+                    <ng-container *ngFor="let tag of idThamgia">
+                        <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                            <span class="text-md font-medium whitespace-nowrap">{{tag| findbyid:Nhanvien:'name'}}</span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                (click)="openTagsPanel()" #tagsPanelOrigin>
+
+                <ng-container *ngIf="idThamgia.length">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                    <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                </ng-container>
+
+                <ng-container *ngIf="!idThamgia.length">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                    <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                </ng-container>
+
+                <ng-template #tagsPanel>
+                    <div class="w-60 rounded border shadow-md bg-card">
+         
+                        <div class="flex items-center m-3 mr-2">
+                            <div class="flex items-center">
+                                <mat-icon
+                                    class="icon-size-5"
+                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <div class="ml-2">
+                                    <input
+                                        class="w-full min-w-0 py-1 border-0"
+                                        type="text"
+                                        placeholder="Enter tag name"
+                                        (input)="filterTags($event)"
+                                        (keydown)="filterTagsInputKeyDown($event)"
+                                        [maxLength]="30"
+                                        #newTagInput>
+                                </div>
+                            </div>
+                            <button
+                                class="ml-1"
+                                mat-icon-button
+                                (click)="toggleTagsEditMode()">
+                            </button>
+                        </div>
+                    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                            <ng-container *ngIf="!tagsEditMode">
+                                <ng-container *ngFor="let tag of Nhanvien;">
+                                    <div
+                                        class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                        (click)="toggleTaskTag(tag)"
+                                        matRipple>
+                                        <mat-checkbox
+                                            class="flex items-center h-10 min-h-10"
+                                            [color]="'primary'"
+                                            [checked]="idThamgia.includes(tag.id)"
+                                           >
+                                        </mat-checkbox>
+                                        <div class="ml-1">{{tag.name}}</div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>         
+
+            </div>       
           </div>
           <div class="sm:col-span-3">
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
@@ -161,7 +218,6 @@
               </mat-tab>
             </mat-tab-group>
           </div>
-        </div>
         <div class="flex items-center justify-end mt-3">
           <button class="ml-4" *ngIf="CRUD==1" mat-flat-button type="button" [color]="'primary'" (click)="CreateLichhop()">Tạo Mới
           </button>
@@ -169,6 +225,7 @@
           </button>
           <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'warn'" (click)="DeleteLichhop()">Xóa Lịch
           </button>         
+        </div>
         </div>
       </form>
     </mat-drawer>

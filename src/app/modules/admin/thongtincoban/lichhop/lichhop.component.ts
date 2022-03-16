@@ -7,6 +7,7 @@ import {
   ViewEncapsulation,
   ViewContainerRef,
   ChangeDetectorRef,
+  ElementRef,
 } from '@angular/core';
 import {
   startOfDay,
@@ -47,6 +48,8 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { Router } from '@angular/router';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -87,6 +90,8 @@ export class LichhopComponent implements OnInit {
   // }
   @ViewChild('picker') picker: any;
   @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
+  @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
   public date: moment.Moment;
   public is_disabled = false;
   public showSpinners = true;
@@ -122,6 +127,11 @@ export class LichhopComponent implements OnInit {
   Title: string;
   user: any;
   CRUD: any;
+  tagsEditMode: boolean = false;
+  filteredTags: any;
+  tags: any;
+  idThamgia:any;
+  private _tagsPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
     public dialog: MatDialog,
@@ -134,7 +144,9 @@ export class LichhopComponent implements OnInit {
     private _fuseConfirmationService: FuseConfirmationService,
     private readonly notifier: NotifierService,
     private _notificationsService: NotificationsService,
-    private router:Router
+    private router:Router,
+    private _overlay: Overlay,
+    private _viewContainerRef: ViewContainerRef
   ) { }
   options: string[] = ['One', 'Two', 'Three'];
   @ViewChild('tabGroup', { static: false }) public tabGroup: any;
@@ -142,6 +154,90 @@ export class LichhopComponent implements OnInit {
 
   public handleTabChange(e: MatTabChangeEvent) {
     this.activeTabIndex = e.index;
+  }
+
+
+  filterTags(event): void
+  {
+      // Get the value
+      const value = event.target.value.toLowerCase();
+
+      // Filter the tags
+     this.filteredTags = this.tags.filter(tag => tag.title.toLowerCase().includes(value));
+  }
+  filterTagsInputKeyDown(event): void
+  {
+  }
+  toggleTagsEditMode(): void
+  {
+     this.tagsEditMode = !this.tagsEditMode;
+  }
+  toggleTaskTag(tag): void
+  {
+      if ( this.idThamgia.includes(tag.id) )
+      {
+          this.deleteTagFromTask(tag);
+      }
+      else
+      {
+          this.addTagToTask(tag);
+      }
+  }
+  addTagToTask(tag): void
+  {
+      this.idThamgia.unshift(tag.id);
+      this.LichhopForm.get('Thamgia').patchValue(this.idThamgia);
+      this._changeDetectorRef.markForCheck();
+  }
+  deleteTagFromTask(tag): void
+  {
+      this.idThamgia.splice(this.idThamgia.findIndex(item => item === tag), 1);
+      this.LichhopForm.get('Thamgia').patchValue(this.idThamgia);
+      this._changeDetectorRef.markForCheck();
+  }
+  openTagsPanel(): void
+  {
+      this._tagsPanelOverlayRef = this._overlay.create({
+          backdropClass   : '',
+          hasBackdrop     : true,
+          scrollStrategy  : this._overlay.scrollStrategies.block(),
+          positionStrategy: this._overlay.position()
+                                .flexibleConnectedTo(this._tagsPanelOrigin.nativeElement)
+                                .withFlexibleDimensions(true)
+                                .withViewportMargin(64)
+                                .withLockedPosition(true)
+                                .withPositions([
+                                    {
+                                        originX : 'start',
+                                        originY : 'bottom',
+                                        overlayX: 'start',
+                                        overlayY: 'top'
+                                    }
+                                ])
+      });
+      this._tagsPanelOverlayRef.attachments().subscribe(() => {
+          this._tagsPanelOverlayRef.overlayElement.querySelector('input').focus();
+      });
+      const templatePortal = new TemplatePortal(this._tagsPanel, this._viewContainerRef);
+      this._tagsPanelOverlayRef.attach(templatePortal);
+      this._tagsPanelOverlayRef.backdropClick().subscribe(() => {
+
+
+       if ( this._tagsPanelOverlayRef && this._tagsPanelOverlayRef.hasAttached() )
+          {
+              this._tagsPanelOverlayRef.detach();
+              //this.filteredTags = this.tags;
+              this.tagsEditMode = false;
+          }
+          if ( templatePortal && templatePortal.isAttached )
+          {
+              templatePortal.detach();
+          }
+      });
+  }
+  shouldShowCreateTagButton(inputValue: string): boolean
+  {
+      return !!!(inputValue === '' || this.tags.findIndex(tag => tag.title.toLowerCase() === inputValue.toLowerCase()) > -1);
   }
   Opentoggle() {
     this.CRUD =1;
@@ -167,12 +263,14 @@ export class LichhopComponent implements OnInit {
     this.sidenav.toggle();
   }
   ngOnInit(): void {
+    this.idThamgia = [];
     this.activeTabIndex = 0;
     this.Title = "Thêm Mới";
     this.CRUD = 1;
     this._NhanvienService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((nhanvien: Nhanvien[]) => {
+        console.log(nhanvien);
         this.Nhanvien = nhanvien;
         this._changeDetectorRef.markForCheck();
       });
@@ -228,6 +326,16 @@ export class LichhopComponent implements OnInit {
       Dieukienkhac: [''],
       Nguyennhan: [''],
     });
+  }
+
+  ngOnDestroy(): void
+  {
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
+      if ( this._tagsPanelOverlayRef )
+      {
+          this._tagsPanelOverlayRef.dispose();
+      }
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
