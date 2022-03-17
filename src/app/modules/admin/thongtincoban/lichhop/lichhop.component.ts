@@ -159,22 +159,20 @@ export class LichhopComponent implements OnInit {
 
   filterTags(event): void
   {
-      // Get the value
-      const value = event.target.value.toLowerCase();
-
-      // Filter the tags
-     this.filteredTags = this.tags.filter(tag => tag.title.toLowerCase().includes(value));
+    const value = event.target.value.toLowerCase();
+     this.filteredTags = this.Nhanvien.filter(tag => tag.name.toLowerCase().includes(value));
   }
   filterTagsInputKeyDown(event): void
   {
   }
+
   toggleTagsEditMode(): void
   {
      this.tagsEditMode = !this.tagsEditMode;
   }
   toggleTaskTag(tag): void
   {
-      if ( this.idThamgia.includes(tag.id) )
+      if ( this.idThamgia.includes(tag.id))
       {
           this.deleteTagFromTask(tag);
       }
@@ -191,7 +189,7 @@ export class LichhopComponent implements OnInit {
   }
   deleteTagFromTask(tag): void
   {
-      this.idThamgia.splice(this.idThamgia.findIndex(item => item === tag), 1);
+      this.idThamgia.splice(this.idThamgia.findIndex(item => item === tag.id), 1);
       this.LichhopForm.get('Thamgia').patchValue(this.idThamgia);
       this._changeDetectorRef.markForCheck();
   }
@@ -221,8 +219,6 @@ export class LichhopComponent implements OnInit {
       const templatePortal = new TemplatePortal(this._tagsPanel, this._viewContainerRef);
       this._tagsPanelOverlayRef.attach(templatePortal);
       this._tagsPanelOverlayRef.backdropClick().subscribe(() => {
-
-
        if ( this._tagsPanelOverlayRef && this._tagsPanelOverlayRef.hasAttached() )
           {
               this._tagsPanelOverlayRef.detach();
@@ -241,6 +237,7 @@ export class LichhopComponent implements OnInit {
   }
   Opentoggle() {
     this.CRUD =1;
+    this.idThamgia = [];
     this.LichhopForm = this._formBuilder.group({
       Loaihinh: [{ value: '', disabled: false }],
       Tieude: [{ value: '', disabled: false }],
@@ -272,6 +269,7 @@ export class LichhopComponent implements OnInit {
       .subscribe((nhanvien: Nhanvien[]) => {
         console.log(nhanvien);
         this.Nhanvien = nhanvien;
+        this.filteredTags =nhanvien; 
         this._changeDetectorRef.markForCheck();
       });
     this._CauhinhService.Cauhinhs$
@@ -393,6 +391,7 @@ export class LichhopComponent implements OnInit {
       this.LichhopForm.get('Batdau').disable();
       this.LichhopForm.get('Ketthuc').disable();
     }
+    this.idThamgia = this.Lichhop.Thamgia;
     this.LichhopForm.patchValue(this.Lichhop);
     this.Title = "Cập Nhật";
   }
@@ -428,9 +427,9 @@ export class LichhopComponent implements OnInit {
             Noidung: result.Tieude,
             Lienket: `${this.router.url}/${result.id}`,
           };
-
           this._notificationsService.create(notifi).subscribe();
         });
+        this._lichhopService.getLichhops().subscribe();
         this.notifier.notify('success', `Tạo Mới Thành Công`);
         this._changeDetectorRef.markForCheck();
       });

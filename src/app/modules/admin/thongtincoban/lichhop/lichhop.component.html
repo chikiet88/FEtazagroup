@@ -1,11 +1,11 @@
 <div class="flex flex-col sm:flex-row md:flex-col justify-between flex-auto">
   <mat-drawer-container autosize class="h-full" fuseScrollbar>
     <mat-drawer #sidenav class="flex flex-col sm:w-3/4 w-full p-3" mode="over">
-      <div class="flex justify-between">      
+      <div class="flex justify-between">
         <h2 mat-dialog-title>{{Title}}</h2>
-          <span class="material-icons pr-4" (click)="sidenav.toggle()">
-            cancel
-            </span>
+        <span class="material-icons pr-4" (click)="sidenav.toggle()">
+          cancel
+        </span>
       </div>
       <form [formGroup]="LichhopForm">
         <div class="grid sm:grid-cols-12 gap-6 w-full mt-8">
@@ -16,21 +16,22 @@
               </div>
               <input [formControlName]="'Tieude'" matInput class="mat-select-value-text">
             </mat-form-field>
-          </div> 
-          <div class="sm:col-span-3">          
+          </div>
+          <div class="sm:col-span-3">
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix>
                 Loại Hình
               </div>
-                <mat-select [formControlName]="'Loaihinh'">
-                    <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchLoaihinh></div>
-                  <mat-option *ngFor="let item of Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value'" [value]="item.key">
-                    {{item.value}}
-                  </mat-option>
-                  <mat-option *ngIf="(Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value').length==0">
-                   Không Tìm Thấy
-                  </mat-option>
-                </mat-select>
+              <mat-select [formControlName]="'Loaihinh'">
+                <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchLoaihinh></div>
+                <mat-option *ngFor="let item of Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value'"
+                  [value]="item.key">
+                  {{item.value}}
+                </mat-option>
+                <mat-option *ngIf="(Loaihinhhop | keyvalue| timkiem : searchLoaihinh.value:'value').length==0">
+                  Không Tìm Thấy
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div class="sm:col-span-3">
@@ -40,13 +41,14 @@
               </div>
               <mat-select [formControlName]="'Congty'" placeholder="Vui Lòng Chọn">
                 <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm" #searchCongty></div>
-              <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty.value:'value'" [value]="item.key">
-                {{item.value}}
-              </mat-option>
-              <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty.value:'value').length==0">
-               Không Tìm Thấy
-              </mat-option>
-            </mat-select>
+                <mat-option *ngFor="let item of Congty | keyvalue| timkiem : searchCongty.value:'value'"
+                  [value]="item.key">
+                  {{item.value}}
+                </mat-option>
+                <mat-option *ngIf="(Congty | keyvalue| timkiem : searchCongty.value:'value').length==0">
+                  Không Tìm Thấy
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div class="sm:col-span-3">
@@ -54,101 +56,85 @@
               <div class="text-secondary" matPrefix>
                 Chủ Trì
               </div>
-              <input type="text" matInput [formControlName]="'Chutri'" hidden ="true">
+              <input type="text" matInput [formControlName]="'Chutri'" hidden="true">
               <span class="text-red-500">{{LichhopForm.get('Chutri').value | findbyid:Nhanvien:'name'}}</span>
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
-              <div class="text-secondary" matPrefix>
-                Tham Gia
-              </div>
-              <div class="flex flex-wrap items-center">
-                <ng-container *ngIf="LichhopForm.get('Thamgia').value as Thamgia">
-                    <ng-container *ngFor="let tag of idThamgia">
-                        <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                            <span class="text-md font-medium whitespace-nowrap">{{tag| findbyid:Nhanvien:'name'}}</span>
-                        </div>
-                    </ng-container>
+            <div class="text-secondary" matPrefix>
+              Tham Gia
+            </div>
+            <div class="flex flex-wrap items-center">
+              <ng-container *ngIf="LichhopForm.get('Thamgia').value as Thamgia">
+                <ng-container *ngFor="let tag of idThamgia">
+                  <div
+                    class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
+                    <span class="text-md font-medium whitespace-nowrap">{{tag| findbyid:Nhanvien:'name'}}</span>
+                  </div>
                 </ng-container>
-                <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+              </ng-container>
+              <div
+                class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
                 (click)="openTagsPanel()" #tagsPanelOrigin>
 
                 <ng-container *ngIf="idThamgia.length">
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                    <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                  <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                  <span class="ml-1.5 text-md font-medium whitespace-nowrap">Sửa</span>
                 </ng-container>
 
                 <ng-container *ngIf="!idThamgia.length">
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                    <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                  <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                  <span class="ml-1.5 text-md font-medium whitespace-nowrap">Thêm</span>
                 </ng-container>
 
                 <ng-template #tagsPanel>
-                    <div class="w-60 rounded border shadow-md bg-card">
-         
-                        <div class="flex items-center m-3 mr-2">
-                            <div class="flex items-center">
-                                <mat-icon
-                                    class="icon-size-5"
-                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                                <div class="ml-2">
-                                    <input
-                                        class="w-full min-w-0 py-1 border-0"
-                                        type="text"
-                                        placeholder="Enter tag name"
-                                        (input)="filterTags($event)"
-                                        (keydown)="filterTagsInputKeyDown($event)"
-                                        [maxLength]="30"
-                                        #newTagInput>
-                                </div>
-                            </div>
-                            <button
-                                class="ml-1"
-                                mat-icon-button
-                                (click)="toggleTagsEditMode()">
-                            </button>
-                        </div>
-                    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-                            <ng-container *ngIf="!tagsEditMode">
-                                <ng-container *ngFor="let tag of Nhanvien;">
-                                    <div
-                                        class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
-                                        (click)="toggleTaskTag(tag)"
-                                        matRipple>
-                                        <mat-checkbox
-                                            class="flex items-center h-10 min-h-10"
-                                            [color]="'primary'"
-                                            [checked]="idThamgia.includes(tag.id)"
-                                           >
-                                        </mat-checkbox>
-                                        <div class="ml-1">{{tag.name}}</div>
-                                    </div>
-                                </ng-container>
-                            </ng-container>
-                        </div>
-                    </div>
-                </ng-template>
-            </div>         
+                  <div class="w-60 rounded border shadow-md bg-card">
 
-            </div>       
+                    <div class="flex items-center m-3 mr-2">
+                      <div class="flex items-center">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                        <div class="ml-2">
+                          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm"
+                            (input)="filterTags($event)" (keydown)="filterTagsInputKeyDown($event)" [maxLength]="30"
+                            #newTagInput>
+                        </div>
+                      </div>
+                      <button class="ml-1" mat-icon-button (click)="toggleTagsEditMode()">
+                      </button>
+                    </div>
+                    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                      <ng-container *ngIf="!tagsEditMode">
+                        <ng-container *ngFor="let tag of filteredTags;">
+                          <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                            (click)="toggleTaskTag(tag)" matRipple>
+                            <mat-checkbox class="flex items-center h-10 min-h-10" [color]="'primary'"
+                              [checked]="idThamgia.includes(tag.id)">
+                            </mat-checkbox>
+                            <div class="ml-1">{{tag.name}}</div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+
+            </div>
           </div>
           <div class="sm:col-span-3">
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix>
                 Ngân Sách
               </div>
-              <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'" class="mat-select-value-text">
+              <input type="text" placeholder="Nhập Ngân Sách" matInput [formControlName]="'Ngansach'"
+                class="mat-select-value-text">
             </mat-form-field>
           </div>
           <div class="sm:col-span-6">
             <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
               <div class="text-secondary" matPrefix> Bắt Đầu </div>
-              <input matInput [ngxMatDatetimePicker]="picker" placeholder="Chọn Ngày Bắt Đầu" [formControlName]="'Batdau'"
-                [min]="minDate" [max]="maxDate" class="mat-select-value-text">
+              <input matInput [ngxMatDatetimePicker]="picker" placeholder="Chọn Ngày Bắt Đầu"
+                [formControlName]="'Batdau'" [min]="minDate" [max]="maxDate" class="mat-select-value-text">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
@@ -192,69 +178,75 @@
               </ngx-mat-datetime-picker>
             </mat-form-field>
           </div>
-       <div class="sm:col-span-12">
+          <div class="sm:col-span-12">
             <mat-tab-group class="min-h-48 max-w-90 sm:max-w-full" #tabGroup>
               <mat-tab label="Nội Dung">
                 <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Noidung'"></ckeditor>
               </mat-tab>
               <mat-tab label="Triển Khai">
-                <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Trienkhai'"></ckeditor>
+                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Trienkhai'"></ckeditor>
               </mat-tab>
               <mat-tab label="Kết Quả">
                 <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Ketqua'"></ckeditor>
                 <!-- <ckeditor [editor]="Editor" placeholder="Type the content here!" (ready)="onReady($event)" [disabled]="false"></ckeditor> -->
               </mat-tab>
               <mat-tab label="Mong Đợi">
-                <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Mongdoi'"></ckeditor>
+                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Mongdoi'"></ckeditor>
               </mat-tab>
               <mat-tab label="Điều Chỉnh">
-                <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Dieuchinh'"></ckeditor>
+                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Dieuchinh'"></ckeditor>
               </mat-tab>
               <mat-tab label="Điều Kiện Khác">
-                <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Dieukienkhac'"></ckeditor>
+                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Dieukienkhac'"></ckeditor>
               </mat-tab>
               <mat-tab label="Nguyên Nhân">
-                <ckeditor [editor]="Editor" [config]="config"  [formControlName]="'Nguyennhan'"></ckeditor>
+                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Nguyennhan'"></ckeditor>
               </mat-tab>
             </mat-tab-group>
           </div>
-        <div class="flex items-center justify-end mt-3">
-          <button class="ml-4" *ngIf="CRUD==1" mat-flat-button type="button" [color]="'primary'" (click)="CreateLichhop()">Tạo Mới
-          </button>
-          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'accent'" (click)="UpdateLichhop()">Cập Nhật
-          </button>
-          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'warn'" (click)="DeleteLichhop()">Xóa Lịch
-          </button>         
         </div>
+
+        <div class="flex items-center justify-end mt-3">
+          <button class="ml-4" *ngIf="CRUD==1" mat-flat-button type="button" [color]="'primary'"
+            (click)="CreateLichhop()">Tạo Mới
+          </button>
+          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'accent'"
+            (click)="UpdateLichhop()">Cập Nhật
+          </button>
+          <button class="ml-4" *ngIf="CRUD==2" mat-flat-button type="button" [color]="'warn'"
+            (click)="DeleteLichhop()">Xóa Lịch
+          </button>
         </div>
       </form>
     </mat-drawer>
-  
+
     <div class="example-sidenav-content">
-       <div class="flex justify-center">
+      <div class="flex justify-center">
         <div class="md:text-3xl text-1xl font-extrabold my-auto mr-2">{{ viewDate | calendarDate:(view +
           'ViewTitle'):'vi' }}</div>
         <div class="my-2">
           <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color">
             <mat-button-toggle value="red" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-              (viewDateChange)="closeOpenMonthViewDay()"> < </mat-button-toggle>
+              (viewDateChange)="closeOpenMonthViewDay()">
+              < </mat-button-toggle>
                 <mat-button-toggle value="green" mwlCalendarToday [(viewDate)]="viewDate">Hôm Nay</mat-button-toggle>
                 <mat-button-toggle value="blue" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
                   (viewDateChange)="closeOpenMonthViewDay()">></mat-button-toggle>
                 <mat-button-toggle value="blue" (click)="Opentoggle()">
                   <mat-icon>add_circle</mat-icon>
                 </mat-button-toggle>
-             </mat-button-toggle-group>
+          </mat-button-toggle-group>
         </div>
       </div>
 
       <div class="flex flex-col">
         <div class="w-full md:p-3 m-auto">
-          <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+          <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [locale]="locale"
+            [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
             (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
           </mwl-calendar-month-view>
         </div>
       </div>
     </div>
-  
+
   </mat-drawer-container>

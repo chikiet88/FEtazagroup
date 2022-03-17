@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
 import { KhachhangsResolver } from './khachhangs.resolver';
+import { MatTableExporterModule } from 'mat-table-exporter';
 const khachhangsRoutes: Route[] = [
   {
       path     : '',
@@ -20,6 +21,7 @@ const khachhangsRoutes: Route[] = [
 @NgModule({
   declarations: [KhachhangsComponent],
   imports: [
+    MatTableExporterModule,
     HttpClientModule,
     MaterialExampleModule,
     ReactiveFormsModule,

@@ -7,4 +7,10 @@ export interface User
     status: string;
     username: string;
     email: string;
+    Role:string;
+    Phanquyen:Phanquyen;
+}
+export interface Phanquyen
+{
+    Chinhanh: string;
 }

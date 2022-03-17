@@ -3,9 +3,12 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khachhang.type';
 import { KhachhangsService } from './khachhangs.service';
 @Component({
@@ -32,6 +35,9 @@ export class KhachhangsComponent implements OnInit {
   Member: any[];
   count:number;
   Showchitiet:boolean=false;
+  CurrentUser:User;
+  UserChinhanh:any;
+  CauhinhChinhanh:any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort) sort: MatSort;
@@ -43,10 +49,34 @@ export class KhachhangsComponent implements OnInit {
     private googleSheetsDbService: GoogleSheetsDbService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _khachhangsService: KhachhangsService,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _userService: UserService,
+    private _cauhinhService: CauhinhService,
   ) {
   }
   ngOnInit(): void {
+    this._userService.user$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((user: User) => {
+        this.CurrentUser = user;
+        this.UserChinhanh = this.CurrentUser.Phanquyen.Chinhanh;
+        console.log(this.UserChinhanh);
+        this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
+    });
+    this._cauhinhService.Cauhinhs$.subscribe((data)=>{ 
+      const x = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+      console.log(x);
+     this.CauhinhChinhanh = Object.fromEntries(
+        Object.entries(x)
+          .filter(([k, v]) => {
+            return k==this.UserChinhanh;
+          })
+      );
+    }
+      );
+
     this.Member = [
       { id: 0, tieude: "All", Tu: '', Den: '' },
       { id: 1, tieude: "Normal", Tu: 0, Den: 50000000 },
@@ -100,6 +130,10 @@ export class KhachhangsComponent implements OnInit {
         this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
   } 
+  ResetSDT()
+  {
+    this.Filtermember.get('SDT').setValue('');
+  }
   LoadMember() {
     this.datamember$.subscribe((v)=>{
         this.datamember = new MatTableDataSource(v);
@@ -114,7 +148,6 @@ export class KhachhangsComponent implements OnInit {
           return a && b && e && i;
         }) as (PeriodicElement, string) => boolean;
         this.Filtermember.valueChanges.subscribe(value => {
-          console.log(value);
           this.datamember.filter = value;
         });
       }
@@ -172,14 +205,14 @@ export class KhachhangsComponent implements OnInit {
         });
         console.log(Thanhvien);
 
-        // Thanhvien.forEach((v, k) => {
-        //   setTimeout(() => {
-        //     this._khachhangsService.CreateMember(v)
-        //       .subscribe(() => {
-        //       });
-        //   }, 10 * k);
-        //   this._changeDetectorRef.markForCheck();
-        // });
+        Thanhvien.forEach((v, k) => {
+          setTimeout(() => {
+            this._khachhangsService.CreateMember(v)
+              .subscribe(() => {
+              });
+          }, 10 * k);
+          this._changeDetectorRef.markForCheck();
+        });
 
        
 
@@ -226,7 +259,9 @@ export class KhachhangsComponent implements OnInit {
     this.Showchitiet = true;
     this.Filtermember.get('SDT').setValue(value.SDT);
     this._khachhangsService.LoadBySDT(value.SDT).subscribe();
+
     this.data$.subscribe((v)=>{
+
       this.data = new MatTableDataSource(v);
       this.data.paginator = this.DataPag;
       this.data.sort = this.DataSort;

@@ -47,9 +47,9 @@ export class KhachhangsService {
           })
       );
   }
-  GetMember():  Observable<any>
+  GetMember(chinhanh):  Observable<any>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang`).pipe(
+       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
            // console.log(Character);

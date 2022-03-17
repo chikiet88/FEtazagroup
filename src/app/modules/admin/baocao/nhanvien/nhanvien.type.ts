@@ -7,7 +7,11 @@ export class Nhanvien {
     avatar:string;
     profile: profile;
     Ngaytao: Date;
-    Role:string
+    Role:string;
+    Phanquyen:Phanquyen;
+}
+export class Phanquyen {
+    Chinhanh: string;
 }
 export class profile {
     Congty: string;

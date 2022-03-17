@@ -1,6 +1,7 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
   <div class="flex justify-start my-4">
     <button mat-raised-button color="primary" (click)="LoadMember()" class="mr-2">Load Thành Viên</button>
+    <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
   </div>
   <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
     <mat-form-field>
@@ -22,7 +23,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select matInput (selectionChange)="ChonMember($event)" placeholder="Hạng Thành Viên">
+      <mat-select matInput (selectionChange)="ChonMember($event);ResetSDT()" placeholder="Hạng Thành Viên">
         <mat-option value="0">All</mat-option>
         <mat-option value="1">Normal</mat-option>
         <mat-option value="2">Member</mat-option>
@@ -33,18 +34,19 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Đà Nẵng">Đà Nẵng</mat-option>
-        <mat-option value="Gò Vấp">Gò Vấp</mat-option>
-        <mat-option value="Thủ Đức" for>Thủ Đức</mat-option>
-        <mat-option value="Quận 10" for>Quận 10</mat-option>
-        <mat-option value="Nha Trang" for>Nha Trang</mat-option>
+      <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh" (selectionChange)="ResetSDT()">
+
+        <mat-option *ngFor="let item of CauhinhChinhanh|keyvalue" [value]="item.key">{{item.value}}</mat-option>
       </mat-select>
     </mat-form-field>
+      <button mat-raised-button color="primary"  class="ml-2" (click)="ResetSDT()">
+        <span class="material-icons">
+        arrow_back
+        </span></button>
   </form>
+  <!-- <div *ngFor="let item of datamember.filter">{{item}}</div> -->
   <div class="mat-elevation-z8">
-    <table class="w-full" mat-table [dataSource]="datamember" #MemberSort="matSort" matSort>
+    <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
         <td mat-cell *matCellDef="let row" (click)="SelectMember(row)"> {{row.TenKH}} </td>
@@ -62,7 +64,7 @@
 
       <ng-container matColumnDef="Chinhanh">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
-        <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
+        <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="thanhvienColumns"></tr>
@@ -84,10 +86,10 @@
 
     <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
       (<span>{{Khachhang.length}}</span>)</button>
-  </div> -->
+  </div>
   
   
-  <!-- <form class="flex space-x-2" [formGroup]="FilterForm">
+  <form class="flex space-x-2" [formGroup]="FilterForm">
     <mat-form-field>
       <input matInput 
         [matDatepicker]="fromDate" 
@@ -176,7 +178,7 @@
   
         <ng-container matColumnDef="Chinhanh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
-          <td mat-cell *matCellDef="let row"> {{row.Chinhanh}} </td>
+          <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
         </ng-container>
         <ng-container matColumnDef="Ghichu">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi Chú</th>

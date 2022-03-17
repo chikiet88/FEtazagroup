@@ -33,6 +33,7 @@ export class DetailsComponent implements OnInit, OnDestroy
     Congty: object;
     Bophan: object;
     Vitri: object;
+    Chinhanh: object;
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     cauhinh:Cauhinh[];
@@ -66,6 +67,7 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
             this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+            this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
            this._changeDetectorRef.markForCheck();
        });
         this._ListComponent.matDrawer.open();
@@ -76,6 +78,9 @@ export class DetailsComponent implements OnInit, OnDestroy
             email       : ['', [Validators.required]],
             SDT         : ['', [Validators.required]],
             Role         : [''],
+            Phanquyen       : this._formBuilder.group({
+                Chinhanh: [''],
+            }),
             profile: this._formBuilder.group({
                 Congty: [''],
                 Khoi: [''],
@@ -116,6 +121,10 @@ export class DetailsComponent implements OnInit, OnDestroy
                     email: nhanvien.email,
                     SDT: nhanvien.SDT,
                     Role: nhanvien.Role,
+                    Phanquyen: 
+                    {
+                        Chinhanh: nhanvien.Phanquyen.Chinhanh,
+                    },
                     profile: {
                         Congty: nhanvien.profile.Congty,
                         Khoi: nhanvien.profile.Khoi,
