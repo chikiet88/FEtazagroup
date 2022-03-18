@@ -6,6 +6,7 @@ import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/co
 import { Navigation } from 'app/core/navigation/navigation.types';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { environment } from 'environments/environment.prod';
+import console from 'console';
 
 @Component({
     selector     : 'compact-layout',

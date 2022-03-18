@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRippleModule } from '@angular/material/core';
+import { MatOptionModule, MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,16 +13,23 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FuseMasonryModule } from '@fuse/components/masonry';
 import { SharedModule } from 'app/shared/shared.module';
 import { CauhinhComponent } from './cauhinh.component';
-import { ListComponent } from './list/list.component';
 import { EditcauhinhComponent } from './editcauhinh/editcauhinh.component';
+import { MenuComponent } from './menu/menu.component';
+import { CaidatchungComponent } from './caidatchung/caidatchung.component';
+import { MaterialExampleModule } from 'material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const CauhinhRoutes: Route[] = [
   {
       path     : '',
       component: CauhinhComponent,
       children : [
         {
-            path     : '',
-            component: ListComponent
+            path     : 'menu',
+            component: MenuComponent
+        },
+        {
+            path     : 'caidat',
+            component: CaidatchungComponent
         }
     ]
   }
@@ -31,13 +38,17 @@ const CauhinhRoutes: Route[] = [
 
 @NgModule({
   declarations: [
-       ListComponent,
+       MenuComponent,
        EditcauhinhComponent,
+       CaidatchungComponent,
   ],
   imports: [
     RouterModule.forChild(CauhinhRoutes),
     CommonModule,
-    MatButtonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MaterialExampleModule,
+    MatOptionModule,
     MatCheckboxModule,
     MatDialogModule,
     MatFormFieldModule,

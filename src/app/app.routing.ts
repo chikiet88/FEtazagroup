@@ -3,6 +3,7 @@ import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
+import { AdminGuard } from './core/auth/guards/admin.guard';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -96,7 +97,9 @@ export const appRoutes: Route[] = [
                 {path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule)},
 
             ]},
-            {path: 'cauhinh', loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
+            {
+            path: 'cauhinh', 
+            loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
             {path: 'custom', children: [
                 {path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule)},
                 {path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule)},

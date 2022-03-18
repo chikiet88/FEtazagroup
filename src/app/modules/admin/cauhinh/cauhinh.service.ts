@@ -4,13 +4,14 @@ import { NotifierService } from 'angular-notifier';
 import { environment } from 'environments/environment';
 import { cloneDeep } from 'lodash';
 import { BehaviorSubject, Observable, tap, take, map, switchMap, throwError, of } from 'rxjs';
-import { Cauhinh } from './cauhinh.types';
+import { Cauhinh, Menu } from './cauhinh.types';
 @Injectable({
   providedIn: 'root'
 })
 export class CauhinhService {
   private _Cauhinhs: BehaviorSubject<Cauhinh[] | null> = new BehaviorSubject(null);
   private _Cauhinh: BehaviorSubject<Cauhinh | null> = new BehaviorSubject(null);
+  private _Menus: BehaviorSubject<Menu[] | null> = new BehaviorSubject(null);
   private readonly notifier: NotifierService;
   constructor(
     private _httpClient: HttpClient,
@@ -25,7 +26,20 @@ export class CauhinhService {
   {
       return this._Cauhinh.asObservable();
   } 
+  get Menus$(): Observable<Menu[]>
+  {
+      return this._Menus.asObservable();
+  } 
 
+  getMenus(): Observable<Menu[]>
+  {
+      return this._httpClient.get<Menu[]>(`${environment.ApiURL}/navigation`).pipe(
+          tap((response: Menu[]) => {
+              console.log(response)
+              this._Menus.next(response);
+          })
+      );
+  }
   getCauhinhs(): Observable<Cauhinh[]>
   {
       return this._httpClient.get<Cauhinh[]>(`${environment.ApiURL}/cauhinh`).pipe(

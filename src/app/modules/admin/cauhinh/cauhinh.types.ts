@@ -7,4 +7,15 @@ export interface Cauhinh {
     Ngaytao?:Date
     idTao?:string
 }
-
+export interface Menu {
+    uuid:string
+    id:string
+    title:string
+    type:string
+    icon:string
+    link:number
+    parent:[]
+    status:boolean
+    Ngaytao:Date
+    idTao:string
+}

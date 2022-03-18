@@ -20,7 +20,7 @@ export class KhachhangsComponent implements OnInit {
   characters$: Observable<Khachhang[]>;
   //displayedColumns: string[] = ['TenKH', 'SDT', 'TDS', 'TTT','LMD','NMD','LMC','NMC'];
   displayedColumns: string[] = ['NgayTaoDV', 'TenKH', 'SDT', 'SDT2', 'Dichvu', 'Doanhso', 'Tonglieutrinh', 'Dathu', 'Ghichu', 'Chinhanh'];
-  thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh'];
+  thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh','HMD','NMD','HMC','NMC'];
   dataKhachhang: MatTableDataSource<Khachhang>;
   data: MatTableDataSource<Khachhang>;
   datamember: MatTableDataSource<any>;
@@ -209,17 +209,22 @@ export class KhachhangsComponent implements OnInit {
         console.log(NewUnique);
         NewUnique.forEach(v => {
           let Sum = 0;
-          const UniKH = data.filter(v1 => v1.SDT == v);
+          const UniKH = data.filter(v1 => v1.SDT == v);   
           const getKH = data.find(v1 => v1.SDT == v);
           UniKH.forEach(v1 => {
             Sum += parseInt(v1.Dathu);
           });
+          let x = UniKH.length-1;
           Thanhvien.push({ 
             'TenKH': getKH.TenKH,
             'SDT': getKH.SDT, 
             'SDT2': getKH.SDT2, 
             'Dathu': Sum, 
             'Chinhanh': getKH.Chinhanh,
+            'NgayMD': UniKH[x].NgayTaoDV,
+            'NoiMD': UniKH[x].Chinhanh,
+            'NgayMC': UniKH[0].NgayTaoDV,
+            'NoiMC': UniKH[0].Chinhanh,
             'Ghichu':getKH.Ghichu
           })
         });

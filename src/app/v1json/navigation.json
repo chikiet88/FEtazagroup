@@ -1,0 +1,265 @@
+[
+    {
+        "id": "wellcome",
+        "title": "Wellcomekit",
+        "type": "aside",
+        "icon": "heroicons_outline:home",
+        "children": [
+            {
+                "id": "wellcome.gioithieu",
+                "title": "Giới Thiệu Công Ty",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/wellcome/gioithieu"
+            },
+            {
+                "id": "wellcome.cauhoi",
+                "title": "Câu Hỏi Thường Gặp",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/wellcome/cauhoi"
+            }
+        ]
+    },
+    {
+        "id": "thongtin",
+        "title": "Thông Tin",
+        "type": "aside",
+        "icon": "heroicons_outline:home",
+        "children": [
+            {
+                "id": "thongtin.hoso",
+                "title": "Hồ Sơ",
+                "type": "basic",
+                "icon": "dashboard",
+                "link": "/thongtin/hoso"
+            },
+            {
+                "id": "thongtin.quanlycongviec",
+                "title": "Quản Lý Công Việc",
+                "type": "basic",
+                "icon": "heroicons_outline:document-text",
+                "link": "/thongtin/quanlycongviec"
+            },
+            {
+                "id": "thongtin.lichhop",
+                "title": "Lịch Họp",
+                "type": "basic",
+                "icon": "heroicons_outline:document-text",
+                "link": "/thongtin/lichhop"
+            }
+        ]
+    },
+    {
+        "id": "tuyendung",
+        "title": "Tuyển Dụng",
+        "type": "aside",
+        "icon": "heroicons_outline:home",
+        "children": [
+            {
+                "id": "tuyendung.vetuyendung",
+                "title": "Vé Tuyển Dụng",
+                "type": "basic",
+                "icon": "dashboard",
+                "link": "/tuyendung/vetuyendung"
+            },
+            {
+                "id": "tuyendung.hosotuyendung",
+                "title": "Hồ Sơ Tuyển Dụng",
+                "type": "basic",
+                "icon": "heroicons_outline:document-text",
+                "link": "/tuyendung/hosotuyendung"
+            }
+        ]
+    },
+    {
+        "id": "daotao",
+        "title": "Đào Tạo",
+        "type": "aside",
+        "icon": "heroicons_outline:academic-cap",
+        "children": [
+            {
+                "id": "daotao.dashboard",
+                "title": "Dashboard",
+                "type": "basic",
+                "icon": "dashboard",
+                "link": "/daotao/dashboard"
+            },
+            {
+                "id": "daotao.tailieunguon",
+                "title": "Tài Liệu Nguồn",
+                "type": "basic",
+                "icon": "heroicons_outline:document-text",
+                "link": "/daotao/tailieunguon"
+            }
+        ]
+    },
+    {
+        "id": "baocao",
+        "title": "Báo Cáo",
+        "type": "aside",
+        "icon": "heroicons_outline:home",
+        "children": [
+            {
+                "id": "baocao.nhanvien",
+                "title": "Danh Sách Nhân Viên",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/baocao/nhanvien"
+            }
+        ]
+    },
+    {
+        "id": "cauhinh",
+        "title": "Cấu Hình",
+        "type": "basic",
+        "icon": "heroicons_outline:academic-cap",
+        "link": "/cauhinh"
+    },
+    {
+        "id": "custom",
+        "title": "Mở Rộng",
+        "type": "aside",
+        "icon": "heroicons_outline:academic-cap",
+        "link": "/custom",
+        "children": [
+            {
+                "id": "custom.thongkekh",
+                "title": "Thống Kê KH",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/custom/thongkekh"
+            },
+            {
+                "id": "custom.testing",
+                "title": "Kiểm Thử",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/custom/testing"
+            },
+            {
+                "id": "custom.khachhangs",
+                "title": "Khách Hàng",
+                "type": "basic",
+                "icon": "heroicons_outline:clipboard-check",
+                "link": "/custom/khachhangs"
+            }
+        ]
+    },
+    {
+        "id": "apps",
+        "title": "Apps",
+        "type": "aside",
+        "icon": "heroicons_outline:qrcode",
+        "children": [
+            {
+                "id": "apps.academy",
+                "title": "Academy",
+                "type": "basic",
+                "icon": "heroicons_outline:academic-cap",
+                "link": "/apps/academy"
+            },
+            {
+                "id": "apps.chat",
+                "title": "Chat",
+                "type": "basic",
+                "icon": "heroicons_outline:chat-alt",
+                "link": "/apps/chat"
+            },
+            {
+                "id": "apps.contacts",
+                "title": "Contacts",
+                "type": "basic",
+                "icon": "heroicons_outline:user-group",
+                "link": "/apps/contacts"
+            },
+            {
+                "id": "apps.ecommerce",
+                "title": "ECommerce",
+                "type": "collapsable",
+                "icon": "heroicons_outline:shopping-cart",
+                "children": [
+                    {
+                        "id": "apps.ecommerce.inventory",
+                        "title": "Inventory",
+                        "type": "basic",
+                        "link": "/apps/ecommerce/inventory"
+                    }
+                ]
+            },
+            {
+                "id": "apps.file-manager",
+                "title": "File Manager",
+                "type": "basic",
+                "icon": "heroicons_outline:cloud",
+                "link": "/apps/file-manager"
+            },
+            {
+                "id": "apps.help-center",
+                "title": "Help Center",
+                "type": "collapsable",
+                "icon": "heroicons_outline:support",
+                "link": "/apps/help-center",
+                "children": [
+                    {
+                        "id": "apps.help-center.home",
+                        "title": "Home",
+                        "type": "basic",
+                        "link": "/apps/help-center",
+                        "exactMatch": true
+                    },
+                    {
+                        "id": "apps.help-center.faqs",
+                        "title": "FAQs",
+                        "type": "basic",
+                        "link": "/apps/help-center/faqs"
+                    },
+                    {
+                        "id": "apps.help-center.guides",
+                        "title": "Guides",
+                        "type": "basic",
+                        "link": "/apps/help-center/guides"
+                    },
+                    {
+                        "id": "apps.help-center.support",
+                        "title": "Support",
+                        "type": "basic",
+                        "link": "/apps/help-center/support"
+                    }
+                ]
+            },
+            {
+                "id": "apps.mailbox",
+                "title": "Mailbox",
+                "type": "basic",
+                "icon": "heroicons_outline:mail",
+                "link": "/apps/mailbox",
+                "badge": {
+                    "title": "27",
+                    "classes": "px-2 bg-pink-600 text-white rounded-full"
+                }
+            },
+            {
+                "id": "apps.notes",
+                "title": "Notes",
+                "type": "basic",
+                "icon": "heroicons_outline:pencil-alt",
+                "link": "/apps/notes"
+            },
+            {
+                "id": "apps.scrumboard",
+                "title": "Scrumboard",
+                "type": "basic",
+                "icon": "heroicons_outline:view-boards",
+                "link": "/apps/scrumboard"
+            },
+            {
+                "id": "apps.tasks",
+                "title": "Tasks",
+                "type": "basic",
+                "icon": "heroicons_outline:check-circle",
+                "link": "/apps/tasks"
+            }
+        ]
+    }
+]

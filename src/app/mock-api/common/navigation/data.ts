@@ -68,9 +68,10 @@ export const compactNavigation: FuseNavigationItem[] = [
     {
         id      : 'cauhinh',
         title   : 'Cấu Hình',
-        type    : 'basic',
+        type    : 'aside',
         icon    : 'heroicons_outline:academic-cap',
-        link : '/cauhinh'
+        link : '/cauhinh',
+        children: []
     },     
     {
         id      : 'custom',
@@ -237,6 +238,22 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: '',
         type    : 'basic',
         icon    : 'heroicons_outline:home',
+        children: [
+            {
+                id   : 'cauhinh.menu',
+                title: 'Menu',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/cauhinh/menu'
+            },
+            {
+                id   : 'cauhinh.caidat',
+                title: 'Cấu Hình Chung',
+                type : 'basic',
+                icon : 'heroicons_outline:clipboard-check',
+                link : '/cauhinh/caidat'
+            }
+        ]
     },
     {
         id      : 'custom',

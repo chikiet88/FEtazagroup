@@ -9,12 +9,12 @@ import { EditcauhinhComponent } from '../editcauhinh/editcauhinh.component';
 import { v4 as uuidv4 } from 'uuid';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
+  selector: 'app-caidatchung',
+  templateUrl: './caidatchung.component.html',
+  styleUrls: ['./caidatchung.component.scss'],
   encapsulation:ViewEncapsulation.None,
 })
-export class ListComponent implements OnInit {
+export class CaidatchungComponent implements OnInit {
   drawerMode: 'over' | 'side' = 'side';
   drawerOpened: boolean = true;
   Cauhinhs$: Observable<Cauhinh[]>;
@@ -251,3 +251,4 @@ export class ListComponent implements OnInit {
      }
   
 }
+

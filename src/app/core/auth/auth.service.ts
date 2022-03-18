@@ -184,4 +184,42 @@ export class AuthService
         //return of(true);
         return this.signInUsingToken();
     }
+    checkAdmin(): Observable<boolean>
+    {
+        if ( this._authenticated )
+        {
+            return of(true);
+        }
+        if ( !this.accessToken || this.accessToken === 'undefined' )
+        {
+            localStorage.removeItem('accessToken');
+            return of(false);
+        }
+        if ( AuthUtils.isTokenExpired(this.accessToken) )
+        {
+            return of(false);
+        }
+        //return of(true);
+        return this.LoginAdmin();
+    }
+    LoginAdmin(): Observable<any>
+    {
+        return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, {access_token:this.accessToken}).pipe(
+            switchMap((response: any) => {
+                if(response!==false)
+                {
+                    this._authenticated = true;
+                    this._userService.user = response.user;
+                    if(response.user.role=="Admin")
+                    {
+                    return of(true)
+                     }
+                     else return of(false)
+
+                }
+                else return of(false)
+
+            })
+        );
+    }
 }
