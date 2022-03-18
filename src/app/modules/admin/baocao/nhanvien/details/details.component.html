@@ -37,17 +37,13 @@
                         <div class="mt-3 py-2 text-2xl font-bold truncate">Thông Tin Cá Nhân</div>
                         <ng-container>
                             <div class="flex justify-center">
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-2/3">
                                     <div class="material-icons icon-size-5" matPrefix>
                                         account_circle
                                     </div>
                                     <input [formControlName]="'name'" matInput class="mat-select-value-text">
                                 </mat-form-field>
-                            </div>
-                        </ng-container>
-                        <ng-container>
-                            <div class="flex justify-center">
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-1/2">
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/3">
                                     <mat-select placeholder="Phân Quyền" [formControlName]="'Role'" #roleSelect="matSelect">
                                         <mat-select-trigger class="text-md">
                                             <span>Role:</span>
@@ -61,21 +57,36 @@
                                         <mat-option [value]="'user'">Nhân Viên</mat-option>
                                     </mat-select>                           
                                 </mat-form-field> 
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/2" [formGroupName]="'Phanquyen'">
-                                    <ng-container  *ngFor="let item of Phanquyen.value">
-                                        <div
-                                          class="columns items-center justify-center px-4 m-1.5 rounded-full leading-9 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
-                                          <span class="text-md font-medium whitespace-nowrap">{{Chinhanh[item]}}</span>
+                            </div>
+                            
+                        </ng-container>
+                        <ng-container>
+                            <div class="flex justify-center">
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full" [formGroupName]="'Phanquyen'">
+                                    <ng-container>
+                                        <div class="flex flex-col w-full">
+                                            <mat-select class="w-full" placeholder="Phân Quyền" [formControlName]="'Chinhanh'" #Phanquyen="matSelect" multiple>
+                                                <mat-select-trigger>
+                               <div  class="items-center justify-center px-4 m-1.5 rounded-full leading-9 text-black  dark:text-gray-300 dark:bg-gray-700">
+                                                    <span class="text-md font-medium whitespace-nowrap">                                             Phân Quyền</span>
+                                                  </div>
+       
+                                                  </mat-select-trigger>
+                                                <mat-option [value]="item.key" *ngFor="let item of Chinhanh|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>
+                      <div class="flex mb-3">
+                        <span *ngFor="let item of Phanquyen.value"
+                        class="text-center rounded-full mr-2 p-2 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
+                                    {{Chinhanh[item]}}
+                                  </span>
+
+                      </div>                          
+
+
                                         </div>
                                       </ng-container>
-
-                                    <mat-select placeholder="Phân Quyền" [formControlName]="'Chinhanh'" #Phanquyen="matSelect" multiple>
-                                        <mat-select-trigger class="text-md">
-                                            <span>Phân Quyền:</span>
-                                            <span class="ml-1 font-medium" *ngFor="let item of Phanquyen.value">{{Chinhanh[item]}}</span>
-                                        </mat-select-trigger>
-                                        <mat-option [value]="item.key" *ngFor="let item of Chinhanh|keyvalue">{{item.value}}</mat-option>
-                                    </mat-select>                                                     
+                                      
+                                                        
                                 </mat-form-field>
  
                             </div>

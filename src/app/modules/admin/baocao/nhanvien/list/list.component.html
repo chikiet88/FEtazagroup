@@ -80,7 +80,7 @@
                                     </div>
                                 </ng-container>
                                 <!-- Contact -->
-                                <a
+                                <a [routerLink]="['./', contact.id]"
                                     class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
                                     [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedNhanvien || selectedNhanvien.id !== contact.id,
                                                 'bg-primary-50 dark:bg-hover': selectedNhanvien && selectedNhanvien.id === contact.id}">
@@ -97,7 +97,7 @@
                                             </div>
                                         </ng-container>
                                     </div>
-                                    <div class="min-w-0 ml-4" [routerLink]="['./', contact.id]">
+                                    <div class="min-w-0 ml-4">
                                             <div class="font-medium leading-5 truncate">{{contact.name}}</div>
                                             <div class="leading-5 truncate text-secondary">{{contact.email}}</div>
                                     </div>

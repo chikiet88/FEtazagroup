@@ -56,6 +56,14 @@ export class KhachhangsService {
           })
       );
   }
+  GetAllMember():  Observable<any>
+  {
+       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang`).pipe(
+          tap((member: any) => {
+            this._member.next(member);
+          })
+      );
+  }
   GetData():  Observable<Khachhang[]>
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(

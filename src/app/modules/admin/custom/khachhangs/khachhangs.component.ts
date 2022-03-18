@@ -66,14 +66,7 @@ export class KhachhangsComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
     });
     this._cauhinhService.Cauhinhs$.subscribe((data)=>{ 
-      const x = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
-      console.log(x);
-     this.CauhinhChinhanh = Object.fromEntries(
-        Object.entries(x)
-          .filter(([k, v]) => {
-            return k==this.UserChinhanh;
-          })
-      );
+      this.CauhinhChinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
     }
       );
 
@@ -131,10 +124,37 @@ export class KhachhangsComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
   } 
   ResetSDT()
-  {
+  {   
+    this.Showchitiet = false;
     this.Filtermember.get('SDT').setValue('');
   }
-  LoadMember() {
+  LoadMember(ob) {
+    this.Showchitiet = false;
+    this._khachhangsService.GetMember(ob.value).subscribe();
+    this.datamember$.subscribe((v)=>{
+        this.datamember = new MatTableDataSource(v);
+        this.datamember.paginator = this.MemberPag;
+        this.datamember.sort = this.MemberSort;
+        this._changeDetectorRef.markForCheck();
+       this.datamember.filterPredicate = ((data, filter) => {
+          const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
+          const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+          const i = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
+          const e = !filter.Hanmuctu && !filter.Hanmucden || data.Dathu <= filter.Hanmucden && data.Dathu >= filter.Hanmuctu;
+          return a && b && e && i;
+        }) as (PeriodicElement, string) => boolean;
+        this.Filtermember.valueChanges.subscribe(value => {
+          this.datamember.filter = value;
+        });
+      }
+
+
+    )
+  } 
+  GetAllMember() {
+    this.Filtermember.get('Chinhanh').setValue('');
+    this.Showchitiet = false;
+    this._khachhangsService.GetAllMember().subscribe();
     this.datamember$.subscribe((v)=>{
         this.datamember = new MatTableDataSource(v);
         this.datamember.paginator = this.MemberPag;
@@ -259,9 +279,7 @@ export class KhachhangsComponent implements OnInit {
     this.Showchitiet = true;
     this.Filtermember.get('SDT').setValue(value.SDT);
     this._khachhangsService.LoadBySDT(value.SDT).subscribe();
-
     this.data$.subscribe((v)=>{
-
       this.data = new MatTableDataSource(v);
       this.data.paginator = this.DataPag;
       this.data.sort = this.DataSort;
