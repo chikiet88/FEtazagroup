@@ -13,7 +13,8 @@ export interface Menu {
     title:string
     type:string
     icon:string
-    link:number
+    link:string
+    level:number
     parent:[]
     status:boolean
     Ngaytao:Date

@@ -37,7 +37,8 @@
                         </mat-form-field>
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                             <mat-select placeholder="Parent" [formControlName]="'parent'">
-                                <mat-option [value]="item.id" *ngFor="let item of menus">{{item.title}}</mat-option>
+                                <mat-option [value]="">Root</mat-option>
+                                <mat-option [value]="item.uuid" *ngFor="let item of menus"><span class="mx-3" *ngFor="let x of [].constructor(item.level)">-</span> {{item.title}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -49,7 +50,7 @@
                     Hủy
                 </button>
                 <button class="ml-2" mat-flat-button [color]="'primary'"
-                    [disabled]="MenuForm.invalid || MenuForm.disabled" [matTooltip]="'Save'">
+                    [disabled]="MenuForm.invalid || MenuForm.disabled" [matTooltip]="'Save'" (click)="CreateMenu()">
                     Tạo Mới
                 </button>
             </div>
@@ -57,10 +58,11 @@
     </div>
 
     <div class="w-1/2 p-8">
-        <span>Danh Mục</span>
-        {{MenuForm.value}}
+        <span class="text-center text-2xl">Danh Mục</span>
         <div>
-            <div *ngFor="let item of menus">{{item.title}}</div>
+            <div *ngFor="let item of menus">
+                <span class="mx-2" *ngFor="let x of [].constructor(item.level)">-</span>    {{item.title}}
+            </div>
         </div>
     </div>
 

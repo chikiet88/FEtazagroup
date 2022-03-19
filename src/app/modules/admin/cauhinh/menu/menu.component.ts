@@ -12,6 +12,7 @@ export class MenuComponent implements OnInit {
   flatToNested = new FlatToNested();
   MenuForm:FormGroup;
   menus:Menu[];
+  menu:Menu;
   constructor(
     private _fb:FormBuilder,
     private _cauhinhService:CauhinhService
@@ -20,21 +21,27 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this._cauhinhService.Menus$.subscribe((data)=>{ 
       console.log(data);
-        this.menus = data;
         const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
           ...item,
           children: nest(items, item.uuid)
         }));
-        console.log(nest(data));
+        this.menus = data;
       }
     )
     this.MenuForm = this._fb.group({
       title:[''],
       id:['wellcome.cauhoi'],
-      Type:[''],
+      type:[''],
       icon:['heroicons_outline:clipboard-check'],
-      Link:['/wellcome/cauhoi'],
+      link:['/wellcome/cauhoi'],
       parent:[''],
     })
+  }
+  CreateMenu()
+  {
+    this.menu = this.MenuForm.getRawValue();
+    const words = this.menu.id.split('.');
+    this.menu.level = words.length;
+    this._cauhinhService.CreateMenu(this.menu).subscribe();
   }
 }

@@ -39,7 +39,6 @@ export class NavigationMockApi
             .onGet('api/common/navigation')
             .reply(() => {
 
-                // Fill compact navigation children using the default navigation
                 this._compactNavigation.forEach((compactNavItem) => {
                     this._defaultNavigation.forEach((defaultNavItem) => {
                         if ( defaultNavItem.id === compactNavItem.id )

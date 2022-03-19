@@ -35,8 +35,17 @@ export class CauhinhService {
   {
       return this._httpClient.get<Menu[]>(`${environment.ApiURL}/navigation`).pipe(
           tap((response: Menu[]) => {
-              console.log(response);
               this._Menus.next(response);
+          })
+      );
+  }
+  CreateMenu(menu: Menu): Observable<Menu[]>
+  {
+      return this._httpClient.post<Menu[]>(`${environment.ApiURL}/navigation`, menu).pipe(
+          tap((res) => {
+            this._Menus.next(res);
+               this.notifier.notify('success', 'Thêm Thành Công');
+               this.getMenus().subscribe();
           })
       );
   }
