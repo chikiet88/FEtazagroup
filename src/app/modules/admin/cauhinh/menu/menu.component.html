@@ -7,30 +7,50 @@
                     <div class="columns-1 space-y-3">
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                             <span matPrefix>
-                                Menu
+                                Tiêu Đề Menu
                             </span>
                             <input [formControlName]="'title'" matInput class="mat-select-value-text">
                         </mat-form-field>
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <mat-select placeholder="Phân Quyền" [formControlName]="'parent'">
-                                <mat-option [value]="'manager'">Quản Lý</mat-option>
+                            <span matPrefix>
+                                ID
+                            </span>
+                            <input [formControlName]="'id'" matInput class="mat-select-value-text" placeholder="wellcome.cauhoi">
+                        </mat-form-field>
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                            <mat-select placeholder="Type" [formControlName]="'type'">
+                                <mat-option [value]="'aside'">Aside</mat-option>
+                                <mat-option [value]="'basic'">Basic</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                            <span matPrefix>
+                                Icon
+                            </span>
+                            <input [formControlName]="'icon'" matInput class="mat-select-value-text" placeholder="heroicons_outline:clipboard-check">
+                        </mat-form-field>
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                            <span matPrefix>
+                                Link
+                            </span>
+                            <input [formControlName]="'Link'" matInput class="mat-select-value-text" placeholder="/wellcome/cauhoi">
+                        </mat-form-field>
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                            <mat-select placeholder="Parent" [formControlName]="'parent'">
+                                <mat-option [value]="item.id" *ngFor="let item of menus">{{item.title}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-
                 </ng-container>
             </div>
             <div
                 class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                <button mat-button [color]="'warn'" [matTooltip]="'Xóa'">
-                    Xóa
-                </button>
-                <button class="ml-auto" mat-button [matTooltip]="'Hủy'">
+                <button class="ml-auto" mat-button [matTooltip]="'Hủy'" (click)="MenuForm.reset()">
                     Hủy
                 </button>
                 <button class="ml-2" mat-flat-button [color]="'primary'"
                     [disabled]="MenuForm.invalid || MenuForm.disabled" [matTooltip]="'Save'">
-                    Lưu
+                    Tạo Mới
                 </button>
             </div>
         </form>
@@ -38,6 +58,7 @@
 
     <div class="w-1/2 p-8">
         <span>Danh Mục</span>
+        {{MenuForm.value}}
         <div>
             <div *ngFor="let item of menus">{{item.title}}</div>
         </div>

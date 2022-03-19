@@ -18,6 +18,7 @@ import { MenuComponent } from './menu/menu.component';
 import { CaidatchungComponent } from './caidatchung/caidatchung.component';
 import { MaterialExampleModule } from 'material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CauhinhMenuResolver } from './cauhinh.resolver';
 const CauhinhRoutes: Route[] = [
   {
       path     : '',
@@ -25,7 +26,10 @@ const CauhinhRoutes: Route[] = [
       children : [
         {
             path     : 'menu',
-            component: MenuComponent
+            component: MenuComponent,
+            resolve:{
+              tasks:CauhinhMenuResolver
+            }
         },
         {
             path     : 'caidat',

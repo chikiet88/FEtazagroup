@@ -10,7 +10,7 @@ import { CauhinhService } from './cauhinh.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CauhinhResolver implements Resolve<boolean> {
+export class CauhinhMenuResolver implements Resolve<boolean> {
   constructor(private _cauhinhService:CauhinhService){}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return forkJoin([

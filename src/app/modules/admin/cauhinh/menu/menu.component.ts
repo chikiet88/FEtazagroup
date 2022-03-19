@@ -9,7 +9,7 @@ const FlatToNested = require('flat-to-nested');
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  flatToNested = new FlatToNested({id: 'uuid',	parent: 'parent',children:'children'});
+  flatToNested = new FlatToNested();
   MenuForm:FormGroup;
   menus:Menu[];
   constructor(
@@ -18,16 +18,22 @@ export class MenuComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this._cauhinhService.getMenus().subscribe();
     this._cauhinhService.Menus$.subscribe((data)=>{ 
       console.log(data);
-      var nested = this.flatToNested.convert(data);
-      console.log(nested);
         this.menus = data;
+        const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+          ...item,
+          children: nest(items, item.uuid)
+        }));
+        console.log(nest(data));
       }
     )
     this.MenuForm = this._fb.group({
       title:[''],
+      id:['wellcome.cauhoi'],
+      Type:[''],
+      icon:['heroicons_outline:clipboard-check'],
+      Link:['/wellcome/cauhoi'],
       parent:[''],
     })
   }

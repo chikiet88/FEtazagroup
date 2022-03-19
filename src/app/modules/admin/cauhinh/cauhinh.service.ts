@@ -35,7 +35,7 @@ export class CauhinhService {
   {
       return this._httpClient.get<Menu[]>(`${environment.ApiURL}/navigation`).pipe(
           tap((response: Menu[]) => {
-              console.log(response)
+              console.log(response);
               this._Menus.next(response);
           })
       );
