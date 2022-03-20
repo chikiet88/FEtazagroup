@@ -52,7 +52,7 @@ export class KhachhangsService {
        return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
-           // console.log(Character);
+            console.log(member);
           })
       );
   }

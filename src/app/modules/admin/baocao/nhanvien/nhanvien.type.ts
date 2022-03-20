@@ -8,10 +8,8 @@ export class Nhanvien {
     profile: profile;
     Ngaytao: Date;
     Role:string;
-    Phanquyen:Phanquyen;
-}
-export class Phanquyen {
-    Chinhanh: string;
+    Phanquyen:string;
+    Menu:string
 }
 export class profile {
     Congty: string;

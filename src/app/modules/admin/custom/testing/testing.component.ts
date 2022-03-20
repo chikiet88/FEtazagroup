@@ -69,7 +69,7 @@ export class TestingComponent implements OnInit {
     })
     this._nhanvienService.getNhanviens().subscribe();
     this._nhanvienService.nhanviens$.subscribe((data)=>{ this.nhanviens = data 
-    console.log(data);
+    //console.log(data);
     });
     this.notification = this._formBuilder.group({
       idTo         : [''],

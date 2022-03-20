@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
@@ -11,6 +11,7 @@ import { ListComponent } from '../list/list.component';
 import { NhanvienService } from '../nhanvien.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-details',
@@ -21,6 +22,7 @@ import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 })
 export class DetailsComponent implements OnInit, OnDestroy
 {
+    panelOpenState = false;
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
     @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
@@ -34,6 +36,10 @@ export class DetailsComponent implements OnInit, OnDestroy
     Bophan: object;
     Vitri: object;
     Chinhanh: object;
+    PQChinhanh:any;
+    PQMenu:any;
+    Menu:any;
+    PQisDisabled:boolean;
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     cauhinh:Cauhinh[];
@@ -59,6 +65,7 @@ export class DetailsComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
+       this.PQisDisabled = true;
        this._cauhinhService.Cauhinhs$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((data: Cauhinh[]) => {
@@ -68,8 +75,23 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
             this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+            this.PQChinhanh = cloneDeep(this.Chinhanh);
+            Object.keys(this.PQChinhanh).forEach(key => {
+                this.PQChinhanh[key] = false;
+              });
            this._changeDetectorRef.markForCheck();
        });
+       this._cauhinhService.Menus$
+       .pipe(takeUntil(this._unsubscribeAll))
+       .subscribe((data) => {
+            this.Menu = data;
+            this.PQMenu = {};
+            data.forEach(v => {
+                this.PQMenu[v.uuid]=false;
+              });
+           this._changeDetectorRef.markForCheck();
+       });
+
         this._ListComponent.matDrawer.open();
         this.NhanvienForm = this._formBuilder.group({
             id      : [''],
@@ -78,9 +100,8 @@ export class DetailsComponent implements OnInit, OnDestroy
             email       : ['', [Validators.required]],
             SDT         : ['', [Validators.required]],
             Role         : [''],
-            Phanquyen       : this._formBuilder.group({
-                Chinhanh: [''],
-            }),
+            Phanquyen       : [''],
+            Menu       : [''],
             profile: this._formBuilder.group({
                 Congty: [''],
                 Khoi: [''],
@@ -101,7 +122,6 @@ export class DetailsComponent implements OnInit, OnDestroy
                 Zalo: [''],
               }),    
         });
-
         // Get the contacts
         this._nhanvienService.nhanviens$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -113,7 +133,9 @@ export class DetailsComponent implements OnInit, OnDestroy
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
-                console.log(nhanvien);
+                this.nhanvien = nhanvien;
+               (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
+               (Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;
                 this.NhanvienForm.patchValue({
                     id: nhanvien.id,
                     avatar: nhanvien.avatar,
@@ -121,10 +143,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                     email: nhanvien.email,
                     SDT: nhanvien.SDT,
                     Role: nhanvien.Role,
-                    Phanquyen: 
-                    {
-                        Chinhanh: nhanvien.Phanquyen.Chinhanh,
-                    },
+                    Phanquyen: nhanvien.Phanquyen,
                     profile: {
                         Congty: nhanvien.profile.Congty,
                         Khoi: nhanvien.profile.Khoi,
@@ -146,12 +165,32 @@ export class DetailsComponent implements OnInit, OnDestroy
                     }
                   });
                 this._ListComponent.matDrawer.open();
-                this.nhanvien = nhanvien;
                 this._changeDetectorRef.markForCheck();
             });
             this.NhanvienForm.disable();
+            this.PQisDisabled = true;
 
     }
+ ChangeChinhanh(Chinhanh: string, isChecked: any) {
+        this.PQChinhanh[Chinhanh]=isChecked.checked;
+        this.NhanvienForm.get('Phanquyen').setValue(this.PQChinhanh);
+      }
+   ChangeAllChinhanh(isChecked: any) {
+       Object.keys(this.PQChinhanh).forEach(key => {
+        this.PQChinhanh[key] = isChecked.checked;
+      });
+      this.NhanvienForm.get('Phanquyen').setValue(this.PQChinhanh);
+    }
+   ChangeMenu(Menu: string, isChecked: any) {
+        this.PQMenu[Menu]=isChecked.checked;
+        this.NhanvienForm.get('Menu').setValue(this.PQMenu);
+      }     
+   ChangeAllMenu(isChecked: any) {
+       Object.keys(this.PQMenu).forEach(key => {
+        this.PQMenu[key] = isChecked.checked;
+      });
+      this.NhanvienForm.get('Menu').setValue(this.PQMenu);
+      }
     ngOnDestroy(): void
     {
         // Unsubscribe from all subscriptions
@@ -169,19 +208,21 @@ export class DetailsComponent implements OnInit, OnDestroy
         return this._ListComponent.matDrawer.close();
     }
     editNhanvien() {
+        this.PQisDisabled = false;
         this.NhanvienForm.enable();
         this._changeDetectorRef.markForCheck();
     }
     Cancel() {
         this.NhanvienForm.disable();
+        this.PQisDisabled = true;
         this._changeDetectorRef.markForCheck();
     }
     updateNhanvien(): void
     {
         const contact = this.NhanvienForm.getRawValue();
-            console.log(contact);
         this._nhanvienService.updateNhanvien(contact.id, contact).subscribe(() => {
-            this.NhanvienForm.disable();
+         this.NhanvienForm.disable();
+         this.PQisDisabled = true;
         });
     }
     deleteNhanvien(): void

@@ -25,6 +25,10 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { NhanviensCauhinhResolver, NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialExampleModule } from 'material.module';
+import { find } from 'lodash';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
+import { FindbyuuidPipe } from 'app/pipes/findbyid/findbyid.pipe';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
@@ -60,6 +64,8 @@ const nhanvienRoutes: Route[] = [
     NhanvienComponent,
   ],
   imports: [
+    FindbyidModule,
+    MaterialExampleModule,
     RouterModule.forChild(nhanvienRoutes),
     ReactiveFormsModule,
     CommonModule,

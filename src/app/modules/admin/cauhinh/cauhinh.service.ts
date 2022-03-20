@@ -49,6 +49,14 @@ export class CauhinhService {
           })
       );
   }
+  UpdateMenu(menu: Menu): Observable<Menu[]>
+  {
+      return this._httpClient.patch<Menu[]>(`${environment.ApiURL}/navigation/${menu.uuid}`, menu).pipe(
+          tap((res) => {
+             this._Menus.next(res);
+          })
+      );
+  }
   getCauhinhs(): Observable<Cauhinh[]>
   {
       return this._httpClient.get<Cauhinh[]>(`${environment.ApiURL}/cauhinh`).pipe(

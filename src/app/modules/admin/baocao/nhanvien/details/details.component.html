@@ -7,7 +7,7 @@
             <ng-container *ngIf="!nhanvien.background">
                 <img class="absolute inset-0 object-cover w-full h-full" style="background-color: rgb(0, 102, 255);">
             </ng-container>
-            <div class="flex items-center justify-end w-full max-w-3xl mx-auto ">
+            <div class="flex items-center justify-end w-full max-w-3xl mx-auto mt-2">
                 <div class="flex items-center ml-auto mb-1">
                     <button mat-icon-button (click)="editNhanvien()">
                         <mat-icon class="text-white" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
@@ -33,211 +33,196 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col mt-4 pt-6 space-y-3">
-                        <div class="mt-3 py-2 text-2xl font-bold truncate">Thông Tin Cá Nhân</div>
-                        <ng-container>
-                            <div class="flex justify-center">
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-2/3">
-                                    <div class="material-icons icon-size-5" matPrefix>
-                                        account_circle
-                                    </div>
-                                    <input [formControlName]="'name'" matInput class="mat-select-value-text">
-                                </mat-form-field>
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/3">
-                                    <mat-select placeholder="Phân Quyền" [formControlName]="'Role'" #roleSelect="matSelect">
-                                        <mat-select-trigger class="text-md">
-                                            <span>Role:</span>
-                                            <span class="ml-1 font-medium">{{roleSelect.value | titlecase}}</span>
-                                        </mat-select-trigger>
-                                        <mat-option [value]="'admin'" class="h-auto py-4 leading-none">
-                                            <div class="font-medium">Admin</div>
-                                            <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary">Toàn quyền quản lý</div>
-                                        </mat-option>
-                                        <mat-option [value]="'manager'">Quản Lý</mat-option>
-                                        <mat-option [value]="'user'">Nhân Viên</mat-option>
-                                    </mat-select>                           
-                                </mat-form-field> 
-                            </div>
-                            
-                        </ng-container>
-                        <ng-container>
-                            <div class="flex justify-center">
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full" [formGroupName]="'Phanquyen'">
-                                    <ng-container>
-                                        <div class="flex flex-col w-full">
-                                            <mat-select class="w-full" placeholder="Phân Quyền" [formControlName]="'Chinhanh'" #Phanquyen="matSelect" multiple>
-                                                <mat-select-trigger>
-                               <div  class="items-center justify-center px-4 m-1.5 rounded-full leading-9 text-black  dark:text-gray-300 dark:bg-gray-700">
-                                                    <span class="text-md font-medium whitespace-nowrap">                                             Phân Quyền</span>
-                                                  </div>
-       
-                                                  </mat-select-trigger>
-                                                <mat-option [value]="item.key" *ngFor="let item of Chinhanh|keyvalue">{{item.value}}</mat-option>
-                                            </mat-select>
-                      <div class="flex mb-3">
-                        <span *ngFor="let item of Phanquyen.value"
-                        class="text-center rounded-full mr-2 p-2 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
-                                    {{Chinhanh[item]}}
-                                  </span>
-
-                      </div>                          
-
-
+                    <div class="flex flex-col mt-4 pt-6 ">
+                        <mat-tab-group mat-align-tabs="start">
+                            <mat-tab label="Thông Tin Cá Nhân">    
+                          <div class="flex flex-col mt-4 pt-6 space-y-3">                        
+                                <ng-container>
+                                <div class="flex justify-center">
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-2/3">
+                                        <div class="material-icons icon-size-5" matPrefix>
+                                            account_circle
                                         </div>
-                                      </ng-container>
-                                      
-                                                        
-                                </mat-form-field>
- 
-                            </div>
-                        </ng-container>
-
-                        <ng-container>
-                            <div class="flex justify-center">
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-1/2">
-                                    <span class="material-icons icon-size-5" matPrefix>
-                                        alternate_email
-                                    </span>
-                                    <input [formControlName]="'email'" matInput class="mat-select-value-text">
-                                </mat-form-field>
-                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/2">
-                                    <div class="material-icons icon-size-5" matPrefix>
-                                        <span class="material-icons">
-                                            phone_iphone
+                                        <input [formControlName]="'name'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/3">
+                                        <mat-select placeholder="Phân Quyền" [formControlName]="'Role'"
+                                            #roleSelect="matSelect">
+                                            <mat-select-trigger class="text-md">
+                                                <span>Role:</span>
+                                                <span class="ml-1 font-medium">{{roleSelect.value | titlecase}}</span>
+                                            </mat-select-trigger>
+                                            <mat-option [value]="'admin'" class="h-auto py-4 leading-none">
+                                                <div class="font-medium">Admin</div>
+                                                <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary">
+                                                    Toàn quyền quản lý</div>
+                                            </mat-option>
+                                            <mat-option [value]="'manager'">Quản Lý</mat-option>
+                                            <mat-option [value]="'user'">Nhân Viên</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            <ng-container>
+                                <div class="flex justify-center">
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-1/2">
+                                        <span class="material-icons icon-size-5" matPrefix>
+                                            alternate_email
                                         </span>
-                                    </div>
-                                    <input [formControlName]="'SDT'" matInput class="mat-select-value-text">
-                                </mat-form-field>
+                                        <input [formControlName]="'email'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/2">
+                                        <div class="material-icons icon-size-5" matPrefix>
+                                            <span class="material-icons">
+                                                phone_iphone
+                                            </span>
+                                        </div>
+                                        <input [formControlName]="'SDT'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            <div [formGroupName]="'profile'" class="flex flex-col space-y-3">
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Mã Nhân Viên
+                                        </div>
+                                        <input [formControlName]="'MaNV'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Giới Tính
+                                        </div>
+                                        <input [formControlName]="'Gioitinh'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Ngày Sinh
+                                        </div>
+                                        <input [formControlName]="'Ngaysinh'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            CMND/CCCD
+                                        </div>
+                                        <input [formControlName]="'CMND'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Địa Chỉ
+                                        </div>
+                                        <input [formControlName]="'Diachi'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Zalo
+                                        </div>
+                                        <input [formControlName]="'Zalo'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-container>
+                                    <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                        <div class="text-secondary" matPrefix>
+                                            Facebook
+                                        </div>
+                                        <input [formControlName]="'Fb'" matInput class="mat-select-value-text">
+                                    </mat-form-field>
+                                </ng-container>
                             </div>
-                        </ng-container>
-            <div [formGroupName]="'profile'" class="flex flex-col space-y-3">
-                        <ng-container>
-                              <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                    Mã Nhân Viên
+                        </div>  
+                        </mat-tab>
+                            <mat-tab label="Thông Tin Công Ty">
+                                
+                                <div class="flex flex-col mt-4 border-t space-y-3" [formGroupName]="'profile'">
+                                    <ng-container>
+                                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                            <div class="text-secondary" matPrefix>
+                                                Công Ty
+                                            </div>
+                                            <input [formControlName]="'Congty'" matInput class="mat-select-value-text">
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-container>
+                                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                            <div class="text-secondary" matPrefix>
+                                                Khối
+                                            </div>
+                                            <input [formControlName]="'Khoi'" matInput class="mat-select-value-text">
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-container>
+                                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                            <div class="text-secondary" matPrefix>
+                                                Phòng Ban
+                                            </div>
+                                            <input [formControlName]="'Phongban'" matInput class="mat-select-value-text">
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-container>
+                                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                            <div class="text-secondary" matPrefix>
+                                                Bộ Phận
+                                            </div>
+                                            <input [formControlName]="'Bophan'" matInput class="mat-select-value-text">
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-container>
+                                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                            <div class="text-secondary" matPrefix>
+                                                Vị Trí
+                                            </div>
+                                            <input [formControlName]="'Vitri'" matInput class="mat-select-value-text">
+                                        </mat-form-field>
+                                    </ng-container>
                                 </div>
-                                <input [formControlName]="'MaNV'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                    Giới Tính
+                            </mat-tab>
+                            <mat-tab label="Phân Quyền">
+                                <div class="border-b-2 mb-4 py-8">
+                                    <div class="text-xl py-2"> Phân Quyền Chi Nhánh</div>
+                                    <div class="flex flex-row space-x-2">
+                                        <div><mat-checkbox [disabled]="PQisDisabled" (change)="ChangeAllChinhanh($event)">All</mat-checkbox></div>
+                                        <div  *ngFor="let item of PQChinhanh |keyvalue">
+                                            <mat-checkbox [disabled]="PQisDisabled" (change)="ChangeChinhanh(item.key, $event)" [checked]="item.value">{{Chinhanh[item.key]}}</mat-checkbox>
+                                         </div> 
+                                    </div>
                                 </div>
-                                <input [formControlName]="'Gioitinh'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                  Ngày Sinh
+                                <div class="border-b-2 py-8">
+                                    <div class="text-xl py-2"> Phân Quyền Menu</div>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 space-2">
+                     <div><mat-checkbox [disabled]="PQisDisabled" (change)="ChangeAllMenu($event)">All</mat-checkbox>
+                                         </div> 
+                                        <div  *ngFor="let item of PQMenu |keyvalue">
+                                            <mat-checkbox [disabled]="PQisDisabled" (change)="ChangeMenu(item.key, $event)" [checked]="item.value">{{item.key|findbyuuid:Menu:'title'}}</mat-checkbox>
+                                         </div> 
+                                    </div>
                                 </div>
-                                <input [formControlName]="'Ngaysinh'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                    CMND/CCCD
-                                </div>
-                                <input [formControlName]="'CMND'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                    Địa Chỉ
-                                </div>
-                                <input [formControlName]="'Diachi'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                    Zalo
-                                </div>
-                                <input [formControlName]="'Zalo'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                   Facebook
-                                </div>
-                                <input [formControlName]="'Fb'" matInput class="mat-select-value-text">
-                            </mat-form-field>
-                        </ng-container>
-                          </div>
+                            </mat-tab>
+                          </mat-tab-group>
                     </div>
-                    <div class="flex flex-col mt-4 border-t space-y-3" [formGroupName]="'profile'">
-                        <div class="mt-3 py-2 text-2xl font-bold truncate">Thông Tin Công Ty</div>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                   Công Ty
-                                </div>
-                                <input [formControlName]="'Congty'" matInput class="mat-select-value-text">
-                            </mat-form-field>       
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                  Khối
-                                </div>
-                                <input [formControlName]="'Khoi'" matInput class="mat-select-value-text">
-                            </mat-form-field> 
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                  Phòng Ban
-                                </div>
-                                <input [formControlName]="'Phongban'" matInput class="mat-select-value-text">
-                            </mat-form-field> 
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                  Bộ Phận
-                                </div>
-                                <input [formControlName]="'Bophan'" matInput class="mat-select-value-text">
-                            </mat-form-field> 
-                        </ng-container>
-                        <ng-container>
-                            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                                <div class="text-secondary" matPrefix>
-                                 Vị Trí
-                                </div>
-                                <input [formControlName]="'Vitri'" matInput class="mat-select-value-text">
-                            </mat-form-field> 
-                        </ng-container>
-                    </div>
-                    <div class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <!-- Delete -->
-                        <button
-                            mat-button
-                            [color]="'warn'"
-                            [matTooltip]="'Xóa'"
-                            (click)="deleteNhanvien()">
+                    <div
+                        class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <button mat-button [color]="'warn'" [matTooltip]="'Xóa'" (click)="deleteNhanvien()">
                             Xóa
                         </button>
-                        <button
-                            class="ml-auto"
-                            mat-button
-                            [matTooltip]="'Hủy'"
-                            (click)="Cancel()">
+                        <button class="ml-auto" mat-button [matTooltip]="'Hủy'" (click)="Cancel()">
                             Hủy
                         </button>
-                        <button
-                            class="ml-2"
-                            mat-flat-button
-                            [color]="'primary'"
-                            [disabled]="NhanvienForm.invalid || NhanvienForm.disabled"
-                            [matTooltip]="'Save'"
+                        <button class="ml-2" mat-flat-button [color]="'primary'"
+                            [disabled]="NhanvienForm.invalid || NhanvienForm.disabled" [matTooltip]="'Save'"
                             (click)="updateNhanvien()">
                             Lưu
                         </button>
-                    </div>      
+                    </div>
                 </form>
             </div>
         </div>

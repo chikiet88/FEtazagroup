@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FindbyidPipe } from './findbyid.pipe';
+import { FindbyidPipe, FindbyuuidPipe } from './findbyid.pipe';
 @NgModule({
-  declarations: [FindbyidPipe],
+  declarations: [FindbyidPipe,FindbyuuidPipe],
   imports: [
     CommonModule
   ],
-  exports:[FindbyidPipe]
+  exports:[FindbyidPipe,FindbyuuidPipe]
 })
 export class FindbyidModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, forkJoin, Observable, throwError } from 'rxjs';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { NhanvienService } from './nhanvien.service';
@@ -55,8 +55,11 @@ export class NhanviensCauhinhResolver implements Resolve<any>
     )
     {
     }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Cauhinh[]>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
     {
-        return this._cauhinhsService.getCauhinhs();
+        return forkJoin([
+            this._cauhinhsService.getCauhinhs(),
+            this._cauhinhsService.getMenus(),
+          ]);
     }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 import { CauhinhService } from '../cauhinh.service';
 import { Menu } from '../cauhinh.types';
 const FlatToNested = require('flat-to-nested');
@@ -13,14 +14,16 @@ export class MenuComponent implements OnInit {
   MenuForm:FormGroup;
   menus:Menu[];
   menu:Menu;
+  CRUD:number;
   constructor(
     private _fb:FormBuilder,
     private _cauhinhService:CauhinhService
     ) { }
 
   ngOnInit(): void {
+    this.CRUD = 0;
     this._cauhinhService.Menus$.subscribe((data)=>{ 
-      console.log(data);
+   //   console.log(data);
         const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
           ...item,
           children: nest(items, item.uuid)
@@ -43,5 +46,17 @@ export class MenuComponent implements OnInit {
     const words = this.menu.id.split('.');
     this.menu.level = words.length;
     this._cauhinhService.CreateMenu(this.menu).subscribe();
+  }
+  EditMenu(item)
+  {
+    this.CRUD=1;
+    this.MenuForm.patchValue(item);
+    this.MenuForm.addControl('uuid', new FormControl(item.uuid));
+  }
+  UpdateMenu()
+  {
+    this.menu = this.MenuForm.getRawValue();
+    this._cauhinhService.UpdateMenu(this.menu).subscribe();
+    this.ngOnInit();
   }
 }

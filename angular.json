@@ -28,7 +28,10 @@
                             "highlight.js",
                             "crypto-js/enc-utf8",
                             "crypto-js/hmac-sha256",
-                            "crypto-js/enc-base64"
+                            "crypto-js/enc-base64",
+                            "xlsx/dist/xlsx.mini.min",
+                            "xlsx"
+
                         ],
                         "assets": [
                             "src/favicon-16x16.png",

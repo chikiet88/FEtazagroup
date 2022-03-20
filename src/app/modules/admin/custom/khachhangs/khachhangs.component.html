@@ -2,7 +2,7 @@
   <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
     <mat-form-field class="w-1/6">
       <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh" (selectionChange)="LoadMember($event);ResetSDT()">
-        <mat-option *ngFor="let item of UserChinhanh" [value]="item">{{CauhinhChinhanh[item]}}</mat-option>
+        <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-1/6">
@@ -62,21 +62,21 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
         <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
       </ng-container>
-      <ng-container matColumnDef="HMD">
+      <ng-container matColumnDef="NgayMD">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Mua Đầu </th>
-        <td mat-cell *matCellDef="let row"> {{row.HMD}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.NgayMD|date:'dd/MM/yyyy'}} </td>
       </ng-container>
-      <ng-container matColumnDef="NMD">
+      <ng-container matColumnDef="NoiMD">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nơi Mua Đầu </th>
-        <td mat-cell *matCellDef="let row"> {{row.NMD}} </td>
+        <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.NoiMD]}} </td>
       </ng-container>
-      <ng-container matColumnDef="HMC">
+      <ng-container matColumnDef="NgayMC">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Mua Cuối </th>
-        <td mat-cell *matCellDef="let row"> {{row.HMC}} </td>
+        <td mat-cell *matCellDef="let row"> {{row.NgayMC|date:'dd/MM/yyyy'}} </td>
       </ng-container>
-      <ng-container matColumnDef="NMC">
+      <ng-container matColumnDef="NoiMC">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nơi Mua Cuối </th>
-        <td mat-cell *matCellDef="let row"> {{row.NMC}} </td>
+        <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.NoiMC]}} </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="thanhvienColumns"></tr>
@@ -88,7 +88,7 @@
 
 
 
-
+<!-- 
   <div class="flex justify-start my-4">
     <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
     <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
@@ -151,7 +151,7 @@
       </mat-select>
     </mat-form-field>
   </form>
-  
+   -->
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
       <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort>
         <ng-container matColumnDef="NgayTaoDV">

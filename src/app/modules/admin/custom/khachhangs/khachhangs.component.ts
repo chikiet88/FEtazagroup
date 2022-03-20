@@ -20,7 +20,7 @@ export class KhachhangsComponent implements OnInit {
   characters$: Observable<Khachhang[]>;
   //displayedColumns: string[] = ['TenKH', 'SDT', 'TDS', 'TTT','LMD','NMD','LMC','NMC'];
   displayedColumns: string[] = ['NgayTaoDV', 'TenKH', 'SDT', 'SDT2', 'Dichvu', 'Doanhso', 'Tonglieutrinh', 'Dathu', 'Ghichu', 'Chinhanh'];
-  thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh','HMD','NMD','HMC','NMC'];
+  thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh','NgayMD','NoiMD','NgayMC','NoiMC'];
   dataKhachhang: MatTableDataSource<Khachhang>;
   data: MatTableDataSource<Khachhang>;
   datamember: MatTableDataSource<any>;
@@ -59,9 +59,8 @@ export class KhachhangsComponent implements OnInit {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
         this.CurrentUser = user;
-        this.UserChinhanh = this.CurrentUser.Phanquyen.Chinhanh;
-        console.log(this.UserChinhanh);
-        this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
+        this.UserChinhanh = this.CurrentUser.Phanquyen;
+        //this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
         // Mark for check
         this._changeDetectorRef.markForCheck();
     });

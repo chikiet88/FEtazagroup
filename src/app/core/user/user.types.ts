@@ -8,9 +8,6 @@ export interface User
     username: string;
     email: string;
     Role:string;
-    Phanquyen:Phanquyen;
-}
-export interface Phanquyen
-{
-    Chinhanh: string;
+    Phanquyen:string;
+    Menu:string;
 }
