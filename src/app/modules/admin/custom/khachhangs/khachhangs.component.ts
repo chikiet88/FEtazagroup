@@ -145,7 +145,11 @@ export class KhachhangsComponent implements OnInit {
           const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
           const i = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
           const e = !filter.Hanmuctu && !filter.Hanmucden || data.Dathu <= filter.Hanmucden && data.Dathu >= filter.Hanmuctu;
-          return a && b && e && i;
+          const c = !filter.NgayMD && !filter.NgayMD || data.NgayMD <= filter.NgayMD && data.NgayMD >= filter.NgayMD;
+          const d = !filter.NgayMC && !filter.NgayMC || data.NgayMC <= filter.NgayMC && data.NgayMC >= filter.NgayMC;
+          const f = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
+          const g = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
+          return a && b && e && i&& c&& d&& f&& g;
         }) as (PeriodicElement, string) => boolean;
         this.Filtermember.valueChanges.subscribe(value => {
           this.datamember.filter = value;
