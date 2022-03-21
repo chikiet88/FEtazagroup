@@ -95,7 +95,7 @@
                                         <div class="text-secondary" matPrefix>
                                             Giới Tính
                                         </div>
-                                        <input [formControlName]="'Gioitinh'" matInput class="mat-select-value-text">
+                                        <input [formControlName]="'Gioitinh'" matInput class="mat-select-value-text">   
                                     </mat-form-field>
                                 </ng-container>
                                 <ng-container>
@@ -103,7 +103,10 @@
                                         <div class="text-secondary" matPrefix>
                                             Ngày Sinh
                                         </div>
-                                        <input [formControlName]="'Ngaysinh'" matInput class="mat-select-value-text">
+                                        <!-- <input [formControlName]="'Ngaysinh'" matInput class="mat-select-value-text"> -->
+                                        <input matInput [matDatepicker]="picker" [formControlName]="'Ngaysinh'"  [value]="NhanvienForm.get('profile.Ngaysinh').value | date:'dd/MM/yyyy'">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker> 
                                     </mat-form-field>
                                 </ng-container>
                                 <ng-container>
@@ -149,7 +152,9 @@
                                             <div class="text-secondary" matPrefix>
                                                 Công Ty
                                             </div>
-                                            <input [formControlName]="'Congty'" matInput class="mat-select-value-text">
+                                            <mat-select [formControlName]="'Congty'">
+                                                <mat-option [value]="item.key" *ngFor="let item of Congty|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </ng-container>
                                     <ng-container>
@@ -157,7 +162,9 @@
                                             <div class="text-secondary" matPrefix>
                                                 Khối
                                             </div>
-                                            <input [formControlName]="'Khoi'" matInput class="mat-select-value-text">
+                                            <mat-select [formControlName]="'Khoi'">
+                                                <mat-option [value]="item.key" *ngFor="let item of Khoi|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>                  
                                         </mat-form-field>
                                     </ng-container>
                                     <ng-container>
@@ -165,7 +172,9 @@
                                             <div class="text-secondary" matPrefix>
                                                 Phòng Ban
                                             </div>
-                                            <input [formControlName]="'Phongban'" matInput class="mat-select-value-text">
+                                            <mat-select [formControlName]="'Phongban'">
+                                                <mat-option [value]="item.key" *ngFor="let item of Phongban|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>                         
                                         </mat-form-field>
                                     </ng-container>
                                     <ng-container>
@@ -173,7 +182,9 @@
                                             <div class="text-secondary" matPrefix>
                                                 Bộ Phận
                                             </div>
-                                            <input [formControlName]="'Bophan'" matInput class="mat-select-value-text">
+                                <mat-select [formControlName]="'Bophan'">
+                                                <mat-option [value]="item.key" *ngFor="let item of Bophan|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>         
                                         </mat-form-field>
                                     </ng-container>
                                     <ng-container>
@@ -181,7 +192,9 @@
                                             <div class="text-secondary" matPrefix>
                                                 Vị Trí
                                             </div>
-                                            <input [formControlName]="'Vitri'" matInput class="mat-select-value-text">
+                                            <mat-select [formControlName]="'Vitri'">
+                                                <mat-option [value]="item.key" *ngFor="let item of Vitri|keyvalue">{{item.value}}</mat-option>
+                                            </mat-select>               
                                         </mat-form-field>
                                     </ng-container>
                                 </div>

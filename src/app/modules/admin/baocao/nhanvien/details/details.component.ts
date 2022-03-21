@@ -12,13 +12,27 @@ import { NhanvienService } from '../nhanvien.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { cloneDeep } from 'lodash';
-
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+export const MY_DATE_FORMATS = {
+    parse: {
+      dateInput: 'DD/MM/YYYY',
+    },
+    display: {
+      dateInput: 'DD/MM/YYYY',
+      monthYearLabel: 'MMMM YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'MMMM YYYY'
+    },
+};
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
     encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
+      ]
 })
 export class DetailsComponent implements OnInit, OnDestroy
 {
@@ -171,7 +185,7 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.PQisDisabled = true;
 
     }
- ChangeChinhanh(Chinhanh: string, isChecked: any) {
+    ChangeChinhanh(Chinhanh: string, isChecked: any) {
         this.PQChinhanh[Chinhanh]=isChecked.checked;
         this.NhanvienForm.get('Phanquyen').setValue(this.PQChinhanh);
       }

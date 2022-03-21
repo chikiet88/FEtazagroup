@@ -26,6 +26,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
+import { MaterialExampleModule } from 'material.module';
 const VetuyendungRoutes: Route[] = [
   {
       path     : '',
@@ -58,6 +59,7 @@ const VetuyendungRoutes: Route[] = [
      DetailsComponent,
     ],
   imports: [
+    MaterialExampleModule,
     FindbyidModule,
     TimkiemModule,
     DragDropModule,

@@ -59,6 +59,7 @@ export class KhachhangsComponent implements OnInit {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
         this.CurrentUser = user;
+        console.log(this.CurrentUser);
         this.UserChinhanh = this.CurrentUser.Phanquyen;
         //this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
         // Mark for check
@@ -99,6 +100,10 @@ export class KhachhangsComponent implements OnInit {
       Chinhanh: [''],
       Hanmuctu: [''],
       Hanmucden: [''],
+      NgayMD: [''],
+      NgayMC: [''],
+      NoiMD: [''],
+      NoiMC: [''],
     });
     this.data$ = this._khachhangsService.data$;
     this.datamember$ = this._khachhangsService.Member$;

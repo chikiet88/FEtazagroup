@@ -1,28 +1,59 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
+    <div class="space-x-2 flex flex-row py-4 justify-end"> 
+      <button mat-raised-button color="primary"  class="ml-2" (click)="ResetSDT()">
+        <span class="material-icons">
+        arrow_back
+        </span></button>
+        <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
+        <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'">All</button>
+    </div>
+
+
   <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
     <mat-form-field class="w-1/6">
+      <mat-label>Chi Nhánh</mat-label>
       <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh" (selectionChange)="LoadMember($event);ResetSDT()">
         <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-1/6">
-      <mat-select matInput (selectionChange)="ChonMember($event);ResetSDT()" placeholder="Hạng Thành Viên">
+      <mat-label>Hạng Khách Hàng</mat-label>
+      <mat-select matInput (selectionChange)="ChonMember($event);ResetSDT()" placeholder="Hạng Thành Viên" #MemberSelect="matSelect">
         <mat-option value="0">All</mat-option>
-        <mat-option value="1">Normal</mat-option>
-        <mat-option value="2">Member</mat-option>
-        <mat-option value="3">Silver</mat-option>
-        <mat-option value="4">Gold</mat-option>
-        <mat-option value="5">Platinum</mat-option>
-        <mat-option value="6">Diamond</mat-option>
+        <mat-option value="1" class="h-auto py-4 leading-none">         
+           <div class="font-medium">Normal</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 0-50 Triệu</div>
+        </mat-option>
+        <mat-option value="2" class="h-auto py-4 leading-none">         
+           <div class="font-medium">Member</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 50-100 Triệu</div></mat-option>
+        <mat-option value="3" class="h-auto py-4 leading-none">
+          <div class="font-medium">Silver</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 100-200 Triệu</div>
+        </mat-option>
+        <mat-option value="4" class="h-auto py-4 leading-none">
+          <div class="font-medium">Gold</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 200-350 Triệu</div>
+        </mat-option>
+        <mat-option value="5" class="h-auto py-4 leading-none">
+          <div class="font-medium">Platinum</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 350-500 Triệu</div>
+        </mat-option>
+        <mat-option value="6" class="h-auto py-4 leading-none">
+          <div class="font-medium">Diamond</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 500 Triệu - 1 Tỷ</div>
+        </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Tên Khách Hàng</mat-label>
       <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Số Điện Thoại</mat-label>
       <input matInput [formControlName]="'SDT'" placeholder="SDT">
     </mat-form-field>
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input matInput [formControlName]="'Doanhso'" placeholder="Đã Thu">
     </mat-form-field>
 
@@ -32,13 +63,33 @@
 
     <mat-form-field>
       <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
+    </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>Ngày Mua Đầu</mat-label>
+      <input matInput [matDatepicker]="pickerMD" [formControlName]="'NgayMD'">
+      <mat-datepicker-toggle matSuffix [for]="pickerMD"></mat-datepicker-toggle>
+      <mat-datepicker #pickerMD></mat-datepicker>
     </mat-form-field>
-      <button mat-raised-button color="primary"  class="ml-2" (click)="ResetSDT()">
-        <span class="material-icons">
-        arrow_back
-        </span></button>
-        <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-        <button mat-raised-button color="primary" (click)="GetAllMember()">All</button>
+    <mat-form-field>
+      <mat-label>Nơi Mua Đầu</mat-label>
+      <input matInput [formControlName]="'NoiMD'" placeholder="Đến">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ngày Mua Cuối</mat-label>
+      <input matInput [matDatepicker]="pickerMC" [formControlName]="'NgayMC'">
+      <mat-datepicker-toggle matSuffix [for]="pickerMC"></mat-datepicker-toggle>
+      <mat-datepicker #pickerMC></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nơi Mua Đầu</mat-label>
+      <input matInput [formControlName]="'NoiMD'" placeholder="Đến">
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
+    </mat-form-field> -->
   </form>
   <!-- <div *ngFor="let item of datamember.filter">{{item}}</div> -->
   <div class="mat-elevation-z8">
