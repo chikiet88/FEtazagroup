@@ -11,7 +11,7 @@ UPDATE `Khachhang` SET`Chinhanh` = '268b7a06-d2c5-4c98-af1d-334144ae280f' WHERE`
 UPDATE `Khachhang` SET`Chinhanh` = 'ca725bf4-4810-4ea2-8ef2-520b2a3121cc' WHERE`Khachhang`.`Chinhanh` = 'Quận 10';
 UPDATE `Khachhang` SET`Chinhanh` = 'e173b1c0-fbdb-4eeb-a00c-b56664068515' WHERE`Khachhang`.`Chinhanh` = 'Nha Trang';
 UPDATE `Khachhang` SET`Chinhanh` = '9887ad61-4b2c-4db1-83e6-570f33cb540a' WHERE`Khachhang`.`Chinhanh` = 'Đà Nẵng';
-
+=IF(K7="Quận 10";"ca725bf4-4810-4ea2-8ef2-520b2a3121cc";IF(K7="Gò Vấp";"268b7a06-d2c5-4c98-af1d-334144ae280f";IF(K7="Thủ Đức";"f54de1e1-66bd-4690-8015-ad7315d6f14e";IF(K7="Đà Nẵng";"9887ad61-4b2c-4db1-83e6-570f33cb540a";"e173b1c0-fbdb-4eeb-a00c-b56664068515"))))
 {
     "268b7a06-d2c5-4c98-af1d-334144ae280f": "Chi Nhánh Thủ Đức",
     "f54de1e1-66bd-4690-8015-ad7315d6f14e": "Chi Nhánh Gò Vấp",

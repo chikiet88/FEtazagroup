@@ -429,6 +429,7 @@ export class LichhopComponent implements OnInit {
           };
           this._notificationsService.create(notifi).subscribe();
         });
+        this.ngOnInit();
         this._lichhopService.getLichhops().subscribe();
         this.notifier.notify('success', `Tạo Mới Thành Công`);
         this._changeDetectorRef.markForCheck();

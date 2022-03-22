@@ -12,9 +12,13 @@ export const environment = {
     //   spreadsheetId: '1qBzPZ6AbiJZCQp8gsiioZRNRmGRwoq_agx5Q5DK05EY',
     //   worksheetName: 'Import',
     // },
+    // characters: {
+    //   spreadsheetId: '1BhjD2orAIKfUc_juGHiA3RovXwEMaSS0qZhYYtlQag8',
+    //   worksheetName: 'Import',
+    // },
     characters: {
-      spreadsheetId: '1BhjD2orAIKfUc_juGHiA3RovXwEMaSS0qZhYYtlQag8',
-      worksheetName: 'Import',
+      spreadsheetId: '1Ax1KCdj0z10zG8jEPCmbXLmqvNy0WSxRq8etAk7yn4o',
+      worksheetName: 'Realtime',
     },
     // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     // characters: {

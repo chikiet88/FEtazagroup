@@ -236,7 +236,6 @@ export class KhachhangsComponent implements OnInit {
           })
         });
         console.log(Thanhvien);
-
         Thanhvien.forEach((v, k) => {
           setTimeout(() => {
             this._khachhangsService.CreateMember(v)
@@ -245,9 +244,6 @@ export class KhachhangsComponent implements OnInit {
           }, 10 * k);
           this._changeDetectorRef.markForCheck();
         });
-
-       
-
         // this.Thanhvien = new MatTableDataSource(Thanhvien);
         // this.Thanhvien.paginator = this.ThanhvienPag;
         // this.Thanhvien.sort = this.ThanvienSort;

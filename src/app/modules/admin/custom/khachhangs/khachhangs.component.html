@@ -6,6 +6,19 @@
         </span></button>
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
         <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'">All</button>
+
+
+      
+  <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'">
+    <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
+    <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
+      (<span *ngIf="data$ | async as Data">{{Data.length}}/{{count}}</span>)
+    </button>
+    <button mat-raised-button color="primary" (click)="LoadDrive()" class="mr-2">Load Drive</button>
+
+    <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
+      (<span>{{Khachhang.length}}</span>)</button>
+  </div>  
     </div>
 
 
@@ -53,17 +66,20 @@
       <mat-label>Số Điện Thoại</mat-label>
       <input matInput [formControlName]="'SDT'" placeholder="SDT">
     </mat-form-field>
+
     <!-- <mat-form-field>
       <input matInput [formControlName]="'Doanhso'" placeholder="Đã Thu">
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Số Tiền Từ</mat-label>
       <input matInput [formControlName]="'Hanmuctu'" placeholder="Từ">
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Số Tiền Đến</mat-label>
       <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
-    </mat-form-field> -->
+    </mat-form-field>
 
     <mat-form-field class="w-full">
       <mat-label>Ngày Mua Đầu</mat-label>
@@ -140,19 +156,9 @@
 
 
 
-  <div class="flex justify-start my-4">
-    <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
-    <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
-      (<span *ngIf="data$ | async as Data">{{Data.length}}/{{count}}</span>)
-    </button>
-    <button mat-raised-button color="primary" (click)="LoadDrive()" class="mr-2">Load Drive</button>
-
-    <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
-      (<span>{{Khachhang.length}}</span>)</button>
-  </div>
   
   
-  <form class="flex space-x-2" [formGroup]="FilterForm">
+  <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">
     <mat-form-field>
       <input matInput 
         [matDatepicker]="fromDate" 
@@ -201,7 +207,7 @@
         <mat-option value="nhatrang" for>Nha Trang</mat-option>
       </mat-select>
     </mat-form-field>
-  </form>
+  </form> -->
   
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
       <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort>
