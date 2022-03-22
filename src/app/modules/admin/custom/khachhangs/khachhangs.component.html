@@ -10,13 +10,13 @@
 
 
   <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
-    <mat-form-field class="w-1/6">
+    <mat-form-field class="w-full">
       <mat-label>Chi Nhánh</mat-label>
       <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh" (selectionChange)="LoadMember($event);ResetSDT()">
         <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="w-1/6">
+    <mat-form-field class="w-full">
       <mat-label>Hạng Khách Hàng</mat-label>
       <mat-select matInput (selectionChange)="ChonMember($event);ResetSDT()" placeholder="Hạng Thành Viên" #MemberSelect="matSelect">
         <mat-option value="0">All</mat-option>
@@ -45,11 +45,11 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Tên Khách Hàng</mat-label>
       <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="w-full">
       <mat-label>Số Điện Thoại</mat-label>
       <input matInput [formControlName]="'SDT'" placeholder="SDT">
     </mat-form-field>
@@ -64,34 +64,34 @@
     <mat-form-field>
       <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
     </mat-form-field> -->
-    <mat-form-field>
+
+    <mat-form-field class="w-full">
       <mat-label>Ngày Mua Đầu</mat-label>
-      <input matInput [matDatepicker]="pickerMD" [formControlName]="'NgayMD'">
-      <mat-datepicker-toggle matSuffix [for]="pickerMD"></mat-datepicker-toggle>
-      <mat-datepicker #pickerMD></mat-datepicker>
+      <mat-date-range-input [rangePicker]="pickerNMD">
+        <input matStartDate [formControlName]="'NgayMDStart'" placeholder="Từ">
+        <input matEndDate [formControlName]="'NgayMDEnd'" placeholder="Đến">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="pickerNMD"></mat-datepicker-toggle>
+      <mat-date-range-picker #pickerNMD></mat-date-range-picker>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Nơi Mua Đầu</mat-label>
-      <input matInput [formControlName]="'NoiMD'" placeholder="Đến">
+
+    <mat-form-field class="w-full">
+      <mat-label>Ngày Mua Cuối</mat-label>
+      <mat-date-range-input [rangePicker]="pickerNMC">
+        <input matStartDate [formControlName]="'NgayMCStart'" placeholder="Từ">
+        <input matEndDate [formControlName]="'NgayMCEnd'" placeholder="Đến">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="pickerNMC"></mat-datepicker-toggle>
+      <mat-date-range-picker #pickerNMC></mat-date-range-picker>
     </mat-form-field>
-    <mat-form-field>
+
+    <!-- <mat-form-field class="w-full">
       <mat-label>Ngày Mua Cuối</mat-label>
       <input matInput [matDatepicker]="pickerMC" [formControlName]="'NgayMC'">
       <mat-datepicker-toggle matSuffix [for]="pickerMC"></mat-datepicker-toggle>
       <mat-datepicker #pickerMC></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Nơi Mua Đầu</mat-label>
-      <input matInput [formControlName]="'NoiMD'" placeholder="Đến">
-    </mat-form-field>
-    <!-- <mat-form-field>
-      <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'Hanmucden'" placeholder="Đến">
     </mat-form-field> -->
   </form>
-  <!-- <div *ngFor="let item of datamember.filter">{{item}}</div> -->
   <div class="mat-elevation-z8">
     <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
@@ -139,7 +139,7 @@
 
 
 
-<!-- 
+
   <div class="flex justify-start my-4">
     <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
     <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
@@ -202,7 +202,7 @@
       </mat-select>
     </mat-form-field>
   </form>
-   -->
+  
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
       <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort>
         <ng-container matColumnDef="NgayTaoDV">

@@ -100,10 +100,10 @@ export class KhachhangsComponent implements OnInit {
       Chinhanh: [''],
       Hanmuctu: [''],
       Hanmucden: [''],
-      NgayMD: [''],
-      NgayMC: [''],
-      NoiMD: [''],
-      NoiMC: [''],
+      NgayMDStart: [''],
+      NgayMDEnd: [''],
+      NgayMCStart: [''],
+      NgayMCEnd: [''],
     });
     this.data$ = this._khachhangsService.data$;
     this.datamember$ = this._khachhangsService.Member$;
@@ -145,13 +145,12 @@ export class KhachhangsComponent implements OnInit {
           const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
           const i = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
           const e = !filter.Hanmuctu && !filter.Hanmucden || data.Dathu <= filter.Hanmucden && data.Dathu >= filter.Hanmuctu;
-          const c = !filter.NgayMD && !filter.NgayMD || data.NgayMD <= filter.NgayMD && data.NgayMD >= filter.NgayMD;
-          const d = !filter.NgayMC && !filter.NgayMC || data.NgayMC <= filter.NgayMC && data.NgayMC >= filter.NgayMC;
-          const f = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
-          const g = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
-          return a && b && e && i&& c&& d&& f&& g;
+          const c = !filter.NgayMDStart && !filter.NgayMDEnd || new Date(data.NgayMD) <= filter.NgayMDEnd && new Date(data.NgayMD) >= filter.NgayMDStart;
+          const d = !filter.NgayMCStart && !filter.NgayMCEnd || new Date(data.NgayMC) <= filter.NgayMCEnd && new Date(data.NgayMC) >= filter.NgayMCStart;
+          return a && b && e && i&& c&& d;
         }) as (PeriodicElement, string) => boolean;
         this.Filtermember.valueChanges.subscribe(value => {
+          console.log(value)
           this.datamember.filter = value;
         });
       }
