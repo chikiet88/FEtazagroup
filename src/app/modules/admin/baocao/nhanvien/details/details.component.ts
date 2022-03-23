@@ -147,6 +147,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
+                console.log(nhanvien)
                 this.nhanvien = nhanvien;
                (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
                (Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;
@@ -172,7 +173,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                         Diachi: nhanvien.profile.Diachi,
                         Fb: nhanvien.profile.Fb,
                         Gioitinh: nhanvien.profile.Gioitinh,
-                        Ngaysinh: nhanvien.profile.Ngaysinh,
+                        Ngaysinh: new Date(nhanvien.profile.Ngaysinh),
                         PQDT: nhanvien.profile.PQDT,
                         PQTD: nhanvien.profile.PQTD,
                         Zalo: nhanvien.profile.Zalo,

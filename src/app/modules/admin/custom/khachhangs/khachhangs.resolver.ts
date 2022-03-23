@@ -17,7 +17,7 @@ export class KhachhangsResolver implements Resolve<boolean> {
     ){}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return forkJoin([
-     //this._khachhangsService.GetData(),
+     this._khachhangsService.GetData(),
      // this._khachhangsService.GetKhachhang(),
      // this._khachhangsService.CountData(),
       this._cauhinhService.getCauhinhs(),

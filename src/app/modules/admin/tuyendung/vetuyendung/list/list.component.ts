@@ -7,7 +7,7 @@ import { Vetuyendung} from '../vetuyendung.types';
 import { VetuyendungService } from '../vetuyendung.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DOCUMENT } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NumberValueAccessor } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -30,8 +30,8 @@ export class ListComponent implements OnInit {
   vetuyendungsCount: number = 0;
   drawerMode: 'over' | 'side';
   searchInputControl: FormControl = new FormControl();
-
-
+  Title:string;
+  CRUD:Number;
   private readonly _positionStep: number = 65536;
   private readonly _maxListCount: number = 200;
   private readonly _maxPosition: number = this._positionStep * 500;
@@ -47,9 +47,11 @@ export class ListComponent implements OnInit {
     private _fuseConfirmationService: FuseConfirmationService,
     private _formbuilder:FormBuilder
     ) { }
-
+    @ViewChild('drawer', { static: true }) drawer: MatDrawer;
     ngOnInit(): void
     {
+        this.CRUD = 1;
+        this.Title = 'Thêm Mới';
         this.VeTDForm = this._formbuilder.group({
                 Vitri:[''],
                 TGTV:[''],
@@ -112,6 +114,13 @@ export class ListComponent implements OnInit {
     onBackdropClicked(): void
     {
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
+        this._changeDetectorRef.markForCheck();
+    }
+    editPhieutuyendung(): void
+    {
+        this.CRUD =2;
+        this.Title = "Cập Nhật";
+        this.drawer.toggle()
         this._changeDetectorRef.markForCheck();
     }
     createYeucau(): void
