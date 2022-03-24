@@ -34,19 +34,18 @@ export class VetuyendungService {
           })
       );
   }
-  createVetuyendung(): Observable<Vetuyendung>
-  {
-      return this.vetuyendungs$.pipe(
+  createVetuyendung(vetuyendung: Vetuyendung): Observable<Vetuyendung> {
+    return this.vetuyendungs$.pipe(
           take(1),
-          switchMap(vetuyendung => this._httpClient.post<Vetuyendung>(`${environment.ApiURL}/vetuyendung`,{}).pipe(
-              map((newVe) => {
-                  this._vetuyendungs.next([newVe, ...vetuyendung]);
-                  this.notifier.notify('success', `Tạo Mới Thành Công`);
-                  return newVe;
+          switchMap(vetuyendungs => this._httpClient.post(`${environment.ApiURL}/vetuyendung`, vetuyendung).pipe(
+              map((result:Vetuyendung) => {
+                this._vetuyendungs.next([result, ...vetuyendungs]);
+                  return result; 
               })
-          ))
-      );
-  }
+    ))
+  )}
+  ;
+
   updateVetuyendung(id: string, vetuyendung: Vetuyendung): Observable<Vetuyendung>
   {
       return this.vetuyendungs$.pipe(

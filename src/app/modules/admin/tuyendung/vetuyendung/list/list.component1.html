@@ -10,7 +10,7 @@
             <form [formGroup]="VeTDForm">
                 <div class="grid grid-cols-12 w-full mt-8 gap-4">
 
-                    <div class="md:col-span-6 col-span-12">
+                    <div class="md:col-span-4 col-span-12">
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
                            Vị Trí
@@ -26,7 +26,19 @@
                         </mat-select>
                         </mat-form-field>
                       </div>
-                      <div class="md:col-span-6 col-span-12">
+                      <div class="md:col-span-4 col-span-12">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                          <div class="text-secondary" matPrefix>
+                            Thời Gian Thử Việc
+                          </div>
+                          <input [formControlName]="'Thoigianthuviec'" type="number" matInput class="mat-select-value-text">
+                          <div class="text-secondary" matSuffix>
+                            Tháng
+                          </div>
+                        </mat-form-field>
+                      </div>               
+
+                      <div class="md:col-span-4 col-span-12">
                         <!-- <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
                             Lý Do Tuyển
@@ -50,18 +62,6 @@
                         </mat-form-field>
 
                       </div> 
-                      <div class="md:col-span-4 col-span-12">
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                          <div class="text-secondary" matPrefix>
-                            Thời Gian Thử Việc
-                          </div>
-                          <input [formControlName]="'Thoigianthuviec'" type="number" matInput class="mat-select-value-text">
-                          <div class="text-secondary" matSuffix>
-                            Tháng
-                          </div>
-                        </mat-form-field>
-                      </div>               
-
                       <div class="sm:col-span-4 col-span-12">
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
@@ -84,14 +84,75 @@
                           </div>
                         </mat-form-field>
                       </div> 
-                      <!-- <div class="sm:col-span-4 col-span-12">
+                      <div class="sm:col-span-4 col-span-12">
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
                             Phê Duyệt
                           </div>
                           <input [formControlName]="'Nguoipheduyet'" type="number" matInput class="mat-select-value-text">
                         </mat-form-field>
-                      </div>  -->
+                      </div> 
+                      <div class="sm:col-span-6">
+                        <div class="text-secondary" matPrefix>
+                          Phê Duyệt
+                        </div>
+                        <div class="flex flex-wrap items-center">
+                          <ng-container *ngIf="VeTDForm.get('Nguoipheduyet').value as Thamgia">
+                            <ng-container *ngFor="let item of Nguoipheduyet">
+                              <div
+                                class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
+                                <span class="text-md font-medium whitespace-nowrap">{{item| findbyid:Nhanvien:'name'}}</span>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <div
+                            class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
+                            (click)="openPanel()" #PanelOrigin>
+            
+                            <ng-container *ngIf="Nguoipheduyet.length">
+                              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                              <span class="ml-1.5 text-md font-medium whitespace-nowrap">Sửa</span>
+                            </ng-container>
+            
+                            <ng-container *ngIf="!Nguoipheduyet.length">
+                              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                              <span class="ml-1.5 text-md font-medium whitespace-nowrap">Thêm</span>
+                            </ng-container>
+            
+                            <ng-template #tagsPanel>
+                              <div class="w-60 rounded border shadow-md bg-card">
+            
+                                <div class="flex items-center m-3 mr-2">
+                                  <div class="flex items-center">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    <div class="ml-2">
+                                      <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm"
+                                        (input)="filterNguoipheduyet($event)" [maxLength]="30">
+                                    </div>
+                                  </div>
+                                  <button class="ml-1" mat-icon-button (click)="toggleNguoipheduyetEditMode()">
+                                  </button>
+                                </div>
+                                <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                  <ng-container *ngIf="!tagsEditMode">
+                                    <ng-container *ngFor="let item of filteredTags;">
+                                      <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                        (click)="toggleTaskTag(tag)" matRipple>
+                                        <mat-checkbox class="flex items-center h-10 min-h-10" [color]="'primary'"
+                                          [checked]="Nguoipheduyet.includes(item.id)">
+                                        </mat-checkbox>
+                                        <div class="ml-1">{{item.name}}</div>
+                                      </div>
+                                    </ng-container>
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </div>
+            
+                        </div>
+                      </div>
+
                       <div class="sm:col-span-6 col-span-12">
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
@@ -116,71 +177,13 @@
                           </div>
                         </div>
                       </div> 
-                      <div class="sm:col-span-6">
-                        <div class="flex flex-wrap mat-form-field items-center fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                          <div class="text-secondary" matPrefix>
-                            Phê Duyệt
-                          </div>
-                          <ng-container *ngIf="VeTDForm.get('Nguoipheduyet').value as Thamgia">
-                            <ng-container *ngFor="let item of Nguoipheduyet">
-                              <div
-                                class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
-                                <span class="text-md font-medium whitespace-nowrap">{{item| findbyid:Nhanvien:'name'}}</span>
-                              </div>
-                            </ng-container>
-                          </ng-container>
-                          <div
-                            class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
-                            (click)="openPanel()" #PanelOrigin>
-            
-                            <ng-container *ngIf="Nguoipheduyet.length">
-                              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                              <span class="ml-1.5 text-md font-medium whitespace-nowrap">Sửa</span>
-                            </ng-container>
-            
-                            <ng-container *ngIf="!Nguoipheduyet.length">
-                              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                              <span class="ml-1.5 text-md font-medium whitespace-nowrap">Thêm</span>
-                            </ng-container>
-            
-                            <ng-template #Panel>
-                              <div class="w-60 rounded border shadow-md bg-card">
-            
-                                <div class="flex items-center m-3 mr-2">
-                                  <div class="flex items-center">
-                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                                    <div class="ml-2">
-                                      <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm"
-                                        (input)="filterNguoipheduyet($event)" [maxLength]="30">
-                                    </div>
-                                  </div>
-                                  <button class="ml-1" mat-icon-button (click)="toggleNguoipheduyetEditMode()">
-                                  </button>
-                                </div>
-                                <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-                                  <ng-container *ngIf="!NguoipheduyetEditMode">
-                                    <ng-container *ngFor="let item of filteredNguoipheduyet;">
-                                      <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
-                                        (click)="toggleNguoipheduyet(item)" matRipple>
-                                        <mat-checkbox class="flex items-center h-10 min-h-10" [color]="'primary'"
-                                          [checked]="Nguoipheduyet.includes(item.id)">
-                                        </mat-checkbox>
-                                        <div class="ml-1">{{item.name}}</div>
-                                      </div>
-                                    </ng-container>
-                                  </ng-container>
-                                </div>
-                              </div>
-                            </ng-template>
-                          </div>
-            
-                        </div>
-                      </div>
-                      <div class="sm:col-span-12 col-span-12">
+                      <div class="sm:col-span-6 col-span-12">
+                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                           <div class="text-secondary" matPrefix>
                             Ghi Chú
                           </div>
-                          <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Ghichu'"></ckeditor>
+                          <input [formControlName]="'Ghichu'" type="number" matInput class="mat-select-value-text">
+                        </mat-form-field>
                       </div> 
                 </div>
                 <div class="flex items-center justify-end mt-3">
@@ -208,7 +211,7 @@
 
     <!-- Main -->
     <div
-        class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto h-200"
+        class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto"
         cdkScrollable>
 
         <!-- Lists -->
@@ -243,17 +246,18 @@
                                 class="p-3 pb-0"
                                 cdkDropList
                                 [cdkDropListData]="list.vetd"
-                                (cdkDropListDropped)="VetuyendungDropped($event)">
-                                <ng-container *ngFor="let item of list.vetd; trackBy: trackByFn">
+                                (cdkDropListDropped)="cardDropped($event)">
+                                <!-- Card -->
+                                <ng-container *ngFor="let card of list.vetd; trackBy: trackByFn">
                                     <a
                                         class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
-                                        (click)="editPhieutuyendung(item)"
+                                        (click)="editPhieutuyendung(card)"
                                         cdkDrag>
                                         <!-- Title -->
-                                        <div class="text-lg font-medium leading-5">{{Vitri[item.Vitri]}}</div>
+                                        <div class="text-lg font-medium leading-5">{{Vitri[card.idVitri]}}</div>
                                         <!-- Labels -->
                                         <!-- Due date -->
-                                        <ng-container *ngIf="item.Ngaytao">
+                                        <ng-container *ngIf="card.Ngaytao">
                                             <div
                                                 class="flex items-center rounded text-sm font-medium leading-5 text-secondary"
                                             >
@@ -261,7 +265,7 @@
                                                     class="icon-size-4 text-current"
                                                     [svgIcon]="'heroicons_outline:clock'"></mat-icon>
                                                 <div class="ml-1">
-                                                    {{item.Ngaytao | date: 'dd/MM/yyyy'}}
+                                                    {{card.Ngaytao | date: 'longDate'}}
                                                 </div>
                                             </div>
                                         </ng-container>

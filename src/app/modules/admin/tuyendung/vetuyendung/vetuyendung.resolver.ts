@@ -4,7 +4,9 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, forkJoin, Observable, of, throwError } from 'rxjs';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { VetuyendungService } from './vetuyendung.service';
 import { Vetuyendung } from './vetuyendung.types';
 
@@ -12,10 +14,18 @@ import { Vetuyendung } from './vetuyendung.types';
   providedIn: 'root'
 })
 export class VetuyendungsResolver implements Resolve<any> {
-     constructor(private _vetuyendungService: VetuyendungService) {}
-     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Vetuyendung[]>
+     constructor(
+       private _vetuyendungService: VetuyendungService,
+       private _cauhinhsService: CauhinhService,
+       private _nhanvienService: NhanvienService,
+       ) {}
+     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
      {
-         return this._vetuyendungService.getVetuyendungs();
+         return forkJoin([
+          this._cauhinhsService.getCauhinhs(),
+          this._nhanvienService.getNhanviens(),
+          this._vetuyendungService.getVetuyendungs()
+        ]);
      }
 }
 @Injectable({

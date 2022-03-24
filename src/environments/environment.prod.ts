@@ -1,5 +1,5 @@
 export const environment = {
-    version:"v2.1",
+    version:"v2.2",
     production: true,
     ApiURL:'https://v2api.tazagroup.vn',
     // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',

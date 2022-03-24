@@ -1,18 +1,21 @@
 export interface Vetuyendung {
-    id?: string;
-    idVitri?: string;
-    SLHT?: number;
-    SLCT?: number;
-    LuongDK?: object;
-    TGThuviec?: number;
-    TNNS?: object;
-    Lydo?: number;
-    Mota?: string;
-    Yeucau?: string;
-    Pheduyet?: object;
-    Trangthai?: number;
-    published?: number;
-    ordering?:number;
-    Ngaytao?: Date;
-    idTao?: number;
+    id: string;
+    Vitri: string;
+    Nhansuhienco:number;
+    Nhansucantuyen: number;
+    Mucluongdukien: number;
+    Tongthunhap: number;
+    Thoigianthuviec: number;
+    TNNS: string;
+    Lydotuyen: string;
+    Mota: string;
+    Yeucau: string;
+    Nguoipheduyet: string[];
+    Ghichu: string;
+    Step: number;
+    Trangthai: number;
+    published: number;
+    ordering: number;
+    Ngaytao: Date;   
+    idTao: string; 
 }
