@@ -219,7 +219,6 @@
         </div>
       </form>
     </mat-drawer>
-
     <div class="example-sidenav-content">
       <div class="flex justify-center">
         <div class="md:text-3xl text-1xl font-extrabold my-auto mr-2">{{ viewDate | calendarDate:(view +
@@ -235,6 +234,12 @@
                 <mat-button-toggle value="blue" (click)="Opentoggle()">
                   <mat-icon>add_circle</mat-icon>
                 </mat-button-toggle>
+                <mat-button-toggle value="blue" (click)="lichhopchitiet.toggle()">
+                  <span class="material-icons">
+                    list
+                    </span>
+                </mat-button-toggle>
+
           </mat-button-toggle-group>
         </div>
       </div>
@@ -249,4 +254,13 @@
       </div>
     </div>
 
+    <mat-drawer #lichhopchitiet class="flex flex-col md:w-1/3 w-full p-3" mode="side" opened position="end"> 
+      <div class="flex justify-between">
+        <h2 mat-dialog-title>{{Lichhops.length}} Lịch Họp</h2>
+        <span class="material-icons pr-4" (click)="lichhopchitiet.toggle()">
+          cancel
+        </span>
+      </div>
+<div *ngFor="let item of Lichhops">{{item.Batdau|date:'dd/MM/YYYY'}} - {{item.Tieude}}</div>
+    </mat-drawer>  
   </mat-drawer-container>

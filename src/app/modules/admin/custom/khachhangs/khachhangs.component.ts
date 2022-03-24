@@ -55,6 +55,7 @@ export class KhachhangsComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    this._khachhangsService.GetData().subscribe();
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
