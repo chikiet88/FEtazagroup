@@ -26,6 +26,8 @@ import { Nhanvien } from '../nhanvien.type';
 import { NhanvienService } from '../nhanvien.service';
 import { NotifierService } from 'angular-notifier';
 import { User } from '../users';
+ const vitri = require('app/v1json/vitri.json');
+ const bophan = require('app/v1json/bophan.json');
 // @Component({
 //     selector       : 'contacts-list',
 //     templateUrl    : './list.component.html',
@@ -82,7 +84,7 @@ export class ListComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-       // this.nhanviens$ = this._nhanviensService.nhanviens$;
+       this._nhanviensService.getNhanviens().subscribe();
         this.nhanviens$ = combineLatest([this._nhanviensService.nhanviens$, this.searchQuery$]).pipe(
             distinctUntilChanged(),
             map(([nhanviens, searchQuery]) => {
@@ -105,7 +107,23 @@ export class ListComponent implements OnInit, OnDestroy
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((nhanviens: Nhanvien[]) => {
             this.nhanviensCount = nhanviens.length;
+            //console.log(vitri);
+            nhanviens.forEach(v => {
+               let x = vitri.find((v1)=> Number(v1.OLDID)  == Number(v.profile.Vitri1));
+               let y = bophan.find((v2)=> Number(v2.OLDID)  == Number(v.profile.Bophan1));
+               if(x!=undefined){v.profile.Vitri = x.NEWID;}
+               if(y!=undefined){v.profile.Bophan = y.NEWID;}
+            });
             this.nhaviens = nhanviens;
+            console.log(nhanviens);
+            nhanviens.forEach((v,k)=> {
+                console.log(v,k);
+                setTimeout(() => {
+                    this._nhanviensService.updateNhanvien(v.id,v).subscribe();
+                }, k*100);
+                
+            });
+
             this._changeDetectorRef.markForCheck();
         });
         this._nhanviensService.nhanvien$

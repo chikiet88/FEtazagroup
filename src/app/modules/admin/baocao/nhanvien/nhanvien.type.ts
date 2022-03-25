@@ -5,7 +5,7 @@ export class Nhanvien {
     email: string;
     password: string;
     avatar:string;
-    profile: profile;
+    profile: any;
     Ngaytao: Date;
     Role:string;
     Phanquyen:string;
@@ -17,6 +17,7 @@ export class profile {
     Phongban: string;
     Bophan: string;
     Vitri: string;
+    Vitri1: string;
     TTLV:number;
     MaNV: string;
     CMND: string;
@@ -25,7 +26,7 @@ export class profile {
     Diachi: string;
     Fb: string;
     Gioitinh: number;
-    Ngaysinh: Date;
+    Ngaysinh: any;
     PQDT: string[];
     PQTD: string[];
     Zalo: string;

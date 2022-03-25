@@ -237,7 +237,7 @@
                 <mat-button-toggle value="blue" (click)="lichhopchitiet.toggle()">
                   <span class="material-icons">
                     list
-                    </span>
+                  </span>
                 </mat-button-toggle>
 
           </mat-button-toggle-group>
@@ -254,13 +254,22 @@
       </div>
     </div>
 
-    <mat-drawer #lichhopchitiet class="flex flex-col md:w-1/3 w-full p-3" mode="side" opened position="end"> 
+    <mat-drawer #lichhopchitiet class="flex flex-col md:w-1/3 w-full p-3" mode="side" opened position="end">
       <div class="flex justify-between">
         <h2 mat-dialog-title>{{Lichhops.length}} Lịch Họp</h2>
         <span class="material-icons pr-4" (click)="lichhopchitiet.toggle()">
           cancel
         </span>
       </div>
-<div *ngFor="let item of Lichhops">{{item.Batdau|date:'dd/MM/YYYY'}} - {{item.Tieude}}</div>
-    </mat-drawer>  
+      <div *ngFor="let item of Lichhops" (click)="editLichhop(item)" class="p-3 hover:text-blue-600 flex">
+        <div class="truncate "> {{item.Batdau|date:'dd/MM/YYYY'}} - {{item.Tieude}}</div>
+        <div class="material-icons ml-auto" [tooltip]="HtmlContent" contentType="template">
+          people
+        </div>
+        <ng-template #HtmlContent>
+          <div *ngFor="let item1 of item.Thamgia; let i = index" class="text-left">
+            {{i+1}}.{{item1|findbyid:Nhanvien:'name'}} - {{Vitri[(item1|findbyid:Nhanvien:'profile').Vitri]}}</div>
+        </ng-template>
+      </div>
+    </mat-drawer>
   </mat-drawer-container>

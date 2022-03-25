@@ -140,6 +140,8 @@ export class DetailsComponent implements OnInit, OnDestroy
         this._nhanvienService.nhanviens$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanviens: Nhanvien[]) => {
+                console.log(nhanviens);
+                
                 this.nhanviens = nhanviens;
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -173,7 +175,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                         Diachi: nhanvien.profile.Diachi,
                         Fb: nhanvien.profile.Fb,
                         Gioitinh: nhanvien.profile.Gioitinh,
-                        Ngaysinh: new Date(nhanvien.profile.Ngaysinh),
+                        Ngaysinh: nhanvien.profile.Ngaysinh,
                         PQDT: nhanvien.profile.PQDT,
                         PQTD: nhanvien.profile.PQTD,
                         Zalo: nhanvien.profile.Zalo,

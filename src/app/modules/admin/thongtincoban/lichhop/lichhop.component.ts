@@ -50,6 +50,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 import { Router } from '@angular/router';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { FindbyidPipe } from 'app/pipes/findbyid/findbyid.pipe';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -131,6 +132,7 @@ export class LichhopComponent implements OnInit {
   filteredTags: any;
   tags: any;
   idThamgia:any;
+  isOpen:any;
   private _tagsPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
@@ -146,7 +148,7 @@ export class LichhopComponent implements OnInit {
     private _notificationsService: NotificationsService,
     private router:Router,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
   ) { }
   options: string[] = ['One', 'Two', 'Three'];
   @ViewChild('tabGroup', { static: false }) public tabGroup: any;
@@ -268,7 +270,7 @@ export class LichhopComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((nhanvien: Nhanvien[]) => {
         console.log(nhanvien);
-        this.Nhanvien = nhanvien;
+        this.Nhanvien = nhanvien;          
         this.filteredTags =nhanvien; 
         this._changeDetectorRef.markForCheck();
       });
@@ -295,6 +297,7 @@ export class LichhopComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((lichhops: Lichhop[]) => {
         this.Lichhops = lichhops;
+        console.log(this.Lichhops);  
         this._changeDetectorRef.markForCheck();
       });
     this._lichhopService.events$
@@ -381,6 +384,24 @@ export class LichhopComponent implements OnInit {
     this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);
+    if(this.user.id!=this.Lichhop.Chutri)
+    {
+      this.LichhopForm.get('Loaihinh').disable();
+      this.LichhopForm.get('Tieude').disable();
+      this.LichhopForm.get('Congty').disable();
+      this.LichhopForm.get('Thamgia').disable();
+      this.LichhopForm.get('Ngansach').disable();
+      this.LichhopForm.get('Batdau').disable();
+      this.LichhopForm.get('Ketthuc').disable();
+    }
+    this.idThamgia = this.Lichhop.Thamgia;
+    this.LichhopForm.patchValue(this.Lichhop);
+    this.Title = "Cập Nhật";
+  }
+  editLichhop(lichhop): void {
+    this.CRUD = 2;
+    this.sidenav.toggle();
+    this.Lichhop = this.Lichhops.find(v => v.id == lichhop.id);
     if(this.user.id!=this.Lichhop.Chutri)
     {
       this.LichhopForm.get('Loaihinh').disable();
