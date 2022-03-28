@@ -13,6 +13,7 @@ import { User } from '../user/user.types';
 export class NavigationService {
     user: User;
     private _navigation: ReplaySubject<Navigation> = new ReplaySubject<Navigation>(1);
+    private _menus: ReplaySubject<Navigation> = new ReplaySubject<Navigation>(1);
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
@@ -20,6 +21,9 @@ export class NavigationService {
     }
     get navigation$(): Observable<Navigation> {
         return this._navigation.asObservable();
+    }
+    get menus$(): Observable<any> {
+        return this._menus.asObservable();
     }
     get(): Observable<Navigation> {
         return this._httpClient.get<any>(`${environment.ApiURL}/navigation`).pipe(
@@ -46,11 +50,20 @@ export class NavigationService {
                 )
             })
         );
+        
         // return this._httpClient.get<Navigation>('api/common/navigation').pipe(
         //     tap((navigation) => {
         //         console.log(navigation);
         //         this._navigation.next(navigation);
         //     })
         // );
+    }
+
+    getMenu(): Observable<any> {
+        return this._httpClient.get<any>(`${environment.ApiURL}/navigation`).pipe(
+            tap((res) => {   
+                return this._menus.next(res); 
+            })
+        )
     }
 }

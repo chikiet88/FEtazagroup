@@ -10,6 +10,8 @@ import Base64 from 'crypto-js/enc-base64';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { NotifierService } from 'angular-notifier';
+import { NavigationService } from '../navigation/navigation.service';
+import { toNumber } from 'lodash';
 @Injectable()
 export class AuthService
 {
@@ -18,6 +20,7 @@ export class AuthService
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
     private readonly notifier: NotifierService;
+    private Menutype: any;
     /**
      * Constructor
      */
@@ -25,6 +28,8 @@ export class AuthService
         private _httpClient: HttpClient,
         private _userService: UserService,
         private _notifierService: NotifierService,
+        private _navigationService: NavigationService,
+        
   
     )
     {
@@ -184,40 +189,25 @@ export class AuthService
         //return of(true);
         return this.signInUsingToken();
     }
-    checkAdmin(): Observable<boolean>
-    {
-        if ( this._authenticated )
-        {
-            return of(true);
-        }
-        if ( !this.accessToken || this.accessToken === 'undefined' )
-        {
-            localStorage.removeItem('accessToken');
-            return of(false);
-        }
-        if ( AuthUtils.isTokenExpired(this.accessToken) )
-        {
-            return of(false);
-        }
-        //return of(true);
-        return this.LoginAdmin();
-    }
-    LoginAdmin(): Observable<any>
+    checkAdmin(redirectURL): Observable<boolean>
     {
         return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, {access_token:this.accessToken}).pipe(
             switchMap((response: any) => {
                 if(response!==false)
                 {
-                    this._authenticated = true;
-                    this._userService.user = response.user;
-                    if(response.user.role=="Admin")
-                    {
-                    return of(true)
-                     }
-                     else return of(false)
 
+                    this._authenticated = true;
+                    this._userService.user = response;
+                         this._navigationService.menus$.subscribe((menus)=>
+                        {
+                           const uuid = menus.find(v=>v.link === redirectURL).uuid;                  
+                            this.Menutype = response.Menu[uuid];
+                            console.log(this.Menutype);
+                            
+                        })
+                    return of(this.Menutype);  
                 }
-                else return of(false)
+                else return of(true)
 
             })
         );

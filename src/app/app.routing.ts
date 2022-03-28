@@ -4,20 +4,9 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 import { AdminGuard } from './core/auth/guards/admin.guard';
-
-// @formatter:off
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/dashboards/project'
     {path: '', pathMatch : 'full', redirectTo: 'wellcome/gioithieu'},
-
-    // Redirect signed in user to the '/dashboards/project'
-    //
-    // After the user signs in, the sign in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
     {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'wellcome/gioithieu'},
 
     // Auth routes for guests
@@ -76,40 +65,61 @@ export const appRoutes: Route[] = [
         },
         children   : [
             // Wellcome
-            {path: 'wellcome', children: [
+            {path: 'wellcome', 
+            children: [
                 {path: 'gioithieu', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule)},
                 {path: 'cauhoi', loadChildren: () => import('app/modules/admin/wellcome/cauhoi/cauhoi.module').then(m => m.CauhoiModule)},
 
             ]},
-            {path: 'thongtin', children: [
+            {path: 'thongtin', 
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+            children: [
                 {path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule)},
                 {path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule)},
                 {path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule)},
 
             ]},
-            {path: 'tuyendung', children: [
+            {path: 'tuyendung',
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+             children: [
                 {path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule)},
                 {path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule)},
 
             ]},         
-            {path: 'daotao', children: [
+            {path: 'daotao',
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+             children: [
                 {path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule)},
                 {path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule)},
 
             ]},
             {
             path: 'cauhinh', 
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
             loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)},
-            {path: 'custom', children: [
+            {path: 'custom',
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+             children: [
                 {path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule)},
                 {path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule)},
                 {path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule)},
             ]},
-            {path: 'baocao', children: [
+            {path: 'baocao', 
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+            children: [
                 {path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule)},
             ]},           
             // Dashboards
-            {path: 'dashboards', children: [
+            {path: 'dashboards',
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+            children: [
                 {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
                 {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
                 {path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
@@ -117,7 +127,10 @@ export const appRoutes: Route[] = [
             ]},
 
             // Apps
-            {path: 'apps', children: [
+            {path: 'apps', 
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+            children: [
                 {path: 'academy', loadChildren: () => import('app/modules/admin/apps/academy/academy.module').then(m => m.AcademyModule)},
                 {path: 'chat', loadChildren: () => import('app/modules/admin/apps/chat/chat.module').then(m => m.ChatModule)},
                 {path: 'contacts', loadChildren: () => import('app/modules/admin/apps/contacts/contacts.module').then(m => m.ContactsModule)},
@@ -131,7 +144,10 @@ export const appRoutes: Route[] = [
             ]},
 
             // Pages
-            {path: 'pages', children: [
+            {path: 'pages',
+            canActivate: [AdminGuard],
+            canActivateChild: [AdminGuard],
+            children: [
 
                 // Activities
                 {path: 'activities', loadChildren: () => import('app/modules/admin/pages/activities/activities.module').then(m => m.ActivitiesModule)},

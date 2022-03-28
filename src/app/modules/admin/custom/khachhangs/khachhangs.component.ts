@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild,ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,7 +14,8 @@ import { KhachhangsService } from './khachhangs.service';
 @Component({
   selector: 'app-khachhangs',
   templateUrl: './khachhangs.component.html',
-  styleUrls: ['./khachhangs.component.scss']
+  styleUrls: ['./khachhangs.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class KhachhangsComponent implements OnInit {
   characters$: Observable<Khachhang[]>;
@@ -60,7 +61,6 @@ export class KhachhangsComponent implements OnInit {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
         this.CurrentUser = user;
-        console.log(this.CurrentUser);
         this.UserChinhanh = this.CurrentUser.Phanquyen;
         //this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
         // Mark for check
@@ -128,6 +128,10 @@ export class KhachhangsComponent implements OnInit {
         this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
   } 
+  Tongcong(data,field) {
+    //console.log(data);
+    if(data!=undefined)
+    {    return data.reduce((a, b) => a + (Number(b[field]) || 0), 0);}}
   ResetSDT()
   {   
     this.Showchitiet = false;
@@ -137,7 +141,7 @@ export class KhachhangsComponent implements OnInit {
     this.Showchitiet = false;
     this._khachhangsService.GetMember(ob.value).subscribe();
     this.datamember$.subscribe((v)=>{
-        this.datamember = new MatTableDataSource(v);
+        this.datamember = new MatTableDataSource(v);       
         this.datamember.paginator = this.MemberPag;
         this.datamember.sort = this.MemberSort;
         this._changeDetectorRef.markForCheck();
@@ -151,7 +155,7 @@ export class KhachhangsComponent implements OnInit {
           return a && b && e && i&& c&& d;
         }) as (PeriodicElement, string) => boolean;
         this.Filtermember.valueChanges.subscribe(value => {
-          console.log(value)
+         // console.log(value)
           this.datamember.filter = value;
         });
       }
@@ -196,7 +200,7 @@ export class KhachhangsComponent implements OnInit {
           // let x = v.NgayTaoDV.toString().split("/");
           // v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
         });
-        console.log(Khachhang)
+       // console.log(Khachhang)
         this.Khachhang = new MatTableDataSource(Khachhang);
         this.Khachhang.paginator = this.DataPag;
         this.Khachhang.sort = this.DataSort;
@@ -207,14 +211,14 @@ export class KhachhangsComponent implements OnInit {
     this.data$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data: Khachhang[]) => {
-        console.log(data);
+       // console.log(data);
         const NewUnique = [... new Set(data.map(v => v.SDT))];
         const Thanhvien = [];
         this.data = new MatTableDataSource(data);
         this.data.paginator = this.DataPag;
         this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
-        console.log(NewUnique);
+       // console.log(NewUnique);
         NewUnique.forEach(v => {
           let Sum = 0;
           const UniKH = data.filter(v1 => v1.SDT == v);   
@@ -236,7 +240,7 @@ export class KhachhangsComponent implements OnInit {
             'Ghichu':getKH.Ghichu
           })
         });
-        console.log(Thanhvien);
+        //console.log(Thanhvien);
         Thanhvien.forEach((v, k) => {
           setTimeout(() => {
             this._khachhangsService.CreateMember(v)
@@ -287,16 +291,17 @@ export class KhachhangsComponent implements OnInit {
   SelectMember(value) {
     this.Showchitiet = true;
     this.Filtermember.get('SDT').setValue(value.SDT);
-    this._khachhangsService.LoadBySDT(value.SDT).subscribe();
-    this.data$.subscribe((v)=>{
-      this.data = new MatTableDataSource(v);
-      this.data.paginator = this.DataPag;
-      this.data.sort = this.DataSort;
-      this._changeDetectorRef.markForCheck();
-    }
+    this._khachhangsService.LoadBySDT(value.SDT).subscribe(
+      ()=>{
+        this.data$.subscribe((v)=>{
+          this.data = new MatTableDataSource(v);
+          this.data.paginator = this.DataPag;
+          this.data.sort = this.DataSort;
+          this._changeDetectorRef.markForCheck();
+        }
+        );
+      }
     );
-
-
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -306,7 +311,7 @@ export class KhachhangsComponent implements OnInit {
     }
   }
   CreateData(dulieu: any): void {
-    console.log(dulieu)
+   //console.log(dulieu)
     dulieu.forEach(v1 => {
       let x = v1.NgayTaoDV.toString().split("/");
       v1.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));

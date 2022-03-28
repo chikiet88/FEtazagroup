@@ -14,16 +14,15 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanDeactivate<
 )
 {
 }
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return false;
-  }
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
-  }
+canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean
+{
+  const redirectUrl = state.url === '/sign-out' ? '/' : state.url;
+  return this._check(redirectUrl);
+}
+canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
+{
+  return this.canActivate(childRoute,state);
+}
   canDeactivate(
     component: unknown,
     currentRoute: ActivatedRouteSnapshot,
@@ -31,21 +30,20 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanDeactivate<
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return true;
   }
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return false;
+  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean
+  {
+      return this._check('/');
   }
 
   private _check(redirectURL: string): Observable<boolean>
-  {
-      return this._authService.checkAdmin()
+  {                            
+      return this._authService.checkAdmin(redirectURL)
                  .pipe(
-                     switchMap((authenticated) => {
-                         if ( !authenticated )
+                     switchMap((res) => {
+                         if (!res)
                          {
-                             this._router.navigate(['sign-in'], {queryParams: {redirectURL}});
-                             return of(false);
+                             this._router.navigate(['/wellcome/gioithieu']);
+                             return of(res);
                          }
                          return of(true);
                      })

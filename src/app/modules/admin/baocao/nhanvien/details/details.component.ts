@@ -101,7 +101,7 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.Menu = data;
             this.PQMenu = {};
             data.forEach(v => {
-                this.PQMenu[v.uuid]=false;
+                this.PQMenu[v.uuid]=v.status;
               });
            this._changeDetectorRef.markForCheck();
        });

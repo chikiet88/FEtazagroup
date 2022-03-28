@@ -108,21 +108,22 @@ export class ListComponent implements OnInit, OnDestroy
         .subscribe((nhanviens: Nhanvien[]) => {
             this.nhanviensCount = nhanviens.length;
             //console.log(vitri);
-            nhanviens.forEach(v => {
-               let x = vitri.find((v1)=> Number(v1.OLDID)  == Number(v.profile.Vitri1));
-               let y = bophan.find((v2)=> Number(v2.OLDID)  == Number(v.profile.Bophan1));
-               if(x!=undefined){v.profile.Vitri = x.NEWID;}
-               if(y!=undefined){v.profile.Bophan = y.NEWID;}
-            });
+            // nhanviens.forEach(v => {
+            //    let x = vitri.find((v1)=> Number(v1.OLDID)  == Number(v.profile.Vitri1));
+            //    let y = bophan.find((v2)=> Number(v2.OLDID)  == Number(v.profile.Bophan1));
+            //    if(x!=undefined){v.profile.Vitri = x.NEWID;}
+            //    if(y!=undefined){v.profile.Bophan = y.NEWID;}
+            // });
+
             this.nhaviens = nhanviens;
             console.log(nhanviens);
-            nhanviens.forEach((v,k)=> {
-                console.log(v,k);
-                setTimeout(() => {
-                    this._nhanviensService.updateNhanvien(v.id,v).subscribe();
-                }, k*100);
+            // nhanviens.forEach((v,k)=> {
+            //     console.log(v,k);
+            //     setTimeout(() => {
+            //         this._nhanviensService.updateNhanvien(v.id,v).subscribe();
+            //     }, k*100);
                 
-            });
+            // });
 
             this._changeDetectorRef.markForCheck();
         });
