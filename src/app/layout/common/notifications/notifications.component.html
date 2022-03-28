@@ -33,7 +33,7 @@
             <div class="ml-auto">
                 <button
                     mat-icon-button
-                    [matTooltip]="'Mark all as read'"
+                    [matTooltip]="'Đã đọc tất cả'"
                     [disabled]="unreadCount === 0"
                     (click)="markAllAsRead()">
                     <mat-icon
@@ -67,7 +67,7 @@
                             class="w-6 h-6 min-h-6"
                             mat-icon-button
                             (click)="toggleRead(notification)"
-                            [matTooltip]="notification.Status ? 'Mark as unread' : 'Mark as read'">
+                            [matTooltip]="notification.Status ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'">
                             <span
                                 class="w-2 h-2 rounded-full"
                                 [ngClass]="{'bg-gray-400 dark:bg-gray-500 sm:opacity-0 sm:group-hover:opacity-100': notification.Status,

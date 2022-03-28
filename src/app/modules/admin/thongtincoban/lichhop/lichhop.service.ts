@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Lichhop } from './lichhop.type';
 const colors: any = {
   red: {
@@ -72,26 +72,25 @@ CreateLichhop(Lichhop: Lichhop): Observable<Lichhop> {
               })
     ))
   );
-
-    // return this._httpClient.post<Lichhop[]>(`${environment.ApiURL}/lichhop`, Lichhop).pipe(
-    //   tap((lichhops) => {
-    //     this.notifi.idFrom = Lichhop.Chutri;
-    //     this.notifi.Tieude = "Lịch Họp";
-    //     this.notifi.Noidung = Lichhop.Tieude;
-    //     this.notifi.Lienket = Lichhop.Tieude;
-    //     this.notifi.idTo = Lichhop.Thamgia;
-
-
-    //     this._notificationsService.create(this.notifi)
-    //     this._lichops.next(lichhops);
-    //     this.getLichhops().subscribe();
-    //   })
-    // );
-
-
-
-
-
+  }
+    
+  getLichopById(id: string): Observable<Lichhop>
+  {
+      return this._lichops.pipe(
+          take(1),
+          map((lichhops) => {
+              const lichhop = lichhops.find(item => item.id === id) || null;
+              this._lichhop.next(lichhop);
+              return lichhop;
+          }),
+          switchMap((lichhop) => {
+              if ( !lichhop)
+              {
+                  return throwError('Could not found contact with id of ' + id + '!');
+              }
+              return of(lichhop);
+          })
+      );
   }
   UpdateLichhop(lichhop: Lichhop): Observable<Lichhop[]> {
     return this._httpClient.patch<Lichhop[]>(`${environment.ApiURL}/lichhop/${lichhop.id}`, lichhop).pipe(

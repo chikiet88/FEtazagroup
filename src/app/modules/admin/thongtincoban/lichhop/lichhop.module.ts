@@ -7,7 +7,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { MaterialExampleModule } from 'material.module';
 import { FuseDrawerModule } from '@fuse/components/drawer';
-import { LichhopResolver } from './lichhop.resolver';
+import { LichhopDetailResolver, LichhopResolver } from './lichhop.resolver';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,8 +27,18 @@ const LichhopRoutes: Routes = [
       resolve  : {
         tasks    : LichhopResolver,
     },
+    children : [
+      {
+          path         : ':id',
+          component: LichhopComponent,  
+          resolve      : {
+             task     : LichhopDetailResolver,
+          },
+      }
+  ]
   }
 ];
+
 @NgModule({
   declarations: [
     LichhopComponent

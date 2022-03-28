@@ -35,7 +35,7 @@ import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { LichhopService } from './lichhop.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
@@ -90,7 +90,8 @@ export class LichhopComponent implements OnInit {
   //     );
   // }
   @ViewChild('picker') picker: any;
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
+  @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
   @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
   @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
   public date: moment.Moment;
@@ -150,7 +151,6 @@ export class LichhopComponent implements OnInit {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
   ) { }
-  options: string[] = ['One', 'Two', 'Three'];
   @ViewChild('tabGroup', { static: false }) public tabGroup: any;
   public activeTabIndex: number | undefined = undefined;
 
@@ -268,10 +268,10 @@ export class LichhopComponent implements OnInit {
     this.CRUD = 1;
     this._NhanvienService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((nhanvien: Nhanvien[]) => {
+      .subscribe((nhanvien) => {
         console.log(nhanvien);
         this.Nhanvien = nhanvien;          
-        this.filteredTags =nhanvien; 
+        this.filteredTags = nhanvien; 
         this._changeDetectorRef.markForCheck();
       });
     this._CauhinhService.Cauhinhs$
@@ -292,7 +292,6 @@ export class LichhopComponent implements OnInit {
         this.user = data;
         this._changeDetectorRef.markForCheck();
       });
-
     this._lichhopService.lichhops$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((lichhops: Lichhop[]) => {
@@ -304,7 +303,6 @@ export class LichhopComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((events: any[]) => {
         this.events = events;
-
         this._changeDetectorRef.markForCheck();
       });
     this.LichhopForm = this._formBuilder.group({
@@ -327,6 +325,38 @@ export class LichhopComponent implements OnInit {
       Dieukienkhac: [''],
       Nguyennhan: [''],
     });
+    this._lichhopService.lichhop$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((lichhop: Lichhop) => {
+        this.Lichhop = lichhop;
+        console.log(this.Lichhop);  
+        this.Title = "Cập Nhật";
+        this.CRUD =2;
+        this.LichhopForm.patchValue(
+          {
+            id: lichhop.id,
+            Loaihinh: lichhop.Loaihinh,
+            Tieude: lichhop.Tieude,
+            Congty: lichhop.Congty,
+            Chutri: lichhop.Chutri,
+            Thamgia: lichhop.Thamgia,
+            Ngansach: lichhop.Ngansach,
+            Batdau: lichhop.Batdau,
+            Ketthuc: lichhop.Ketthuc,
+            Review: lichhop.Review,
+            Hoanthanh: lichhop.Hoanthanh,
+            Noidung: lichhop.Noidung,
+            Trienkhai: lichhop.Trienkhai,
+            Ketqua:lichhop.Ketqua,
+            Mongdoi:lichhop.Mongdoi,
+            Dieuchinh: lichhop.Dieuchinh,
+            Dieukienkhac: lichhop.Dieukienkhac,
+            Nguyennhan: lichhop.Nguyennhan,
+          });
+          this.sidenav.toggle();
+        this._changeDetectorRef.markForCheck();
+      });
+
   }
 
   ngOnDestroy(): void

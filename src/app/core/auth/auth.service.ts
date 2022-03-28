@@ -189,27 +189,4 @@ export class AuthService
         //return of(true);
         return this.signInUsingToken();
     }
-    checkAdmin(redirectURL): Observable<boolean>
-    {
-        return this._httpClient.post(`${environment.ApiURL}/auth/signbytoken`, {access_token:this.accessToken}).pipe(
-            switchMap((response: any) => {
-                if(response!==false)
-                {
-
-                    this._authenticated = true;
-                    this._userService.user = response;
-                         this._navigationService.menus$.subscribe((menus)=>
-                        {
-                           const uuid = menus.find(v=>v.link === redirectURL).uuid;                  
-                            this.Menutype = response.Menu[uuid];
-                            console.log(this.Menutype);
-                            
-                        })
-                    return of(this.Menutype);  
-                }
-                else return of(true)
-
-            })
-        );
-    }
 }

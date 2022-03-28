@@ -69,7 +69,7 @@
                 <ng-container *ngFor="let tag of idThamgia">
                   <div
                     class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-white bg-blue-700 dark:text-gray-300 dark:bg-gray-700">
-                    <span class="text-md font-medium whitespace-nowrap">{{tag| findbyid:Nhanvien:'name'}}</span>
+                    <span class="text-md font-medium whitespace-nowrap">{{tag| findbyid:Nhanvien:'name'}} ({{Vitri[(tag|findbyid:Nhanvien:'profile').Vitri]}})</span>
                   </div>
                 </ng-container>
               </ng-container>
@@ -110,7 +110,7 @@
                             <mat-checkbox class="flex items-center h-10 min-h-10" [color]="'primary'"
                               [checked]="idThamgia.includes(tag.id)">
                             </mat-checkbox>
-                            <div class="ml-1">{{tag.name}}</div>
+                            <div class="ml-1">{{tag.name}}  ({{Vitri[(tag.id|findbyid:Nhanvien:'profile').Vitri]}})</div>
                           </div>
                         </ng-container>
                       </ng-container>
@@ -268,7 +268,7 @@
         </div>
         <ng-template #HtmlContent>
           <div *ngFor="let item1 of item.Thamgia; let i = index" class="text-left">
-            {{i+1}}.{{item1|findbyid:Nhanvien:'name'}} - {{Vitri[(item1|findbyid:Nhanvien:'profile').Vitri]}}</div>
+            {{i+1}}.{{item1|findbyid:Nhanvien:'name'}} ({{Vitri[(item1|findbyid:Nhanvien:'profile').Vitri]}})</div>
         </ng-template>
       </div>
     </mat-drawer>
