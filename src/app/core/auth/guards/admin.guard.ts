@@ -19,28 +19,11 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanDeactivate<
     private _navigationService: NavigationService,
   ) {}
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      this._userService.user$.subscribe((user: User) => {
-        this._navigationService.menus$.subscribe((menus) => {
-          const uuid = menus.find(v => v.link === state.url).uuid;
-           this.status = user.Menu[uuid];
-           console.log(this.status);
-    });
-    this.status==undefined?this.status =true:this.status =this.status;
-    console.log(this.status);
-   }
-  );
-    return of(this.status);
-    // if(state.url){localStorage.setItem('redirectUrl', state.url)} 
-    // const redirectUrl = state.url === '/sign-out' ? '/' : state.url;
-    // return
-    // if(state.url){return this._check(redirectUrl)}
-    // else {return this._check(localStorage.getItem('redirectUrl'))}
-
-
+    const redirectUrl = state.url === '/sign-out' ? '/' : state.url;
+    return this._Checkmenu(redirectUrl);
   }
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return of(true)
-    //return this.canActivate(childRoute,state);
+    return this.canActivate(childRoute,state);
   }
   canDeactivate(
     component: unknown,
@@ -50,7 +33,33 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanDeactivate<
     return true;
   }
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    return of(true)
-    // return this._check('/');
+    return this._Checkmenu('/');
   }
+  private _Checkmenu(redirectUrl): Observable<boolean>
+  {
+      return this._authService.CheckMenu()
+          .pipe(switchMap((checkmenu) => {
+            console.log(checkmenu);
+            
+                 if (!checkmenu )
+                  {
+                    this._router.navigate(['/wellcome/gioithieu']);
+                    return of(false);
+                  }
+                  else
+                  {
+                    console.log(checkmenu);
+                    
+                    const check = checkmenu.find(v=>v.link ===redirectUrl)
+                    console.log(check);
+                    
+                    if(check!=undefined){return of(true)}
+                    else {
+                     this._router.navigate(['/wellcome/gioithieu']);
+                     return of(false)
+                  }
+                  }
+                   })
+                );
+    }
 }

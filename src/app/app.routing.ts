@@ -75,6 +75,7 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'thongtin',
+                canActivate: [AdminGuard],
                     children: [
                         { path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule) },
                         { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
@@ -84,6 +85,7 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'tuyendung',
+                canActivate: [AdminGuard],
                 children: [
                     { path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule) },
                     { path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule) },
@@ -92,6 +94,7 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'daotao',
+                canActivate: [AdminGuard],
                 children: [
                     { path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
                     { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
@@ -100,10 +103,12 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'cauhinh',
+                canActivate: [AdminGuard],
                 loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)
             },
             {
                 path: 'custom',
+                canActivate: [AdminGuard],
                 children: [
                     { path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule) },
                     { path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule) },
@@ -112,6 +117,7 @@ export const appRoutes: Route[] = [
             },
             {
                 path: 'baocao',
+                canActivate: [AdminGuard],
                 children: [
                     { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
                 ]
@@ -119,6 +125,7 @@ export const appRoutes: Route[] = [
             // Dashboards
             {
                 path: 'dashboards',
+                canActivate: [AdminGuard],
                 children: [
                     { path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule) },
                     { path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule) },
