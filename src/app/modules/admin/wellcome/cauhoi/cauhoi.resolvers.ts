@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
+import { HelpCenterService } from '../../apps/help-center/help-center.service';
 import { CauhoiService } from './cauhoi.service'; 
 
 @Injectable({
@@ -11,22 +12,17 @@ export class CauhoiResolver implements Resolve<any>
     /**
      * Constructor
      */
-    constructor(private _cauhoiService: CauhoiService)
+    constructor(
+        private _cauhoiService: CauhoiService,
+        private _helpCenterService: HelpCenterService)
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
     {
-        return this._cauhoiService.getData();
+       
+        return forkJoin([
+            this._cauhoiService.getData(),
+            this._helpCenterService.getAllFaqs()
+        ]);
     }
 }

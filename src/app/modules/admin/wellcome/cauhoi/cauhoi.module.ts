@@ -13,11 +13,13 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { CauhoiComponent } from './cauhoi.component'; 
 import { cauhoiRoutes } from './cauhoi.routing';
+import { MaterialExampleModule } from 'material.module';
 @NgModule({
     declarations: [
         CauhoiComponent
     ],
     imports     : [
+        MaterialExampleModule,
         RouterModule.forChild(cauhoiRoutes),
         MatButtonModule,
         MatButtonToggleModule,
