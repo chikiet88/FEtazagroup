@@ -178,6 +178,7 @@ export class AuthService {
             switchMap((response: any) => {
                 if (response !== false) {
                     const Menus = [];
+                    this._navigationService.getMenu().subscribe();
                     this._navigationService.menus$.subscribe((menus) => {
                         this._menus.next(menus);
                     });

@@ -48,9 +48,9 @@ export class LichhopService {
         this._UserService.user$.subscribe((data: User) => {
           lichhops = lichhops.filter(v=>v.Chutri==data.id || v.Thamgia.some(v2=>v2==data.id))});
         lichhops.forEach(v => {
-          let item1 = {id: v.id,start: new Date(v.Batdau),end: new Date(v.Ketthuc), color: colors.red,title: v.Tieude,allDay: true,draggable: true}
-          let item2 = {id: v.id,start: new Date(v.Review),end: new Date(v.Review), color: colors.yellow,title: v.Tieude,allDay: true, draggable: true,}
-          let item3 = {id: v.id,start: new Date(v.Hoanthanh),end: new Date(v.Hoanthanh),color: colors.green,title: v.Tieude,allDay: true,draggable: true,}
+          let item1 = {id: v.id,typeLich:1,start: new Date(v.Batdau),end: new Date(v.Ketthuc), color: colors.red,title: v.Tieude,allDay: true,draggable: true}
+          let item2 = {id: v.id,typeLich:2,start: new Date(v.Review),end: new Date(v.Review), color: colors.yellow,title: v.Tieude,allDay: true, draggable: true,}
+          let item3 = {id: v.id,typeLich:3,start: new Date(v.Hoanthanh),end: new Date(v.Hoanthanh),color: colors.green,title: v.Tieude,allDay: true,draggable: true,}
           events.push(item1);
           events.push(item2);
           events.push(item3);

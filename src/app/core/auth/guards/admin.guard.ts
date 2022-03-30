@@ -33,6 +33,7 @@ export class AdminGuard implements CanActivate, CanActivateChild, CanDeactivate<
     return true;
   }
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
+    return of(true)
     return this._Checkmenu('/');
   }
   private _Checkmenu(redirectUrl): Observable<boolean>

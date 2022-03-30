@@ -3,7 +3,7 @@
     <mat-drawer #sidenav class="flex flex-col sm:w-3/4 w-full p-3" mode="over">
       <div class="flex justify-between">
         <h2 mat-dialog-title>{{Title}}</h2>
-        <span class="material-icons pr-4" (click)="sidenav.toggle()">
+        <span class="material-icons pr-4" (click)="sidenav.toggle()" [routerLink]="['./']">
           cancel
         </span>
       </div>

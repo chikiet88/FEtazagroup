@@ -92,10 +92,13 @@ export class NotificationsComponent implements OnInit, OnDestroy
     {
         this._overlayRef.detach();
     }
-    // markAllAsRead(): void
-    // {
-    //     this._notificationsService.markAllAsRead().subscribe();
-    // }
+    markAllAsRead(): void
+    {
+        this.notifications.forEach(v => {
+            v.Status = true;
+            this._notificationsService.update(v).subscribe();
+        });
+    }
 
     toggleRead(notification: NotificationEntity): void
     {

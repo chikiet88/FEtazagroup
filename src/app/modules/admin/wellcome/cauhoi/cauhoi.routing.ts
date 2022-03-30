@@ -1,13 +1,34 @@
 import { Route } from '@angular/router';
-import { CauhoiComponent } from './cauhoi.component'; 
-import { CauhoiResolver } from './cauhoi.resolvers'; 
+import { CauhoiComponent } from './cauhoi.component';
+import { CauhoiResolver } from './cauhoi.resolvers';
+import { FaqComponent } from './faq/faq.component';
+import { HotroComponent } from './hotro/hotro.component';
+import { HuongdanComponent } from './huongdan/huongdan.component';
 
 export const cauhoiRoutes: Route[] = [
     {
-        path     : '',
+        path: '',
         component: CauhoiComponent,
-        resolve  : {
+        resolve: {
             data: CauhoiResolver
         }
-    }
+    },
+        {
+                path: 'faq', component: FaqComponent,
+                resolve: {
+                    data: CauhoiResolver
+         }
+            },
+            {
+                path: 'huongdan', component: HuongdanComponent,
+                resolve: {
+                    data: CauhoiResolver
+                }
+            },
+            {
+                path: 'hotro', component: HotroComponent,
+                resolve: {
+                    data: CauhoiResolver
+                }
+            }
 ];

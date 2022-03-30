@@ -22,7 +22,8 @@ export class CauhoiResolver implements Resolve<any>
        
         return forkJoin([
             this._cauhoiService.getData(),
-            this._helpCenterService.getAllFaqs()
+            this._helpCenterService.getAllFaqs(),
+            this._helpCenterService.getAllGuides()
         ]);
     }
 }

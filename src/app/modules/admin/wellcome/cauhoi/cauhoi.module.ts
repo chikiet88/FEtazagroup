@@ -14,9 +14,15 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CauhoiComponent } from './cauhoi.component'; 
 import { cauhoiRoutes } from './cauhoi.routing';
 import { MaterialExampleModule } from 'material.module';
+import { FaqComponent } from './faq/faq.component';
+import { HuongdanComponent } from './huongdan/huongdan.component';
+import { HotroComponent } from './hotro/hotro.component';
 @NgModule({
     declarations: [
-        CauhoiComponent
+        CauhoiComponent,
+        FaqComponent,
+        HuongdanComponent,
+        HotroComponent
     ],
     imports     : [
         MaterialExampleModule,

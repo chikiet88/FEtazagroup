@@ -296,7 +296,6 @@ export class LichhopComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((lichhops: Lichhop[]) => {
         this.Lichhops = lichhops;
-        console.log(this.Lichhops);  
         this._changeDetectorRef.markForCheck();
       });
     this._lichhopService.events$
@@ -381,11 +380,7 @@ export class LichhopComponent implements OnInit {
       this.viewDate = date;
     }
   }
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd,
-  }: CalendarEventTimesChangedEvent): void {
+  eventTimesChanged({event,newStart,newEnd}): void {
     const confirmation = this._fuseConfirmationService.open({
       title: 'Chuyển Lịch',
       message: 'Bạn Có Chắc Chắn Chuyển Lịch Không?',
@@ -397,15 +392,39 @@ export class LichhopComponent implements OnInit {
     });
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
+        console.log(event);
         this.Lichhop = this.Lichhops.find(v => v.id == event.id);
-        this.Lichhop.Batdau=new Date(newStart)
-        this.Lichhop.Ketthuc=new Date(newEnd);
-          this._lichhopService.UpdateLichhop(this.Lichhop).subscribe(
-            () => {
-              this.notifier.notify('success', 'Dời Lịch Thành Công');
-              this._changeDetectorRef.markForCheck();
-            }
-          );
+        if(event.typeLich==1)
+        {
+          this.Lichhop.Batdau=new Date(newStart)
+          this.Lichhop.Ketthuc=new Date(newEnd);
+            this._lichhopService.UpdateLichhop(this.Lichhop).subscribe(
+              () => {
+                this.notifier.notify('success', 'Dời Lịch Thành Công');
+                this._changeDetectorRef.markForCheck();
+              }
+            );
+        }
+        else if(event.typeLich==2)
+        {
+          this.Lichhop.Review=new Date(newStart)
+            this._lichhopService.UpdateLichhop(this.Lichhop).subscribe(
+              () => {
+                this.notifier.notify('success', 'Dời Lịch Thành Công');
+                this._changeDetectorRef.markForCheck();
+              }
+            );
+        }
+        else
+        {
+          this.Lichhop.Hoanthanh=new Date(newStart)
+            this._lichhopService.UpdateLichhop(this.Lichhop).subscribe(
+              () => {
+                this.notifier.notify('success', 'Dời Lịch Thành Công');
+                this._changeDetectorRef.markForCheck();
+              }
+            );
+        }
       }
     });
   }
