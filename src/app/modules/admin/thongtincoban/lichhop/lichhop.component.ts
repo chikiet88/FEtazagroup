@@ -238,8 +238,10 @@ export class LichhopComponent implements OnInit {
       return !!!(inputValue === '' || this.tags.findIndex(tag => tag.title.toLowerCase() === inputValue.toLowerCase()) > -1);
   }
   Opentoggle() {
+    this.Title = "Thêm Mới";
     this.CRUD =1;
     this.idThamgia = [];
+    this.LichhopForm.enable();
     this.LichhopForm = this._formBuilder.group({
       Loaihinh: [{ value: '', disabled: false }],
       Tieude: [{ value: '', disabled: false }],
@@ -442,6 +444,16 @@ export class LichhopComponent implements OnInit {
       this.LichhopForm.get('Ngansach').disable();
       this.LichhopForm.get('Batdau').disable();
       this.LichhopForm.get('Ketthuc').disable();
+    }
+    else
+    {
+      this.LichhopForm.get('Loaihinh').enable();
+      this.LichhopForm.get('Tieude').enable();
+      this.LichhopForm.get('Congty').enable();
+      this.LichhopForm.get('Thamgia').enable();
+      this.LichhopForm.get('Ngansach').enable();
+      this.LichhopForm.get('Batdau').enable();
+      this.LichhopForm.get('Ketthuc').enable();
     }
     this.idThamgia = this.Lichhop.Thamgia;
     this.LichhopForm.patchValue(this.Lichhop);

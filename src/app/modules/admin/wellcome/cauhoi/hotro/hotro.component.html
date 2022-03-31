@@ -15,75 +15,37 @@
             <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
                 Gửi Câu Hỏi Cần Hỗ Trợ
             </div>
-            <!-- Form -->
             <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
-                <!-- Alert -->
-                <fuse-alert
-                    class="mb-8"
-                    *ngIf="alert"
-                    [type]="alert.type"
-                    [showIcon]="false">
-                    {{alert.message}}
-                </fuse-alert>
                 <form
-                    class="space-y-3"
+                    class="space-y-5"
                     [formGroup]="supportForm"
                     #supportNgForm="ngForm">
                     <div class="mb-6">
                         <div class="text-2xl font-bold tracking-tight">Thông Tin</div>
-                        <div class="text-secondary">Câu hỏi của bạn sẽ mau chóng được phản hồi.</div>
+                        <div class="text-secondary mt-4">Câu hỏi của bạn sẽ mau chóng được phản hồi.</div>
                     </div>
-                    <!-- Name -->
                     <mat-form-field class="w-full">
                         <input
                             matInput
-                            [formControlName]="'name'"
-                            [required]="true">
-                        <mat-label>Họ Và Tên</mat-label>
-                        <mat-error *ngIf="supportForm.get('name').hasError('required')">
-                            Required
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Email -->
-                    <mat-form-field class="w-full">
-                        <input
-                            type="email"
-                            matInput
-                            [formControlName]="'email'"
-                            [required]="true">
-                        <mat-label>Vị Trí</mat-label>
-                        <mat-error *ngIf="supportForm.get('email').hasError('required')">
-                            Required
-                        </mat-error>
-                        <mat-error *ngIf="supportForm.get('email').hasError('email')">
-                            Enter a valid email address
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Subject -->
-                    <mat-form-field class="w-full">
-                        <input
-                            matInput
-                            [formControlName]="'subject'"
+                            [formControlName]="'Tieude'"
                             [required]="true">
                         <mat-label>Tiêu Đề</mat-label>
-                        <mat-error *ngIf="supportForm.get('subject').hasError('required')">
-                            Required
+                        <mat-error class="py-2" *ngIf="supportForm.get('Tieude').hasError('required')">
+                            Vui Lòng Nhập Tiêu Đề
                         </mat-error>
                     </mat-form-field>
-                    <!-- Message -->
                     <mat-form-field class="fuse-mat-textarea w-full">
                         <textarea
                             matInput
-                            [formControlName]="'message'"
+                            [formControlName]="'NoidungCauhoi'"
                             [required]="true"
                             [rows]="5"
                             matTextareaAutosize></textarea>
                         <mat-label>Nội Dung</mat-label>
-                        <mat-error *ngIf="supportForm.get('message').hasError('required')">
-                            Required
+                        <mat-error class="py-2" *ngIf="supportForm.get('NoidungCauhoi').hasError('required')">
+                            Vui Lòng Nhập Nội Dung
                         </mat-error>
                     </mat-form-field>
-                    <!-- Actions -->
                     <div class="flex items-center justify-end">
                         <button
                             mat-button
@@ -97,7 +59,7 @@
                             mat-flat-button
                             [color]="'primary'"
                             [disabled]="supportForm.pristine || supportForm.invalid"
-                            (click)="sendForm()">
+                            (click)="CreateHotro()">
                             Gửi
                         </button>
                     </div>
