@@ -1,0 +1,74 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="flex flex-col p-6 sm:p-10">
+            <div class="">
+                <a
+                    mat-button
+                    [routerLink]="['../']"
+                    [color]="'primary'">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
+                    <span class="ml-2">Trở Về</span>
+                </a>
+            </div>
+     
+      <div class="w-full">
+        <mat-form-field class="fuse-mat-no-subscript flex-auto my-4 w-1/5">
+            <input matInput [placeholder]="'Tìm Kiếm'">
+            <mat-icon matPrefix>
+                <span class="material-icons">
+                    search
+                    </span>
+            </mat-icon>
+        </mat-form-field>
+          
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort class="w-full">   
+              <ng-container matColumnDef="#">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let row"> </td>
+              </ng-container>
+              <ng-container matColumnDef="Tieude">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="max-w-70"> Tiêu Đề </th>
+                <td mat-cell *matCellDef="let row" class="max-w-70"> {{row.Tieude}} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoidungCauhoi">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="max-w-70"> Nội Dung Câu Hỏi </th>
+                <td mat-cell *matCellDef="let row" class="max-w-70"> {{row.NoidungCauhoi}} </td>
+              </ng-container>
+              <ng-container matColumnDef="NoidungTraloi">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="max-w-70"> Nội Dung Trả Lời </th>
+                <td mat-cell *matCellDef="let row" class="max-w-70"> {{row.NoidungTraloi}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Cauhoituongtu">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Câu Hỏi Tương Tự </th>
+                <td mat-cell *matCellDef="let row"> {{row.Cauhoituongtu||''}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Vitri">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Vị Trí </th>
+                <td mat-cell *matCellDef="let row"> {{Vitri[row.Vitri]}} </td>
+              </ng-container>
+              <ng-container matColumnDef="idTao">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Người Tạo </th>
+                <td mat-cell *matCellDef="let row"> {{row.idTao|findbyid:Nhanviens:'name'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Trangthai">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng Thái </th>
+                <td mat-cell *matCellDef="let row"> {{row.Trangthai}} 
+                    <mat-form-field>
+                        <mat-select>
+                          <mat-option *ngFor="let food of foods" [value]="row.Trangthai">
+                            {{food.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                     </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          </div>
+          
+      </div>  
+    </div>
+</div>

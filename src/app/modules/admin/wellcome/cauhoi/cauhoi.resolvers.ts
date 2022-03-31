@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { HelpCenterService } from '../../apps/help-center/help-center.service';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { CauhoiService } from './cauhoi.service'; 
 
 @Injectable({
@@ -14,7 +16,10 @@ export class CauhoiResolver implements Resolve<any>
      */
     constructor(
         private _cauhoiService: CauhoiService,
-        private _helpCenterService: HelpCenterService)
+        private _helpCenterService: HelpCenterService,
+        private _cauhinhService: CauhinhService,
+        private _nhanvienService: NhanvienService,
+        )
     {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
@@ -22,8 +27,10 @@ export class CauhoiResolver implements Resolve<any>
        
         return forkJoin([
             this._cauhoiService.getAllHotro(),
-            this._helpCenterService.getAllFaqs(),
-            this._helpCenterService.getAllGuides()
+            this._cauhinhService.getCauhinhs(),
+            this._nhanvienService.getNhanviens(),
+            
+
         ]);
     }
 }

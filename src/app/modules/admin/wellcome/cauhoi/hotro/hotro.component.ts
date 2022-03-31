@@ -15,6 +15,7 @@ export class HotroComponent implements OnInit {
   hotros:any;
   supportForm: FormGroup;
   thisUser:any;
+  status:boolean;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
       private _formBuilder: FormBuilder,
@@ -26,6 +27,7 @@ export class HotroComponent implements OnInit {
   }
   ngOnInit(): void
   { 
+    this.status = true;
     this._userService.user$.subscribe((data)=>
         {
             this.thisUser = data;
@@ -47,15 +49,22 @@ export class HotroComponent implements OnInit {
   }
   clearForm(): void
   {
-      this.supportNgForm.resetForm();
+      this.status = true;
+      this.supportForm = this._formBuilder.group({
+        Tieude   : [''],
+        NoidungCauhoi  : [''],
+    });
+
   }
   CreateHotro(): void
   {
-      this.supportForm.addControl('Vitri', new FormControl([]))
-      const hotro = this.supportForm.getRawValue();
+      this.supportForm.addControl('Vitri', new FormControl([this.thisUser.profile.Vitri]));
+      this.supportForm.addControl('idTao', new FormControl([this.thisUser.id]))
+      const hotro = this.supportForm.getRawValue();     
       this._cauhoiService.CreateHotro(hotro).subscribe(()=>
         {
             this.clearForm();
+            this.status = false;
         }
       )
   }

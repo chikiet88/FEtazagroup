@@ -19,10 +19,9 @@
                 <form
                     class="space-y-5"
                     [formGroup]="supportForm"
-                    #supportNgForm="ngForm">
+                    #supportNgForm="ngForm" *ngIf="status">
                     <div class="mb-6">
                         <div class="text-2xl font-bold tracking-tight">Thông Tin</div>
-                        <div class="text-secondary mt-4">Câu hỏi của bạn sẽ mau chóng được phản hồi.</div>
                     </div>
                     <mat-form-field class="w-full">
                         <input
@@ -64,6 +63,12 @@
                         </button>
                     </div>
                 </form>
+                <div class="text-center" *ngIf="!status">
+                   <div class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
+                       Cảm ơn bạn đã gửi câu hỏi về công ty. <br>
+                       Câu hỏi của bạn sẽ được giải đáp sớm nhất.<br> Chân thành cảm ơn.</div> 
+                    <button mat-raised-button [color]="'primary'" (click)="clearForm()">Gửi Thêm Câu Hỏi</button>
+                </div>
             </div>
         </div>
     </div>

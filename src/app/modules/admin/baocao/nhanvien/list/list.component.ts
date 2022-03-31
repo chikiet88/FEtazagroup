@@ -116,7 +116,7 @@ export class ListComponent implements OnInit, OnDestroy
             // });
 
             this.nhaviens = nhanviens;
-            console.log(nhanviens);
+         //   console.log(nhanviens);
             // nhanviens.forEach((v,k)=> {
             //     console.log(v,k);
             //     setTimeout(() => {

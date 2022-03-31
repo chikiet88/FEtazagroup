@@ -139,9 +139,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         // Get the contacts
         this._nhanvienService.nhanviens$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((nhanviens: Nhanvien[]) => {
-                console.log(nhanviens);
-                
+            .subscribe((nhanviens: Nhanvien[]) => {               
                 this.nhanviens = nhanviens;
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -149,10 +147,9 @@ export class DetailsComponent implements OnInit, OnDestroy
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
-                console.log(nhanvien)
                 this.nhanvien = nhanvien;
                (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
-               (Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;
+               (Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;               
                 this.NhanvienForm.patchValue({
                     id: nhanvien.id,
                     avatar: nhanvien.avatar,
@@ -161,6 +158,7 @@ export class DetailsComponent implements OnInit, OnDestroy
                     SDT: nhanvien.SDT,
                     Role: nhanvien.Role,
                     Phanquyen: nhanvien.Phanquyen,
+                    Menu: nhanvien.Menu,
                     profile: {
                         Congty: nhanvien.profile.Congty,
                         Khoi: nhanvien.profile.Khoi,

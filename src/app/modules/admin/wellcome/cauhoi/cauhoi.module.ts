@@ -17,14 +17,18 @@ import { MaterialExampleModule } from 'material.module';
 import { FaqComponent } from './faq/faq.component';
 import { HuongdanComponent } from './huongdan/huongdan.component';
 import { HotroComponent } from './hotro/hotro.component';
+import { CauhoiadminComponent } from './cauhoiadmin/cauhoiadmin.component';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 @NgModule({
     declarations: [
         CauhoiComponent,
         FaqComponent,
         HuongdanComponent,
-        HotroComponent
+        HotroComponent,
+        CauhoiadminComponent
     ],
     imports     : [
+        FindbyidModule,
         MaterialExampleModule,
         RouterModule.forChild(cauhoiRoutes),
         MatButtonModule,
