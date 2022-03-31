@@ -7,7 +7,6 @@
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
         <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'">All</button>
 
-
       
   <!-- <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'">
     <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
@@ -171,6 +170,12 @@
 
   
   
+  <div class="mt-4">
+    <div class="space-x-2 flex flex-row py-4 justify-end"> 
+        <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
+        <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'">All Chi Tiet</button>
+    </div>
+  
   <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">
     <mat-form-field>
       <input matInput 
@@ -223,7 +228,7 @@
   </form> -->
   
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
-      <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort>
+      <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort #exporter="matTableExporter" matTableExporter>
         <ng-container matColumnDef="NgayTaoDV">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Tạo DV </th>
           <td mat-cell *matCellDef="let row"> {{row.NgayTaoDV|date:'dd/MM/yyyy'}} </td>
@@ -231,7 +236,7 @@
         </ng-container>
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
+          <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT">
@@ -282,6 +287,6 @@
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #DataPag="matPaginator"></mat-paginator>
     </div>
-
+  </div>
   </div>
   

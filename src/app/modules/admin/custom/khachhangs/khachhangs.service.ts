@@ -69,7 +69,7 @@ export class KhachhangsService {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
-           // console.log(Character);
+           console.log(khachhang);
           })
       );
   }

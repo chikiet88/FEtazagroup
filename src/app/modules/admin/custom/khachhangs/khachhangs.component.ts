@@ -56,7 +56,7 @@ export class KhachhangsComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    this._khachhangsService.GetData().subscribe();
+   //this._khachhangsService.GetData().subscribe();
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
@@ -208,6 +208,7 @@ export class KhachhangsComponent implements OnInit {
       });
   }
   LoadAll() {
+    this.Showchitiet = true;
     this.data$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data: Khachhang[]) => {
@@ -219,36 +220,36 @@ export class KhachhangsComponent implements OnInit {
         this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
        // console.log(NewUnique);
-        NewUnique.forEach(v => {
-          let Sum = 0;
-          const UniKH = data.filter(v1 => v1.SDT == v);   
-          const getKH = data.find(v1 => v1.SDT == v);
-          UniKH.forEach(v1 => {
-            Sum += parseInt(v1.Dathu);
-          });
-          let x = UniKH.length-1;
-          Thanhvien.push({ 
-            'TenKH': getKH.TenKH,
-            'SDT': getKH.SDT, 
-            'SDT2': getKH.SDT2, 
-            'Dathu': Sum, 
-            'Chinhanh': getKH.Chinhanh,
-            'NgayMD': UniKH[x].NgayTaoDV,
-            'NoiMD': UniKH[x].Chinhanh,
-            'NgayMC': UniKH[0].NgayTaoDV,
-            'NoiMC': UniKH[0].Chinhanh,
-            'Ghichu':getKH.Ghichu
-          })
-        });
-        //console.log(Thanhvien);
-        Thanhvien.forEach((v, k) => {
-          setTimeout(() => {
-            this._khachhangsService.CreateMember(v)
-              .subscribe(() => {
-              });
-          }, 10 * k);
-          this._changeDetectorRef.markForCheck();
-        });
+        // NewUnique.forEach(v => {
+        //   let Sum = 0;
+        //   const UniKH = data.filter(v1 => v1.SDT == v);   
+        //   const getKH = data.find(v1 => v1.SDT == v);
+        //   UniKH.forEach(v1 => {
+        //     Sum += parseInt(v1.Dathu);
+        //   });
+        //   let x = UniKH.length-1;
+        //   Thanhvien.push({ 
+        //     'TenKH': getKH.TenKH,
+        //     'SDT': getKH.SDT, 
+        //     'SDT2': getKH.SDT2, 
+        //     'Dathu': Sum, 
+        //     'Chinhanh': getKH.Chinhanh,
+        //     'NgayMD': UniKH[x].NgayTaoDV,
+        //     'NoiMD': UniKH[x].Chinhanh,
+        //     'NgayMC': UniKH[0].NgayTaoDV,
+        //     'NoiMC': UniKH[0].Chinhanh,
+        //     'Ghichu':getKH.Ghichu
+        //   })
+        // });
+        // //console.log(Thanhvien);
+        // Thanhvien.forEach((v, k) => {
+        //   setTimeout(() => {
+        //     this._khachhangsService.CreateMember(v)
+        //       .subscribe(() => {
+        //       });
+        //   }, 10 * k);
+        //   this._changeDetectorRef.markForCheck();
+        // });
         // this.Thanhvien = new MatTableDataSource(Thanhvien);
         // this.Thanhvien.paginator = this.ThanhvienPag;
         // this.Thanhvien.sort = this.ThanvienSort;
@@ -295,6 +296,27 @@ export class KhachhangsComponent implements OnInit {
       ()=>{
         this.data$.subscribe((v)=>{
           this.data = new MatTableDataSource(v);
+          this.data.paginator = this.DataPag;
+          this.data.sort = this.DataSort;
+          this._changeDetectorRef.markForCheck();
+        }
+        );
+      }
+    );
+  }
+  LoadKHSDT(value,type) {
+    console.log(value,type);
+    
+    this.Showchitiet = true;
+    this._khachhangsService.GetData().subscribe(
+      ()=>{
+        this.data$.subscribe((v)=>{
+          const x = [];
+          v.forEach(v1 => {
+            if(v1[type] == value)
+            {x.push(v1)}
+          });
+          this.data = new MatTableDataSource(x);
           this.data.paginator = this.DataPag;
           this.data.sort = this.DataSort;
           this._changeDetectorRef.markForCheck();
