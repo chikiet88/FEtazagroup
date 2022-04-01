@@ -29,15 +29,15 @@
                     <div class="md:max-w-40 mt-1 text-secondary">Câu Hỏi Thường Gặp Và Câu Trả Lời</div>
                 </div>
                 <div
-                    class="flex flex-col space-y-8 items-center justify-center py-4 px-8 text-primary-500 dark:text-primary-400 bg-gray-50 dark:bg-transparent dark:border-t">
+                    class="flex flex-col space-y-4 items-center justify-center py-4 px-8 text-primary-500 dark:text-primary-400 bg-gray-50 dark:bg-transparent dark:border-t">
                     <a class="flex items-center" [routerLink]="['faq']">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         <span class="font-medium">Xem Thêm</span>
                         <mat-icon class="ml-2 icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>
                     </a>
                     <a class="flex items-center" [routerLink]="['cauhoiadmin']" *ngIf="thisUser.Role!='user'">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         <span class="font-medium">Quản Lý Câu Hỏi</span>
                         <mat-icon class="ml-2 icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>
@@ -51,15 +51,15 @@
                     <div class="md:max-w-40 mt-1 text-secondary">Các bài viết và dữ liệu hướng dẫn chi tiết</div>
                 </div>
                 <div
-                    class="flex flex-col space-y-8 items-center justify-center py-4 px-8 text-primary-500 dark:text-primary-400 bg-gray-50 dark:bg-transparent dark:border-t">
+                    class="flex flex-col space-y-4 items-center justify-center py-4 px-8 text-primary-500 dark:text-primary-400 bg-gray-50 dark:bg-transparent dark:border-t">
                     <a class="flex items-center" [routerLink]="['huongdan']">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         <span class="font-medium">Xem Thêm</span>
                         <mat-icon class="ml-2 icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>
                     </a>
                     <a class="flex items-center" [routerLink]="['huongdanadmin']" *ngIf="thisUser.Role!='user'">
-                        <span class="absolute inset-0"></span>
+                        <!-- <span class="absolute inset-0"></span> -->
                         <span class="font-medium">Quản Lý Hướng Dẫn</span>
                         <mat-icon class="ml-2 icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:arrow-narrow-right'"></mat-icon>

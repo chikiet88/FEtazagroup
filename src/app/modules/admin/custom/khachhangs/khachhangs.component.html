@@ -171,9 +171,9 @@
   
   
   <div class="mt-4">
-    <div class="space-x-2 flex flex-row py-4 justify-end"> 
+    <div class="space-x-2 flex flex-row py-4 justify-end" *ngIf="CurrentUser.Role=='admin'"> 
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-        <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'">All Chi Tiet</button>
+        <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')">All Chi Tiết</button>
     </div>
   
   <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">

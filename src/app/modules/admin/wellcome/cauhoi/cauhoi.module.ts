@@ -19,6 +19,8 @@ import { HuongdanComponent } from './huongdan/huongdan.component';
 import { HotroComponent } from './hotro/hotro.component';
 import { CauhoiadminComponent } from './cauhoiadmin/cauhoiadmin.component';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { TooltipModule } from 'ng2-tooltip-directive';
 @NgModule({
     declarations: [
         CauhoiComponent,
@@ -28,6 +30,8 @@ import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
         CauhoiadminComponent
     ],
     imports     : [
+        TooltipModule,
+        CKEditorModule,
         FindbyidModule,
         MaterialExampleModule,
         RouterModule.forChild(cauhoiRoutes),

@@ -109,7 +109,7 @@ export const appRoutes: Route[] = [
                 path: 'custom',
                 //canActivate: [AdminGuard],
                 children: [
-                    { path: 'thongkekh', loadChildren: () => import('app/modules/admin/custom/thongkekh/thongkekh.module').then(m => m.ThongkekhModule) },
+                    { path: 'thongkekh',redirectTo:'custom/khachhangs'},
                     { path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule) },
                     { path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule) },
                 ]
