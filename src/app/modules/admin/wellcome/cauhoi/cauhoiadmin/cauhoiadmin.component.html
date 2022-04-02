@@ -109,38 +109,33 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Câu Hỏi Tương Tự </th>
                 <td mat-cell *matCellDef="let row"> {{row.Cauhoituongtu||''}} 
                   <div class="flex flex-wrap items-center -m-1.5 mt-6">
-                    <!-- Tags -->
-                    <ng-container *ngIf="contact.tags.length">
-                        <ng-container *ngFor="let tag of (contact.tags | fuseFindByKey:'id':tags); trackBy: trackByFn">
+                    <ng-container *ngIf="Status.length">
+                        <ng-container *ngFor="let item of Status">
                             <div class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                <span class="text-md font-medium whitespace-nowrap">{{tag.title}}</span>
+                                <span class="text-md font-medium whitespace-nowrap">{{item.title}}</span>
                             </div>
                         </ng-container>
                     </ng-container>
-                    <!-- Tags panel and its button -->
                     <div
                         class="flex items-center justify-center px-4 m-1.5 rounded-full leading-9 cursor-pointer text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700"
-                        (click)="openTagsPanel()"
-                        #tagsPanelOrigin>
+                        (click)="openPanel()"
+                        #PanelOrigin>
 
-                        <ng-container *ngIf="contact.tags.length">
+                        <ng-container *ngIf="Status.length">
                             <mat-icon
                                 class="icon-size-5"
                                 [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
                             <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
                         </ng-container>
-
-                        <ng-container *ngIf="!contact.tags.length">
+                        <ng-container *ngIf="!Status.length">
                             <mat-icon
                                 class="icon-size-5"
                                 [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
                             <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
                         </ng-container>
 
-                        <!-- Tags panel -->
-                        <ng-template #tagsPanel>
+                        <ng-template #Panel>
                             <div class="w-60 rounded border shadow-md bg-card">
-                                <!-- Tags panel header -->
                                 <div class="flex items-center m-3 mr-2">
                                     <div class="flex items-center">
                                         <mat-icon
@@ -151,38 +146,24 @@
                                                 class="w-full min-w-0 py-1 border-0"
                                                 type="text"
                                                 placeholder="Enter tag name"
-                                                (input)="filterTags($event)"
+                                                (input)="filterPanel($event)"
                                                 (keydown)="filterTagsInputKeyDown($event)"
                                                 [maxLength]="30"
-                                                #newTagInput>
+                                                #newPanelInput>
                                         </div>
                                     </div>
-                                    <button
-                                        class="ml-1"
-                                        mat-icon-button
-                                        (click)="toggleTagsEditMode()">
-                                        <mat-icon
-                                            *ngIf="!tagsEditMode"
-                                            class="icon-size-5"
-                                            [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                                        <mat-icon
-                                            *ngIf="tagsEditMode"
-                                            class="icon-size-5"
-                                            [svgIcon]="'heroicons_solid:check'"></mat-icon>
-                                    </button>
                                 </div>
                                 <div
                                     class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-                                    <!-- Tags -->
                                     <ng-container *ngIf="!tagsEditMode">
-                                        <ng-container *ngFor="let tag of filteredTags; trackBy: trackByFn">
+                                        <ng-container *ngFor="let tag of filteredTags">
                                             <div
                                                 class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
                                                 (click)="toggleContactTag(tag)"
                                                 matRipple>
                                                 <mat-checkbox
                                                     class="flex items-center h-10 min-h-10 pointer-events-none"
-                                                    [checked]="contact.tags.includes(tag.id)"
+                                                    [checked]="Status.includes(tag.id)"
                                                     [color]="'primary'"
                                                     [disableRipple]="true">
                                                 </mat-checkbox>
@@ -190,7 +171,6 @@
                                             </div>
                                         </ng-container>
                                     </ng-container>
-                                    <!-- Tags editing -->
                                     <ng-container *ngIf="tagsEditMode">
                                         <div class="py-2 space-y-2">
                                             <ng-container *ngFor="let tag of filteredTags; trackBy: trackByFn">
@@ -212,18 +192,7 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                    </ng-container>
-                                    <!-- Create tag -->
-                                    <div
-                                        class="flex items-center h-10 min-h-10 -ml-0.5 pl-4 pr-3 leading-none cursor-pointer hover:bg-hover"
-                                        *ngIf="shouldShowCreateTagButton(newTagInput.value)"
-                                        (click)="createTag(newTagInput.value); newTagInput.value = ''"
-                                        matRipple>
-                                        <mat-icon
-                                            class="mr-2 icon-size-5"
-                                            [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                                        <div class="break-all">Create "<b>{{newTagInput.value}}</b>"</div>
-                                    </div>
+                                    </ng-container>  
                                 </div>
                             </div>
                         </ng-template>
