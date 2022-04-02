@@ -7,7 +7,7 @@ import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.serv
 import { Nhanvien } from 'app/modules/admin/baocao/nhanvien/nhanvien.type';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { CauhoiService } from '../cauhoi.service';
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -39,11 +39,11 @@ export class CauhoiadminComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-
-
   @ViewChild('PanelOrigin') private _PanelOrigin: ElementRef;
   @ViewChild('Panel') private _Panel: TemplateRef<any>;
-  filteredTags: any[];
+  filteredItems: any[];
+  Cauhoituongtu: any[];
+  PanelItem:any;
   private _PanelOverlayRef: OverlayRef;
 
   private _unsubscribeAll: Subject<any> = new Subject();
@@ -71,8 +71,9 @@ export class CauhoiadminComponent implements OnInit {
       { id: 2, title: 'Không Phù Hợp' },
       { id: 3, title: 'Xuất Bản' },
     ]
-    this.filteredTags = this.Status;
+
     this._cauhoiService.hotros$.subscribe((data) => {
+      this.filteredItems = data; 
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -96,7 +97,8 @@ export class CauhoiadminComponent implements OnInit {
 
   }
 
-  openPanel(): void {
+  openPanel(data): void {
+    this.PanelItem = data;
     this._PanelOverlayRef = this._overlay.create({
       backdropClass: '',
       hasBackdrop: true,
@@ -125,7 +127,7 @@ export class CauhoiadminComponent implements OnInit {
       this._renderer2.removeClass(this._PanelOrigin.nativeElement, 'panel-opened');
       if (this._PanelOverlayRef && this._PanelOverlayRef.hasAttached()) {
         this._PanelOverlayRef.detach();
-        this.filteredTags = this.Status;
+        //this.filteredItems = data.Cauhoituongtu;
       }
       if (templatePortal && templatePortal.isAttached) {
         templatePortal.detach();
@@ -134,83 +136,28 @@ export class CauhoiadminComponent implements OnInit {
   }
   filterPanel(event): void {
     const value = event.target.value.toLowerCase();
-    this.filteredTags = this.Status.filter(v => v.title.toLowerCase().includes(value));
+    this.filteredItems = this.Status.filter(v => v.title.toLowerCase().includes(value));
   }
-  filterTagsInputKeyDown(event): void {
-    if (event.key !== 'Enter') {
-      return;
-    }
-    if (this.filteredTags.length === 0) {
-      this.createTag(event.target.value);
-      event.target.value = '';
-      return;
-    }
-    const tag = this.filteredTags[0];
-    const isTagApplied = this.Status.find(id => id === tag.id);
-    if (isTagApplied) {
-      this.removeTagFromContact(tag);
-    }
-    else {
-      this.addTagToContact(tag);
-    }
+  addItem(data,item): void {
+    data.Cauhoituongtu.push(item.id);
+    this._cauhoiService.UpdateTraloi(data).subscribe();
+    this._changeDetectorRef.markForCheck();
   }
-  addTagToContact(tag): void {
-    // // Add the tag
-    // this.contact.tags.unshift(tag.id);
-
-    // // Update the contact form
-    // this.contactForm.get('tags').patchValue(this.contact.tags);
-
-    // // Mark for check
-    // this._changeDetectorRef.markForCheck();
+  removeItem(data,item): void {
+    data.Cauhoituongtu = data.Cauhoituongtu.filter(v=>v!=item.id);
+    this._cauhoiService.UpdateTraloi(data).subscribe();
+    this._changeDetectorRef.markForCheck();
   }
-  removeTagFromContact(tag): void {
-    // // Remove the tag
-    // this.contact.tags.splice(this.contact.tags.findIndex(item => item === tag.id), 1);
-
-    // // Update the contact form
-    // this.contactForm.get('tags').patchValue(this.contact.tags);
-
-    // // Mark for check
-    // this._changeDetectorRef.markForCheck();
-  }
-  toggleContactTag(tag): void {
-    if ( this.Status.includes(tag.id) )
+  toggleItem(data,item): void {      
+    if (data.Cauhoituongtu.includes(item.id))
     {
-        this.removeTagFromContact(tag);
+     
+        this.removeItem(data,item);
     }
     else
     {
-        this.addTagToContact(tag);
+        this.addItem(data,item);
     }
-  }
-  updateTagTitle(tag, event): void {
-    // // Update the title on the tag
-    // tag.title = event.target.value;
-
-    // // Update the tag on the server
-    // this._contactsService.updateTag(tag.id, tag)
-    //     .pipe(debounceTime(300))
-    //     .subscribe();
-
-    // this._changeDetectorRef.markForCheck();
-  }
-  createTag(title): void {
-    const tag = {
-      title
-    };
-
-    // Create tag on the server
-    // this._contactsService.createTag(tag)
-    //     .subscribe((response) => {
-
-    //         // Add the tag to the contact
-    //         this.addTagToContact(response);
-    //     });
-  }
-  deleteTag(tag): void {
-    // this._contactsService.deleteTag(tag.id).subscribe();
-    this._changeDetectorRef.markForCheck();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -224,8 +171,8 @@ export class CauhoiadminComponent implements OnInit {
   UpdateTraloi() {
     this.matDrawer.toggle();
     const data = this.CauhoiForm.getRawValue();
-    this._cauhoiService.UpdateTraloi(data).subscribe(() => { this._changeDetectorRef.markForCheck(); }
-    );
+    this._cauhoiService.UpdateTraloi(data).subscribe();
+    this._changeDetectorRef.markForCheck(); 
   }
   DeleteCauhoi(data) {
     this._cauhoiService.DeleteCauhoi(data).subscribe();

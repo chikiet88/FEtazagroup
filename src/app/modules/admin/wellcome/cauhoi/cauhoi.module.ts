@@ -45,7 +45,7 @@ import { TooltipModule } from 'ng2-tooltip-directive';
         MatTableModule,
         MatTooltipModule,
         NgApexchartsModule,
-        SharedModule
+        SharedModule,
     ]
 })
 export class CauhoiModule
