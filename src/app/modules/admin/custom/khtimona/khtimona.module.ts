@@ -1,32 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KhachhangsComponent } from './khachhangs.component';
+import { KhtimonaComponent } from './khtimona.component';
 import { Route, RouterModule } from '@angular/router';
 import { API_KEY, GoogleSheetsDbService } from 'ng-google-sheets-db';
 import { environment } from 'environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
-import { KhachhangsResolver } from './khtimona.resolver';
+import { KhtimonaResolver } from './khtimona.resolver';
 import { MatTableExporterModule } from 'mat-table-exporter';
-const khachhangsRoutes: Route[] = [
+const khtimonaRoutes: Route[] = [
   {
       path     : '',
-      component: KhachhangsComponent,
+      component: KhtimonaComponent,
       resolve  : {
-        tasks    : KhachhangsResolver,
+        tasks    : KhtimonaResolver,
     },
   }
 ];
 @NgModule({
-  declarations: [KhachhangsComponent],
+  declarations: [KhtimonaComponent],
   imports: [
     MatTableExporterModule,
     HttpClientModule,
     MaterialExampleModule,
     ReactiveFormsModule,
     CommonModule,
-    RouterModule.forChild(khachhangsRoutes),
+    RouterModule.forChild(khtimonaRoutes),
   ],
   providers: [
     {
@@ -36,4 +36,4 @@ const khachhangsRoutes: Route[] = [
     GoogleSheetsDbService
   ],
 })
-export class KhachhangsModule { }
+export class KhtimonaModule { }

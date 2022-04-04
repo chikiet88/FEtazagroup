@@ -20,36 +20,10 @@ export const environment = {
       spreadsheetId: '1Ax1KCdj0z10zG8jEPCmbXLmqvNy0WSxRq8etAk7yn4o',
       worksheetName: 'Realtime',
     },
-    // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
-    // characters: {
-    //   spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
-    //   worksheetName: 'Characters1',
-    // },
-    // googleSheetsApiKey: 'AIzaSyBWAabxkOgkJVIK3PVrWnXz3y2inylGiQo',
-    // characters: {
-    //   spreadsheetId: '1Z-7nH87Qslg_c1jPtuJna-PmzzKFtxNr1_Zt9OTD3eo',
-    //   worksheetName: '2021',
-    // },
-    // characters: {
-    //   spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
-    //   worksheetName: 'Characters1',
-    // },
-    // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
-    // characters: {
-    //   spreadsheetId: '1cwdN0a8Dx2N5QjOsjeVQu9yqOoKZGop2',
-    //   worksheetName: '2021',
-    // },
-
-
+    khtimona: {
+      spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
+      worksheetName: 'form',
+    },
 
     
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

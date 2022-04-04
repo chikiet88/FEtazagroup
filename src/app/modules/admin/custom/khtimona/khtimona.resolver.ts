@@ -6,22 +6,22 @@ import {
 } from '@angular/router';
 import { forkJoin, Observable, of } from 'rxjs';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
-import { KhachhangsService } from './khachhangs.service';
+import { KhtimonaService } from './khtimona.service';
 @Injectable({
   providedIn: 'root'
 })
-export class KhachhangsResolver implements Resolve<boolean> {
+export class KhtimonaResolver implements Resolve<boolean> {
   constructor(
-    private _khachhangsService: KhachhangsService,
+    private _khtimonaService: KhtimonaService,
     private _cauhinhService: CauhinhService,
     ){}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return forkJoin([
-     //this._khachhangsService.GetData(),
-    // this._khachhangsService.GetKhachhang(),
-     // this._khachhangsService.CountData(),
+     //this._khtimonaService.GetData(),
+    // this._khtimonaService.GetKhachhang(),
+     // this._khtimonaService.CountData(),
       this._cauhinhService.getCauhinhs(),
-     // this._khachhangsService.GetMember(),
+     // this._khtimonaService.GetMember(),
     ]);
   }
 }

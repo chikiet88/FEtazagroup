@@ -6,7 +6,7 @@ import { Khachhang } from './khtimona.type';
 @Injectable({
   providedIn: 'root'
 })
-export class KhachhangsService {
+export class KhtimonaService {
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
   private _Khachhang: BehaviorSubject<any> = new BehaviorSubject(null);
   private _member: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -33,7 +33,7 @@ export class KhachhangsService {
   }
   CreateData(dulieu): Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khachhangs/chitiet`,dulieu).pipe(
+      return this._httpClient.post(`${environment.ApiURL}/khtimona/khtimonachitiet`,dulieu).pipe(
           tap((response: any) => {
               console.log(response)
           })
@@ -41,7 +41,7 @@ export class KhachhangsService {
   }
   CreateMember(dulieu): Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khachhangs/khachhang`,dulieu).pipe(
+      return this._httpClient.post(`${environment.ApiURL}/khtimona/khachhang`,dulieu).pipe(
           tap((response: any) => {
               console.log(response)
           })
@@ -49,7 +49,7 @@ export class KhachhangsService {
   }
   GetMember(chinhanh):  Observable<any>
   {
-       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/${chinhanh}`).pipe(
+       return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
             console.log(member);
@@ -58,7 +58,7 @@ export class KhachhangsService {
   }
   GetAllMember():  Observable<any>
   {
-       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang`).pipe(
+       return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang`).pipe(
           tap((member: any) => {
             this._member.next(member);
           })
@@ -66,7 +66,7 @@ export class KhachhangsService {
   }
   GetData():  Observable<Khachhang[]>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
            console.log(khachhang);
@@ -75,7 +75,7 @@ export class KhachhangsService {
   }
   LoadBySDT(SDT):  Observable<any>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/${SDT}`).pipe(
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/${SDT}`).pipe(
           tap((khachhang) => {
             console.log(khachhang);
             this._data.next(khachhang);
@@ -84,7 +84,7 @@ export class KhachhangsService {
   }
   LoadMore(skip,take):  Observable<any>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/paged?skip=${skip}&take=${take}`).pipe(
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/paged?skip=${skip}&take=${take}`).pipe(
           tap((khachhang) => {
             console.log(khachhang);
             this._data.next(khachhang.data);
@@ -94,7 +94,7 @@ export class KhachhangsService {
   }
   CountData():  Observable<any>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/count`).pipe(
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/count`).pipe(
           tap((count) => {
             this._count.next(count[1]);
           })
@@ -102,7 +102,7 @@ export class KhachhangsService {
   }
   GetKhachhang():  Observable<Khachhang[]>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
           tap((Khachhang: Khachhang[]) => {
             this._Khachhang.next(Khachhang);
             //console.log(Khachhang);

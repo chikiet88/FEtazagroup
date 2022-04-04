@@ -23,7 +23,6 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.CRUD = 0;
     this._cauhinhService.Menus$.subscribe((data)=>{ 
-   //   console.log(data);
         const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
           ...item,
           children: nest(items, item.uuid)
@@ -52,6 +51,11 @@ export class MenuComponent implements OnInit {
     this.CRUD=1;
     this.MenuForm.patchValue(item);
     this.MenuForm.addControl('uuid', new FormControl(item.uuid));
+  }
+  CancelMenu()
+  {
+    this.CRUD=0;
+    this.MenuForm.reset()
   }
   UpdateMenu()
   {

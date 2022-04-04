@@ -77,7 +77,7 @@ export const appRoutes: Route[] = [
                 path: 'thongtin',    
                     children: [
                         { path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule) },
-                        { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
+                      //  { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
                         { path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule) },
 
                     ]
@@ -112,6 +112,7 @@ export const appRoutes: Route[] = [
                     { path: 'thongkekh',redirectTo:'custom/khachhangs'},
                     { path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule) },
                     { path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule) },
+                    { path: 'khtimona', loadChildren: () => import('app/modules/admin/custom/khtimona/khtimona.module').then(m => m.KhtimonaModule) },
                 ]
             },
             {

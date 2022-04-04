@@ -98,6 +98,7 @@ export class DetailsComponent implements OnInit, OnDestroy
        this._cauhinhService.Menus$
        .pipe(takeUntil(this._unsubscribeAll))
        .subscribe((data) => {
+           console.log(data);
             this.Menu = data;
             this.PQMenu = {};
             data.forEach(v => {
@@ -148,8 +149,12 @@ export class DetailsComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
                 this.nhanvien = nhanvien;
-               (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
-               (Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;               
+              // (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
+               //(Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;    
+              // let merged = {...this.PQMenu, ...nhanvien.Menu}; 
+              this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
+              this.PQMenu= Object.assign(this.PQMenu,nhanvien.Menu); 
+                         
                 this.NhanvienForm.patchValue({
                     id: nhanvien.id,
                     avatar: nhanvien.avatar,

@@ -8,7 +8,7 @@
         <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'">All</button>
 
       
-  <!-- <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'">
+  <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'">
     <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
     <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
       (<span *ngIf="data$ | async as Data">{{Data.length}}/{{count}}</span>)
@@ -17,7 +17,8 @@
 
     <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
       (<span>{{Khachhang.length}}</span>)</button>
-  </div>   -->
+  </div>  
+  
     </div>
 
 
