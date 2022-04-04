@@ -111,13 +111,13 @@
     <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-        <td mat-cell *matCellDef="let row" (click)="SelectMember(row)"> {{row.TenKH}} </td>
+        <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
    
       <ng-container matColumnDef="SDT">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
-        <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+        <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.SDT,'SDT')"> {{row.SDT}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer>Tổng</td>
       </ng-container>
  
@@ -241,7 +241,7 @@
         </ng-container>
         <ng-container matColumnDef="SDT">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
-          <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+          <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.SDT,'SDT')"> {{row.SDT}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT2">

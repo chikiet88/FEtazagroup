@@ -51,8 +51,7 @@
             </mat-icon>
           </mat-form-field>
         </div>
-
-        <div class="w-full">
+        <div class="w-full">        
           <div class="mat-elevation-z8">
             <table mat-table [dataSource]="dataSource" matSort class="w-full">
               <ng-container matColumnDef="#">
@@ -166,7 +165,7 @@
                                                     [color]="'primary'"
                                                     [disableRipple]="true">
                                                 </mat-checkbox>
-                                                <div class="ml-1">{{item.Tieude}}</div>
+                                                <div class="ml-1" [innerHTML]="item.NoidungCauhoi"></div>
                                             </div>
                                         </ng-container>
                                     </ng-container>

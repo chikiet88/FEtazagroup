@@ -135,7 +135,7 @@ export class KhachhangsComponent implements OnInit {
   ResetSDT()
   {   
     this.Showchitiet = false;
-    this.Filtermember.get('SDT').setValue('');
+    this.Filtermember.reset();
   }
   LoadMember(ob) {
     this.Showchitiet = false;
@@ -306,7 +306,6 @@ export class KhachhangsComponent implements OnInit {
   }
   LoadKHSDT(value,type) {
     console.log(value,type);
-    
     this.Showchitiet = true;
     this._khachhangsService.GetData().subscribe(
       ()=>{

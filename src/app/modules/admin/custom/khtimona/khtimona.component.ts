@@ -132,10 +132,10 @@ export class KhtimonaComponent implements OnInit {
     //console.log(data);
     if(data!=undefined)
     {    return data.reduce((a, b) => a + (Number(b[field]) || 0), 0);}}
-  ResetSDT()
+  Reset()
   {   
     this.Showchitiet = false;
-    this.Filtermember.get('SDT').setValue('');
+    this.Filtermember.reset();
   }
   LoadMember(ob) {
     this.Showchitiet = false;
@@ -304,23 +304,34 @@ export class KhtimonaComponent implements OnInit {
       }
     );
   }
+  SelecByTenKH(value) {
+    this.Showchitiet = true;
+    this.Filtermember.get('TenKH').setValue(value.toLowerCase());
+    this._khtimonaService.LoadByTenKH(value.toLowerCase()).subscribe(
+      ()=>{
+        this.data$.subscribe((v)=>{
+          this.data = new MatTableDataSource(v);
+          this.data.paginator = this.DataPag;
+          this.data.sort = this.DataSort;
+          this._changeDetectorRef.markForCheck();
+        }
+        );
+      }
+    );
+  }
   LoadKHSDT(value,type) {
     console.log(value,type);
-    
+    this.Filtermember.get(type).setValue(value.toLowerCase());
     this.Showchitiet = true;
     this._khtimonaService.GetData().subscribe(
       ()=>{
-        this.data$.subscribe((v)=>{
-          console.log(v);
-          
+        this.data$.subscribe((v)=>{         
           const x = [];
           v.forEach(v1 => {
             if(v1[type] == value)
             {x.push(v1)}
-          });
-          console.log(x);
-          
-          this.data = new MatTableDataSource(v);
+          });         
+          this.data = new MatTableDataSource(x);
           this.data.paginator = this.DataPag;
           this.data.sort = this.DataSort;
           this._changeDetectorRef.markForCheck();

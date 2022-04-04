@@ -24,14 +24,10 @@
                         <div class="text-2xl font-bold tracking-tight">Thông Tin</div>
                     </div>
                     <mat-form-field class="w-full">
-                        <input
-                            matInput
-                            [formControlName]="'Tieude'"
-                            [required]="true">
-                        <mat-label>Tiêu Đề</mat-label>
-                        <mat-error class="py-2" *ngIf="supportForm.get('Tieude').hasError('required')">
-                            Vui Lòng Nhập Tiêu Đề
-                        </mat-error>
+                        <mat-label>Danh Mục</mat-label>
+                        <mat-select [formControlName]="'Danhmuc'" #Danhmuc>
+                            <mat-option [value]="item.key"  *ngFor="let item of DMchtg|keyvalue">{{item.value}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fuse-mat-textarea w-full">
                         <textarea
@@ -40,7 +36,7 @@
                             [required]="true"
                             [rows]="5"
                             matTextareaAutosize></textarea>
-                        <mat-label>Nội Dung</mat-label>
+                        <mat-label>Nội Dung Câu Hỏi</mat-label>
                         <mat-error class="py-2" *ngIf="supportForm.get('NoidungCauhoi').hasError('required')">
                             Vui Lòng Nhập Nội Dung
                         </mat-error>

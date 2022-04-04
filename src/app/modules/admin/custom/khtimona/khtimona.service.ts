@@ -73,9 +73,20 @@ export class KhtimonaService {
           })
       );
   }
+  LoadByTenKH(TenKH):  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/paged?TenKH=${TenKH}`).pipe(
+          tap((khachhang) => {
+            console.log(khachhang);
+            this._data.next(khachhang);
+          })
+      );
+  }
   LoadBySDT(SDT):  Observable<any>
   {
-      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/${SDT}`).pipe(
+      console.log(SDT);
+      
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet/paged?SDT=${SDT}`).pipe(
           tap((khachhang) => {
             console.log(khachhang);
             this._data.next(khachhang);

@@ -44,6 +44,7 @@ export class CauhoiadminComponent implements OnInit {
   filteredItems: any[];
   Cauhoituongtu: any[];
   PanelItem:any;
+  DMchtg:any;
   private _PanelOverlayRef: OverlayRef;
 
   private _unsubscribeAll: Subject<any> = new Subject();
@@ -86,6 +87,7 @@ export class CauhoiadminComponent implements OnInit {
         this.Congty = data.find(v => v.id == "bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
         this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
         this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+        this.DMchtg = data.find(v => v.id == "15e3eac7-e75e-4040-87b2-ab018f20997d").detail;
         this._changeDetectorRef.markForCheck();
       });
     this._nhanvienService.nhanviens$

@@ -15,16 +15,25 @@
             <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
                 Câu Hỏi Thường Gặp
             </div>
+            <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8">
+                <input matInput [placeholder]="'Tìm Kiếm'">
+                <mat-icon matPrefix>
+                  <span class="material-icons">
+                    search
+                  </span>
+                </mat-icon>
+              </mat-form-field>
             <ng-container>
                 <mat-accordion class="max-w-4xl mt-8">
                     <ng-container *ngFor="let cauhoi of cauhois; trackBy: trackByFn">
                         <mat-expansion-panel>
                             <mat-expansion-panel-header [collapsedHeight]="'56px'">
-                                <mat-panel-title class="font-medium leading-tight">
-                                   {{cauhoi.Tieude}}
+                                <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
+                                    <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
+                                    <div class="fuse-vertical-navigation-item-badge-content p-2 bg-blue-600 text-white rounded-full">{{Vitri[cauhoi.Vitri]}}</div>
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            {{cauhoi.NoidungCauhoi}}
+                            <div [innerHTML]="cauhoi.NoidungTraloi"></div>
                         </mat-expansion-panel>
                     </ng-container>
                 </mat-accordion>

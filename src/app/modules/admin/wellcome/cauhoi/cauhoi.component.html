@@ -91,12 +91,13 @@
             <ng-container *ngFor="let cauhoi of cauhois; trackBy: trackByFn">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header [collapsedHeight]="'56px'">
-                        <mat-panel-title class="flex justify-between">
-                            <div>{{cauhoi.Tieude}}</div>
-                            <div class="fuse-vertical-navigation-item-badge-content px-2 bg-blue-600 text-white rounded-full">{{Vitri[cauhoi.Vitri]}}</div>
+                        <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
+                            <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
+                            <div class="fuse-vertical-navigation-item-badge-content p-2 bg-blue-600 text-white rounded-full">{{Vitri[cauhoi.Vitri]}}</div>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    {{cauhoi.NoidungCauhoi}}
+                    <div [innerHTML]="cauhoi.NoidungTraloi"></div>
+                    
                 </mat-expansion-panel>
             </ng-container>
         </mat-accordion>

@@ -21,4 +21,8 @@ export const environment = {
       spreadsheetId: '1Ax1KCdj0z10zG8jEPCmbXLmqvNy0WSxRq8etAk7yn4o',
       worksheetName: 'Realtime',
     },
+    khtimona: {
+      spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
+      worksheetName: 'form',
+    },
 };

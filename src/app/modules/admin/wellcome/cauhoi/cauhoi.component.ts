@@ -28,7 +28,6 @@ export class CauhoiComponent implements OnInit, OnDestroy
     private _unsubscribeAll: Subject<any> = new Subject();
 
     constructor(
-        private _helpCenterService: HelpCenterService,
         private _cauhoiService: CauhoiService,
         private _cauhinhService: CauhinhService,
         private _userService: UserService,
@@ -38,15 +37,10 @@ export class CauhoiComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
-        this._helpCenterService.faqs$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((faqCategories) => {
-                this.faqCategory = faqCategories[0];
-        });
-            this._cauhoiService.hotros$
+      this._cauhoiService.hotros$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((cauhois) => {
-                this.cauhois = cauhois;
+                this.cauhois = cauhois.filter(v=>v.Trangthai==3);
             });
      this._cauhinhService.Cauhinhs$
         .pipe(takeUntil(this._unsubscribeAll))
