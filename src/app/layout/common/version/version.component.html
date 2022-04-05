@@ -1,13 +1,10 @@
 <button mat-icon-button color="accent" (click)="openPanel()" #notificationsOrigin>
-    {{version}}
+    {{Changelogs[0].Version}}
 </button>
 
 <ng-template #notificationsPanel>
-
     <div
-        class="fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-90 sm:w-90 sm:rounded-2xl overflow-hidden shadow-lg">
-
-        <!-- Header -->
+        class="fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-120 sm:w-120 sm:rounded-2xl overflow-hidden shadow-lg">
         <div class="flex flex-shrink-0 items-center py-4 pr-4 pl-6 bg-primary text-on-primary">
             <div class="sm:hidden -ml-1 mr-3">
                 <button mat-icon-button (click)="closePanel()">
@@ -23,22 +20,24 @@
                 <div class="flex-auto p-4">
                     <div class="prose prose-sm max-w-5xl">
                         <ng-container>
-                            <div class="mb-12 p-4 rounded-2xl shadow bg-card">
-                                <div>
-                                    <h2 class="my-0">{{version}}</h2>
-                                    <div class="font-semibold text-md text-secondary">Feb 21, 2022</div>
+                            <form [formGroup]="VerForm" class="flex flex-col space-y-4 m-4">
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <div matPrefix>Version</div>
+                                    <input [formControlName]="'Version'" matInput
+                                        class="mat-select-value-text">
+                                </mat-form-field>
+                                <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Noidung'"></ckeditor>
+                               <div><button mat-raised-button [color]="'primary'" (click)="CreateChangelog()">Thêm</button></div> 
+                            </form>
+                            <div class="mb-12 p-4 rounded-2xl shadow bg-card" *ngFor="let item of Changelogs">
+                                 <div>
+                                    <h2 class="my-0">{{item.Version}}</h2>
+                                    <div class="font-semibold text-md text-secondary">{{item.Ngaytao|date:'dd/MM/yyyy'}}</div>
                                 </div>
                                 <hr class="mt-4">
                                 <ng-container>
                                     <div class="mt-4">
-                                        <span
-                                            class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Cập
-                                            Nhật</span>
-                                        <ul>
-                                            <li>Chuyển đổi lịch họp</li>
-                                            <li>Chuyển đổi nhân viên</li>
-                                            <li>Cập Nhật Noti</li>
-                                        </ul>
+                                            <span [innerHTML]="item.Noidung"></span>
                                     </div>
                                 </ng-container>
                             </div>

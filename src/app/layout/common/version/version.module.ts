@@ -7,11 +7,19 @@ import { PortalModule } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SharedModule } from 'app/shared/shared.module';@NgModule({
+import { SharedModule } from 'app/shared/shared.module';
+import { MaterialExampleModule } from 'material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+@NgModule({
   declarations: [
     VersionComponent
   ],
   imports: [
+    CKEditorModule,
+    MaterialExampleModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     CommonModule,
     OverlayModule,

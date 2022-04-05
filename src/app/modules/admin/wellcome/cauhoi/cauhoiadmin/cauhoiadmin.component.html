@@ -111,7 +111,7 @@
                     <ng-container *ngIf="row.Cauhoituongtu.length!=0">
                         <ng-container *ngFor="let item of row.Cauhoituongtu">
                             <div class="flex items-center justify-center px-2 m-1.5 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">
-                                <span class="text-md font-medium whitespace-nowrap">{{item|findbyid:filteredItems:'Tieude'}}</span>
+                                <span class="text-md font-medium whitespace-nowrap truncate w-24" [innerHTML]="item|findbyid:filteredItems:'NoidungCauhoi'"></span>
                             </div>
                         </ng-container>
                     </ng-container>
@@ -156,11 +156,11 @@
                                     <ng-container>
                                         <ng-container *ngFor="let item of filteredItems">
                                             <div
-                                                class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                                class="flex items-center h-auto px-4 cursor-pointer hover:bg-hover"
                                                 (click)="toggleItem(PanelItem,item)"
                                                 matRipple>
                                                 <mat-checkbox
-                                                    class="flex items-center h-10 min-h-10 pointer-events-none"
+                                                    class="flex items-center h-auto pointer-events-none"
                                                     [checked]="PanelItem.Cauhoituongtu.includes(item.id)"
                                                     [color]="'primary'"
                                                     [disableRipple]="true">
