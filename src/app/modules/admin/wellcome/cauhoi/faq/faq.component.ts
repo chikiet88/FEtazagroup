@@ -14,7 +14,8 @@ import { CauhoiService } from '../cauhoi.service';
 })
 export class FaqComponent implements OnInit {
   faqCategories: FaqCategory[];
-  cauhois:any;
+  Cauhois:any;
+  filteredCauhois:any;
   Phongban: any;
   Khoi: any;
   Congty: any;
@@ -23,7 +24,6 @@ export class FaqComponent implements OnInit {
   thisUser: any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
-    private _helpCenterService: HelpCenterService,
     private _cauhoiService: CauhoiService,
     private _cauhinhService: CauhinhService,
     private _userService: UserService,
@@ -41,7 +41,7 @@ export class FaqComponent implements OnInit {
     this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((cauhois) => {
-      this.cauhois = cauhois.filter(v=>v.Trangthai==3);
+      this.Cauhois = this.filteredCauhois = cauhois.filter(v=>v.Trangthai==3);
     });
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -54,10 +54,18 @@ export class FaqComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
   }
-  
+filterByQuery(query: string): void
+  {
+      if ( !query )
+      {
+          this.filteredCauhois = this.Cauhois;
+          return;
+      }
+      this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
+      || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+  }
 ngOnDestroy(): void
     {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }

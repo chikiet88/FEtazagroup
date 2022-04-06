@@ -7,12 +7,13 @@ import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.serv
 import { Nhanvien } from 'app/modules/admin/baocao/nhanvien/nhanvien.type';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, Subject, takeUntil } from 'rxjs';
 import { CauhoiService } from '../cauhoi.service';
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'app-cauhoiadmin',
@@ -25,9 +26,8 @@ export class CauhoiadminComponent implements OnInit {
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
   };
-  displayedColumns: string[] = ['#', 'Tieude', 'NoidungCauhoi', 'NoidungTraloi', 'Cauhoituongtu', 'Vitri', 'idTao', 'Trangthai'];
+  displayedColumns: string[] = ['#', 'Danhmuc', 'NoidungCauhoi', 'NoidungTraloi', 'Cauhoituongtu', 'Vitri', 'idTao', 'Trangthai'];
   dataSource: MatTableDataSource<any>;
-  cauhois: any;
   Phongban: any;
   Khoi: any;
   Congty: any;
@@ -42,10 +42,14 @@ export class CauhoiadminComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild('PanelOrigin') private _PanelOrigin: ElementRef;
   @ViewChild('Panel') private _Panel: TemplateRef<any>;
-  filteredItems: any[];
+  Cauhois: any[];
   Cauhoituongtu: any[];
+  filteredCauhois: any[];
   PanelItem: any;
   DMchtg: any;
+  CRUD: any;
+  Title:any;
+  filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
 
   private _unsubscribeAll: Subject<any> = new Subject();
@@ -53,19 +57,23 @@ export class CauhoiadminComponent implements OnInit {
     private _cauhoiService: CauhoiService,
     private _cauhinhService: CauhinhService,
     private _nhanvienService: NhanvienService,
+    private _userService: UserService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _formBuilder: FormBuilder,
-
     private _renderer2: Renderer2,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
   ) { }
   ngOnInit(): void {
+    this.CRUD = 0;
+    this.Title = "Thêm Mới";
     this.CauhoiForm = this._formBuilder.group({
-      Tieude: [''],
+      Danhmuc: [''],
       NoidungCauhoi: [''],
       NoidungTraloi: [''],
       Cauhoituongtu: [''],
+      Vitri: [''],
+      idTao: [''],
     })
     this.Status = [
       { id: 0, title: 'Chưa Xem' },
@@ -75,10 +83,11 @@ export class CauhoiadminComponent implements OnInit {
     ]
 
     this._cauhoiService.hotros$.subscribe((data) => {
-      this.filteredItems = data;
+      this.Cauhois = this.filteredCauhois = data;
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this._changeDetectorRef.markForCheck();
     })
     this._cauhinhService.Cauhinhs$
       .pipe(takeUntil(this._unsubscribeAll))
@@ -96,6 +105,24 @@ export class CauhoiadminComponent implements OnInit {
       .subscribe((data: Nhanvien[]) => {
         this.Nhanviens = data;
         this._changeDetectorRef.markForCheck();
+      });
+    this._userService.user$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data) => {
+        this.thisUser = data;
+        this._changeDetectorRef.markForCheck();
+      });
+      combineLatest([this.filters.query$])
+      .subscribe(([query]) => {
+          if ( query !== '' )
+          {
+            this.filteredCauhois = this.Cauhois;
+          }
+          this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
+          || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+        this.dataSource = new MatTableDataSource(this.filteredCauhois);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
 
   }
@@ -138,7 +165,7 @@ export class CauhoiadminComponent implements OnInit {
   }
   filterPanel(event): void {
     const value = event.target.value.toLowerCase();
-    this.filteredItems = this.Status.filter(v => v.title.toLowerCase().includes(value));
+    this.Cauhois = this.Status.filter(v => v.title.toLowerCase().includes(value));
   }
   addItem(data, item): void {
     data.Cauhoituongtu.push(item.id);
@@ -174,13 +201,45 @@ export class CauhoiadminComponent implements OnInit {
     this._cauhoiService.UpdateTraloi(data).subscribe();
     this._changeDetectorRef.markForCheck();
   }
+  CreateTraloi() {
+    this.matDrawer.toggle();
+    const data = this.CauhoiForm.getRawValue();
+    this._cauhoiService.CreateHotro(data).subscribe();
+    this._changeDetectorRef.markForCheck();
+  }
   DeleteCauhoi(data) {
     this._cauhoiService.DeleteCauhoi(data).subscribe();
   }
   EditCauhoi(data) {
+    this.CRUD = 1;
+    this.Title = "Cập Nhật";
     this.CauhoiForm.addControl('id', new FormControl(''))
     this.CauhoiForm.patchValue(data);
     this.matDrawer.toggle();
+  }
+  AddCauhoi() {
+    this.CRUD = 0;
+    this.Title = "Thêm Mới";
+    this.CauhoiForm = this._formBuilder.group({
+      Danhmuc: [''],
+      NoidungCauhoi: [''],
+      NoidungTraloi: [''],
+      Cauhoituongtu: [''],
+      Vitri: [''],
+      idTao: [this.thisUser.id],
+    })
+    this.matDrawer.toggle();
+
+  }
+  filterByQuery(query: string): void
+  {
+      this.filters.query$.next(query);
+      console.log(query);   
+  }
+  ngOnDestroy(): void
+  {
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
   }
 
   applyFilter(event: Event) {
