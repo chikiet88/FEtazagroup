@@ -8,7 +8,6 @@ import { HelpCenterService } from '../../apps/help-center/help-center.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { UserService } from 'app/core/user/user.service';
-
 @Component({
     selector       : 'cauhoi',
     templateUrl    : './cauhoi.component.html',

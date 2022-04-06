@@ -10,6 +10,7 @@ import { environment } from 'environments/environment.prod';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { VersionService } from './version.service';
+import { UserService } from 'app/core/user/user.service';
 @Component({
     selector: 'app-version',
     templateUrl: './version.component.html',
@@ -25,12 +26,14 @@ export class VersionComponent implements OnInit {
     VerForm: FormGroup;
     Changelogs: any;
     Changelog: any;
+    ThisUser: any;
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
         private _versionService: VersionService,
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
+        private _userService: UserService,
         private _formbuilder: FormBuilder
     ) {
     }
@@ -43,6 +46,11 @@ export class VersionComponent implements OnInit {
         this._versionService.getAllChanglog().subscribe();
         this._versionService.changelogs$.pipe(takeUntil(this._unsubscribeAll)).subscribe
             ((res) => { this.Changelogs = res; })
+        this._userService.user$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe
+            ((res) => { this.ThisUser = res; })
+
         this.VerForm = this._formbuilder.group({
             Version: [''],
             Noidung: ['']
@@ -65,6 +73,17 @@ export class VersionComponent implements OnInit {
         const changelog = this.VerForm.getRawValue();
         this._versionService.CreateChanglog(changelog).subscribe();
         this.VerForm.reset();
+        this._changeDetectorRef.markForCheck();
+    }
+    EditChangelog(item): void {
+       this.VerForm.patchValue(item);+
+       this._changeDetectorRef.markForCheck();
+    }
+    UpdateChangelog(): void {
+        const changelog = this.VerForm.getRawValue();
+        this._versionService.UpdateChangelog(changelog).subscribe();
+        this.VerForm.reset();
+        this._changeDetectorRef.markForCheck();
     }
     openPanel(): void {
         if (!this._notificationsPanel || !this._notificationsOrigin) {

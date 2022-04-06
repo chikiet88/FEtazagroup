@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,28 +38,27 @@ export class VersionService {
           ))
       );
   }
-  // UpdateHotro(id, hotro): Observable<any> {
-  //     return this.hotros$.pipe(
-  //         take(1),
-  //         switchMap(hotros => this._httpClient.patch(`${environment.ApiURL}/cauhoithuonggap/${id}`, hotro).pipe(
-  //             map((hotro) => {
-  //                 const index = hotros.findIndex(item => item.id === id);
-  //                 hotros[index] = hotro;
-  //                 this._hotros.next(hotros);
-  //                 return hotro;
-  //             }),
-  //             switchMap(hotro => this.hotro$.pipe(
-  //                 take(1),
-  //                 filter(item => item && item.id === id),
-  //                 tap(() => {
-  //                     this._hotro.next(hotro);
-  //                     return hotro;
-  //                 })
-  //             ))
-  //         ))
-  //     );
-
-  // }
+  UpdateChangelog(changelog): Observable<any> {
+      return this.changelogs$.pipe(
+          take(1),
+          switchMap(changelogs => this._httpClient.patch(`${environment.ApiURL}/changelog/${changelog.id}`, changelog).pipe(
+              map((hotro) => {
+                  const index = changelogs.findIndex(item => item.id === changelog.id);
+                  changelogs[index] = hotro;
+                  this._changelogs.next(changelogs);
+                  return hotro;
+              }),
+              switchMap(hotro => this.changelogs$.pipe(
+                  take(1),
+                  filter(item => item && item.id === changelog.id),
+                  tap(() => {
+                      this._changelog.next(hotro);
+                      return hotro;
+                  })
+              ))
+          ))
+      );
+    }
   // UpdateTraloi(data): Observable<any> {
   //     return this.hotros$.pipe(
   //         take(1),

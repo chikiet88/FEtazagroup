@@ -13,6 +13,7 @@ import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+
 @Component({
   selector: 'app-cauhoiadmin',
   templateUrl: './cauhoiadmin.component.html',
@@ -22,7 +23,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 export class CauhoiadminComponent implements OnInit {
   public Editor = InlineEditor;
   public config = {
-    placeholder: 'Vui lòng nhập nội dung'
+    placeholder: 'Vui lòng nhập nội dung',
   };
   displayedColumns: string[] = ['#', 'Tieude', 'NoidungCauhoi', 'NoidungTraloi', 'Cauhoituongtu', 'Vitri', 'idTao', 'Trangthai'];
   dataSource: MatTableDataSource<any>;
@@ -43,8 +44,8 @@ export class CauhoiadminComponent implements OnInit {
   @ViewChild('Panel') private _Panel: TemplateRef<any>;
   filteredItems: any[];
   Cauhoituongtu: any[];
-  PanelItem:any;
-  DMchtg:any;
+  PanelItem: any;
+  DMchtg: any;
   private _PanelOverlayRef: OverlayRef;
 
   private _unsubscribeAll: Subject<any> = new Subject();
@@ -74,7 +75,7 @@ export class CauhoiadminComponent implements OnInit {
     ]
 
     this._cauhoiService.hotros$.subscribe((data) => {
-      this.filteredItems = data; 
+      this.filteredItems = data;
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -98,7 +99,6 @@ export class CauhoiadminComponent implements OnInit {
       });
 
   }
-
   openPanel(data): void {
     this.PanelItem = data;
     this._PanelOverlayRef = this._overlay.create({
@@ -140,25 +140,23 @@ export class CauhoiadminComponent implements OnInit {
     const value = event.target.value.toLowerCase();
     this.filteredItems = this.Status.filter(v => v.title.toLowerCase().includes(value));
   }
-  addItem(data,item): void {
+  addItem(data, item): void {
     data.Cauhoituongtu.push(item.id);
     this._cauhoiService.UpdateTraloi(data).subscribe();
     this._changeDetectorRef.markForCheck();
   }
-  removeItem(data,item): void {
-    data.Cauhoituongtu = data.Cauhoituongtu.filter(v=>v!=item.id);
+  removeItem(data, item): void {
+    data.Cauhoituongtu = data.Cauhoituongtu.filter(v => v != item.id);
     this._cauhoiService.UpdateTraloi(data).subscribe();
     this._changeDetectorRef.markForCheck();
   }
-  toggleItem(data,item): void {      
-    if (data.Cauhoituongtu.includes(item.id))
-    {
-     
-        this.removeItem(data,item);
+  toggleItem(data, item): void {
+    if (data.Cauhoituongtu.includes(item.id)) {
+
+      this.removeItem(data, item);
     }
-    else
-    {
-        this.addItem(data,item);
+    else {
+      this.addItem(data, item);
     }
   }
   ngAfterViewInit() {
@@ -174,7 +172,7 @@ export class CauhoiadminComponent implements OnInit {
     this.matDrawer.toggle();
     const data = this.CauhoiForm.getRawValue();
     this._cauhoiService.UpdateTraloi(data).subscribe();
-    this._changeDetectorRef.markForCheck(); 
+    this._changeDetectorRef.markForCheck();
   }
   DeleteCauhoi(data) {
     this._cauhoiService.DeleteCauhoi(data).subscribe();

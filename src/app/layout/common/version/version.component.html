@@ -20,19 +20,23 @@
                 <div class="flex-auto p-4">
                     <div class="prose prose-sm max-w-5xl">
                         <ng-container>
-                            <form [formGroup]="VerForm" class="flex flex-col space-y-4 m-4">
+                            <form [formGroup]="VerForm" class="flex flex-col space-y-4 m-4" *ngIf="ThisUser.Role=='admin'">
                                 <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                                     <div matPrefix>Version</div>
                                     <input [formControlName]="'Version'" matInput
                                         class="mat-select-value-text">
                                 </mat-form-field>
                                 <ckeditor [editor]="Editor" [config]="config" [formControlName]="'Noidung'"></ckeditor>
-                               <div><button mat-raised-button [color]="'primary'" (click)="CreateChangelog()">Thêm</button></div> 
+                               <div class="flex space-x-4">
+                                   <button mat-raised-button [color]="'primary'" (click)="CreateChangelog()">Thêm</button>
+                                   <button mat-raised-button [color]="'primary'" (click)="UpdateChangelog()">Cập Nhật</button>
+                            </div> 
                             </form>
                             <div class="mb-12 p-4 rounded-2xl shadow bg-card" *ngFor="let item of Changelogs">
-                                 <div>
+                                 <div class="flex flex-row space-x-4">
                                     <h2 class="my-0">{{item.Version}}</h2>
-                                    <div class="font-semibold text-md text-secondary">{{item.Ngaytao|date:'dd/MM/yyyy'}}</div>
+                                    <div class="font-semibold text-md text-secondary m-auto">{{item.Ngaytao|date:'dd/MM/yyyy'}}</div>
+                                    <span class="material-icons" (click)="EditChangelog(item)">edit_note</span>
                                 </div>
                                 <hr class="mt-4">
                                 <ng-container>

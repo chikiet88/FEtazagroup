@@ -21,6 +21,7 @@ import { CauhoiadminComponent } from './cauhoiadmin/cauhoiadmin.component';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
     declarations: [
         CauhoiComponent,
@@ -30,6 +31,7 @@ import { TooltipModule } from 'ng2-tooltip-directive';
         CauhoiadminComponent
     ],
     imports     : [
+        EditorModule,
         TooltipModule,
         CKEditorModule,
         FindbyidModule,
