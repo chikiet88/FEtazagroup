@@ -11,21 +11,28 @@
         <div class="flex flex-col mt-4 pt-6 space-y-3">
           <ng-container>
             <div class="flex flex-col">
-              <div class="w-full">
-                <mat-form-field class="w-full">
+              <div class="w-full flex flex-row space-x-4">
+                <mat-form-field class="w-3/4">
                   <mat-label>Danh Mục</mat-label>
                   <mat-select [formControlName]="'Danhmuc'" #Danhmuc>
-                      <mat-option [value]="item.key"  *ngFor="let item of DMchtg|keyvalue">{{item.value}}</mat-option>
+                    <mat-option [value]="item.key" *ngFor="let item of DMchtg|keyvalue">{{item.value}}</mat-option>
                   </mat-select>
-              </mat-form-field>
+                </mat-form-field>
+                <span class="material-icons m-auto" (click)="isAddDM=true">add_circle</span>
               </div>
+              <div class="w-full flex flex-row space-x-4" *ngIf="isAddDM">
+                <mat-form-field class="w-3/4">
+                  <input matInput placeholder="Tên DanhMuc" [value]="TenDanhmuc.value" #TenDanhmuc>
+                </mat-form-field>
+                <button mat-raised-button class="bg-blue-600 text-white" (click)="CreateDanhMuc(TenDanhmuc)">Thêm Mới</button>
+              </div>             
               <div class="w-full">
                 <mat-form-field class="w-full">
                   <mat-label>Vị Trí</mat-label>
                   <mat-select [formControlName]="'Vitri'">
-                      <mat-option [value]="item.key"  *ngFor="let item of Vitri|keyvalue">{{item.value}}</mat-option>
+                    <mat-option [value]="item.key" *ngFor="let item of Vitri|keyvalue">{{item.value}}</mat-option>
                   </mat-select>
-              </mat-form-field>
+                </mat-form-field>
               </div>
               <div class="w-full">
                 <div class="font-bold p-2">Câu Hỏi</div>
@@ -43,8 +50,10 @@
           </ng-container>
         </div>
         <div class="flex justify-end space-x-3 mt-10 p-4">
-          <button *ngIf="CRUD==0" mat-flat-button [color]="'primary'" class="bg-blue-600" (click)="CreateTraloi()">Thêm Mới</button>
-          <button *ngIf="CRUD!=0" mat-flat-button [color]="'primary'" class="bg-green-600" (click)="UpdateTraloi()">Cập Nhật</button>
+          <button *ngIf="CRUD==0" mat-flat-button [color]="'primary'" class="bg-blue-600" (click)="CreateTraloi()">Thêm
+            Mới</button>
+          <button *ngIf="CRUD!=0" mat-flat-button [color]="'primary'" class="bg-green-600" (click)="UpdateTraloi()">Cập
+            Nhật</button>
         </div>
       </form>
     </div>
@@ -117,8 +126,8 @@
                 </td>
               </ng-container>
               <ng-container matColumnDef="NoidungTraloi">
-                <th mat-header-cell *matHeaderCellDef class="max-w-70"> 
-                    Nội Dung Trả Lời 
+                <th mat-header-cell *matHeaderCellDef class="max-w-70">
+                  Nội Dung Trả Lời
                 </th>
                 <td mat-cell *matCellDef="let row" class="max-w-70">
 

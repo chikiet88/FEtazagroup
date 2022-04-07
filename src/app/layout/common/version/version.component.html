@@ -20,7 +20,7 @@
                 <div class="flex-auto p-4">
                     <div class="prose prose-sm max-w-5xl">
                         <ng-container>
-                            <form [formGroup]="VerForm" class="flex flex-col space-y-4 m-4" *ngIf="ThisUser.Role=='admin'">
+                            <form [formGroup]="VerForm" class="flex flex-col space-y-4 m-4" *ngIf="ThisUser.Role=='dev'">
                                 <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                                     <div matPrefix>Version</div>
                                     <input [formControlName]="'Version'" matInput

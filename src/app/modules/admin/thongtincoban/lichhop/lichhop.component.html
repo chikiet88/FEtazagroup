@@ -261,7 +261,29 @@
           cancel
         </span>
       </div>
-      <div *ngFor="let item of Lichhops" (click)="editLichhop(item)" class="p-3 hover:text-blue-600 flex">
+      <div class="flex flex-row space-x-2">
+        <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full">
+          <input matInput [placeholder]="'Tìm Kiếm'" [placeholder]="'Tìm Kiếm'" (input)="filterByQuery(query.value)" #query>
+          <mat-icon matPrefix>
+            <span class="material-icons">
+              search
+            </span>
+          </mat-icon>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-date-range-input
+            [formGroup]="campaignOne"
+            [rangePicker]="campaignOnePicker"
+            [comparisonStart]="campaignOne.value.start"
+            [comparisonEnd]="campaignOne.value.end">
+            <input matStartDate placeholder="Start date" formControlName="start">
+            <input matEndDate placeholder="End date" formControlName="end">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <div *ngFor="let item of filteredLichhops" (click)="editLichhop(item)" class="p-3 hover:text-blue-600 flex">
         <div class="truncate "> {{item.Batdau|date:'dd/MM/YYYY'}} - {{item.Tieude}}</div>
         <div class="material-icons ml-auto" [tooltip]="HtmlContent" contentType="template">
           people

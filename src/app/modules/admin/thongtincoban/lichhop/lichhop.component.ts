@@ -19,7 +19,7 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -29,7 +29,7 @@ import {
 } from 'angular-calendar';
 import { FuseDrawerService } from '@fuse/components/drawer';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -51,6 +51,8 @@ import { Router } from '@angular/router';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FindbyidPipe } from 'app/pipes/findbyid/findbyid.pipe';
+import { log } from 'console';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -134,6 +136,8 @@ export class LichhopComponent implements OnInit {
   tags: any;
   idThamgia:any;
   isOpen:any;
+  filteredLichhops:any;
+  campaignOne:FormGroup;
   private _tagsPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
@@ -150,7 +154,16 @@ export class LichhopComponent implements OnInit {
     private router:Router,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
-  ) { }
+  ) { 
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+
+    this.campaignOne = new FormGroup({
+      start: new FormControl(new Date(year, month, 13)),
+      end: new FormControl(new Date(year, month, 16)),
+    });
+  }
   @ViewChild('tabGroup', { static: false }) public tabGroup: any;
   public activeTabIndex: number | undefined = undefined;
 
@@ -297,7 +310,7 @@ export class LichhopComponent implements OnInit {
     this._lichhopService.lichhops$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((lichhops: Lichhop[]) => {
-        this.Lichhops = lichhops;
+        this.filteredLichhops = this.Lichhops = lichhops;
         this._changeDetectorRef.markForCheck();
       });
     this._lichhopService.events$
@@ -335,7 +348,7 @@ export class LichhopComponent implements OnInit {
         this.CRUD =2;
         this.LichhopForm.patchValue(
           {
-            id: lichhop.id,
+            id: lichhop.id||'',
             Loaihinh: lichhop.Loaihinh,
             Tieude: lichhop.Tieude,
             Congty: lichhop.Congty,
@@ -359,7 +372,31 @@ export class LichhopComponent implements OnInit {
       });
 
   }
-
+  ngAfterViewInit() {
+    this.campaignOne.valueChanges.pipe(
+        debounceTime(200)
+    ).subscribe(event => {
+      this.Filterdate(event);
+      console.log(event);
+    });
+}
+  filterByQuery(query: string): void
+  {
+      if ( !query )
+      {
+          this.filteredLichhops = this.Lichhops;
+          return;
+      }
+      this.filteredLichhops = this.Lichhops.filter(v => v.Tieude.toLowerCase().includes(query.toLowerCase())); 
+  }
+  Filterdate(data): void
+  { 
+    console.log(this.filteredLichhops);
+    console.log(this.Lichhops);
+    
+      this.filteredLichhops = this.Lichhops.filter(v => new Date(v.Batdau) >= data.start); 
+      console.log(this.filteredLichhops);  
+  }
   ngOnDestroy(): void
   {
       this._unsubscribeAll.next(null);

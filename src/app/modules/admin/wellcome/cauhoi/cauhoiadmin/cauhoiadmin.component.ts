@@ -49,6 +49,7 @@ export class CauhoiadminComponent implements OnInit {
   DMchtg: any;
   CRUD: any;
   Title:any;
+  isAddDM:boolean;
   filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
 
@@ -66,6 +67,7 @@ export class CauhoiadminComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.CRUD = 0;
+    this.isAddDM = false;
     this.Title = "Thêm Mới";
     this.CauhoiForm = this._formBuilder.group({
       Danhmuc: [''],
@@ -166,6 +168,11 @@ export class CauhoiadminComponent implements OnInit {
   filterPanel(event): void {
     const value = event.target.value.toLowerCase();
     this.Cauhois = this.Status.filter(v => v.title.toLowerCase().includes(value));
+  }
+  CreateDanhMuc(data)
+  {
+    console.log(data.value);
+    
   }
   addItem(data, item): void {
     data.Cauhoituongtu.push(item.id);
