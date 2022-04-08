@@ -373,9 +373,7 @@ export class LichhopComponent implements OnInit {
 
   }
   ngAfterViewInit() {
-    this.campaignOne.valueChanges.pipe(
-        debounceTime(200)
-    ).subscribe(event => {
+    this.campaignOne.valueChanges.subscribe(event => {
       this.Filterdate(event);
       console.log(event);
     });
@@ -394,7 +392,7 @@ export class LichhopComponent implements OnInit {
     console.log(this.filteredLichhops);
     console.log(this.Lichhops);
     
-      this.filteredLichhops = this.Lichhops.filter(v => new Date(v.Batdau) >= data.start); 
+      this.filteredLichhops = this.Lichhops.filter(item => new Date(item.Batdau) >data.start && new Date(item.Batdau) < data.end); 
       console.log(this.filteredLichhops);  
   }
   ngOnDestroy(): void
