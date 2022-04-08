@@ -374,8 +374,8 @@ export class LichhopComponent implements OnInit {
   }
   ngAfterViewInit() {
     this.campaignOne.valueChanges.subscribe(event => {
-      this.Filterdate(event);
-      console.log(event);
+      //this.Filterdate(event);
+      this.filteredLichhops = this.Lichhops.filter(item => new Date(item.Batdau) >event.start && new Date(item.Batdau) < event.end);
     });
 }
   filterByQuery(query: string): void
@@ -387,14 +387,10 @@ export class LichhopComponent implements OnInit {
       }
       this.filteredLichhops = this.Lichhops.filter(v => v.Tieude.toLowerCase().includes(query.toLowerCase())); 
   }
-  Filterdate(data): void
-  { 
-    console.log(this.filteredLichhops);
-    console.log(this.Lichhops);
-    
-      this.filteredLichhops = this.Lichhops.filter(item => new Date(item.Batdau) >data.start && new Date(item.Batdau) < data.end); 
-      console.log(this.filteredLichhops);  
-  }
+  // Filterdate(data): void
+  // { 
+  //     this.filteredLichhops = this.Lichhops.filter(item => new Date(item.Batdau) >data.start && new Date(item.Batdau) < data.end);  
+  // }
   ngOnDestroy(): void
   {
       this._unsubscribeAll.next(null);

@@ -43,9 +43,12 @@ export class VersionComponent implements OnInit {
         placeholder: 'Vui lòng nhập nội dung'
     };
     ngOnInit(): void {
-        this._versionService.getAllChanglog().subscribe();
-        this._versionService.changelogs$.pipe(takeUntil(this._unsubscribeAll)).subscribe
-            ((res) => { this.Changelogs = res; })
+        this._versionService.getAllChanglog().subscribe(
+            ()=>{
+                this._versionService.changelogs$.pipe(takeUntil(this._unsubscribeAll)).subscribe
+                ((res) => { this.Changelogs = res; })
+            }
+        );
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe

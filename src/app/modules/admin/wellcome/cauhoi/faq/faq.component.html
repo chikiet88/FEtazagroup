@@ -6,10 +6,7 @@
 
         <div class="flex flex-col w-full max-w-4xl">
             <div class="-ml-4 sm:mt-8">
-                <a
-                    mat-button
-                    [routerLink]="['../']"
-                    [color]="'primary'">
+                <a mat-button [routerLink]="['../']" [color]="'primary'">
                     <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
                     <span class="ml-2">Trở về</span>
                 </a>
@@ -18,36 +15,49 @@
                 Câu Hỏi Thường Gặp
             </div>
             <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8">
-                <input matInput [placeholder]="'Tìm Kiếm'" [placeholder]="'Tìm Kiếm'" (input)="filterByQuery(query.value)" #query>
+                <input matInput [placeholder]="'Tìm Kiếm'" [placeholder]="'Tìm Kiếm'"
+                    (input)="filterByQuery(query.value)" #query>
                 <mat-icon matPrefix>
-                  <span class="material-icons">
-                    search
-                  </span>
+                    <span class="material-icons">
+                        search
+                    </span>
                 </mat-icon>
-              </mat-form-field>
+            </mat-form-field>
         </div>
         <ng-container>
-            <div class="flex flex-row">
-                <div class="w-1/6">
-    ádasdasdasdasd
-                </div>
-                <div class="w-5/6">                  
-                <mat-accordion class="max-w-4xl mt-8">
-                    <ng-container *ngFor="let cauhoi of filteredCauhois; trackBy: trackByFn">
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header [collapsedHeight]="'56px'">
-                                <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
-                                    <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
-                                    <div class="fuse-vertical-navigation-item-badge-content px-3 bg-blue-600 text-white rounded-full">{{Vitri[cauhoi.Vitri]}}</div>
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <div [innerHTML]="cauhoi.NoidungTraloi"></div>
-                        </mat-expansion-panel>
+            <div class="flex flex-row w-full">
+                <div class="w-1/6 px-4">
+                    <ng-container *ngFor="let item of Danhmucs">
+                        <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+                            matRipple (click)="FilterDanhmuc(item)" [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': item.id === filterStatus,
+                        'text-hint hover:bg-hover': item.id !== filterStatus}">
+                            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:tag'"></mat-icon>
+                            <div class="ml-3 leading-5 select-none text-default">{{item.Tieude}}</div>
+                        </div>
                     </ng-container>
-                </mat-accordion>
-            </div>
+                </div>
+                <div class="w-5/6 max-w-4xl">
+                    <mat-accordion class="mt-8">
+                        <ng-container *ngIf="filteredCauhois.length!=0; else NoCauhoi">
+                            <mat-expansion-panel *ngFor="let cauhoi of filteredCauhois; trackBy: trackByFn">
+                                <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                                    <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
+                                        <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
+                                        <div
+                                            class="fuse-vertical-navigation-item-badge-content px-3 bg-blue-600 text-white rounded-full">
+                                            {{Vitri[cauhoi.Vitri]}}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div [innerHTML]="cauhoi.NoidungTraloi"></div>
+                            </mat-expansion-panel>
+                        </ng-container>
+                    </mat-accordion>
+                </div>
             </div>
         </ng-container>
+        <ng-template #NoCauhoi>
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Chưa Có Câu Hỏi</div>
+        </ng-template>
     </div>
 
 </div>

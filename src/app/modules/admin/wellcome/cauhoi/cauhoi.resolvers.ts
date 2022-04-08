@@ -16,7 +16,6 @@ export class CauhoiResolver implements Resolve<any>
      */
     constructor(
         private _cauhoiService: CauhoiService,
-        private _helpCenterService: HelpCenterService,
         private _cauhinhService: CauhinhService,
         private _nhanvienService: NhanvienService,
         )
@@ -28,9 +27,8 @@ export class CauhoiResolver implements Resolve<any>
         return forkJoin([
             this._cauhoiService.getAllHotro(),
             this._cauhinhService.getCauhinhs(),
+            this._cauhinhService.getAllDanhmuc(),
             this._nhanvienService.getNhanviens(),
-            
-
         ]);
     }
 }

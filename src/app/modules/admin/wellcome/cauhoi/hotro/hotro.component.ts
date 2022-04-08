@@ -24,6 +24,7 @@ export class HotroComponent implements OnInit {
   Bophan: any;
   Vitri: any;
   DMchtg: any;
+  Danhmucs: any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
       private _formBuilder: FormBuilder,
@@ -45,6 +46,10 @@ export class HotroComponent implements OnInit {
       console.log(user);
       this._changeDetectorRef.markForCheck();
     });   
+    this._cauhinhService.danhmucs$.subscribe((data) => {
+      this.Danhmucs = data;
+      this._changeDetectorRef.markForCheck();
+    })  
      this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((hotros) => {

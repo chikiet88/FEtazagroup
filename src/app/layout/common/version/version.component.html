@@ -1,5 +1,5 @@
 <button mat-icon-button color="accent" (click)="openPanel()" #notificationsOrigin>
-    {{Changelogs[0].Version}}
+   <ng-container *ngIf="Changelogs">{{Changelogs[0].Version}}</ng-container>
 </button>
 
 <ng-template #notificationsPanel>

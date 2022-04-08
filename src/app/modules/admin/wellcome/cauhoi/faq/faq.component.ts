@@ -4,7 +4,7 @@ import { HelpCenterService } from 'app/modules/admin/apps/help-center/help-cente
 import { FaqCategory } from 'app/modules/admin/apps/help-center/help-center.type';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { CauhoiService } from '../cauhoi.service';
 
 @Component({
@@ -22,7 +22,9 @@ export class FaqComponent implements OnInit {
   Bophan: any;
   Vitri: any;
   thisUser: any;
+  Danhmucs: any;
   private _unsubscribeAll: Subject<any> = new Subject();
+  filter$: BehaviorSubject<string> = new BehaviorSubject(null);
   constructor(
     private _cauhoiService: CauhoiService,
     private _cauhinhService: CauhinhService,
@@ -31,12 +33,20 @@ export class FaqComponent implements OnInit {
 
     )
   {}
-
+  get filterStatus(): string
+  {
+      return this.filter$.value;
+  }
   ngOnInit(): void {
 
     this._userService.user$.subscribe((data)=>{
       this.thisUser = data;
       console.log(data);
+    })
+    this._cauhinhService.danhmucs$.subscribe((data) => {
+      this.Danhmucs = data;
+      console.log(this.Danhmucs);
+      this._changeDetectorRef.markForCheck();
     })
     this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -63,6 +73,11 @@ filterByQuery(query: string): void
       }
       this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
       || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+  }
+FilterDanhmuc(item): void
+  {
+    this.filter$.next(item.id);
+    this.filteredCauhois = this.Cauhois.filter(v=>v.Danhmuc == item.id);
   }
 ngOnDestroy(): void
     {

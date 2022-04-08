@@ -26,7 +26,7 @@
                     <mat-form-field class="w-full">
                         <mat-label>Danh Mục</mat-label>
                         <mat-select [formControlName]="'Danhmuc'" #Danhmuc>
-                            <mat-option [value]="item.key"  *ngFor="let item of DMchtg|keyvalue">{{item.value}}</mat-option>
+                            <mat-option [value]="item.id"  *ngFor="let item of Danhmucs">{{item.Tieude}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fuse-mat-textarea w-full">

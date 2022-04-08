@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import { environment } from 'environments/environment';
 import { cloneDeep } from 'lodash';
-import { BehaviorSubject, Observable, tap, take, map, switchMap, throwError, of } from 'rxjs';
+import { BehaviorSubject, Observable, tap, take, map, switchMap, throwError, of, filter } from 'rxjs';
 import { Cauhinh, Menu } from './cauhinh.types';
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,8 @@ export class CauhinhService {
   private _Cauhinhs: BehaviorSubject<Cauhinh[] | null> = new BehaviorSubject(null);
   private _Cauhinh: BehaviorSubject<Cauhinh | null> = new BehaviorSubject(null);
   private _Menus: BehaviorSubject<Menu[] | null> = new BehaviorSubject(null);
+  private _danhmucs: BehaviorSubject<any | null> = new BehaviorSubject(null);
+  private _danhmuc: BehaviorSubject<any | null> = new BehaviorSubject(null);
   private readonly notifier: NotifierService;
   constructor(
     private _httpClient: HttpClient,
@@ -29,6 +31,14 @@ export class CauhinhService {
   get Menus$(): Observable<Menu[]>
   {
       return this._Menus.asObservable();
+  } 
+  get danhmucs$(): Observable<any>
+  {
+      return this._danhmucs.asObservable();
+  } 
+  get danhmuc$(): Observable<any>
+  {
+      return this._danhmuc.asObservable();
   } 
 
   getMenus(): Observable<Menu[]>
@@ -112,6 +122,56 @@ export class CauhinhService {
             return of(cauhinh);
         })
     );
+}
+
+
+
+//Danh Mục
+getAllDanhmuc(): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/danhmuc`).pipe(
+        tap((response: any) => {
+            this._danhmucs.next(response);
+        })
+    );
+}
+CreateDanhmuc(danhmuc): Observable<any> {
+    return this.danhmucs$.pipe(
+        take(1),
+        switchMap(danhmucs => this._httpClient.post(`${environment.ApiURL}/danhmuc`, danhmuc).pipe(
+            map((result) => {
+                this._danhmucs.next([result, ...danhmucs]);
+                return result;
+            })
+        ))
+    );
+}
+UpdateDanhmuc(data): Observable<any> {
+    return this.danhmucs$.pipe(
+        take(1),
+        switchMap(danhmucs => this._httpClient.patch(`${environment.ApiURL}/danhmuc/${data.id}`, data).pipe(
+            map((danhmuc) => {
+                const index = danhmucs.findIndex(item => item.id === data.id);
+                danhmucs[index] = danhmuc;
+                this._danhmucs.next(danhmucs);
+                return danhmuc;
+            }),
+            switchMap(danhmuc => this.danhmuc$.pipe(
+                take(1),
+                filter(item => item && item.id === data.id),
+                tap(() => {
+                    this._danhmuc.next(danhmuc);
+                    return danhmuc;
+                })
+            ))
+        ))
+    );
+}
+Deletedanhmuc(data): Observable<any> {
+    return this._httpClient.delete(`${environment.ApiURL}/danhmuc/${data.id}`).pipe(
+      tap(() => {
+          this.getAllDanhmuc().subscribe();
+      })
+  );
 }
 
 //   createDetail(detail: Detail): Observable<Detail>

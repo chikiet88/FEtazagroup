@@ -50,9 +50,10 @@ export class CauhoiadminComponent implements OnInit {
   CRUD: any;
   Title:any;
   isAddDM:boolean;
+  Danhmucs: any;
   filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
-
+  @ViewChild('TenDanhmuc') TenDanhmuc:ElementRef;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _cauhoiService: CauhoiService,
@@ -89,6 +90,10 @@ export class CauhoiadminComponent implements OnInit {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this._changeDetectorRef.markForCheck();
+    })
+    this._cauhinhService.danhmucs$.subscribe((data) => {
+      this.Danhmucs = data;
       this._changeDetectorRef.markForCheck();
     })
     this._cauhinhService.Cauhinhs$
@@ -171,8 +176,10 @@ export class CauhoiadminComponent implements OnInit {
   }
   CreateDanhMuc(data)
   {
-    console.log(data.value);
-    
+    const danhmuc = {'Tieude':data.value};
+    this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
+    this.TenDanhmuc.nativeElement.value  = "";
+    this.isAddDM =false;
   }
   addItem(data, item): void {
     data.Cauhoituongtu.push(item.id);
