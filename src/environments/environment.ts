@@ -22,7 +22,7 @@ export const environment = {
     },
     khtimona: {
       spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
-      worksheetName: 'form',
+      worksheetName: 'form2022',
     },
 
     

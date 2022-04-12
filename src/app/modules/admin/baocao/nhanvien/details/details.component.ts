@@ -153,8 +153,8 @@ export class DetailsComponent implements OnInit, OnDestroy
                //(Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;    
               // let merged = {...this.PQMenu, ...nhanvien.Menu}; 
               this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
-              this.PQMenu= Object.assign(this.PQMenu,nhanvien.Menu); 
-                         
+              this.PQMenu= nhanvien.Menu; 
+                    
                 this.NhanvienForm.patchValue({
                     id: nhanvien.id,
                     avatar: nhanvien.avatar,

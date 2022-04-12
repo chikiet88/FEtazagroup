@@ -184,8 +184,6 @@ export class KhtimonaComponent implements OnInit {
           this.datamember.filter = value;
         });
       }
-
-
     )
   } 
 
@@ -204,6 +202,9 @@ export class KhtimonaComponent implements OnInit {
           // let x = v.NgayTaoDV.toString().split("/");
           // v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
         });
+        // if(Datepick){
+        //   Khachhang=Khachhang.filter(v=> v.NgayTaoDV >= Datepick.value&& v.NgayTaoDV <= Datepick.value);
+        // }
         this.dataKhachhang = Khachhang;
         this.Khachhang = new MatTableDataSource(Khachhang);
         this.Khachhang.paginator = this.DataPag;
@@ -214,54 +215,56 @@ export class KhtimonaComponent implements OnInit {
   }
 
   LoadByDay(type: string, event: MatDatepickerInputEvent<Date>) {
-   const x =this.dataKhachhang.filter(v=> v.NgayTaoDV == event.value);
+    this.LoadDrive();
+   const x =this.dataKhachhang.filter(v=> v.NgayTaoDV >= event.value&& v.NgayTaoDV <= event.value);
+
      console.log(x);
      console.log(this.dataKhachhang);
     console.log(event.value);
   }
-  LoadAll(Ngay) {
+  LoadAll() {
+    this._khtimonaService.ClearKhachhang().subscribe();
     this._khtimonaService.GetData().subscribe();
     this.Showchitiet = true;
     this.data$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data: Khachhang[]) => {
-        // console.log(data);
         const NewUnique = [... new Set(data.map(v => v.SDT))];
         const Thanhvien = [];
         this.data = new MatTableDataSource(data);
         this.data.paginator = this.DataPag;
         this.data.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
-      //  console.log(NewUnique);
-      //   NewUnique.forEach(v => {
-      //     let Sum = 0;
-      //     const UniKH = data.filter(v1 => v1.SDT == v);   
-      //     const getKH = data.find(v1 => v1.SDT == v);
-      //     UniKH.forEach(v1 => {
-      //       Sum += parseInt(v1.Dathu);
-      //     });
-      //     let x = UniKH.length-1;
-      //     Thanhvien.push({ 
-      //       'TenKH': getKH.TenKH,
-      //       'SDT': getKH.SDT, 
-      //       'SDT2': getKH.SDT2, 
-      //       'Dathu': Sum, 
-      //       'Chinhanh': getKH.Chinhanh,
-      //       'NgayMD': UniKH[x].NgayTaoDV,
-      //       'NoiMD': UniKH[x].Chinhanh,
-      //       'NgayMC': UniKH[0].NgayTaoDV,
-      //       'NoiMC': UniKH[0].Chinhanh,
-      //       'Ghichu':getKH.Ghichu
-      //     })
-      //   });
-      //   Thanhvien.forEach((v, k) => {
-      //     setTimeout(() => {
-      //       this._khtimonaService.CreateMember(v)
-      //         .subscribe(() => {
-      //         });
-      //     }, 10 * k);
-      //     this._changeDetectorRef.markForCheck();
-      //   });
+           console.log(NewUnique);
+        NewUnique.forEach(v => {
+          let Sum = 0;
+          const UniKH = data.filter(v1 => v1.SDT == v);   
+          const getKH = data.find(v1 => v1.SDT == v);
+          UniKH.forEach(v1 => {
+            Sum += parseInt(v1.Dathu);
+          });
+          let x = UniKH.length-1;
+          Thanhvien.push({ 
+            'TenKH': getKH.TenKH,
+            'SDT': getKH.SDT, 
+            'SDT2': getKH.SDT2, 
+            'Dathu': Sum, 
+            'Chinhanh': getKH.Chinhanh,
+            'NgayMD': UniKH[x].NgayTaoDV,
+            'NoiMD': UniKH[x].Chinhanh,
+            'NgayMC': UniKH[0].NgayTaoDV,
+            'NoiMC': UniKH[0].Chinhanh,
+            'Ghichu':getKH.Ghichu
+          })
+        });
+        Thanhvien.forEach((v, k) => {
+          setTimeout(() => {
+            this._khtimonaService.CreateMember(v)
+              .subscribe(() => {
+              });
+          }, 10 * k);
+          this._changeDetectorRef.markForCheck();
+        });
         // this.Thanhvien = new MatTableDataSource(Thanhvien);
         // this.Thanhvien.paginator = this.ThanhvienPag;
         // this.Thanhvien.sort = this.ThanvienSort;
@@ -369,7 +372,7 @@ export class KhtimonaComponent implements OnInit {
       setTimeout(() => {
         this._khtimonaService.CreateData(v)
           .subscribe((v1) => {
-            console.log(v1);
+            //console.log(v1);
           });
       }, 10 * k);
       this._changeDetectorRef.markForCheck();

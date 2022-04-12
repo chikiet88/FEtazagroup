@@ -15,7 +15,8 @@
                             <span matPrefix>
                                 ID
                             </span>
-                            <input [formControlName]="'id'" matInput class="mat-select-value-text" placeholder="wellcome.cauhoi">
+                            <input [formControlName]="'id'" matInput class="mat-select-value-text"
+                                placeholder="wellcome.cauhoi">
                         </mat-form-field>
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                             <mat-select placeholder="Type" [formControlName]="'type'">
@@ -27,18 +28,22 @@
                             <span matPrefix>
                                 Icon
                             </span>
-                            <input [formControlName]="'icon'" matInput class="mat-select-value-text" placeholder="heroicons_outline:clipboard-check">
+                            <input [formControlName]="'icon'" matInput class="mat-select-value-text"
+                                placeholder="heroicons_outline:clipboard-check">
                         </mat-form-field>
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                             <span matPrefix>
                                 Link
                             </span>
-                            <input [formControlName]="'link'" matInput class="mat-select-value-text" placeholder="/wellcome/cauhoi">
+                            <input [formControlName]="'link'" matInput class="mat-select-value-text"
+                                placeholder="/wellcome/cauhoi">
                         </mat-form-field>
                         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                             <mat-select placeholder="Parent" [formControlName]="'parent'">
                                 <mat-option [value]="">Root</mat-option>
-                                <mat-option [value]="item.uuid" *ngFor="let item of menus"><span class="mx-3" *ngFor="let x of [].constructor(item.level)">-</span> {{item.title}}</mat-option>
+                                <mat-option [value]="item.uuid" *ngFor="let item of menus"><span class="mx-3"
+                                        *ngFor="let x of [].constructor(item.level)">-</span> {{item.title}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -61,10 +66,22 @@
     </div>
 
     <div class="w-1/2 p-8">
-        <span class="text-center text-2xl">Danh Mục</span>
+        <div class="flex justify-between">
+            <span class="text-center text-2xl">Danh Mục</span>
+            <button mat-button> <span class="material-icons" (click)="UpdateUserMenu()">
+                    sync
+                </span></button>
+
+        </div>
+
+
         <div class="mt-4 overflow-y-auto h-96">
-            <div *ngFor="let item of menus" class="p-3" [ngClass]="{'text-blue-700': item.link!=''}" (click)="EditMenu(item)">
-                <span class="mx-2" *ngFor="let x of [].constructor(item.level)">-</span>    {{item.title}}
+            <div *ngFor="let item of menus" class="p-3 flex space-x-2" [ngClass]="{'text-blue-700': item.link!=''}">
+                <mat-slide-toggle #toggleElement class="example-margin" [checked]="item.status"
+                    (change)="Changetatus(item,$event)">
+                </mat-slide-toggle>
+                <div><span class="mx-2" *ngFor="let x of [].constructor(item.level)" (click)="EditMenu(item)">-</span>
+                    {{item.title}}</div>
             </div>
         </div>
     </div>

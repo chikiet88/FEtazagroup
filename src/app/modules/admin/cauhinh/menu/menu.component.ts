@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { cloneDeep } from 'lodash';
+import { Subject, takeUntil } from 'rxjs';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
 import { CauhinhService } from '../cauhinh.service';
-import { Menu } from '../cauhinh.types';
+import { Cauhinh, Menu } from '../cauhinh.types';
 const FlatToNested = require('flat-to-nested');
 @Component({
   selector: 'app-menu',
@@ -10,15 +14,24 @@ const FlatToNested = require('flat-to-nested');
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  flatToNested = new FlatToNested();
   MenuForm:FormGroup;
   menus:Menu[];
   menu:Menu;
   CRUD:number;
+  Chinhanh: any;
+  PQChinhanh:any;
+  PQMenu:any;
+  Menu:any;
+  formGroup: FormGroup;
+  nhanviens: Nhanvien[];
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @ViewChild("toggleElement") ref: ElementRef;
   constructor(
     private _fb:FormBuilder,
-    private _cauhinhService:CauhinhService
-    ) { }
+    private _cauhinhService:CauhinhService,
+    private _nhanvienService:NhanvienService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    ) {}
 
   ngOnInit(): void {
     this.CRUD = 0;
@@ -38,7 +51,49 @@ export class MenuComponent implements OnInit {
       link:['/wellcome/cauhoi'],
       parent:[''],
     })
+    this._cauhinhService.Cauhinhs$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data: Cauhinh[]) => {
+      this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+         this.PQChinhanh = cloneDeep(this.Chinhanh);
+         Object.keys(this.PQChinhanh).forEach(key => {
+             this.PQChinhanh[key] = false;
+           });
+        this._changeDetectorRef.markForCheck();
+    });
+    this._cauhinhService.Menus$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data) => {
+        console.log(data);
+         this.Menu = data;
+         this.PQMenu = {};
+         data.forEach(v => {
+             this.PQMenu[v.uuid]=v.status;
+           });
+        this._changeDetectorRef.markForCheck();
+    }); 
+  this._nhanvienService.nhanviens$
+  .pipe(takeUntil(this._unsubscribeAll))
+  .subscribe((nhanviens: Nhanvien[]) => {               
+      this.nhanviens = nhanviens;
+      this._changeDetectorRef.markForCheck();
+  });
   }
+  Changetatus(item,e) {
+      const data = item;
+      data.status = e.checked;
+      this._cauhinhService.UpdateMenu(data).subscribe(); 
+  }
+  UpdateUserMenu() {
+    this.nhanviens.forEach(v => {
+      console.log(this.PQMenu);
+      console.log(v.Menu); 
+      v.Menu = Object.assign(true,this.PQMenu,v.Menu);
+      console.log(v.Menu);
+      this._nhanvienService.updateNhanvien(v.id,v).subscribe();
+    });  
+  }
+
   CreateMenu()
   {
     this.menu = this.MenuForm.getRawValue();

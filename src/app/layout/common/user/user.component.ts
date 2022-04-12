@@ -17,12 +17,7 @@ export class UserComponent implements OnInit, OnDestroy
     static ngAcceptInputType_showHinhanh: BooleanInput;
     @Input() showHinhanh: boolean = true;
     user: User;
-
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    /**
-     * Constructor
-     */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
@@ -30,64 +25,32 @@ export class UserComponent implements OnInit, OnDestroy
     )
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
-        // Subscribe to user changes
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.user = user;
-                //console.log(this.user);
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
-            });
+            });         
     }
-
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void
     {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Update the user status
-     *
-     * @param status
-     */
     updateUserStatus(status: string): void
     {
-        // Return if user is not available
         if ( !this.user )
         {
             return;
         }
-
         // Update the user
         // this._userService.update({
         //     ...this.user,
         //     guest
         // }).subscribe();
     }
-
-    /**
-     * Sign out
-     */
     signOut(): void
     {
         this._router.navigate(['/sign-out']);

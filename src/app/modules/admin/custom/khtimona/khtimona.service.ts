@@ -47,6 +47,15 @@ export class KhtimonaService {
           })
       );
   }
+  ClearKhachhang():  Observable<Khachhang[]>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/clear`).pipe(
+          tap((khachhang: Khachhang[]) => {
+            this._data.next(khachhang);
+           console.log(khachhang);
+          })
+      );
+  }
   GetMember(chinhanh):  Observable<any>
   {
        return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/${chinhanh}`).pipe(
