@@ -33,6 +33,13 @@ const CauhinhRoutes: Route[] = [
             }
         },
         {
+            path     : 'danhmuc',
+            component: DanhmucComponent,
+            resolve:{
+              tasks:CauhinhMenuResolver
+            }
+        },
+        {
             path     : 'caidat',
             component: CaidatchungComponent
         }

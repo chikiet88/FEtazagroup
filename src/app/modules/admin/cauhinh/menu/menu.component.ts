@@ -79,21 +79,14 @@ export class MenuComponent implements OnInit {
       this._changeDetectorRef.markForCheck();
   });
   }
-  Changetatus(item,e) {
-      const data = item;
-      data.status = e.checked;
-      this._cauhinhService.UpdateMenu(data).subscribe(); 
+  Changetatus(item,e) {   
+      item.status = e.checked;
+       this._cauhinhService.UpdateMenu(item).subscribe(); 
+      this.nhanviens.forEach(v => {
+          v.Menu[item.uuid] = e.checked;
+        this._nhanvienService.updateNhanvien(v.id,v).subscribe();
+      }); 
   }
-  UpdateUserMenu() {
-    this.nhanviens.forEach(v => {
-      console.log(this.PQMenu);
-      console.log(v.Menu); 
-      v.Menu = Object.assign(true,this.PQMenu,v.Menu);
-      console.log(v.Menu);
-      this._nhanvienService.updateNhanvien(v.id,v).subscribe();
-    });  
-  }
-
   CreateMenu()
   {
     this.menu = this.MenuForm.getRawValue();
@@ -116,6 +109,8 @@ export class MenuComponent implements OnInit {
   {
     this.menu = this.MenuForm.getRawValue();
     this._cauhinhService.UpdateMenu(this.menu).subscribe();
+    console.log(this.menu);
+    
     this.ngOnInit();
   }
 }

@@ -61,7 +61,10 @@ export class KhachhangsComponent implements OnInit {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
         this.CurrentUser = user;
-        this.UserChinhanh = this.CurrentUser.Phanquyen;
+        Object.keys(this.CurrentUser.Phanquyen).forEach(key => {
+          if (!this.CurrentUser.Phanquyen[key]) delete this.CurrentUser.Phanquyen[key];
+        });
+        this.UserChinhanh = this.CurrentUser.Phanquyen;    
         //this._khachhangsService.GetMember(this.UserChinhanh).subscribe();
         // Mark for check
         this._changeDetectorRef.markForCheck();

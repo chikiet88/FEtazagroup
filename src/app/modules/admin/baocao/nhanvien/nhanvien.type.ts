@@ -9,7 +9,7 @@ export class Nhanvien {
     Ngaytao: Date;
     Role:string;
     Phanquyen:string;
-    Menu:string
+    Menu:object;
 }
 export class profile {
     Congty: string;

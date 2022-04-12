@@ -68,20 +68,26 @@
     <div class="w-1/2 p-8">
         <div class="flex justify-between">
             <span class="text-center text-2xl">Danh Mục</span>
-            <button mat-button> <span class="material-icons" (click)="UpdateUserMenu()">
+            <!-- <button mat-button> 
+                <span class="material-icons" (click)="UpdateUserMenu()">
                     sync
-                </span></button>
+                </span></button> -->
 
         </div>
 
 
         <div class="mt-4 overflow-y-auto h-96">
             <div *ngFor="let item of menus" class="p-3 flex space-x-2" [ngClass]="{'text-blue-700': item.link!=''}">
+                <div  (click)="EditMenu(item)">
+                    <span class="mx-2" *ngFor="let x of [].constructor(item.level)">-</span>
+                  </div>
+              <div>
                 <mat-slide-toggle #toggleElement class="example-margin" [checked]="item.status"
                     (change)="Changetatus(item,$event)">
                 </mat-slide-toggle>
-                <div><span class="mx-2" *ngFor="let x of [].constructor(item.level)" (click)="EditMenu(item)">-</span>
-                    {{item.title}}</div>
+                
+                  {{item.title}}
+                </div>
             </div>
         </div>
     </div>
