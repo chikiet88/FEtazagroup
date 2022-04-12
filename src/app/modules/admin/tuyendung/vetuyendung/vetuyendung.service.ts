@@ -40,6 +40,8 @@ export class VetuyendungService {
           switchMap(vetuyendungs => this._httpClient.post(`${environment.ApiURL}/vetuyendung`, vetuyendung).pipe(
               map((result:Vetuyendung) => {
                 this._vetuyendungs.next([result, ...vetuyendungs]);
+                console.log(result);
+                
                   return result; 
               })
     ))

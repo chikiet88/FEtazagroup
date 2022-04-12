@@ -21,9 +21,7 @@ export class VersionService {
   getAllChanglog(): Observable<any> {
       return this._httpClient.get(`${environment.ApiURL}/changelog`).pipe(
           tap((response: any) => {
-              this._changelogs.next(response);
-              console.log(response);
-              
+              this._changelogs.next(response);    
           })
       );
   }

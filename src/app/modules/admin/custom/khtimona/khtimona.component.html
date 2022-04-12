@@ -5,19 +5,24 @@
         arrow_back
         </span></button>
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-        <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'">All</button>
-
-      
-  <!-- <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'">
+        <button mat-raised-button color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All</button>
+  
+   <div class="flex justify-start" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">
     <button mat-raised-button color="primary" (click)="LoadAll()" class="mr-2">Load All</button>
-    <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
+    <!-- <button mat-raised-button color="primary" (click)="LoadMore(0,1000)" class="mr-2">Load More 
       (<span *ngIf="data$ | async as Data">{{Data.length}}/{{count}}</span>)
-    </button>
+    </button> -->
     <button mat-raised-button color="primary" (click)="LoadDrive()" class="mr-2">Load Drive</button>
-
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" (dateChange)="LoadByDay('change', $event)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
     <button mat-raised-button color="primary" (click)="CreateData(Khachhang)" *ngIf="Khachhang$ | async as Khachhang">Cập Nhật 
       (<span>{{Khachhang.length}}</span>)</button>
-  </div>   -->
+
+      <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')">All Chi Tiết</button>  
+  </div>  
   
     </div>
 
@@ -66,8 +71,8 @@
       <mat-label>Số Điện Thoại</mat-label>
       <input matInput [formControlName]="'SDT'" placeholder="SDT">
     </mat-form-field>
-
-    <!-- <mat-form-field>
+<!-- 
+    <mat-form-field>
       <input matInput [formControlName]="'Doanhso'" placeholder="Đã Thu">
     </mat-form-field> -->
 
@@ -171,12 +176,7 @@
 
   
   
-  <div class="mt-4">
-    <div class="space-x-2 flex flex-row py-4 justify-end" *ngIf="CurrentUser.Role=='admin'"> 
-        <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-        <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')">All Chi Tiết</button>
-    </div>
-  
+  <div class="mt-4">  
   <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">
     <mat-form-field>
       <input matInput 

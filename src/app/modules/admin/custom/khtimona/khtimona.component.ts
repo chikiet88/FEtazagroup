@@ -11,6 +11,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khtimona.type';
 import { KhtimonaService } from './khtimona.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 @Component({
   selector: 'app-khtimona',
   templateUrl: './khtimona.component.html',
@@ -22,7 +23,7 @@ export class KhtimonaComponent implements OnInit {
   //displayedColumns: string[] = ['TenKH', 'SDT', 'TDS', 'TTT','LMD','NMD','LMC','NMC'];
   displayedColumns: string[] = ['NgayTaoDV', 'TenKH', 'SDT', 'SDT2', 'Dichvu', 'Doanhso', 'Tonglieutrinh', 'Dathu', 'Ghichu', 'Chinhanh'];
   thanhvienColumns: string[] = ['TenKH', 'SDT', 'Dathu', 'Chinhanh','NgayMD','NoiMD','NgayMC','NoiMC'];
-  dataKhachhang: MatTableDataSource<Khachhang>;
+  dataKhachhang: Khachhang[];
   data: MatTableDataSource<Khachhang>;
   datamember: MatTableDataSource<any>;
   Thanhvien: MatTableDataSource<any>;
@@ -187,6 +188,7 @@ export class KhtimonaComponent implements OnInit {
 
     )
   } 
+
   LoadDrive() {
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
       environment.khtimona.spreadsheetId, environment.khtimona.worksheetName, KhachhangMapping);
@@ -197,23 +199,33 @@ export class KhtimonaComponent implements OnInit {
           v.Doanhso = v.Doanhso.replace(/\,/g, '').replace(/\./g, '');
           v.Tonglieutrinh = v.Tonglieutrinh.replace(/\,/g, '').replace(/\./g, '');
           v.Dathu = v.Dathu.replace(/\,/g, '').replace(/\./g, '');
+          let x = v.NgayTaoDV.toString().split("/");
+          v.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
           // let x = v.NgayTaoDV.toString().split("/");
           // v.NgayTaoDV = new Date(Number(x[2]),Number(x[1])-1,Number(x[0]));
         });
-       // console.log(Khachhang)
+        this.dataKhachhang = Khachhang;
         this.Khachhang = new MatTableDataSource(Khachhang);
         this.Khachhang.paginator = this.DataPag;
         this.Khachhang.sort = this.DataSort;
         this._changeDetectorRef.markForCheck();
+       // console.log(Khachhang)
       });
   }
-  LoadAll() {
+
+  LoadByDay(type: string, event: MatDatepickerInputEvent<Date>) {
+   const x =this.dataKhachhang.filter(v=> v.NgayTaoDV == event.value);
+     console.log(x);
+     console.log(this.dataKhachhang);
+    console.log(event.value);
+  }
+  LoadAll(Ngay) {
     this._khtimonaService.GetData().subscribe();
     this.Showchitiet = true;
     this.data$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data: Khachhang[]) => {
-        console.log(data);
+        // console.log(data);
         const NewUnique = [... new Set(data.map(v => v.SDT))];
         const Thanhvien = [];
         this.data = new MatTableDataSource(data);
@@ -356,10 +368,10 @@ export class KhtimonaComponent implements OnInit {
     dulieu.forEach((v, k) => {
       setTimeout(() => {
         this._khtimonaService.CreateData(v)
-          .subscribe((response) => {
+          .subscribe((v1) => {
+            console.log(v1);
           });
       }, 10 * k);
-      // 100*k
       this._changeDetectorRef.markForCheck();
     });
   }

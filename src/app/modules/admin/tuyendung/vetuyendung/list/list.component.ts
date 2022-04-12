@@ -121,7 +121,7 @@ export class ListComponent implements OnInit {
           this.Congty = data.find(v => v.id == "bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
           this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
           this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
-          this.Lydotuyen = data.find(v => v.id == "9f195b98-7ed1-4a17-baaf-fc36e564550a").detail;
+          this.Lydotuyen = data.find(v => v.id == "a2e90816-3c92-497e-a971-a8a62563de37").detail;
           this._changeDetectorRef.markForCheck();
         });
        // this.Vitri = {"eceb6560-47b2-480f-b876-857e48f7d723":"CEO","4aebb23f-0009-4765-8616-2ec0bc3bf721":"Front End","d9dfcd17-3bdb-4ef7-9675-336e33d0592b":"SEO","30941412-66c5-4676-8862-7de27aa86c85":"Leader IT"};
@@ -131,9 +131,10 @@ export class ListComponent implements OnInit {
             .subscribe((vetuyendungs: Vetuyendung[]) => {
                 console.log(vetuyendungs)
                 vetuyendungs.forEach(v => {
-                    this.lists[v.Step-1].vetd.push(v)
+                    this.lists.find(v1 => v1.id == v.Step).vetd.push(v);
+                   // this.lists[v.Step-1].vetd.push(v)
                 });
-                console.log(this.lists)
+                console.log(vetuyendungs)
                 this.vetuyendungsCount = vetuyendungs.length;
                 this.vetuyendungs = vetuyendungs;
                 this._changeDetectorRef.markForCheck();
@@ -263,17 +264,18 @@ export class ListComponent implements OnInit {
         console.log(Vetuyendung);
         this._VetuyendungService.createVetuyendung(Vetuyendung).subscribe(
           (result) => {
-            Vetuyendung.Nguoipheduyet.forEach(v => {
-              const notifi = {
-                idFrom: result.idTao,
-                idTo: v,
-                Tieude: "Tuyển Dụng",
-                Noidung: "Tạo Mới",
-                Lienket: `${this.router.url}/${result.id}`,
-              };
-              this._notificationsService.create(notifi).subscribe();
-            });
-            this.ngOnInit();
+              console.log(result);
+              
+            // Vetuyendung.Nguoipheduyet.forEach(v => {
+            //   const notifi = {
+            //     idFrom: result.idTao,
+            //     idTo: v,
+            //     Tieude: "Tuyển Dụng",
+            //     Noidung: "Tạo Mới",
+            //     Lienket: `${this.router.url}/${result.id}`,
+            //   };
+            //   this._notificationsService.create(notifi).subscribe();
+            // });
             this._VetuyendungService.getVetuyendungs().subscribe();
             this.notifier.notify('success', `Tạo Mới Thành Công`);
             this.drawer.toggle();
