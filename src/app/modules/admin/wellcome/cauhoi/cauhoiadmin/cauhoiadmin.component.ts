@@ -14,6 +14,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { UserService } from 'app/core/user/user.service';
+import { MatOption } from '@angular/material/core';
 
 @Component({
   selector: 'app-cauhoiadmin',
@@ -46,7 +47,6 @@ export class CauhoiadminComponent implements OnInit {
   Cauhoituongtu: any[];
   filteredCauhois: any[];
   PanelItem: any;
-  DMchtg: any;
   CRUD: any;
   Title:any;
   isAddDM:boolean;
@@ -54,6 +54,7 @@ export class CauhoiadminComponent implements OnInit {
   filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
   @ViewChild('TenDanhmuc') TenDanhmuc:ElementRef;
+  @ViewChild('allSelected') private allSelected: MatOption;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _cauhoiService: CauhoiService,
@@ -104,7 +105,6 @@ export class CauhoiadminComponent implements OnInit {
         this.Congty = data.find(v => v.id == "bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
         this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
         this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
-        this.DMchtg = data.find(v => v.id == "15e3eac7-e75e-4040-87b2-ab018f20997d").detail;
         this._changeDetectorRef.markForCheck();
       });
     this._nhanvienService.nhanviens$
@@ -133,13 +133,36 @@ export class CauhoiadminComponent implements OnInit {
       });
 
   }
+  // toggleAllSelection() {
+  //   if (this.allSelected) {
+  //     this.select.options.forEach((item: MatOption) => item.select());
+  //   } else {
+  //     this.select.options.forEach((item: MatOption) => item.deselect());
+  //   }
+  // }
+  tosslePerOne(all){ 
+    if (this.allSelected.selected) {  
+     this.allSelected.deselect();
+     return false;
+    }
+   if(Object.keys(this.CauhoiForm.controls.Vitri.value).length==Object.keys(this.Vitri).length)
+     this.allSelected.select();
+ }
   toggleAllSelection() {
-    if (this.allSelected) {
-      this.select.options.forEach((item: MatOption) => item.select());
+    if (this.allSelected.selected) {
+      this.CauhoiForm.controls.Vitri
+        .patchValue([...Object.keys(this.Vitri).map(item => item), 0]);
     } else {
-      this.select.options.forEach((item: MatOption) => item.deselect());
+      this.CauhoiForm.controls.Vitri.patchValue([]);
     }
   }
+  // toggleAllSelection()
+  // {
+  //   this.CauhoiForm.get("Vitri").setValue(this.Vitri);
+  //   //this.CauhoiForm.patchValue({Vitri: this.Vitri});
+  //   console.log(this.CauhoiForm);
+    
+  // }
   openPanel(data): void {
     this.PanelItem = data;
     this._PanelOverlayRef = this._overlay.create({
@@ -224,7 +247,7 @@ export class CauhoiadminComponent implements OnInit {
   }
   CreateTraloi() {
     this.matDrawer.toggle();
-    const data = this.CauhoiForm.getRawValue();
+    const data = this.CauhoiForm.getRawValue();    
     this._cauhoiService.CreateHotro(data).subscribe();
     this._changeDetectorRef.markForCheck();
   }
