@@ -133,6 +133,13 @@ export class CauhoiadminComponent implements OnInit {
       });
 
   }
+  toggleAllSelection() {
+    if (this.allSelected) {
+      this.select.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.select.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
   openPanel(data): void {
     this.PanelItem = data;
     this._PanelOverlayRef = this._overlay.create({

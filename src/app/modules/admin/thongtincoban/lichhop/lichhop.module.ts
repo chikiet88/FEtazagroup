@@ -19,6 +19,7 @@ import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { FindbyidPipe } from 'app/pipes/findbyid/findbyid.pipe';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { TooltipModule } from 'ng2-tooltip-directive';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 registerLocaleData(localeVi);
 const LichhopRoutes: Routes = [
   {
@@ -44,6 +45,7 @@ const LichhopRoutes: Routes = [
     LichhopComponent
   ],
   imports: [
+    NgxDropzoneModule,
     TooltipModule,
     FindbyidModule,
     TimkiemModule,
