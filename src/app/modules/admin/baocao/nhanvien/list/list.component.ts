@@ -1,18 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-list',
-//   templateUrl: './list.component.html',
-//   styleUrls: ['./list.component.scss']
-// })
-// export class ListComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit(): void {
-//   }
-
-// }
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
@@ -26,14 +11,52 @@ import { Nhanvien } from '../nhanvien.type';
 import { NhanvienService } from '../nhanvien.service';
 import { NotifierService } from 'angular-notifier';
 import { User } from '../users';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
  const vitri = require('app/v1json/vitri.json');
  const bophan = require('app/v1json/bophan.json');
-// @Component({
-//     selector       : 'contacts-list',
-//     templateUrl    : './list.component.html',
-//     encapsulation  : ViewEncapsulation.None,
-//     changeDetection: ChangeDetectionStrategy.OnPush
-// })
+ export interface UserData {
+    id: string;
+    name: string;
+    progress: string;
+    fruit: string;
+  }
+  
+  /** Constants used to fill up our data base. */
+  const FRUITS: string[] = [
+    'blueberry',
+    'lychee',
+    'kiwi',
+    'mango',
+    'peach',
+    'lime',
+    'pomegranate',
+    'pineapple',
+  ];
+  const NAMES: string[] = [
+    'Maia',
+    'Asher',
+    'Olivia',
+    'Atticus',
+    'Amelia',
+    'Jack',
+    'Charlotte',
+    'Theodore',
+    'Isla',
+    'Oliver',
+    'Isabella',
+    'Jasper',
+    'Cora',
+    'Levi',
+    'Violet',
+    'Arthur',
+    'Mia',
+    'Thomas',
+    'Elizabeth',
+  ];
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -43,12 +66,19 @@ import { User } from '../users';
 })
 export class ListComponent implements OnInit, OnDestroy
 {
+    displayedColumns: string[] = ['avatar', 'name','vitri', 'role'];
+    dataSource: MatTableDataSource<Nhanvien>;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatSort) sort: MatSort;
+
+    
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
     searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
     searchText:string;
     contacts$: Observable<Contact[]>;
     nhanviens$: Observable<Nhanvien[]>;
-    nhaviens:Nhanvien[];
+    nhanviens:Nhanvien[];
+    filteredNhanviens:Nhanvien[];
     nhanviensCount: number = 0;
     Users:any
     contactsCount: number = 0;
@@ -57,11 +87,14 @@ export class ListComponent implements OnInit, OnDestroy
     drawerMode: 'side' | 'over';
     selectedContact: Contact;
     selectedNhanvien: Nhanvien;
+    Phongban: object;
+    Khoi: object;
+    Congty: object;
+    Bophan: object;
+    Vitri: object;
+    Chinhanh: object;
+    Role:any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    /**
-     * Constructor
-     */
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -71,38 +104,34 @@ export class ListComponent implements OnInit, OnDestroy
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _notifierService: NotifierService,
+        private _cauhinhService: CauhinhService,
     )
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
+      }
     ngOnInit(): void
     {
+        this._nhanviensService.getNhanviens().subscribe();
+        this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT'}
+        this._cauhinhService.Cauhinhs$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((data: Cauhinh[]) => {
+             this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+             this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+             this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+             this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+             this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+            this._changeDetectorRef.markForCheck();
+        });
        this._nhanviensService.getNhanviens().subscribe();
-        this.nhanviens$ = combineLatest([this._nhanviensService.nhanviens$, this.searchQuery$]).pipe(
-            distinctUntilChanged(),
-            map(([nhanviens, searchQuery]) => {
-                if ( !nhanviens || !nhanviens.length )
-                {
-                    return;
-                }
-                let filteredNotes = nhanviens;
-                if ( searchQuery )
-                {
-                    searchQuery = searchQuery.trim().toLowerCase();
-                    filteredNotes = filteredNotes.filter(nhanvien => nhanvien.name.toLowerCase().includes(searchQuery) || nhanvien.SDT.toLowerCase().includes(searchQuery)|| nhanvien.email.toLowerCase().includes(searchQuery));
-                }
-                return filteredNotes;
-            })
-        );
-
-        
         this._nhanviensService.nhanviens$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((nhanviens: Nhanvien[]) => {
@@ -114,17 +143,17 @@ export class ListComponent implements OnInit, OnDestroy
             //    if(x!=undefined){v.profile.Vitri = x.NEWID;}
             //    if(y!=undefined){v.profile.Bophan = y.NEWID;}
             // });
-
-            this.nhaviens = nhanviens;
+            this.nhanviens = this.filteredNhanviens = nhanviens;
+            this.dataSource = new MatTableDataSource(nhanviens);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
          //   console.log(nhanviens);
             // nhanviens.forEach((v,k)=> {
             //     console.log(v,k);
             //     setTimeout(() => {
             //         this._nhanviensService.updateNhanvien(v.id,v).subscribe();
             //     }, k*100);
-                
             // });
-
             this._changeDetectorRef.markForCheck();
         });
         this._nhanviensService.nhanvien$
@@ -165,38 +194,36 @@ export class ListComponent implements OnInit, OnDestroy
                 this.createNhanvien();
             });
     }
+    // filterByQuery(query: string): void
+    // {
+    //     this.searchQuery$.next(query);
+    // }
     filterByQuery(query: string): void
     {
-        this.searchQuery$.next(query);
+        if ( !query )
+        {
+            this.filteredNhanviens = this.nhanviens;
+            return;
+        }
+        this.filteredNhanviens = this.nhanviens.filter(v => v.name.toLowerCase().includes(query.toLowerCase())); 
     }
     ChangeRole(data): void
     {
         console.log(data);
     }
-
-    /**
-     * On destroy
-     */
+    ChangeProfile(item,pro,event): void
+    {
+        item.profile[pro] = event.value;
+        this._nhanviensService.updateNhanvien(item.id,item).subscribe();
+    }
     ngOnDestroy(): void
     {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On backdrop clicked
-     */
     onBackdropClicked(): void
     {
-        // Go back to the list
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
-
-        // Mark for check
         this._changeDetectorRef.markForCheck();
     }
     ImportNhanvien(): void
@@ -208,13 +235,10 @@ export class ListComponent implements OnInit, OnDestroy
                         this._changeDetectorRef.markForCheck();
                     });
         });
- 
     }
-
-
     createNhanvien(): void
     {
-    if(this.nhaviens.length==0)
+    if(this.nhanviens.length==0)
         {
             this._nhanviensService.createNhanvien().subscribe((newNhanvien) => {
                 this._router.navigate(['./', newNhanvien.id], {relativeTo: this._activatedRoute});
@@ -223,12 +247,11 @@ export class ListComponent implements OnInit, OnDestroy
      }
      else
      {
-         const name = this.nhaviens[0].name;
+         const name = this.nhanviens[0].name;
       if(name=="Mới")
          {
              this._notifierService.notify('error', 'Có Nhân Sự Mới Chưa Điền');
              this.filterByQuery("Mới");
-             
          }
          else {
             this._nhanviensService.createNhanvien().subscribe((newNhanvien) => {
@@ -238,18 +261,10 @@ export class ListComponent implements OnInit, OnDestroy
          }
      }
     }
-
     UpdateRole(role): void
     {
          this._nhanviensService.createNhanvien().subscribe(() => {});
     }
-    
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
