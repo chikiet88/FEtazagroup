@@ -69,9 +69,7 @@ export class ListComponent implements OnInit, OnDestroy
     displayedColumns: string[] = ['avatar', 'name','vitri', 'role'];
     dataSource: MatTableDataSource<Nhanvien>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
-
-    
+    @ViewChild(MatSort) sort: MatSort;    
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
     searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
     searchText:string;
@@ -108,14 +106,6 @@ export class ListComponent implements OnInit, OnDestroy
     )
     {
     }
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-    
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-        }
-      }
     ngOnInit(): void
     {
         this._nhanviensService.getNhanviens().subscribe();
@@ -194,18 +184,21 @@ export class ListComponent implements OnInit, OnDestroy
                 this.createNhanvien();
             });
     }
-    // filterByQuery(query: string): void
-    // {
-    //     this.searchQuery$.next(query);
-    // }
-    filterByQuery(query: string): void
+    filterByQuery(event:Event): void
     {
-        if ( !query )
-        {
-            this.filteredNhanviens = this.nhanviens;
-            return;
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
         }
-        this.filteredNhanviens = this.nhanviens.filter(v => v.name.toLowerCase().includes(query.toLowerCase())); 
+        // if ( !query )
+        // {
+        //     this.filteredNhanviens = this.nhanviens;
+        //     return;
+        // }
+        // this.filteredNhanviens = this.nhanviens.filter(v => v.name.toLowerCase().includes(query.toLowerCase())); 
+
     }
     ChangeRole(data): void
     {
@@ -244,16 +237,19 @@ export class ListComponent implements OnInit, OnDestroy
                 this._router.navigate(['./', newNhanvien.id], {relativeTo: this._activatedRoute});
                 this._changeDetectorRef.markForCheck();
             });
-     }
-     else
-     {
-         const name = this.nhanviens[0].name;
-      if(name=="Mới")
-         {
+    }
+    else
+    {
+    const name = this.nhanviens[0].name;
+    if(name=="Mới")
+    {
              this._notifierService.notify('error', 'Có Nhân Sự Mới Chưa Điền');
-             this.filterByQuery("Mới");
-         }
-         else {
+             const filterValue = "Mới";
+             this.dataSource.filter = filterValue.trim().toLowerCase();
+             //this.filterByQuery("Mới");
+     }
+     else {
+
             this._nhanviensService.createNhanvien().subscribe((newNhanvien) => {
                 this._router.navigate(['./', newNhanvien.id], {relativeTo: this._activatedRoute});
                 this._changeDetectorRef.markForCheck();

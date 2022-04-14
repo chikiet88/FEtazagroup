@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NotifierService } from 'angular-notifier';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Nhanvien } from './nhanvien.type';
@@ -11,7 +12,10 @@ export class NhanvienService {
   private _nhanvien: BehaviorSubject<Nhanvien | null> = new BehaviorSubject(null);
   private _nhanviens: BehaviorSubject<Nhanvien[] | null> = new BehaviorSubject(null);
   private _users: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
-  constructor(private _httpClient: HttpClient) {}
+  constructor(
+      private _httpClient: HttpClient,
+      private _notifierService: NotifierService,
+    ) {}
 
      get nhanvien$(): Observable<Nhanvien>
      {
@@ -80,9 +84,20 @@ export class NhanvienService {
              switchMap(nhanviens => this._httpClient.post<any>(`${environment.ApiURL}/users`, {SDT:"0999999999",password:"12345678",name:"Mới"}).pipe(
                  map((result) => {
                    console.log(result)
+                   if(result==1)
+                   {
+                    this._notifierService.notify('error', 'Số Điện Thoại Đã Tồn Tạo');
+                   }
+                   else if(result==2)
+                   {
+                    this._notifierService.notify('error', 'Email Đã Tồn Tại');
+                   }
+                   else
+                   {
                    const newNhanvien = result;
                     this._nhanviens.next([newNhanvien, ...nhanviens]);
                      return newNhanvien;
+                   }
                  })
              ))
          );

@@ -6,19 +6,19 @@ import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { NhanvienService } from './nhanvien.service';
 import { Nhanvien } from './nhanvien.type';
 
-// @Injectable({
-//     providedIn: 'root'
-// })
-// export class NhanviensResolver implements Resolve<any>
-// {
-//     constructor(private _nhanviensService: NhanvienService)
-//     {
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Nhanvien[]>
-//     {
-//         return this._nhanviensService.getNhanviens();
-//     }
-// }
+@Injectable({
+    providedIn: 'root'
+})
+export class NhanviensResolver implements Resolve<any>
+{
+    constructor(private _nhanviensService: NhanvienService)
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Nhanvien[]>
+    {
+        return this._nhanviensService.getNhanviens();
+    }
+}
 
 @Injectable({
     providedIn: 'root'

@@ -14,7 +14,7 @@ import { CauhoiService } from '../cauhoi.service';
 })
 export class FaqComponent implements OnInit {
   faqCategories: FaqCategory[];
-  Cauhois:any;
+  Cauhois:any = [];
   filteredCauhois:any;
   Phongban: any;
   Khoi: any;
@@ -51,7 +51,14 @@ export class FaqComponent implements OnInit {
     this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((cauhois) => {
-      this.Cauhois = this.filteredCauhois = cauhois.filter(v=>v.Trangthai==3);
+      cauhois.forEach(v => {
+        const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
+         if(v.Trangthai == 3 && x!=undefined)
+         {
+             this.Cauhois.push(v);
+         }                   
+      });
+      this.filteredCauhois = this.Cauhois;
     });
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))

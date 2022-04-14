@@ -93,7 +93,19 @@
                     <mat-expansion-panel-header [collapsedHeight]="'56px'">
                         <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
                             <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
-                            <div class="fuse-vertical-navigation-item-badge-content p-2 bg-blue-600 text-white rounded-full">{{Vitri[cauhoi.Vitri]}}</div>
+                            <div class="flex flex-row space-x-2" *ngIf="(cauhoi.Vitri|keyvalue).length-1 != (Vitri|keyvalue).length; else elseTemplate">
+                                <button mat-button [matMenuTriggerFor]="menu" class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">{{cauhoi.Vitri.length}} Vị Trí</button>
+                                <mat-menu #menu="matMenu">
+                                  <ng-container *ngFor="let item of cauhoi.Vitri">
+                                    <button mat-menu-item> {{Vitri[item]}}</button>
+                                    </ng-container>
+                                </mat-menu>
+                             </div>
+                             <ng-template #elseTemplate>
+                                 <span class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">
+                                  Tất Cả
+                                  </span>
+                               </ng-template>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div [innerHTML]="cauhoi.NoidungTraloi"></div>

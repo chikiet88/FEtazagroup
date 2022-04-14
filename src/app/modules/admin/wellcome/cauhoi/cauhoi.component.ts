@@ -17,7 +17,7 @@ import { UserService } from 'app/core/user/user.service';
 export class CauhoiComponent implements OnInit, OnDestroy
 {
     faqCategory: FaqCategory;
-    cauhois:any;
+    cauhois:any = [];
     Phongban: any;
     Khoi: any;
     Congty: any;
@@ -36,10 +36,23 @@ export class CauhoiComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
+    this._userService.user$.subscribe((data)=>{
+            this.thisUser = data;
+        }
+    )   
       this._cauhoiService.hotros$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((cauhois) => {
-                this.cauhois = cauhois.filter(v=>v.Trangthai==3);
+                cauhois.forEach(v => {
+                  const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
+                  console.log(x);
+                  
+                   if(v.Trangthai == 3 && x!=undefined)
+                   {
+                       this.cauhois.push(v);
+                   }                    
+                });   
+                this.cauhois = this.cauhois.slice(0, 10);   
             });
      this._cauhinhService.Cauhinhs$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -50,13 +63,7 @@ export class CauhoiComponent implements OnInit, OnDestroy
           this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
           this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
           this._changeDetectorRef.markForCheck();         
-        }); 
-    this._userService.user$.subscribe((data)=>{
-            this.thisUser = data;
-            console.log(data);
-        }
-    )
-        
+        });         
     }
 
     ngOnDestroy(): void

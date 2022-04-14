@@ -39,7 +39,7 @@
                                 class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
                                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
                                 <input matInput [autocomplete]="'off'" [placeholder]="'Tìm Kiếm'"
-                                    (input)="filterByQuery(searchInput.value)" #searchInput>
+                                    (input)="filterByQuery($event)" #searchInput>
                             </mat-form-field>
                         </div>
                     </div>

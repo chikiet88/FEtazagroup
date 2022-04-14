@@ -24,6 +24,14 @@ export const environment = {
       spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
       worksheetName: 'form2022',
     },
+    firebaseConfig : {
+      apiKey: "AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js",
+      authDomain: "tazagroup.firebaseapp.com",
+      projectId: "tazagroup",
+      storageBucket: "tazagroup.appspot.com",
+      messagingSenderId: "287950542192",
+      appId: "1:287950542192:web:5de715205701996b7f2bb5"
+    },
 
     
 };
