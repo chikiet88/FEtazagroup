@@ -77,7 +77,7 @@ export const appRoutes: Route[] = [
                 path: 'thongtin',    
                     children: [
                         { path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule) },
-                      //  { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
+                        { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
                         { path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule) },
 
                     ]
@@ -96,7 +96,7 @@ export const appRoutes: Route[] = [
                 //canActivate: [AdminGuard],
                 children: [
                     { path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
-                    { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
+                   
 
                 ]
             },

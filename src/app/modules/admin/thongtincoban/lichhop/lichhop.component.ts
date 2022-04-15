@@ -378,6 +378,7 @@ onRemove(event) {
             Dieukienkhac: lichhop.Dieukienkhac,
             Nguyennhan: lichhop.Nguyennhan,
           });
+          this.idThamgia = lichhop.Thamgia;
           this.sidenav.toggle();
         this._changeDetectorRef.markForCheck();
       });

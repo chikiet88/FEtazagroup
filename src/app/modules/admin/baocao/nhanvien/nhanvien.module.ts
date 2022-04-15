@@ -22,7 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
-import { NhanviensCauhinhResolver, NhanviensNhanvienResolver, NhanviensResolver } from './nhanvien.resolvers';
+import { NhanviensCauhinhResolver, NhanviensNhanvienResolver } from './nhanvien.resolvers';
 import { CanDeactivateNhanviensDetails } from './nhanvien.guards';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
