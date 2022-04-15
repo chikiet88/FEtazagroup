@@ -9,6 +9,7 @@ import { FuseCardModule } from '@fuse/components/card';
 import { TongquanComponent } from './tongquan/tongquan.component';
 import { MuctieuComponent } from './muctieu/muctieu.component';
 import { DauviecComponent } from './dauviec/dauviec.component';
+import { DuanComponent } from './duan/duan.component';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -30,7 +31,7 @@ const quanlycongviecRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent],
+  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent],
   imports: [
     FuseCardModule,
     MaterialExampleModule,
