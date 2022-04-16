@@ -1,1 +1,69 @@
-<p>dauviec works!</p>
+<div class="flex flex-col flex-auto min-w-0">
+    <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
+        <div class="flex flex-row space-x-2 py-6">
+            <div class="text-2xl font-bold">Dự Án 1</div>
+            <div class="font-bold">Trạng Thái</div>
+        </div>
+        <mat-tab-group>
+            <mat-tab label="Tổng Quát"> Tổng Quát </mat-tab>
+            <mat-tab label="Đầu Việc">
+               <mat-button-toggle><span class="material-icons">
+                add
+                </span>Thêm Section</mat-button-toggle>           
+            </mat-tab>
+            <mat-tab label="Dashboard"> Dashboard</mat-tab>
+          </mat-tab-group>
+      <div class="flex flex-col w-full p-4 text-center">
+        <div class="py-2">
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle value="bold">10 Dự Án</mat-button-toggle>
+            <mat-button-toggle value="italic">20 Đầu Việc Hoàn Thành</mat-button-toggle>
+            <mat-button-toggle value="underline">5 Người Tham Gia</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+  
+      </div>
+      <div class="grid grid-cols-2 gap-4 w-full">
+        <fuse-card class="flex flex-col w-full p-4">
+          <div class="flex justify-between">
+          <div class="py-2 text-center flex flex-auto items-center">
+            <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden">
+              <img class="w-full h-full object-cover" src="favicon-32x32.png">
+            </div>
+            <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div>
+          </div>
+          <button mat-button class="bg-blue-100" [routerLink]="['./dauviec']">Tất Cả</button>
+        </div>
+          <div class="py-2">
+            <mat-tab-group>
+              <mat-tab label="Đang làm "> Đang làm </mat-tab>
+              <mat-tab label="Hoàn Thành"> Hoàn Thành </mat-tab>
+              <mat-tab label="Quá Hạn"> Quá Hạn </mat-tab>
+            </mat-tab-group>
+          </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col w-full p-4">
+          <div class="text-xl font-bold"> Dự Án</div>
+          <div class="grid grid-cols-2 gap-4 py-2">
+            <div class="flex flex-row gap-2">
+            <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden" [routerLink]="['./duan']">
+              <span class="material-icons m-auto">
+                add
+                </span>
+            </div>
+            <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
+          </div>
+          <div class="flex flex-row gap-2">
+            <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden">
+              <img class="w-full h-full object-cover" src="favicon-32x32.png">
+            </div>
+            <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
+          </div>
+          </div>
+        </fuse-card>
+  
+      </div>
+  
+    </div>
+  
+  </div>

@@ -1,4 +1,4 @@
-<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+<div class="flex flex-col flex-auto min-w-0">
 
   <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
     <div class="flex flex-col w-full p-4 text-center">
@@ -15,12 +15,15 @@
     </div>
     <div class="grid grid-cols-2 gap-4 w-full">
       <fuse-card class="flex flex-col w-full p-4">
+        <div class="flex justify-between">
         <div class="py-2 text-center flex flex-auto items-center">
           <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden">
             <img class="w-full h-full object-cover" src="favicon-32x32.png">
           </div>
           <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div>
         </div>
+        <button mat-button class="bg-blue-100" [routerLink]="['./dauviec']">Tất Cả</button>
+      </div>
         <div class="py-2">
           <mat-tab-group>
             <mat-tab label="Đang làm "> Đang làm </mat-tab>
@@ -30,10 +33,10 @@
         </div>
       </fuse-card>
       <fuse-card class="flex flex-col w-full p-4">
-        <div class="py-2">Dự Án</div>
+        <div class="text-xl font-bold"> Dự Án</div>
         <div class="grid grid-cols-2 gap-4 py-2">
           <div class="flex flex-row gap-2">
-          <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden">
+          <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden" [routerLink]="['./duan']">
             <span class="material-icons m-auto">
               add
               </span>
@@ -48,6 +51,29 @@
         </div>
         </div>
       </fuse-card>
+      <fuse-card class="flex flex-col w-full p-4 col-span-2">
+        <div class="py-2 flex flex-row space-x-4">
+          <div class="text-xl font-bold my-auto"> Người Tham Gia</div>
+          <div class="text-xl font-bold">         
+           <mat-form-field>
+            <mat-select>
+              <mat-option *ngFor="let item of typethamgia|keyvalue" [value]="item.key">
+                {{item.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field></div>
+        </div>
+        <div class="grid grid-cols-4 gap-4 py-2">
+        <div class="flex flex-row"  *ngFor="let item of [].constructor(10)">
+            <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden">
+              <img class="w-full h-full object-cover" src="favicon-32x32.png">
+            </div>
+            <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
+        </div>
+        </div>
+      </fuse-card>
+
+
     </div>
 
   </div>

@@ -26,6 +26,10 @@ const quanlycongviecRoutes: Route[] = [
         {
           path     : 'dauviec',
           component: DauviecComponent,
+        },
+        {
+          path     : 'duan',
+          component: DuanComponent,
         }
     ]
   }
