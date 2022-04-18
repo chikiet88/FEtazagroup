@@ -27,6 +27,20 @@
         <ng-container>
             <div class="flex flex-row w-full">
                 <div class="w-1/6 px-4">
+                <div
+                class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+                [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': filterStatus === 'all',
+                        'text-hint hover:bg-hover': filterStatus !== 'all'}"
+                (click)="AllDanhmuc()"
+                matRipple
+                [matRippleDisabled]="filterStatus === 'all'">
+                <mat-icon
+                    class="text-current"
+                    [svgIcon]="'heroicons_outline:archive'"></mat-icon>
+                <div class="ml-3 leading-5 select-none text-default">All</div>
+            </div>
+
+
                     <ng-container *ngFor="let item of Danhmucs">
                         <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
                             matRipple (click)="FilterDanhmuc(item)" [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': item.id === filterStatus,

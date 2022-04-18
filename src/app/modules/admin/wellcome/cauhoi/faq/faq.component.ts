@@ -86,6 +86,11 @@ FilterDanhmuc(item): void
     this.filter$.next(item.id);
     this.filteredCauhois = this.Cauhois.filter(v=>v.Danhmuc == item.id);
   }
+  AllDanhmuc(): void
+  {
+    this.filter$.next('all');
+    this.filteredCauhois = this.Cauhois;
+  } 
 ngOnDestroy(): void
     {
         this._unsubscribeAll.next(null);

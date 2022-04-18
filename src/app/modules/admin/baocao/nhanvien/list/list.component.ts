@@ -66,7 +66,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class ListComponent implements OnInit, OnDestroy
 {
-    displayedColumns: string[] = ['avatar', 'name','vitri', 'role'];
+    displayedColumns: string[] = ['avatar', 'name','vitri', 'role','trangthai'];
     dataSource: MatTableDataSource<Nhanvien>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;    
@@ -92,6 +92,7 @@ export class ListComponent implements OnInit, OnDestroy
     Vitri: object;
     Chinhanh: object;
     Role:any;
+    Trangthai:any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -110,6 +111,7 @@ export class ListComponent implements OnInit, OnDestroy
     {
         this._nhanviensService.getNhanviens().subscribe();
         this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT'}
+        this.Trangthai = {1:'Đang Làm',0:'Nghỉ Việc'}
         this._cauhinhService.Cauhinhs$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data: Cauhinh[]) => {
@@ -121,10 +123,10 @@ export class ListComponent implements OnInit, OnDestroy
              this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
             this._changeDetectorRef.markForCheck();
         });
-       this._nhanviensService.getNhanviens().subscribe();
         this._nhanviensService.nhanviens$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((nhanviens: Nhanvien[]) => {
+            console.log(nhanviens);
             this.nhanviensCount = nhanviens.length;
             //console.log(vitri);
             // nhanviens.forEach(v => {
