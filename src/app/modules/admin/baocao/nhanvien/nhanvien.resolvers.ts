@@ -6,20 +6,6 @@ import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { NhanvienService } from './nhanvien.service';
 import { Nhanvien } from './nhanvien.type';
 
-// @Injectable({
-//     providedIn: 'root'
-// })
-// export class NhanviensResolver implements Resolve<any>
-// {
-//     constructor(private _nhanviensService: NhanvienService)
-//     {
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Nhanvien[]>
-//     {
-//         return this._nhanviensService.getNhanviens();
-//     }
-// }
-
 @Injectable({
     providedIn: 'root'
 })
@@ -51,7 +37,8 @@ export class NhanviensCauhinhResolver implements Resolve<any>
 {
     constructor(
         private _cauhinhsService: CauhinhService,
-        private _router: Router
+        private _router: Router,
+        private _nhanviensService: NhanvienService
     )
     {
     }
@@ -60,6 +47,7 @@ export class NhanviensCauhinhResolver implements Resolve<any>
         return forkJoin([
             this._cauhinhsService.getCauhinhs(),
             this._cauhinhsService.getMenus(),
+            this._nhanviensService.getNhanviens(),
           ]);
     }
 }

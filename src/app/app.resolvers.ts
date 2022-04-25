@@ -36,7 +36,7 @@ export class InitialDataResolver implements Resolve<any>
             this._notificationsService.getAll(),
             this._quickChatService.getChats(),
             this._shortcutsService.getAll(),
-            this._userService.get()
+            this._userService.get(),
         ]);
     }
 }

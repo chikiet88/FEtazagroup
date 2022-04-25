@@ -47,12 +47,29 @@ export class KhachhangsService {
           })
       );
   }
+  UpdateMember(dulieu): Observable<any>
+  {
+      return this._httpClient.patch(`${environment.ApiURL}/khachhangs/khachhang/${dulieu.id}`,dulieu).pipe(
+          tap((response: any) => {
+              console.log(response)
+          })
+      );
+  }
   GetMember(chinhanh):  Observable<any>
   {
        return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
             console.log(member);
+          })
+      );
+  }
+  GetMemberBySDT(SDT):  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/paged?SDT=${SDT}`).pipe(
+          tap((khachhang) => {
+            console.log(khachhang);
+            this._data.next(khachhang);
           })
       );
   }
@@ -69,7 +86,7 @@ export class KhachhangsService {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
-           console.log(khachhang);
+           //console.log(khachhang);
           })
       );
   }

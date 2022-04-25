@@ -78,7 +78,7 @@ export class KhtimonaService {
       return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
-           console.log(khachhang);
+           //console.log(khachhang);
           })
       );
   }

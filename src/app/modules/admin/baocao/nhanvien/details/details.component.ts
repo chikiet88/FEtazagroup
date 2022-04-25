@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
+import { catchError, debounceTime, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Nhanvien } from '../nhanvien.type';
 import { ListComponent } from '../list/list.component';
@@ -73,7 +73,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _renderer2: Renderer2,
         private _router: Router,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
     )
     {
     }
@@ -137,12 +137,10 @@ export class DetailsComponent implements OnInit, OnDestroy
                 Zalo: [''],
               }),    
         });
-        // Get the contacts
         this._nhanvienService.nhanviens$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanviens: Nhanvien[]) => {               
                 this.nhanviens = nhanviens;
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
         this._nhanvienService.nhanvien$
@@ -154,7 +152,6 @@ export class DetailsComponent implements OnInit, OnDestroy
               // let merged = {...this.PQMenu, ...nhanvien.Menu}; 
               this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
               this.PQMenu= nhanvien.Menu; 
-                    
                 this.NhanvienForm.patchValue({
                     id: nhanvien.id,
                     avatar: nhanvien.avatar,

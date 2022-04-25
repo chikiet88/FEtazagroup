@@ -109,7 +109,6 @@ export class ListComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
-        this._nhanviensService.getNhanviens().subscribe();
         this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT'}
         this.Trangthai = {1:'Đang Làm',0:'Nghỉ Việc'}
         this._cauhinhService.Cauhinhs$
@@ -127,7 +126,7 @@ export class ListComponent implements OnInit, OnDestroy
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((nhanviens: Nhanvien[]) => {
             console.log(nhanviens);
-            this.nhanviensCount = nhanviens.length;
+            nhanviens != null?this.nhanviensCount = nhanviens.length:this.nhanviensCount=0;
             //console.log(vitri);
             // nhanviens.forEach(v => {
             //    let x = vitri.find((v1)=> Number(v1.OLDID)  == Number(v.profile.Vitri1));
@@ -148,19 +147,19 @@ export class ListComponent implements OnInit, OnDestroy
             // });
             this._changeDetectorRef.markForCheck();
         });
-        this._nhanviensService.nhanvien$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((nhanvien: Nhanvien) => {
-                this.selectedNhanvien = nhanvien;
-                this._changeDetectorRef.markForCheck();
-            });
-        this.matDrawer.openedChange.subscribe((opened) => {
-            if ( !opened )
-            {
-                this.selectedNhanvien = null;
-                this._changeDetectorRef.markForCheck();
-            }
-        });
+        // this._nhanviensService.nhanvien$
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe((nhanvien: Nhanvien) => {
+        //         this.selectedNhanvien = nhanvien;
+        //         this._changeDetectorRef.markForCheck();
+        //     });
+        // this.matDrawer.openedChange.subscribe((opened) => {
+        //     if ( !opened )
+        //     {
+        //         this.selectedNhanvien = null;
+        //         this._changeDetectorRef.markForCheck();
+        //     }
+        // });
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({matchingAliases}) => {

@@ -37,7 +37,6 @@ const nhanvienRoutes: Route[] = [
             path     : '',
             component: ListComponent,
             resolve  : {
-               //tasks    : NhanviensResolver,
                 cauhinhs :NhanviensCauhinhResolver,
             },
             children : [

@@ -23,7 +23,7 @@ export const environment = {
     },
     khtimona: {
       spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
-      worksheetName: 'form2022',
+      worksheetName: 'Realtime',
     },
     firebaseConfig : {
       apiKey: "AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js",

@@ -34,12 +34,16 @@ export class KhtimonaComponent implements OnInit {
   Khachhang$: Observable<Khachhang[]>;
   FilterForm: FormGroup;
   Filtermember: FormGroup;
+  Ngaydulieu: FormGroup;
   Member: any[];
   count:number;
   Showchitiet:boolean=false;
   CurrentUser:User;
   UserChinhanh:any;
   CauhinhChinhanh:any;
+  DataDrive: any = [];
+  DataServer: any = [];
+  Alldata: any = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort) sort: MatSort;
@@ -110,6 +114,10 @@ export class KhtimonaComponent implements OnInit {
       NgayMCStart: [''],
       NgayMCEnd: [''],
     });
+    this.Ngaydulieu = this._formBuilder.group({
+      Batdau: [new Date()],
+      Ketthuc: [new Date()],
+    });
     this.data$ = this._khtimonaService.data$;
     this.datamember$ = this._khtimonaService.Member$;
     this.count$ = this._khtimonaService.count$;
@@ -141,6 +149,43 @@ export class KhtimonaComponent implements OnInit {
     this.Showchitiet = false;
     this.Filtermember.reset();
   }
+  LoadDulieu() {
+    const BD = this.Ngaydulieu.get('Batdau').value;
+    const KT = this.Ngaydulieu.get('Ketthuc').value;
+    this._khtimonaService.GetData().subscribe();
+    this._khtimonaService.GetAllMember().subscribe();
+
+    this.datamember$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((Alldata) => {
+        this.Alldata = Alldata;
+      })
+    this.data$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((Khachhang: Khachhang[]) => {
+        if (Khachhang != null) {
+          this.DataServer = Khachhang.filter(v => new Date(v.NgayTaoDV) >= BD && new Date(v.NgayTaoDV) <= KT);
+        }
+       // console.log(this.DataServer);
+      })
+
+    this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
+      environment.khtimona.spreadsheetId, environment.khtimona.worksheetName, KhachhangMapping);
+    this.Khachhang$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((Khachhang: Khachhang[]) => {
+        Khachhang.forEach(v => {
+          v.Doanhso = v.Doanhso.replace(/\,/g, '').replace(/\./g, '');
+          v.Tonglieutrinh = v.Tonglieutrinh.replace(/\,/g, '').replace(/\./g, '');
+          v.Dathu = v.Dathu.replace(/\,/g, '').replace(/\./g, '');
+          let x = v.NgayTaoDV.toString().split("/");
+          v.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
+        });
+        this.DataDrive = Khachhang.filter(v => v.NgayTaoDV >= BD && v.NgayTaoDV <= KT);
+        console.log(this.DataDrive)
+      });
+  }
+  
   LoadMember(ob) {
     this.Showchitiet = false;
     this._khtimonaService.GetMember(ob.value).subscribe();
