@@ -8,10 +8,22 @@ import { environment } from 'environments/environment';
 export class QuanlycongviecService {
     private _sectiontask: BehaviorSubject<any> = new BehaviorSubject(null);
     private _sections: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _section: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _tasks: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _task: BehaviorSubject<any> = new BehaviorSubject(null);
     constructor(private _httpClient: HttpClient) {
     }
     get sections$(): Observable<any> {
         return this._sections.asObservable();
+    }
+    get section$(): Observable<any> {
+        return this._section.asObservable();
+    }
+    get tasks$(): Observable<any> {
+        return this._tasks.asObservable();
+    }
+    get task$(): Observable<any> {
+        return this._task.asObservable();
     }
     get sectiontask$(): Observable<any> {
         return this._sectiontask.asObservable();
@@ -34,57 +46,93 @@ export class QuanlycongviecService {
             ))
         );
     }
+    UpdateSection(section,id): Observable<any> {
+        return this.sections$.pipe(
+            take(1),
+            switchMap(sections => this._httpClient.patch(`${environment.ApiURL}/section/${id}`, section).pipe(
+                map((section) => {
+                    const index = sections.findIndex(item => item.id === id);
+                    sections[index] = section;
+                    this._sections.next(sections);
+                    return section;
+                }),
+                switchMap(section => this.section$.pipe(
+                    take(1),
+                    filter(item => item && item.id === id),
+                    tap(() => {
+                        this._section.next(section);
+                        return section;
+                    })
+                ))
+            ))
+        );
+    }
+    DeleteSection(id): Observable<any> {
+        return this.sections$.pipe(
+            take(1),
+            switchMap(sections => this._httpClient.delete(`${environment.ApiURL}/section/${id}`).pipe(
+                map((isDeleted: boolean) => {
+                    const index = sections.findIndex(item => item.id === id);
+                    sections.splice(index, 1);
+                    this._sections.next(sections);
+                    return isDeleted;
+                })
+            ))
+        );
+      }
 
-    // UpdateHotro(id, hotro): Observable<any> {
-    //     return this.hotros$.pipe(
-    //         take(1),
-    //         switchMap(hotros => this._httpClient.patch(`${environment.ApiURL}/cauhoithuonggap/${id}`, hotro).pipe(
-    //             map((hotro) => {
-    //                 const index = hotros.findIndex(item => item.id === id);
-    //                 hotros[index] = hotro;
-    //                 this._hotros.next(hotros);
-    //                 return hotro;
-    //             }),
-    //             switchMap(hotro => this.hotro$.pipe(
-    //                 take(1),
-    //                 filter(item => item && item.id === id),
-    //                 tap(() => {
-    //                     this._hotro.next(hotro);
-    //                     return hotro;
-    //                 })
-    //             ))
-    //         ))
-    //     );
-
-    // }
-    // UpdateTraloi(data): Observable<any> {
-    //     return this.hotros$.pipe(
-    //         take(1),
-    //         switchMap(hotros => this._httpClient.patch(`${environment.ApiURL}/cauhoithuonggap/${data.id}`, data).pipe(
-    //             map((hotro) => {
-    //                 const index = hotros.findIndex(item => item.id === data.id);
-    //                 hotros[index] = hotro;
-    //                 this._hotros.next(hotros);
-    //                 return hotro;
-    //             }),
-    //             switchMap(hotro => this.hotro$.pipe(
-    //                 take(1),
-    //                 filter(item => item && item.id === data.id),
-    //                 tap(() => {
-    //                     this._hotro.next(hotro);
-    //                     return hotro;
-    //                 })
-    //             ))
-    //         ))
-    //     );
-    // }
-    // DeleteCauhoi(data): Observable<any> {
-    //     return this._httpClient.delete(`${environment.ApiURL}/cauhoithuonggap/${data.id}`).pipe(
-    //       tap(() => {
-    //           this.getAllHotro().subscribe();
-    //       })
-    //   );
-    //   }
+   getAllTaks(): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/tasks`).pipe(
+            tap((response: any) => {
+                this._tasks.next(response);
+            })
+        );
+    }
+    CreateTaks(task): Observable<any> {
+        return this.tasks$.pipe(
+            take(1),
+            switchMap(tasks => this._httpClient.post(`${environment.ApiURL}/tasks`, task).pipe(
+                map((result) => {
+                    this._tasks.next([result, ...tasks]);
+                    return result;
+                })
+            ))
+        );
+    }
+    UpdateTaks(task,id): Observable<any> {
+        return this.tasks$.pipe(
+            take(1),
+            switchMap(tasks => this._httpClient.patch(`${environment.ApiURL}/tasks/${id}`, task).pipe(
+                map((task) => {
+                    const index = tasks.findIndex(item => item.id === id);
+                    tasks[index] = task;
+                    this._tasks.next(tasks);
+                    return task;
+                }),
+                switchMap(task => this.task$.pipe(
+                    take(1),
+                    filter(item => item && item.id === id),
+                    tap(() => {
+                        this._task.next(task);
+                        return task;
+                    })
+                ))
+            ))
+        );
+    }
+    DeleteTaks(id): Observable<any> {
+        return this.tasks$.pipe(
+            take(1),
+            switchMap(tasks => this._httpClient.delete(`${environment.ApiURL}/tasks/${id}`).pipe(
+                map((isDeleted: boolean) => {
+                    const index = tasks.findIndex(item => item.id === id);
+                    tasks.splice(index, 1);
+                    this._tasks.next(tasks);
+                    return isDeleted;
+                })
+            ))
+        );
+      }
 
 }
 

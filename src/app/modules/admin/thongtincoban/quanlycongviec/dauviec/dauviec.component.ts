@@ -28,10 +28,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./dauviec.component.scss']
 })
 export class DauviecComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['#','tieude', 'ngaytao'];
   dataSource = ELEMENT_DATA;
-  Sections:any;
+  Sections:any = [];
+  Tasks:any = [];
   filteredSections:any;
+  filteredTasks:any;
   constructor(
     private _quanlycongviecService : QuanlycongviecService,
     private _changeDetectorRef : ChangeDetectorRef,
@@ -59,6 +61,12 @@ export class DauviecComponent implements OnInit {
       this.Sections = this.filteredSections = data;
       console.log(data);
       
+      this._changeDetectorRef.markForCheck();
+    })
+    this._quanlycongviecService.getAllTaks().subscribe();
+    this._quanlycongviecService.tasks$.subscribe((data) => {
+      this.Tasks = this.filteredTasks = data;
+      console.log(data);
       this._changeDetectorRef.markForCheck();
     })
     // this._cauhinhService.danhmucs$.subscribe((data) => {
@@ -101,6 +109,9 @@ export class DauviecComponent implements OnInit {
       // });
 
   }
+  GetdataSource(item) {
+    return this.Tasks.filter(v=>v.sid == item.id);
+  }
   createSection()
   {
     const section = {Tieude:"New Section"}
@@ -129,6 +140,45 @@ export class DauviecComponent implements OnInit {
               }); 
             }
      }
+    }
+  CreateTaks(idSection)
+  {
+    const task = {Tieude:"New Task",sid:idSection}
+    const checktask =  this.Tasks.filter(v=>v.sid == idSection);
+    if(checktask.length==0)
+        {
+            this._quanlycongviecService.CreateTaks(task).subscribe((newtask) => {
+                this._router.navigate(['./', newtask.id], {relativeTo: this._activatedRoute});
+                this._changeDetectorRef.markForCheck();
+            });
+    }
+    else
+    {
+        const Tieude = checktask[0].Tieude;
+        if(Tieude=="New Task")
+        {
+                this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
+                const filterValue = "New Task";
+                //this.dataSource.filter = filterValue.trim().toLowerCase();
+                //this.filterByQuery("Mới");
+        }
+        else {
+
+                this._quanlycongviecService.CreateTaks(task).subscribe((newtask) => {
+                  this._router.navigate(['./', newtask.id], {relativeTo: this._activatedRoute});
+                  this._changeDetectorRef.markForCheck();
+              }); 
+            }
+     }
+    }
+    DeleteSection(item) {
+      this._quanlycongviecService.DeleteSection(item.id).subscribe();
+    }
+    EditSection(event,item) {
+      item.Tieude = event.target.value;
+      this._quanlycongviecService.UpdateSection(item,item.id).subscribe();
+      console.log(event.target.value);
+      console.log(item);
     }
 
 }

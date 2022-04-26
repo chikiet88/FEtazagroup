@@ -1,98 +1,64 @@
 <div class="flex flex-col flex-auto min-w-0">
-    <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
-        <div class="flex flex-row space-x-2 py-6">
-            <div class="text-2xl font-bold">Công Việc Của Tôi</div>
-        </div>
-        
-        <mat-tab-group>
-            <mat-tab label="Đầu Việc">
-              <div class="flex flex-col w-full p-2 space-y-4">
-                <div class="py-4"><mat-button-toggle (click)="createSection()"><span class="material-icons">
-                  add
-                  </span>Thêm Section</mat-button-toggle></div>
-                  <div>
-                    <mat-accordion>
-                      <mat-expansion-panel *ngFor="let item of Sections">
-                        <mat-expansion-panel-header class="border-b-2">
-                          <mat-panel-title>
-                           {{item.Tieude}}
-                          </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <span class="material-icons">
-                          edit_note
-                          </span>
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-full">
-                          <ng-container matColumnDef="position">
-                            <th mat-header-cell *matHeaderCellDef> No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="weight">
-                            <th mat-header-cell *matHeaderCellDef> Weight </th>
-                            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="symbol">
-                            <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                            <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                          </ng-container>
-                        
-                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table> 
-                      </mat-expansion-panel>
-
-                      
-                      <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                           Section 1
-                          </mat-panel-title>
-                          <mat-panel-description>
-                          Mô Tả
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-full">
-                          <ng-container matColumnDef="position">
-                            <th mat-header-cell *matHeaderCellDef> No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="weight">
-                            <th mat-header-cell *matHeaderCellDef> Weight </th>
-                            <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="symbol">
-                            <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                            <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                          </ng-container>
-                        
-                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table> 
-                      </mat-expansion-panel>
-                      <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                           Section 2
-                          </mat-panel-title>
-                          <mat-panel-description>
-                           Mô tả
-                          </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <p>I'm visible because I am open</p>
-                      </mat-expansion-panel>
-                    </mat-accordion>               
-                  </div>
-                                </div>            
-            </mat-tab>
-            <mat-tab label="Dashboard"> Dashboard</mat-tab>
-          </mat-tab-group>  
+  <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
+    <div class="flex flex-row space-x-2 py-6">
+      <div class="text-2xl font-bold">Công Việc Của Tôi</div>
     </div>
-  
+
+    <mat-tab-group>
+      <mat-tab label="Đầu Việc">
+        <div class="flex flex-col w-full p-2 space-y-4">
+          <div class="py-4">
+            <mat-button-toggle (click)="createSection()"><span class="material-icons">
+                add
+              </span>Thêm Section</mat-button-toggle>
+          </div>
+          <div>
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let item of Sections" class="py-3">
+                <mat-expansion-panel-header>
+                  <mat-panel-title (keydown)="$event.stopPropagation()" class="p-2 border-2 border-dashed">
+                    <input class="w-full" matInput [value]="item.Tieude" (click)="$event.stopPropagation()"
+                      (change)="EditSection($event,item)">
+                  </mat-panel-title>
+                  <mat-panel-description class="justify-end">
+                    <button mat-icon-button (click)="DeleteSection(item)">
+                      <span class="material-icons">
+                        delete
+                      </span>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <table mat-table [dataSource]="GetdataSource(item)" class="mat-elevation-z8 w-full">
+                  <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef> # </th>
+                    <td mat-cell *matCellDef="let row; let i =index"> {{i+1}} </td>
+                    <td mat-header-cell *matFooterCellDef colspan="4">
+                      <button mat-button (click)="CreateTaks(item.id)" class="m-3 border-blue-500 border-2 border-dashed"><span class="material-icons">
+                          add
+                        </span>Thêm Đầu Việc</button>
+                  </td>
+                  </ng-container>
+                  <ng-container matColumnDef="tieude">
+                    <th mat-header-cell *matHeaderCellDef> Tiêu Đề </th>
+                    <td mat-cell *matCellDef="let row"> {{row.Tieude}} </td>
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="ngaytao">
+                    <th mat-header-cell *matHeaderCellDef> Ngày Tạo </th>
+                    <td mat-cell *matCellDef="let row"> {{row.Ngaytao}} </td>
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                </table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Dashboard"> Dashboard</mat-tab>
+    </mat-tab-group>
   </div>
+
+</div>

@@ -87,6 +87,8 @@ export class CauhoiadminComponent implements OnInit {
     ]
 
     this._cauhoiService.hotros$.subscribe((data) => {
+      console.log(data);
+      
       this.Cauhois = this.filteredCauhois = data;
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
