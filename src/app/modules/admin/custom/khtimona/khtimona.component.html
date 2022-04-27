@@ -4,7 +4,7 @@
       <span class="material-icons text-blue-600">
         arrow_back
       </span></button>
-      <div class="flex space-x-3" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">
+      <div class="flex space-x-3" *ngIf="CurrentUser.Role=='dev'">
         <mat-form-field class="w-60" [formGroup]="Ngaydulieu">
           <mat-date-range-input [rangePicker]="pickerNDL">
             <input matStartDate [formControlName]="'Batdau'" placeholder="Từ">
@@ -29,19 +29,12 @@
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
       <button mat-menu-item color="primary" (click)="GetAllMember()"
         *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All</button>
-      <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
+      <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
         *ngIf="Khachhang$ | async as Khachhang">Cập Nhật Chi Tiết
         (<span>{{Khachhang.length}}</span>)</button>
-      <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button>
-      <button mat-menu-item *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" (dateChange)="LoadByDay('change', $event)">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </button>
+      <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button> -->
     </mat-menu>
   </div>
 

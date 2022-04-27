@@ -11,6 +11,8 @@ import { MuctieuComponent } from './muctieu/muctieu.component';
 import { DauviecComponent } from './dauviec/dauviec.component';
 import { DuanComponent } from './duan/duan.component';
 import { ChitietComponent } from './dauviec/chitiet/chitiet.component';
+import { CustomModule } from 'app/pipes/custom/custom.module';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -44,6 +46,8 @@ const quanlycongviecRoutes: Route[] = [
 @NgModule({
   declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent],
   imports: [
+    FindbyidModule,
+    CustomModule,
     FuseCardModule,
     MaterialExampleModule,
     CommonModule,

@@ -12,3 +12,9 @@ export class FindbyuuidPipe implements PipeTransform {
     return items.find(v=>v.uuid == uuid)[result];
   }
 }
+@Pipe({name: 'findbytype'})
+export class FindbytypePipe implements PipeTransform {
+  transform(value:any,items: any,type:any): any {  
+    return items.find(v=>v[type] == value);
+  }
+}
