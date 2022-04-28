@@ -12,3 +12,9 @@ export class DemSoPipe implements PipeTransform {
      return data.filter(v=>v[status] == value1);
   }
 }
+@Pipe({name: 'Filter'})
+export class FilterPipe implements PipeTransform {
+  transform(items:any,type: any,value): any {
+     return items.filter(v=>v[type] == value);
+  }
+}

@@ -90,9 +90,38 @@
                     </td>
                     <td mat-header-cell *matFooterCellDef></td>
                   </ng-container>
-                  <ng-container matColumnDef="ngaytao">
-                    <th mat-header-cell *matHeaderCellDef> Ngày Tạo </th>
-                    <td mat-cell *matCellDef="let row"> {{row.Ngaytao|date:'dd/MM/yyyy'}} </td>
+                  <ng-container matColumnDef="uutien">
+                    <th mat-header-cell *matHeaderCellDef> Ưu Tiên </th>
+                    <td mat-cell *matCellDef="let row"> 
+                      <button mat-button [matMenuTriggerFor]="menu">{{row.Uutien|findbyid:Uutiens:'value'}}</button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngFor="let item of Uutiens" (click)="UpdateUutien(row,item.id)">{{item.value}}</button>
+                      </mat-menu>                   
+                  </td>
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="deadline">
+                    <th mat-header-cell *matHeaderCellDef> Deadline </th>
+                    <td mat-cell *matCellDef="let row" class="flex"> 
+                      <!-- <mat-form-field appearance="fill">
+                        <input matInput [matDatepicker]="picker"
+                               (dateInput)="UpdateDeadline('input', $event)" (dateChange)="UpdateDeadline('change', $event)">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field> -->
+
+                      <span class="my-auto">
+                        {{row.Deadline|date:'dd/MM/yyyy'}}  
+                        {{selected|date:'dd/MM/yyyy'}}
+                      </span>
+                      <button mat-button [matMenuTriggerFor]="menu"><span class="material-icons">
+                        calendar_month
+                        </span></button>
+                      <mat-menu #menu="matMenu">
+                          <mat-calendar (selectedChange)="UpdateDeadline(row,$event)"></mat-calendar>
+                      </mat-menu>
+                  
+                  </td>
                     <td mat-header-cell *matFooterCellDef></td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

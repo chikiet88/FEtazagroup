@@ -11,12 +11,13 @@ import { QuanlycongviecService } from '../quanlycongviec.service';
   styleUrls: ['./dauviec.component.scss']
 })
 export class DauviecComponent implements OnInit {
-  displayedColumns: string[] = ['#', 'tieude', 'ngaytao'];
+  displayedColumns: string[] = ['#', 'tieude','deadline','uutien'];
   Sections: any = [];
   Tasks: any = [];
   filteredSections: any;
   filteredTasks: any;
   CUser: any;
+  Uutiens:any[];
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -28,6 +29,18 @@ export class DauviecComponent implements OnInit {
     private _nhanvienServiceService: NhanvienService,
   ) { }
   ngOnInit(): void {
+    this.Uutiens = [
+      {id:0,value:'...'},
+      {id:1,value:'Cấp Độ 1'},
+      {id:2,value:'Cấp Độ 2'},
+      {id:3,value:'Cấp Độ 3'},
+      {id:4,value:'Cấp Độ 4'},
+      {id:5,value:'Cấp Độ 5'},
+      {id:6,value:'Cấp Độ 6'},
+      {id:7,value:'Cấp Độ 7'},
+      {id:8,value:'Cấp Độ 8'},
+      {id:9,value:'Cấp Độ 9'}
+    ]
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
@@ -116,6 +129,16 @@ export class DauviecComponent implements OnInit {
   }
   ChangeStatusTasks(item, status) {
     item.Trangthai = status;
+    this._quanlycongviecService.UpdateTaks(item, item.id).subscribe();
+    this.ngOnInit();
+  }
+  UpdateDeadline(item,value) {
+    item.Deadline = value;
+    this._quanlycongviecService.UpdateTaks(item, item.id).subscribe();
+    this.ngOnInit();
+  }
+  UpdateUutien(item,value) {
+    item.Uutien = value;
     this._quanlycongviecService.UpdateTaks(item, item.id).subscribe();
     this.ngOnInit();
   }

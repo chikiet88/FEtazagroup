@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CustomPipe, DemSoPipe} from './custom.pipe';
+import { CustomPipe, DemSoPipe, FilterPipe} from './custom.pipe';
 @NgModule({
-  declarations: [CustomPipe,DemSoPipe],
+  declarations: [CustomPipe,DemSoPipe,FilterPipe],
   imports: [
     CommonModule
   ],
-  exports:[CustomPipe,DemSoPipe]
+  exports:[CustomPipe,DemSoPipe,FilterPipe]
 })
 export class CustomModule { }

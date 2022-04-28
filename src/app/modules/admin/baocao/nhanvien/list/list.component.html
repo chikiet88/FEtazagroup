@@ -71,10 +71,16 @@
         <div class="leading-5 truncate text-secondary">{{row.email}}</div> 
     </td>
     </ng-container>
-    <ng-container matColumnDef="vitri">
+    <ng-container matColumnDef="Vitri">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-56"> Vị Trí </th>
       <td mat-cell *matCellDef="let row" class="w-36 p-2"> 
-            <mat-form-field
+        <button mat-button [matMenuTriggerFor]="menu">
+            {{Vitri[row.profile.Vitri]}}</button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="ChangeProfile(row,'Vitri',item.key)"  *ngFor="let item of Vitri| keyvalue"> {{item.value}}</button> 
+        </mat-menu>
+        
+            <!-- <mat-form-field
                 class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                 <mat-select [(value)]="row.profile.Vitri"
                     (selectionChange)="ChangeProfile(row,'Vitri',$event)">
@@ -90,13 +96,20 @@
                         Không Tìm Thấy
                     </mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
     </td>
     </ng-container>
-    <ng-container matColumnDef="role">
+    <ng-container matColumnDef="Role">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
       <td mat-cell *matCellDef="let row" class="w-32 p-2"> 
-            <mat-form-field
+
+        <button mat-button [matMenuTriggerFor]="menu">
+            {{Role[row.Role]}}</button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="ChangeState(row,'Role',item.key)"  *ngFor="let item of Role| keyvalue"> {{item.value}}</button> 
+        </mat-menu>
+
+            <!-- <mat-form-field
                 class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                 <mat-select [(value)]="row.Role"
                     (selectionChange)="ChangeUser(row,'Role',$event)">
@@ -112,28 +125,20 @@
                         Không Tìm Thấy
                     </mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
     </td>
     </ng-container>
-    <ng-container matColumnDef="trangthai">
+    <ng-container matColumnDef="Trangthai">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng Thái </th>
       <td mat-cell *matCellDef="let row" class="w-32 p-2"> 
-            <mat-form-field
-                class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                <mat-select [(value)]="row.Trangthai" (selectionChange)="ChangeUser(row,'Trangthai',$event)">
-                    <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm"
-                            #searchTrangthai></div>
-                    <mat-option
-                        *ngFor="let item of Trangthai | keyvalue| timkiem : searchTrangthai.value:'value'"
-                        [value]="item.key">
-                        {{item.value}}
-                    </mat-option>
-                    <mat-option
-                        *ngIf="(Trangthai | keyvalue| timkiem : searchTrangthai.value:'value').length==0">
-                        Không Tìm Thấy
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+        <button mat-button [matMenuTriggerFor]="menu">
+            <span class="material-icons text-green-500" *ngIf="row.Trangthai==0">check_circle</span>
+            <span class="material-icons text-red-500" *ngIf="row.Trangthai==1">cancel</span>
+            {{row.Trangthai|findbyid:Trangthai:'value'}}</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="ChangeState(row,'Trangthai',0)"><span class="material-icons text-green-500">check_circle</span> Đang làm</button>
+          <button mat-menu-item (click)="ChangeState(row,'Trangthai',1)"><span class="material-icons text-red-500">cancel</span> Nghỉ Việc</button>
+        </mat-menu>
     </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

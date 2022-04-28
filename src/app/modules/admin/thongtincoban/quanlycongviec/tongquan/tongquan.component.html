@@ -5,9 +5,9 @@
       <div class="text-xl py-2">{{thisUser.name}}</div>
       <div class="py-2">
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-          <mat-button-toggle value="bold">10 Dự Án</mat-button-toggle>
-          <mat-button-toggle value="italic">20 Đầu Việc Hoàn Thành</mat-button-toggle>
-          <mat-button-toggle value="underline">5 Người Tham Gia</mat-button-toggle>
+          <mat-button-toggle value="bold">0 Dự Án</mat-button-toggle>
+          <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{(Tasks|Filter:'Trangthai':2).length}}</span> Đầu Việc Hoàn Thành</mat-button-toggle>
+          <mat-button-toggle value="underline">0 Người Tham Gia</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
@@ -25,7 +25,11 @@
       </div>
         <div class="py-2">
           <mat-tab-group>
-            <mat-tab label="Đang làm "> Đang làm </mat-tab>
+            <mat-tab label="Đang làm "> 
+               <mat-list>
+                <mat-list-item *ngFor="let item of Tasks" class="border-2 "> {{item.Tieude}} </mat-list-item>
+               </mat-list>
+              </mat-tab>
             <mat-tab label="Hoàn Thành"> Hoàn Thành </mat-tab>
             <mat-tab label="Quá Hạn"> Quá Hạn </mat-tab>
           </mat-tab-group>
@@ -53,14 +57,12 @@
       <fuse-card class="flex flex-col w-full p-4 col-span-2">
         <div class="py-2 flex flex-row space-x-4">
           <div class="text-xl font-bold my-auto"> Người Tham Gia</div>
-          <div class="text-xl font-bold">         
-           <mat-form-field>
-            <mat-select>
-              <mat-option *ngFor="let item of typethamgia|keyvalue" [value]="item.key">
-                {{item.value}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field></div>
+          <div class="text-xl font-bold my-auto">    
+            <button mat-button [matMenuTriggerFor]="menu">{{typethamgia[0]}}</button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item *ngFor="let item of typethamgia|keyvalue" [value]="item.key">{{item.value}}</button>
+            </mat-menu>     
+        </div>
         </div>
         <div class="grid grid-cols-4 gap-4 py-2">
         <div class="flex flex-row"  *ngFor="let item of [].constructor(10)">

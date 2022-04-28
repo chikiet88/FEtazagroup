@@ -6,7 +6,7 @@ import { BehaviorSubject, catchError, combineLatest, distinctUntilChanged, filte
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Contact, Country } from 'app/modules/admin/apps/contacts/contacts.types';
 import { ContactsService } from 'app/modules/admin/apps/contacts/contacts.service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Nhanvien } from '../nhanvien.type';
 import { NhanvienService } from '../nhanvien.service';
 import { NotifierService } from 'angular-notifier';
@@ -18,45 +18,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
  const vitri = require('app/v1json/vitri.json');
  const bophan = require('app/v1json/bophan.json');
- export interface UserData {
-    id: string;
-    name: string;
-    progress: string;
-    fruit: string;
-  }
-  
-  /** Constants used to fill up our data base. */
-  const FRUITS: string[] = [
-    'blueberry',
-    'lychee',
-    'kiwi',
-    'mango',
-    'peach',
-    'lime',
-    'pomegranate',
-    'pineapple',
-  ];
-  const NAMES: string[] = [
-    'Maia',
-    'Asher',
-    'Olivia',
-    'Atticus',
-    'Amelia',
-    'Jack',
-    'Charlotte',
-    'Theodore',
-    'Isla',
-    'Oliver',
-    'Isabella',
-    'Jasper',
-    'Cora',
-    'Levi',
-    'Violet',
-    'Arthur',
-    'Mia',
-    'Thomas',
-    'Elizabeth',
-  ];
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -66,7 +27,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class ListComponent implements OnInit, OnDestroy
 {
-    displayedColumns: string[] = ['avatar', 'name','vitri', 'role','trangthai'];
+    displayedColumns: string[] = ['avatar', 'name','Vitri', 'Role','Trangthai'];
     dataSource: MatTableDataSource<Nhanvien>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;    
@@ -110,8 +71,11 @@ export class ListComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         this._nhanviensService.getNhanviens().subscribe();
-        this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT'}
-        this.Trangthai = {1:'Nghỉ Việc',0:'Đang Làm'}
+        this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT',new:'Mới'}
+        this.Trangthai = [
+            {id:0,value:'Đang Làm'},
+            {id:1,value:'Nghỉ Việc'}
+        ]
         this._cauhinhService.Cauhinhs$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data: Cauhinh[]) => {
@@ -212,9 +176,14 @@ export class ListComponent implements OnInit, OnDestroy
         item[prop] = e.value;
         this._nhanviensService.updateNhanvien(item.id,item).subscribe();
     }
-    ChangeProfile(item,pro,event): void
+    ChangeState(item,prop,value): void
     {
-        item.profile[pro] = event.value;
+        item[prop] = value;
+        this._nhanviensService.updateNhanvien(item.id,item).subscribe();
+    }
+    ChangeProfile(item,pro,value): void
+    {
+        item.profile[pro] = value;
         this._nhanviensService.updateNhanvien(item.id,item).subscribe();
     }
     ngOnDestroy(): void
