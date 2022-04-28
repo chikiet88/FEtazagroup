@@ -109,8 +109,9 @@ export class ListComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {
+        this._nhanviensService.getNhanviens().subscribe();
         this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT'}
-        this.Trangthai = {1:'Đang Làm',0:'Nghỉ Việc'}
+        this.Trangthai = {1:'Nghỉ Việc',0:'Đang Làm'}
         this._cauhinhService.Cauhinhs$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data: Cauhinh[]) => {
@@ -201,9 +202,15 @@ export class ListComponent implements OnInit, OnDestroy
         // this.filteredNhanviens = this.nhanviens.filter(v => v.name.toLowerCase().includes(query.toLowerCase())); 
 
     }
-    ChangeRole(data): void
+    ChangeRole(item,e): void
     {
-        console.log(data);
+        item.Role = e.value;
+        this._nhanviensService.updateNhanvien(item.id,item).subscribe();
+    }
+    ChangeUser(item,prop,e): void
+    {
+        item[prop] = e.value;
+        this._nhanviensService.updateNhanvien(item.id,item).subscribe();
     }
     ChangeProfile(item,pro,event): void
     {

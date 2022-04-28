@@ -99,7 +99,7 @@
             <mat-form-field
                 class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
                 <mat-select [(value)]="row.Role"
-                    (selectionChange)="ChangeRole(row,$event)">
+                    (selectionChange)="ChangeUser(row,'Role',$event)">
                     <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm"
                             #searchSelect></div>
                     <mat-option
@@ -120,16 +120,16 @@
       <td mat-cell *matCellDef="let row" class="w-32 p-2"> 
             <mat-form-field
                 class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                <mat-select [(value)]="row.profile.TTLV" (selectionChange)="ChangeTrangthai(row,$event)">
+                <mat-select [(value)]="row.Trangthai" (selectionChange)="ChangeUser(row,'Trangthai',$event)">
                     <div class="p-3 border-b"><input matInput placeholder="Tìm Kiếm"
-                            #searchSelect></div>
+                            #searchTrangthai></div>
                     <mat-option
-                        *ngFor="let item of Trangthai | keyvalue| timkiem : searchSelect.value:'value'"
+                        *ngFor="let item of Trangthai | keyvalue| timkiem : searchTrangthai.value:'value'"
                         [value]="item.key">
                         {{item.value}}
                     </mat-option>
                     <mat-option
-                        *ngIf="(Trangthai | keyvalue| timkiem : searchSelect.value:'value').length==0">
+                        *ngIf="(Trangthai | keyvalue| timkiem : searchTrangthai.value:'value').length==0">
                         Không Tìm Thấy
                     </mat-option>
                 </mat-select>

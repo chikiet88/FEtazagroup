@@ -10,6 +10,7 @@ export class Nhanvien {
     Role:string;
     Phanquyen:string;
     Menu:object;
+    Trangthai:number;
 }
 export class profile {
     Congty: string;

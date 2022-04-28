@@ -11,7 +11,6 @@ import { Nhanvien } from './nhanvien.type';
 export class NhanvienService {
   private _nhanvien: BehaviorSubject<Nhanvien | null> = new BehaviorSubject(null);
   private _nhanviens: BehaviorSubject<Nhanvien[] | null> = new BehaviorSubject(null);
-  private _users: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   constructor(
       private _httpClient: HttpClient,
       private _notifierService: NotifierService,
@@ -25,10 +24,6 @@ export class NhanvienService {
      {
          return this._nhanviens.asObservable();
      }
-     get users$(): Observable<Nhanvien[]>
-     {
-         return this._users.asObservable();
-     }
      getNhanviens(): Observable<Nhanvien[]>
      {
          return this._httpClient.get<Nhanvien[]>(`${environment.ApiURL}/users`).pipe(
@@ -37,15 +32,6 @@ export class NhanvienService {
              })
          );
      }
-    //  getUsers(): Observable<any[]>
-    //  {
-    //      return this._httpClient.get<any[]>(`${environment.ApiURL1}`).pipe(
-    //          tap((data) => {
-    //            console.log(data)
-    //              this._users.next(data);
-    //          })
-    //      );
-    //  }
      getNhanvienById(id: string): Observable<Nhanvien>
      {
          return this._nhanviens.pipe(

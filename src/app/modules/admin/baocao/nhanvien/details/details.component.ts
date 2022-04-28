@@ -70,10 +70,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _cauhinhService: CauhinhService,
         private _formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
-        private _renderer2: Renderer2,
         private _router: Router,
-        private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef,
     )
     {
     }
@@ -137,12 +134,12 @@ export class DetailsComponent implements OnInit, OnDestroy
                 Zalo: [''],
               }),    
         });
-        this._nhanvienService.nhanviens$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((nhanviens: Nhanvien[]) => {               
-                this.nhanviens = nhanviens;
-                this._changeDetectorRef.markForCheck();
-            });
+        // this._nhanvienService.nhanviens$
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe((nhanviens: Nhanvien[]) => {               
+        //         this.nhanviens = nhanviens;
+        //         this._changeDetectorRef.markForCheck();
+        //     });
         this._nhanvienService.nhanvien$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((nhanvien: Nhanvien) => {
