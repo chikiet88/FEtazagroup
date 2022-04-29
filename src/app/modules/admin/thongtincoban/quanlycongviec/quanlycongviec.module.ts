@@ -13,6 +13,9 @@ import { DuanComponent } from './duan/duan.component';
 import { ChitietComponent } from './dauviec/chitiet/chitiet.component';
 import { CustomModule } from 'app/pipes/custom/custom.module';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { DetailComponent } from './duan/detail/detail.component';
+import { DialogComponent } from './duan/dialog/dialog.component';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -39,13 +42,20 @@ const quanlycongviecRoutes: Route[] = [
         {
           path     : 'duan',
           component: DuanComponent,
-        }
+          children : [
+            {
+                path     : ':id',
+                component: DetailComponent,
+            },
+        ]
+        },
     ]
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent],
+  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent],
   imports: [
+    CKEditorModule,
     FindbyidModule,
     CustomModule,
     FuseCardModule,

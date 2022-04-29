@@ -1,16 +1,21 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { QuanlycongviecService } from '../quanlycongviec.service';
+import { Subject, takeUntil } from 'rxjs';
+import { QuanlycongviecService } from '../../quanlycongviec.service';
 @Component({
-  selector: 'app-dauviec',
-  templateUrl: './dauviec.component.html',
-  styleUrls: ['./dauviec.component.scss']
+  selector: 'app-detail',
+  templateUrl: './detail.component.html',
+  styleUrls: ['./detail.component.scss']
 })
-export class DauviecComponent implements OnInit {
+export class DetailComponent implements OnInit {
+  public Editor = InlineEditor;
+  public config = {
+    placeholder: 'Mô Tả Dự Án'
+  };
   displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
   Sections: any = [];
   Tasks: any = [];
@@ -18,8 +23,8 @@ export class DauviecComponent implements OnInit {
   filteredTasks: any;
   filteredDuans: any;
   CUser: any;
-  Uutiens:any[];
-  Duans:any[];
+  Uutiens:any[]=[];
+  Duans:any[]=[];
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -29,30 +34,16 @@ export class DauviecComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
-  ) {
+  ) { 
     this._quanlycongviecService.getAllSection().subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.getAllDuans().subscribe();
-   }
-  ngOnInit(): void {
-    this.Uutiens = [
-      {id:0,value:'...'},
-      {id:1,value:'Cấp Độ 1'},
-      {id:2,value:'Cấp Độ 2'},
-      {id:3,value:'Cấp Độ 3'},
-      {id:4,value:'Cấp Độ 4'},
-      {id:5,value:'Cấp Độ 5'},
-      {id:6,value:'Cấp Độ 6'},
-      {id:7,value:'Cấp Độ 7'},
-      {id:8,value:'Cấp Độ 8'},
-      {id:9,value:'Cấp Độ 9'}
-    ]
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
       this.CUser = data;
       this._changeDetectorRef.markForCheck();         
-    });         
+    }); 
     this._quanlycongviecService.sections$.subscribe((data) => {
       this.Sections = this.filteredSections = data;
       console.log(data);
@@ -69,57 +60,66 @@ export class DauviecComponent implements OnInit {
       this._changeDetectorRef.markForCheck();
     })
   }
-  GetdataSource(item) {
+
+  ngOnInit(): void {
+
+  }
+  GetdataSource(item) {    
     return this.Tasks.filter(v => v.sid == item.id);
   }
-  createSection() {
-    const section = { Tieude: "New Section",IsOpen:true,idTao:this.CUser.id}
-    if (this.Sections.length == 0) {
-      this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
-        this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
-        this._changeDetectorRef.markForCheck();
-      });
+  CreateSection() {
+    const section = { Tieude: "New Section",IsOpen:true,idTao:this.CUser.id,type:1}
+    if(this.Sections.length != 0 && this.Sections[0].Tieude=="New Section")
+    {
+      this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
     }
-    else {
-      const Tieude = this.Sections[0].Tieude;
-      if (Tieude == "New Section") {
-        this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
-        const filterValue = "New Section";
-        //this.dataSource.filter = filterValue.trim().toLowerCase();
-        //this.filterByQuery("Mới");
-      }
-      else {
+    else
+    {
+      this._quanlycongviecService.CreateSection(section).subscribe();
+    }
 
-        this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
-          this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
-          this._changeDetectorRef.markForCheck();
-        });
-      }
-    }
+    // if (this.Sections.length == 0) {
+    //   this._quanlycongviecService.CreateSection(section).subscribe();
+    // }
+    // else {
+    //   const Tieude = this.Sections[0].Tieude;
+    //   if (Tieude == "New Section") {
+    //     this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
+    //     const filterValue = "New Section";
+    //     //this.dataSource.filter = filterValue.trim().toLowerCase();
+    //     //this.filterByQuery("Mới");
+    //   }
+    //   else {
+    //     this._quanlycongviecService.CreateSection(section).subscribe();
+    //   }
+    // }
   }
+
   CreateTaks(idSection) {
+    
     const task = { Tieude: "New Task", sid: idSection,idTao:this.CUser.id}
     const checktask = this.Tasks.filter(v => v.sid == idSection);
-    if (checktask.length == 0) {
-      this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
-        this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
-        this._changeDetectorRef.markForCheck();
-      });
+    if(checktask.length != 0 &&checktask[0].Tieude== "New Task")
+    {
+      this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
     }
-    else {
-      const Tieude = checktask[0].Tieude;
-      if (Tieude == "New Task") {
-        this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
-        const filterValue = "New Task";
-      }
-      else {
-
-        this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
-          this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
-          this._changeDetectorRef.markForCheck();
-        });
-      }
+    else
+    {
+      this._quanlycongviecService.CreateTasks(task).subscribe();
     }
+    // if (checktask.length == 0) {
+    //   this._quanlycongviecService.CreateTasks(task).subscribe();
+    // }
+    // else {
+    //   const Tieude = checktask[0].Tieude;
+    //   if (Tieude == "New Task") {
+    //     this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
+    //     const filterValue = "New Task";
+    //   }
+    //   else {
+    //     this._quanlycongviecService.CreateTasks(task).subscribe();
+    //   }
+    // }
   }
   DeleteSection(item) {
     this._quanlycongviecService.DeleteSection(item.id).subscribe();
@@ -155,5 +155,4 @@ export class DauviecComponent implements OnInit {
     item.IsOpen = !item.IsOpen;
     this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
   }
-
 }

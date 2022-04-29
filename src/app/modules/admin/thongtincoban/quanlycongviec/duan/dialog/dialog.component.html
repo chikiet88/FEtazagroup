@@ -1,0 +1,33 @@
+<div class="m-4">
+    <div>
+        <input
+            class="w-full p-2 text-2xl"
+            [placeholder]="'Tiêu Đề'"
+            [(ngModel)]="Duan.Tieude"
+            (input)="updateNoteDetails(Duan)">
+    </div>
+    <div class="flex w-full py-5 px-2">
+        <textarea
+            class="w-full"
+            [placeholder]="'Mô Tả'"
+            [(ngModel)]="Duan.Mota"
+            (input)="updateNoteDetails(Duan)"
+            matTextareaAutosize></textarea>
+    </div>
+    <ng-container>
+        <div class="flex items-center justify-end mt-4">
+            <button
+                mat-flat-button
+                [color]="'primary'"
+                [disabled]="!Duan.Tieude && !Duan.Mota"
+                (click)="CreateDuan(Duan)">
+                Save
+            </button>
+            <button
+            mat-flat-button
+            matDialogClose>
+            Close
+        </button>
+        </div>
+    </ng-container>
+</div>

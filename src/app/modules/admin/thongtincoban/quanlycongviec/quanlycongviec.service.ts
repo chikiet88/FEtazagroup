@@ -11,6 +11,8 @@ export class QuanlycongviecService {
     private _section: BehaviorSubject<any> = new BehaviorSubject(null);
     private _tasks: BehaviorSubject<any> = new BehaviorSubject(null);
     private _task: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _duans: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _duan: BehaviorSubject<any> = new BehaviorSubject(null);
     constructor(private _httpClient: HttpClient) {
     }
     get sections$(): Observable<any> {
@@ -24,6 +26,12 @@ export class QuanlycongviecService {
     }
     get task$(): Observable<any> {
         return this._task.asObservable();
+    }
+    get duans$(): Observable<any> {
+        return this._duans.asObservable();
+    }
+    get duan$(): Observable<any> {
+        return this._duan.asObservable();
     }
     get sectiontask$(): Observable<any> {
         return this._sectiontask.asObservable();
@@ -80,15 +88,14 @@ export class QuanlycongviecService {
             ))
         );
       }
-
-   getAllTaks(): Observable<any> {
+   getAllTasks(): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/tasks`).pipe(
             tap((response: any) => {
                 this._tasks.next(response);
             })
         );
     }
-    CreateTaks(task): Observable<any> {
+    CreateTasks(task): Observable<any> {
         return this.tasks$.pipe(
             take(1),
             switchMap(tasks => this._httpClient.post(`${environment.ApiURL}/tasks`, task).pipe(
@@ -99,7 +106,7 @@ export class QuanlycongviecService {
             ))
         );
     }
-    UpdateTaks(task,id): Observable<any> {
+    UpdateTasks(task,id): Observable<any> {
         return this.tasks$.pipe(
             take(1),
             switchMap(tasks => this._httpClient.patch(`${environment.ApiURL}/tasks/${id}`, task).pipe(
@@ -120,7 +127,7 @@ export class QuanlycongviecService {
             ))
         );
     }
-    DeleteTaks(id): Observable<any> {
+    DeleteTasks(id): Observable<any> {
         return this.tasks$.pipe(
             take(1),
             switchMap(tasks => this._httpClient.delete(`${environment.ApiURL}/tasks/${id}`).pipe(
@@ -128,6 +135,58 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks.splice(index, 1);
                     this._tasks.next(tasks);
+                    return isDeleted;
+                })
+            ))
+        );
+      }
+    getAllDuans(): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/project`).pipe(
+            tap((response: any) => {
+                this._duans.next(response);
+            })
+        );
+    }
+    CreateDuans(duan): Observable<any> {
+        return this.duans$.pipe(
+            take(1),
+            switchMap(duans => this._httpClient.post(`${environment.ApiURL}/project`, duan).pipe(
+                map((result) => {
+                    this._duans.next([result, ...duans]);
+                    return result;
+                })
+            ))
+        );
+    }
+    UpdateDuans(duan,id): Observable<any> {
+        return this.duans$.pipe(
+            take(1),
+            switchMap(duans => this._httpClient.patch(`${environment.ApiURL}/project/${id}`, duan).pipe(
+                map((duan) => {
+                    const index = duans.findIndex(item => item.id === id);
+                    duans[index] = duan;
+                    this._duans.next(duans);
+                    return duan;
+                }),
+                switchMap(duan => this.duan$.pipe(
+                    take(1),
+                    filter(item => item && item.id === id),
+                    tap(() => {
+                        this._duan.next(duan);
+                        return duan;
+                    })
+                ))
+            ))
+        );
+    }
+    DeleteDuans(id): Observable<any> {
+        return this.duans$.pipe(
+            take(1),
+            switchMap(duans => this._httpClient.delete(`${environment.ApiURL}/project/${id}`).pipe(
+                map((isDeleted: boolean) => {
+                    const index = duans.findIndex(item => item.id === id);
+                    duans.splice(index, 1);
+                    this._duans.next(duans);
                     return isDeleted;
                 })
             ))

@@ -23,7 +23,7 @@ export class TongquanComponent implements OnInit {
     
   ) {
     this._userService.user$.subscribe((data)=>this.thisUser = data);
-    this._quanlycongviecService.getAllTaks().subscribe();
+    this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.tasks$.subscribe((data)=>this.Tasks = data);
     }
   ngOnInit(): void {
