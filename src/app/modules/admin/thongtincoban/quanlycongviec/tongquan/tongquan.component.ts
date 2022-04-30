@@ -16,6 +16,7 @@ export class TongquanComponent implements OnInit {
   homnay:Date;
   thisUser:User;
   Tasks:any;
+  Duans:any;
   typethamgia:any;
   constructor( 
       private _userService:UserService,
@@ -25,6 +26,8 @@ export class TongquanComponent implements OnInit {
     this._userService.user$.subscribe((data)=>this.thisUser = data);
     this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.tasks$.subscribe((data)=>this.Tasks = data);
+    this._quanlycongviecService.getAllDuans().subscribe();
+    this._quanlycongviecService.duans$.subscribe((data)=>this.Duans = data);
     }
   ngOnInit(): void {
     this.homnay = new Date();

@@ -47,7 +47,7 @@ export class NhanviensCauhinhResolver implements Resolve<any>
         return forkJoin([
             this._cauhinhsService.getCauhinhs(),
             this._cauhinhsService.getMenus(),
-            this._nhanviensService.getNhanviens(),
+            //this._nhanviensService.getNhanviens(),
           ]);
     }
 }

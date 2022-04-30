@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
@@ -16,15 +17,17 @@ export class DetailComponent implements OnInit {
   public config = {
     placeholder: 'Mô Tả Dự Án'
   };
-  displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
+  displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'duan'];
   Sections: any = [];
   Tasks: any = [];
   filteredSections: any;
   filteredTasks: any;
   filteredDuans: any;
   CUser: any;
-  Uutiens:any[]=[];
-  Duans:any[]=[];
+  Uutiens: any[] = [];
+  Duans: any[] = [];
+  Nhanviens: any[] = [];
+  Duan: any = {};
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -34,16 +37,32 @@ export class DetailComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
-  ) { 
+  ) {
     this._quanlycongviecService.getAllSection().subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.getAllDuans().subscribe();
+    this._nhanvienServiceService.getNhanviens().subscribe();
+    const id = this._activatedRoute.snapshot.paramMap.get('id');
+    this._quanlycongviecService.getDuanById(id).subscribe();
+    this._quanlycongviecService.duan$.subscribe((data) => {
+      this.Duan = data;
+      console.log(data);
+      this._changeDetectorRef.markForCheck();
+    })
     this._userService.user$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((data) => {
-      this.CUser = data;
-      this._changeDetectorRef.markForCheck();         
-    }); 
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data) => {
+        this.CUser = data;
+        this._changeDetectorRef.markForCheck();
+      });
+    this._nhanvienServiceService.nhanviens$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data) => {
+        console.log(data);
+        
+        this.Nhanviens = data;
+        this._changeDetectorRef.markForCheck();
+      });
     this._quanlycongviecService.sections$.subscribe((data) => {
       this.Sections = this.filteredSections = data;
       console.log(data);
@@ -62,72 +81,52 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    const id = this._activatedRoute.snapshot.paramMap.get('id');
+    this._quanlycongviecService.getDuanById(id).subscribe();
+    console.log(id);
   }
-  GetdataSource(item) {    
+  GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);
   }
   CreateSection() {
-    const section = { Tieude: "New Section",IsOpen:true,idTao:this.CUser.id,type:1}
-    if(this.Sections.length != 0 && this.Sections[0].Tieude=="New Section")
-    {
+    const section = { Tieude: "New Section", IsOpen: true, idTao: this.CUser.id, type: 1 }
+    if (this.Sections.length != 0 && this.Sections[0].Tieude == "New Section") {
       this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
     }
-    else
-    {
+    else {
       this._quanlycongviecService.CreateSection(section).subscribe();
     }
-
-    // if (this.Sections.length == 0) {
-    //   this._quanlycongviecService.CreateSection(section).subscribe();
-    // }
-    // else {
-    //   const Tieude = this.Sections[0].Tieude;
-    //   if (Tieude == "New Section") {
-    //     this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
-    //     const filterValue = "New Section";
-    //     //this.dataSource.filter = filterValue.trim().toLowerCase();
-    //     //this.filterByQuery("Mới");
-    //   }
-    //   else {
-    //     this._quanlycongviecService.CreateSection(section).subscribe();
-    //   }
-    // }
   }
 
   CreateTaks(idSection) {
-    
-    const task = { Tieude: "New Task", sid: idSection,idTao:this.CUser.id}
+    const task = { Tieude: "New Task", sid: idSection, idTao: this.CUser.id }
     const checktask = this.Tasks.filter(v => v.sid == idSection);
-    if(checktask.length != 0 &&checktask[0].Tieude== "New Task")
-    {
+    if (checktask.length != 0 && checktask[0].Tieude == "New Task") {
       this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
     }
-    else
-    {
+    else {
       this._quanlycongviecService.CreateTasks(task).subscribe();
     }
-    // if (checktask.length == 0) {
-    //   this._quanlycongviecService.CreateTasks(task).subscribe();
-    // }
-    // else {
-    //   const Tieude = checktask[0].Tieude;
-    //   if (Tieude == "New Task") {
-    //     this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
-    //     const filterValue = "New Task";
-    //   }
-    //   else {
-    //     this._quanlycongviecService.CreateTasks(task).subscribe();
-    //   }
-    // }
   }
   DeleteSection(item) {
     this._quanlycongviecService.DeleteSection(item.id).subscribe();
   }
-  EditSection(event, item) {
-    item.Tieude = event.target.value;
-    this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
-    console.log(event.target.value);
+  UpdateDuan(item, type, value) {      
+    item[type] = value;
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    console.log(item);
+  }
+  AddMang(item, type, value) {   
+     item[type].push(value);
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+  }
+  RemoveMang(item, type, value) {   
+    item[type]= item[type].filter(v=>v!=value);
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+  }
+  UpdateEditorDuan(item, type,{editor}: ChangeEvent ) {   
+    item[type] = editor.getData();
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
     console.log(item);
   }
   EditTasks(event, item) {
@@ -141,12 +140,12 @@ export class DetailComponent implements OnInit {
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.ngOnInit();
   }
-  UpdateDeadline(item,value) {
+  UpdateDeadline(item, value) {
     item.Deadline = value;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.ngOnInit();
   }
-  UpdateUutien(item,value) {
+  UpdateUutien(item, value) {
     item.Uutien = value;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.ngOnInit();

@@ -72,8 +72,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _fuseConfirmationService: FuseConfirmationService,
         private _router: Router,
     )
-    {
-    }
+    {}
     ngOnInit(): void
     {
        this.PQisDisabled = true;
@@ -140,49 +139,48 @@ export class DetailsComponent implements OnInit, OnDestroy
         //         this.nhanviens = nhanviens;
         //         this._changeDetectorRef.markForCheck();
         //     });
+
         this._nhanvienService.nhanvien$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((nhanvien: Nhanvien) => {
-                this.nhanvien = nhanvien;
-              // (Object.keys(nhanvien.Phanquyen).length!=0)?this.PQChinhanh=nhanvien.Phanquyen:this.PQChinhanh=this.PQChinhanh;
-               //(Object.keys(nhanvien.Menu).length!=0)?this.PQMenu=nhanvien.Menu:this.PQMenu=this.PQMenu;    
-              // let merged = {...this.PQMenu, ...nhanvien.Menu}; 
-              this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
-              this.PQMenu= nhanvien.Menu; 
-                this.NhanvienForm.patchValue({
-                    id: nhanvien.id,
-                    avatar: nhanvien.avatar,
-                    name: nhanvien.name,
-                    email: nhanvien.email,
-                    SDT: nhanvien.SDT,
-                    Role: nhanvien.Role,
-                    Phanquyen: nhanvien.Phanquyen,
-                    Menu: nhanvien.Menu,
-                    profile: {
-                        Congty: nhanvien.profile.Congty,
-                        Khoi: nhanvien.profile.Khoi,
-                        Phongban: nhanvien.profile.Phongban,
-                        Bophan: nhanvien.profile.Bophan,
-                        Vitri: nhanvien.profile.Vitri,
-                        TTLV: nhanvien.profile.TTLV,
-                        MaNV: nhanvien.profile.MaNV,
-                        CMND: nhanvien.profile.CMND,
-                        Datein: nhanvien.profile.Datein,
-                        Dateout: nhanvien.profile.Dateout,
-                        Diachi: nhanvien.profile.Diachi,
-                        Fb: nhanvien.profile.Fb,
-                        Gioitinh: nhanvien.profile.Gioitinh,
-                        Ngaysinh: nhanvien.profile.Ngaysinh,
-                        PQDT: nhanvien.profile.PQDT,
-                        PQTD: nhanvien.profile.PQTD,
-                        Zalo: nhanvien.profile.Zalo,
-                    }
-                  });
-                this._ListComponent.matDrawer.open();
-                this._changeDetectorRef.markForCheck();
-            });
-            this.NhanvienForm.disable();
-            this.PQisDisabled = true;
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((nhanvien: Nhanvien) => {
+        this.nhanvien = nhanvien;
+          this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
+          this.PQMenu= nhanvien.Menu; 
+            this.NhanvienForm.patchValue({
+                id: nhanvien.id,
+                avatar: nhanvien.avatar,
+                name: nhanvien.name,
+                email: nhanvien.email,
+                SDT: nhanvien.SDT,
+                Role: nhanvien.Role,
+                Phanquyen: nhanvien.Phanquyen,
+                Menu: nhanvien.Menu,
+                profile: {
+                    Congty: nhanvien.profile.Congty,
+                    Khoi: nhanvien.profile.Khoi,
+                    Phongban: nhanvien.profile.Phongban,
+                    Bophan: nhanvien.profile.Bophan,
+                    Vitri: nhanvien.profile.Vitri,
+                    TTLV: nhanvien.profile.TTLV,
+                    MaNV: nhanvien.profile.MaNV,
+                    CMND: nhanvien.profile.CMND,
+                    Datein: nhanvien.profile.Datein,
+                    Dateout: nhanvien.profile.Dateout,
+                    Diachi: nhanvien.profile.Diachi,
+                    Fb: nhanvien.profile.Fb,
+                    Gioitinh: nhanvien.profile.Gioitinh,
+                    Ngaysinh: nhanvien.profile.Ngaysinh,
+                    PQDT: nhanvien.profile.PQDT,
+                    PQTD: nhanvien.profile.PQTD,
+                    Zalo: nhanvien.profile.Zalo,
+                }
+              });
+            this._ListComponent.matDrawer.open();
+            this._changeDetectorRef.markForCheck();
+        });  
+
+        this.NhanvienForm.disable();
+        this.PQisDisabled = true;
 
     }
     ChangeChinhanh(Chinhanh: string, isChecked: any) {

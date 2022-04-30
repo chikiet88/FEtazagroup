@@ -5,7 +5,7 @@
       <div class="text-xl py-2">{{thisUser.name}}</div>
       <div class="py-2">
         <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-          <mat-button-toggle value="bold">0 Dự Án</mat-button-toggle>
+          <mat-button-toggle value="bold"><span class="text-xl text-blue-500 font-bold">{{Duans.length}}</span> Dự Án</mat-button-toggle>
           <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{(Tasks|Filter:'Trangthai':2).length}}</span> Đầu Việc Hoàn Thành</mat-button-toggle>
           <mat-button-toggle value="underline">0 Người Tham Gia</mat-button-toggle>
         </mat-button-toggle-group>
@@ -27,8 +27,8 @@
           <mat-tab-group>
             <mat-tab label="Đang làm "> 
                <mat-list>
-                <mat-list-item *ngFor="let item of Tasks|Filter:'Trangthai':1" class="border-2 flex space-x-2"> 
-                  <span class="material-icons" [ngClass]="{'text-green-500': item.Trangthai<2}">
+                <mat-list-item *ngFor="let item of Tasks|Filter:'Trangthai':'#':2" class="border-2 flex space-x-2"> 
+                  <span class="material-icons text-xl mr-2">
                     check_circle_outline
                     </span>  {{item.Tieude}} 
                 </mat-list-item>
@@ -39,9 +39,9 @@
             </mat-tab>
             <mat-tab label="Hoàn Thành">          
              <mat-list>
-              <mat-list-item *ngFor="let item of Tasks" class="border-2 flex space-x-2"> 
-                <span class="material-icons" [ngClass]="{'text-green-500': item.Trangthai==2}">
-                  check_circle_outline
+              <mat-list-item *ngFor="let item of Tasks|Filter:'Trangthai':'':2" class="border-2 flex space-x-2"> 
+                <span class="material-icons text-xl mr-2" [ngClass]="{'text-green-500': item.Trangthai==2}">
+                  check_circle
                   </span>  {{item.Tieude}} 
               </mat-list-item>
              </mat-list></mat-tab>
@@ -49,21 +49,16 @@
         </div>
       </fuse-card>
       <fuse-card class="flex flex-col w-full p-4">
-        <div class="text-xl font-bold"> Dự Án</div>
-        <div class="grid grid-cols-2 gap-4 py-2">
-          <div class="flex flex-row gap-2">
-          <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden" [routerLink]="['./duan']">
-            <span class="material-icons m-auto">
-              add
-              </span>
-          </div>
-          <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
+        <div class="flex justify-between"> 
+          <span  class="text-xl font-bold py-4"> Dự Án</span>  
+          <button mat-button class="bg-blue-100" [routerLink]="['./duan']">Tất Cả</button>
         </div>
-        <div class="flex flex-row gap-2">
-          <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden">
+        <div class="grid grid-cols-2 gap-4 py-2">
+        <div class="flex flex-row gap-2" *ngFor="let item of Duans.slice(0, 4)" [routerLink]="['./duan',item.id]">
+          <div class="mx-4 flex w-10 text-center rounded h-10 border-dashed border overflow-hidden">
             <img class="w-full h-full object-cover" src="favicon-32x32.png">
           </div>
-          <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
+          <div class="text-lg leading-4 font-bold">{{item.Tieude}}</div> 
         </div>
         </div>
       </fuse-card>

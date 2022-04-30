@@ -147,6 +147,13 @@ export class QuanlycongviecService {
             })
         );
     }
+    getDuanById(id): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/project/${id}`).pipe(
+            tap((response: any) => {
+                this._duan.next(response);
+            })
+        );
+    }
     CreateDuans(duan): Observable<any> {
         return this.duans$.pipe(
             take(1),

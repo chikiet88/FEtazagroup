@@ -67,10 +67,10 @@ export class ListComponent implements OnInit, OnDestroy
         private _cauhinhService: CauhinhService,
     )
     {
+        this._nhanviensService.getNhanviens().subscribe();
     }
     ngOnInit(): void
     {
-        this._nhanviensService.getNhanviens().subscribe();
         this.Role = {admin:'Admin',manager:'Manager',user:'Nhân Viên',dev:'IT',new:'Mới'}
         this.Trangthai = [
             {id:0,value:'Đang Làm'},

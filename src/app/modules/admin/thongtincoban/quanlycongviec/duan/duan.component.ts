@@ -73,11 +73,11 @@ export class DuanComponent implements OnInit {
   GetdataSource(item) {    
     return this.Tasks.filter(v => v.sid == item.id);
   }
-  CreateSection() {
+  CreateDuan() {
     this.dialog.open(DialogComponent, {
       data: {
-        duan: [],
       },
+      minWidth:'50%'
     });
 
     // const section = { Tieude: "New Section",IsOpen:true,idTao:this.CUser.id,type:1}

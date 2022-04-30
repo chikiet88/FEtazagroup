@@ -32,25 +32,33 @@ export class NhanvienService {
              })
          );
      }
+    //  getNhanvienById(id: string): Observable<Nhanvien>
+    //  {
+    //      return this._nhanviens.pipe(
+    //          take(1),
+    //          map((nhanviens) => {
+    //              const nhanvien = nhanviens.find(item => item.id === id) || null;
+    //              this._nhanvien.next(nhanvien);
+    //              return nhanvien;
+    //          }),
+    //          switchMap((nhanvien) => {
+ 
+    //              if ( !nhanvien )
+    //              {
+    //                  return throwError('Could not found contact with id of ' + id + '!');
+    //              }
+ 
+    //              return of(nhanvien);
+    //          })
+    //      );
+    //  }
      getNhanvienById(id: string): Observable<Nhanvien>
      {
-         return this._nhanviens.pipe(
-             take(1),
-             map((nhanviens) => {
-                 const nhanvien = nhanviens.find(item => item.id === id) || null;
-                 this._nhanvien.next(nhanvien);
-                 return nhanvien;
-             }),
-             switchMap((nhanvien) => {
- 
-                 if ( !nhanvien )
-                 {
-                     return throwError('Could not found contact with id of ' + id + '!');
-                 }
- 
-                 return of(nhanvien);
-             })
-         );
+        return this._httpClient.get<Nhanvien>(`${environment.ApiURL}/users/${id}`).pipe(
+            tap((nhanvien) => {
+                this._nhanvien.next(nhanvien);
+            })
+        );
      }
      
      searchNhanviens(query: string): Observable<Nhanvien[]>

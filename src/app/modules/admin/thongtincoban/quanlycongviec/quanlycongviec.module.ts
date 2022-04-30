@@ -16,6 +16,18 @@ import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { DetailComponent } from './duan/detail/detail.component';
 import { DialogComponent } from './duan/dialog/dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { FuseMasonryModule } from '@fuse/components/masonry';
+import { SharedModule } from 'app/shared/shared.module';
+import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -29,25 +41,20 @@ const quanlycongviecRoutes: Route[] = [
           path     : 'muctieu',
           component: MuctieuComponent,
         },
+
         {
           path     : 'dauviec',
           component: DauviecComponent,
-          children : [
-            {
-                path     : ':id',
-                component: ChitietComponent,
-            },
-        ]
+
         },
         {
           path     : 'duan',
           component: DuanComponent,
-          children : [
-            {
-                path     : ':id',
-                component: DetailComponent,
-            },
-        ]
+
+        },
+        {
+          path     : 'duan/:id',
+          component: DetailComponent,
         },
     ]
   }
@@ -57,10 +64,21 @@ const quanlycongviecRoutes: Route[] = [
   imports: [
     CKEditorModule,
     FindbyidModule,
+    TimkiemModule,
     CustomModule,
     FuseCardModule,
     MaterialExampleModule,
-    CommonModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatRippleModule,
+    MatSidenavModule,
+    FuseMasonryModule,
+    SharedModule,
     QuanlycongviecRoutingModule,
     RouterModule.forChild(quanlycongviecRoutes),
   ]

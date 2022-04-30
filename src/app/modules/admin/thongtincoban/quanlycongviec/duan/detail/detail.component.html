@@ -3,15 +3,14 @@
       <div class="flex flex-row space-x-2 py-6 justify-between">
         <div class="flex space-x-2">
           <div class="text-2xl font-bold m-auto">
-            <input class="w-full" matInput [value]="'Dự Án Số 1'">
-            <!-- <input class="w-full" matInput [value]="'Dự Án Số 1'" (click)="$event.stopPropagation()" (change)="EditSection($event,item)"> -->
+            <input class="w-full" matInput [value]="Duan.Tieude" (change)="UpdateDuan(Duan,'Tieude',$event.target.value)">
           </div>
           <div class="font-bold">
             <button mat-button [matMenuTriggerFor]="menu">
               <span class="material-icons">
                 radio_button_unchecked
               </span>
-              Trạng Thái
+              {{Duan.Trangthai}}
             </button>
             <mat-menu #menu="matMenu">
               <button mat-menu-item>Item 1</button>
@@ -19,8 +18,12 @@
             </mat-menu>
           </div>
           <div class="font-bold m-auto">
-            <span class="material-icons">star_border</span>
-            <span class="material-icons">star</span>
+            <ng-container *ngIf="Duan.Noibat==0; else elseTemplate">
+              <span class="material-icons" (click)="UpdateDuan(Duan,'Noibat',true)">star_border</span>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <span class="material-icons text-yellow-500" (click)="UpdateDuan(Duan,'Noibat',false)">star</span>
+            </ng-template>
           </div>
         </div>
         <div class="flex">
@@ -46,143 +49,70 @@
         <mat-tab label="Tổng Quan">
           <div class="my-4">
           <div class="text-2xl font-bold">Mô Tả Dự Án</div>
-          <ckeditor [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}"></ckeditor>
+          <ckeditor [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}" [data]="Duan.Mota"  (change)="UpdateEditorDuan(Duan,'Mota',$event)"></ckeditor>
           </div>
           <mat-divider></mat-divider>
           <div class="my-4">
             <div class="text-2xl font-bold">Thành Viên Dự Án</div>
-            <div class="grid grid-cols-3">
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
+            <div class="grid grid-cols-3 mt-3">  
+              <div class="flex">
+                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full m-auto">
+                  <mat-icon
+                  class="icon-size-5"
+                  matPrefix>
+                  <span class="material-icons">
+                    person_add
+                    </span>
+                </mat-icon>
+                  <mat-select placeholder="Người Tham Gia" (selectionChange)="AddMang(Duan,'Thamgia',$event.value)">
+                    <div class="p-3 border-b">
+                    <input matInput placeholder="Tìm Kiếm" #searchNhanviens></div>
+                    <mat-option *ngFor="let item of Nhanviens|Unique:Duan.Thamgia:'id' | timkiem : searchNhanviens.value:'name'"
+                      [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                    <mat-option *ngIf="(Nhanviens | timkiem : searchNhanviens.value:'name').length==0">
+                      Không Tìm Thấy
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>      
+              </div>
+            <div *ngFor="let item of Duan.Thamgia" class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                    <img
                       alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
+                      src="favicon-32x32.png">
                   </div>
                   <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
+                    <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
                   </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
+                  <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)">
+                    <span class="material-icons text-red-500">
+                      remove_circle
+                      </span>
                   </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
+                </div>
             </div>
           </div>
           <mat-divider></mat-divider>
         <div class="my-4">
             <div class="text-2xl font-bold">Tóm Tắt Dự Án</div>
-            <ckeditor [editor]="Editor" [config]="{placeholder:'Tóm Tắt Dự Án'}"></ckeditor>
+            <ckeditor [editor]="Editor" [config]="{placeholder:'Tóm Tắt Dự Án'}"  [data]="Duan.Tomtat"  (change)="UpdateEditorDuan(Duan,'Tomtat',$event)"></ckeditor>
           </div> 
           <mat-divider></mat-divider>
         <div class="my-4">
             <div class="text-2xl font-bold">Tài Nguyên</div>
             <div class="grid grid-cols-3">
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
-              <div><a
-                  class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted"
-                  href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="assets/images/avatars/female-12.jpg">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">Alice Harding</div>
-                    <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                  </div>
-                </a></div>
+              <div *ngFor="let item of [].constructor(6)" class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+                <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
+                    alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
+                    src="favicon-32x32.png">
+                </div>
+                <div class="min-w-0 ml-4">
+                  <div class="font-medium leading-5 truncate">Alice Harding</div>
+                  <div class="leading-5 truncate text-secondary">Track Service Worker</div>
+                </div>
+              </div>
             </div>
           </div> 
         </mat-tab>

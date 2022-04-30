@@ -4,7 +4,7 @@
 
       <div class="grid grid-cols-3 gap-10 mt-3"> 
   <div class="flex items-center">
-     <div class="flex flex-col items-center justify-center rounded-lg cursor-pointer border-2 border-gray-300 border-dashed hover:bg-hover transition-colors duration-150 ease-in-out" (click)="CreateSection()">
+     <div class="flex flex-col items-center justify-center rounded-lg cursor-pointer border-2 border-gray-300 border-dashed hover:bg-hover transition-colors duration-150 ease-in-out" (click)="CreateDuan()">
         <mat-icon
             class="icon-size-12 text-hint"
             [svgIcon]="'heroicons_outline:plus'"></mat-icon>
@@ -14,17 +14,16 @@
         <div class="font-medium leading-5 truncate">Thêm Dự Án Mới</div>
       </div>
     </div>
-
-        <div *ngFor="let item of [].constructor(20)"
+        <div *ngFor="let item of Duans"
           class="flex items-center"
-          href="/apps/contacts/22f18d47-ff8d-440e-888d-a1747c093052">
-          <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-              alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-              src="assets/images/avatars/female-12.jpg">
+          [routerLink]="['./',item.id]">
+          <div class="flex flex-0 items-center justify-center w-20 h-20 overflow-hidden border-dashed border-2"><img
+              class="object-cover w-full h-full ng-star-inserted"
+              src="favicon-32x32.png">
           </div>
           <div class="min-w-0 ml-4">
-            <div class="font-medium leading-5 truncate">Alice Harding</div>
-            <div class="leading-5 truncate text-secondary">Track Service Worker</div>
+            <div class="font-medium leading-5 truncate mb-3">{{item.Tieude}}</div>
+            <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
           </div>
         </div>
       </div>
