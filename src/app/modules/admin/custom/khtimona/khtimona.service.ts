@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
 import { Khachhang } from './khtimona.type';
 @Injectable({
   providedIn: 'root'
@@ -31,19 +31,66 @@ export class KhtimonaService {
   {
       return this._member.asObservable();
   }
-  CreateData(dulieu): Observable<any>
+  GetData():  Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khtimona/khtimonachitiet`,dulieu).pipe(
-          tap((response: any) => {
-              console.log(response)
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
+          tap((data) => {
+            this._data.next(data);
           })
       );
   }
+  CreateData(dulieu): Observable<any>
+  {
+    return this.data$.pipe(
+        take(1),
+        switchMap(datas => this._httpClient.post(`${environment.ApiURL}/khtimona/khtimonachitiet`, dulieu).pipe(
+            map((result) => {
+                this._data.next([result, ...datas]);
+                return result;
+            })
+        ))
+    );
+  }
+  UpdateData(dulieu,id): Observable<any> {
+    return this.data$.pipe(
+        take(1),
+        switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`, dulieu).pipe(
+            map((data) => {
+                const index = datas.findIndex(item => item.id === id);
+                datas[index] = data;
+                this._data.next(datas);
+                return data;
+            }),
+            switchMap(data => this.data$.pipe(
+                take(1),
+                filter(item => item && item.id === id),
+                tap(() => {
+                    this._data.next(data);
+                    return data;
+                })
+            ))
+        ))
+    );
+}
+
   CreateMember(dulieu): Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khtimona/khachhang`,dulieu).pipe(
+    return this.Member$.pipe(
+        take(1),
+        switchMap(members => this._httpClient.post(`${environment.ApiURL}/khtimona/khachhang`, dulieu).pipe(
+            map((result) => {
+                this._member.next([result, ...members]);
+                return result;
+            })
+        ))
+    );
+  }
+
+  UpdateMember(dulieu): Observable<any>
+  {
+      return this._httpClient.patch(`${environment.ApiURL}/khtimona/khachhang/${dulieu.id}`,dulieu).pipe(
           tap((response: any) => {
-              console.log(response)
+             // console.log(response)
           })
       );
   }
@@ -52,7 +99,7 @@ export class KhtimonaService {
       return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/clear`).pipe(
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
-           console.log(khachhang);
+         //  console.log(khachhang);
           })
       );
   }
@@ -61,7 +108,15 @@ export class KhtimonaService {
        return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
-            console.log(member);
+          })
+      );
+  }
+  GetMemberBySDT(SDT):  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/paged?SDT=${SDT}`).pipe(
+          tap((khachhang) => {
+           // console.log(khachhang);
+            this._data.next(khachhang);
           })
       );
   }
@@ -70,15 +125,6 @@ export class KhtimonaService {
        return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang`).pipe(
           tap((member: any) => {
             this._member.next(member);
-          })
-      );
-  }
-  GetData():  Observable<Khachhang[]>
-  {
-      return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
-          tap((khachhang: Khachhang[]) => {
-            this._data.next(khachhang);
-           //console.log(khachhang);
           })
       );
   }

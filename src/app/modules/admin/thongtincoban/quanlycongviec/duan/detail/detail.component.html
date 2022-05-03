@@ -86,7 +86,7 @@
                   <div class="min-w-0 ml-4">
                     <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
                   </div>
-                  <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)">
+                  <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)" *ngIf="Duan.idTao == CUser.id">
                     <span class="material-icons text-red-500">
                       remove_circle
                       </span>

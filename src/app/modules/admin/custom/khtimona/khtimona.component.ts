@@ -27,7 +27,7 @@ export class KhtimonaComponent implements OnInit {
   data: MatTableDataSource<Khachhang>;
   datamember: MatTableDataSource<any>;
   Thanhvien: MatTableDataSource<any>;
-  data$: Observable<Khachhang[]>;
+  data$: Observable<any>;
   datamember$: Observable<any>;
   count$: Observable<any>;
   Khachhang: MatTableDataSource<Khachhang>;
@@ -61,7 +61,19 @@ export class KhtimonaComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-   //this._khtimonaService.GetData().subscribe();
+    this._khtimonaService.GetData().subscribe();
+    this._khtimonaService.GetAllMember().subscribe();
+    this.data$ = this._khtimonaService.data$;
+    this.datamember$ = this._khtimonaService.Member$;
+    this.count$ = this._khtimonaService.count$;
+    this.count$.subscribe((count) => {
+        this.count = count;
+      })
+    this.datamember$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((Alldata) => {
+        this.Alldata = Alldata;
+      })
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: User) => {
@@ -72,6 +84,8 @@ export class KhtimonaComponent implements OnInit {
         this.UserChinhanh = this.CurrentUser.Phanquyen;        
         //this._khtimonaService.GetMember(this.UserChinhanh).subscribe();
         // Mark for check
+        console.log(this.CurrentUser);
+        
         this._changeDetectorRef.markForCheck();
     });
     this._cauhinhService.Cauhinhs$.subscribe((data)=>{ 
@@ -118,12 +132,6 @@ export class KhtimonaComponent implements OnInit {
       Batdau: [new Date()],
       Ketthuc: [new Date()],
     });
-    this.data$ = this._khtimonaService.data$;
-    this.datamember$ = this._khtimonaService.Member$;
-    this.count$ = this._khtimonaService.count$;
-    this.count$.subscribe((count) => {
-        this.count = count;
-      })
   }
   LoadMore(skip,take) {
     this._khtimonaService.LoadMore(skip,take).subscribe();
@@ -185,7 +193,53 @@ export class KhtimonaComponent implements OnInit {
         console.log(this.DataDrive)
       });
   }
-  
+  UpdateDulieu(data) {
+    data.forEach((v, k) => {
+      setTimeout(() => {
+        this._khtimonaService.CreateData(v).subscribe();
+        console.log(this.Alldata);
+        const x = this.Alldata.find(v1 => v1.SDT == v.SDT);
+        console.log(x);
+        if (x!=undefined) {
+          this._khtimonaService.GetMemberBySDT(x.SDT).subscribe(data => {
+            let khachhang = {
+              'id': data.id,
+              'TenKH': data.TenKH,
+              'SDT': data.SDT,
+              'SDT2': data.SDT2,
+              'Dathu': parseInt(data.Dathu) + parseInt(x.Dathu),
+              'Chinhanh': data.Chinhanh,
+              'NgayMD': new Date(data.NgayTaoDV),
+              'NoiMD': data.Chinhanh,
+              'NgayMC': new Date(x.NgayTaoDV),
+              'NoiMC': x.Chinhanh,
+              'Ghichu': data.Ghichu + ' ' + x.Ghichu
+            }
+              console.log(khachhang);
+            this._khtimonaService.UpdateMember(khachhang).subscribe();
+          })
+        }
+        else {
+          let khachhang = {
+            'TenKH': v.TenKH,
+            'SDT': v.SDT,
+            'SDT2': v.SDT2,
+            'Dathu': v.Dathu,
+            'Chinhanh': v.Chinhanh,
+            'NgayMD': new Date(v.NgayTaoDV),
+            'NoiMD': v.Chinhanh,
+            'NgayMC': new Date(v.NgayTaoDV),
+            'NoiMC': v.Chinhanh,
+            'Ghichu': v.Ghichu
+          }
+          console.log(khachhang);
+          this._khtimonaService.CreateMember(khachhang).subscribe();
+        }
+      }, 10 * k);
+      this._changeDetectorRef.markForCheck();
+    });
+  }
+
   LoadMember(ob) {
     this.Showchitiet = false;
     this._khtimonaService.GetMember(ob.value).subscribe();
@@ -425,5 +479,13 @@ export class KhtimonaComponent implements OnInit {
       }, 10 * k);
       this._changeDetectorRef.markForCheck();
     });
+  }
+  EditData(value,row)
+  {
+    row.SDT = value;
+    this._khtimonaService.UpdateData(row,row.id).subscribe();
+    console.log(value);
+    console.log(row);
+    
   }
 }

@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
@@ -18,8 +19,8 @@ export class DetailComponent implements OnInit {
     placeholder: 'Mô Tả Dự Án'
   };
   displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'duan'];
-  Sections: any = [];
-  Tasks: any = [];
+  Sections: any[] = [];
+  Tasks: any[] = [];
   filteredSections: any;
   filteredTasks: any;
   filteredDuans: any;
@@ -28,25 +29,40 @@ export class DetailComponent implements OnInit {
   Duans: any[] = [];
   Nhanviens: any[] = [];
   Duan: any = {};
+  pjid: any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
+    private _location: Location,
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
+    
   ) {
-    this._quanlycongviecService.getAllSection().subscribe();
+    this._userService.user$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data) => {
+      this.CUser = data;
+      this._changeDetectorRef.markForCheck();
+    });
+    this._quanlycongviecService.getSectionByType('duan').subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
-    this._quanlycongviecService.getAllDuans().subscribe();
     this._nhanvienServiceService.getNhanviens().subscribe();
-    const id = this._activatedRoute.snapshot.paramMap.get('id');
-    this._quanlycongviecService.getDuanById(id).subscribe();
+    this.pjid = this._activatedRoute.snapshot.paramMap.get('id');   
+    this._quanlycongviecService.getDuanById(this.pjid).subscribe();
     this._quanlycongviecService.duan$.subscribe((data) => {
-      this.Duan = data;
-      console.log(data);
+
+      if(data.idTao != this.CUser.id && !data.Thamgia.includes(this.CUser.id))
+      {
+        this._location.back();
+      }
+      else
+      {
+        this.Duan = data;
+      }
       this._changeDetectorRef.markForCheck();
     })
     this._userService.user$
@@ -58,42 +74,38 @@ export class DetailComponent implements OnInit {
     this._nhanvienServiceService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data) => {
-        console.log(data);
-        
         this.Nhanviens = data;
         this._changeDetectorRef.markForCheck();
       });
     this._quanlycongviecService.sections$.subscribe((data) => {
-      this.Sections = this.filteredSections = data;
-      console.log(data);
+      this.Sections = this.filteredSections = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));;
       this._changeDetectorRef.markForCheck();
     })
     this._quanlycongviecService.tasks$.subscribe((data) => {
-      this.Tasks = this.filteredTasks = data;
-      console.log(data);
+      this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));;
       this._changeDetectorRef.markForCheck();
     })
     this._quanlycongviecService.duans$.subscribe((data) => {
       this.Duans = this.filteredDuans = data;
-      console.log(data);
       this._changeDetectorRef.markForCheck();
     })
   }
 
   ngOnInit(): void {
-    const id = this._activatedRoute.snapshot.paramMap.get('id');
-    this._quanlycongviecService.getDuanById(id).subscribe();
-    console.log(id);
+    // const id = this._activatedRoute.snapshot.paramMap.get('id');
+    // this._quanlycongviecService.getDuanById(id).subscribe();
+    // console.log(id);
   }
   GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);
   }
   CreateSection() {
-    const section = { Tieude: "New Section", IsOpen: true, idTao: this.CUser.id, type: 1 }
+    let section = { Tieude: "New Section", IsOpen: true, idTao: this.CUser.id,pjid:this.pjid, Loai: 'duan' }
     if (this.Sections.length != 0 && this.Sections[0].Tieude == "New Section") {
       this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
     }
     else {
+      console.log(section);
       this._quanlycongviecService.CreateSection(section).subscribe();
     }
   }

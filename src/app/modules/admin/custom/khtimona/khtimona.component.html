@@ -261,7 +261,9 @@
         </ng-container>
         <ng-container matColumnDef="SDT">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
-          <td mat-cell *matCellDef="let row"> {{row.SDT}} </td>
+          <td mat-cell *matCellDef="let row">  {{row.SDT}} 
+            <input class="w-full border-1 border-dashed border-blue-500" matInput [value]="row.SDT" (change)="EditData($event.target.value,row)">
+          </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT2">

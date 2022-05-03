@@ -12,8 +12,8 @@ import { QuanlycongviecService } from '../quanlycongviec.service';
 })
 export class DauviecComponent implements OnInit {
   displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
-  Sections: any = [];
-  Tasks: any = [];
+  Sections: any[] = [];
+  Tasks: any[] = [];
   filteredSections: any;
   filteredTasks: any;
   filteredDuans: any;
@@ -30,9 +30,30 @@ export class DauviecComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
   ) {
-    this._quanlycongviecService.getAllSection().subscribe();
+    this._quanlycongviecService.getSectionByType('project').subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.getAllDuans().subscribe();
+    this._userService.user$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data) => {
+      console.log(data);
+      this.CUser = data;
+      this._changeDetectorRef.markForCheck();         
+    });         
+    this._quanlycongviecService.sections$.subscribe((data) => {
+      this.Sections = this.filteredSections = data.filter(v=>v.idTao == this.CUser.id);
+      console.log(data.filter(v=>v.idTao == this.CUser.id));
+      console.log(this.CUser.id);
+      this._changeDetectorRef.markForCheck();
+    })
+    this._quanlycongviecService.tasks$.subscribe((data) => {
+      this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
+      this._changeDetectorRef.markForCheck();
+    })
+    this._quanlycongviecService.duans$.subscribe((data) => {
+      this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id);
+      this._changeDetectorRef.markForCheck();
+    })
    }
   ngOnInit(): void {
     this.Uutiens = [
@@ -47,80 +68,78 @@ export class DauviecComponent implements OnInit {
       {id:8,value:'Cấp Độ 8'},
       {id:9,value:'Cấp Độ 9'}
     ]
-    this._userService.user$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((data) => {
-      this.CUser = data;
-      this._changeDetectorRef.markForCheck();         
-    });         
-    this._quanlycongviecService.sections$.subscribe((data) => {
-      this.Sections = this.filteredSections = data;
-      console.log(data);
-      this._changeDetectorRef.markForCheck();
-    })
-    this._quanlycongviecService.tasks$.subscribe((data) => {
-      this.Tasks = this.filteredTasks = data;
-      console.log(data);
-      this._changeDetectorRef.markForCheck();
-    })
-    this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data;
-      console.log(data);
-      this._changeDetectorRef.markForCheck();
-    })
   }
   GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);
   }
-  createSection() {
-    const section = { Tieude: "New Section",IsOpen:true,idTao:this.CUser.id}
-    if (this.Sections.length == 0) {
-      this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
-        this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
-        this._changeDetectorRef.markForCheck();
-      });
+  CreateSection() {
+    let section = { Tieude: "New Section", IsOpen: true, idTao: this.CUser.id, Loai: 'project' }
+    if (this.Sections.length != 0 && this.Sections[0].Tieude == "New Section") {
+      this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
     }
     else {
-      const Tieude = this.Sections[0].Tieude;
-      if (Tieude == "New Section") {
-        this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
-        const filterValue = "New Section";
-        //this.dataSource.filter = filterValue.trim().toLowerCase();
-        //this.filterByQuery("Mới");
-      }
-      else {
-
-        this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
-          this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
-          this._changeDetectorRef.markForCheck();
-        });
-      }
+      this._quanlycongviecService.CreateSection(section).subscribe();
     }
   }
+  // createSection() {
+  //   const section = {Tieude: "New Section",IsOpen:true,idTao:this.CUser.id,Type:0}
+  //   if (this.Sections.length == 0) {
+  //     this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
+  //       this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
+  //       this._changeDetectorRef.markForCheck();
+  //     });
+  //   }
+  //   else {
+  //     const Tieude = this.Sections[0].Tieude;
+  //     if (Tieude == "New Section") {
+  //       this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
+  //       const filterValue = "New Section";
+  //       //this.dataSource.filter = filterValue.trim().toLowerCase();
+  //       //this.filterByQuery("Mới");
+  //     }
+  //     else {
+
+  //       this._quanlycongviecService.CreateSection(section).subscribe((newsection) => {
+  //         this._router.navigate(['./', newsection.id], { relativeTo: this._activatedRoute });
+  //         this._changeDetectorRef.markForCheck();
+  //       });
+  //     }
+  //   }
+  // }
   CreateTaks(idSection) {
-    const task = { Tieude: "New Task", sid: idSection,idTao:this.CUser.id}
+    const task = { Tieude: "New Task", sid: idSection, idTao: this.CUser.id }
     const checktask = this.Tasks.filter(v => v.sid == idSection);
-    if (checktask.length == 0) {
-      this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
-        this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
-        this._changeDetectorRef.markForCheck();
-      });
+    if (checktask.length != 0 && checktask[0].Tieude == "New Task") {
+      this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
     }
     else {
-      const Tieude = checktask[0].Tieude;
-      if (Tieude == "New Task") {
-        this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
-        const filterValue = "New Task";
-      }
-      else {
-
-        this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
-          this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
-          this._changeDetectorRef.markForCheck();
-        });
-      }
+      this._quanlycongviecService.CreateTasks(task).subscribe();
     }
   }
+  // CreateTaks(idSection) {
+  //   const task = { Tieude: "New Task", sid: idSection,idTao:this.CUser.id}
+  //   const checktask = this.Tasks.filter(v => v.sid == idSection);
+  //   if (checktask.length == 0) {
+  //     this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
+  //       this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
+  //       this._changeDetectorRef.markForCheck();
+  //     });
+  //   }
+  //   else {
+  //     const Tieude = checktask[0].Tieude;
+  //     if (Tieude == "New Task") {
+  //       this._notifierService.notify('error', 'Có Task Mới Chưa Đổi Tên');
+  //       const filterValue = "New Task";
+  //     }
+  //     else {
+
+  //       this._quanlycongviecService.CreateTasks(task).subscribe((newtask) => {
+  //         this._router.navigate(['./', newtask.id], { relativeTo: this._activatedRoute });
+  //         this._changeDetectorRef.markForCheck();
+  //       });
+  //     }
+  //   }
+  // }
   DeleteSection(item) {
     this._quanlycongviecService.DeleteSection(item.id).subscribe();
   }

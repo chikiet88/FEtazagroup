@@ -11,12 +11,14 @@ export class DialogComponent implements OnInit {
   Duan:any
   public Editor = InlineEditor;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private _quanlycongviecService: QuanlycongviecService,
   ) { }
   ngOnInit(): void {
     this.Duan = {
       Tieude  : '',
       Mota    : '',
+      idTao :this.data.idTao
   };
   }
   CreateDuan(Duan): void

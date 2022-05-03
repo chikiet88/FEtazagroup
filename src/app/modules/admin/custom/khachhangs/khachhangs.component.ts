@@ -141,8 +141,6 @@ export class KhachhangsComponent implements OnInit {
     const KT = this.Ngaydulieu.get('Ketthuc').value;
     this._khachhangsService.GetData().subscribe();
     this._khachhangsService.GetAllMember().subscribe();
-
-
     this.datamember$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Alldata) => {
