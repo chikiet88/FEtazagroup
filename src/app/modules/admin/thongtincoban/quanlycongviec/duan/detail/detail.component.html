@@ -81,7 +81,7 @@
                   <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
                     <img
                       alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="favicon-32x32.png">
+                      src="src/assets/images/logo/logo300.png">
                   </div>
                   <div class="min-w-0 ml-4">
                     <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
@@ -106,7 +106,7 @@
               <div *ngFor="let item of [].constructor(6)" class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
                 <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
                     alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                    src="favicon-32x32.png">
+                    src="/src/assets/images/logo/logo300.png">
                 </div>
                 <div class="min-w-0 ml-4">
                   <div class="font-medium leading-5 truncate">Alice Harding</div>
@@ -323,36 +323,6 @@
                             person_add
                             </span>
                         </button>             
-                        <!-- <ng-template
-                          cdkConnectedOverlay
-                          [cdkConnectedOverlayOrigin]="trigger"
-                          [cdkConnectedOverlayOpen]="isOpen"
-                        >
-                          <ul class="example-list">
-                            <li *ngFor="let item of Duan.Thamgia|keyvalue">{{item.value|findbyid:Nhanviens:'name'}}</li>
-                          </ul>
-                        </ng-template> -->
-                          <!-- <div *ngFor="let item of Duan.Thamgia|keyvalue">{{item.value|findbyid:Nhanviens:'name'}}</div>
-                          <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full m-auto">
-                            <mat-icon
-                            class="icon-size-5"
-                            matPrefix>
-                            <span class="material-icons">
-                              person_add
-                              </span>
-                          </mat-icon>
-                            <mat-select placeholder="Người Tham Gia">
-                              <div class="p-3 border-b">
-                              <input matInput placeholder="Tìm Kiếm" #searchNhanviens></div>
-                              <mat-option *ngFor="let item of Nhanviens|Unique:Duan.Thamgia:'id' | timkiem : searchNhanviens.value:'name'"
-                                [value]="item.id">
-                                {{item.name}}
-                              </mat-option>
-                              <mat-option *ngIf="(Nhanviens | timkiem : searchNhanviens.value:'name').length==0">
-                                Không Tìm Thấy
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>  -->
                       </div>                 
                     </td>
                       <td mat-header-cell *matFooterCellDef></td>
@@ -426,9 +396,7 @@
   
   </div>
   
-<ng-template
-
-ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
       [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
       [cdkConnectedOverlayOpen]="isOpen" (detach)="isOpen = false" (backdropClick)="isOpen = false">
 <div class="w-60 rounded border shadow-md bg-card m-3">

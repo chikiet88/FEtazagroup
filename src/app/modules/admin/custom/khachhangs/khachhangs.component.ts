@@ -45,8 +45,6 @@ export class KhachhangsComponent implements OnInit {
   DataServer: any = [];
   Alldata: any = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort) sort: MatSort;
   @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
   @ViewChild('DataSort', { static: false }) DataSort: MatSort;
   @ViewChild('MemberPag', { static: false }) MemberPag: MatPaginator;
@@ -69,7 +67,6 @@ export class KhachhangsComponent implements OnInit {
   }
   ngOnInit(): void {
     //this._khachhangsService.GetData().subscribe();
-    this._khachhangsService.GetData().subscribe();
     this._khachhangsService.GetAllMember().subscribe();
     this.data$ = this._khachhangsService.data$;
     this.datamember$ = this._khachhangsService.Member$;
@@ -175,9 +172,6 @@ export class KhachhangsComponent implements OnInit {
           v.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
         });
         this.DataDrive = Khachhang.filter(v => v.NgayTaoDV >= BD && v.NgayTaoDV <= KT);
-        // this.datamember = new MatTableDataSource(this.DataDrive);
-        // this.datamember.paginator = this.MemberPag;
-        // this.datamember.sort = this.MemberSort;
         console.log(this.DataDrive)
       });
   }
@@ -190,6 +184,7 @@ export class KhachhangsComponent implements OnInit {
         const x = this.Alldata.find(v1 => v1.SDT == v.SDT);
         if (x!=undefined) {
           this._khachhangsService.GetMemberBySDT(x.SDT).subscribe(data => {
+            console.log(data);
             let khachhang = {
               'id': data.id,
               'TenKH': data.TenKH,
@@ -199,9 +194,9 @@ export class KhachhangsComponent implements OnInit {
               'Chinhanh': data.Chinhanh,
               'NgayMD': new Date(data.NgayTaoDV),
               'NoiMD': data.Chinhanh,
-              'NgayMC': new Date(x.NgayTaoDV),
-              'NoiMC': x.Chinhanh,
-              'Ghichu': data.Ghichu + ' ' + x.Ghichu
+              'NgayMC': new Date(v.NgayTaoDV),
+              'NoiMC': v.Chinhanh,
+              'Ghichu': data.Ghichu + ' ' + v.Ghichu
             }
             this._khachhangsService.UpdateMember(khachhang).subscribe();
           })

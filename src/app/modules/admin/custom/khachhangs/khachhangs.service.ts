@@ -9,6 +9,7 @@ import { Khachhang } from './khachhang.type';
 export class KhachhangsService {
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
   private _Khachhang: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _khachhangs: BehaviorSubject<any> = new BehaviorSubject(null);
   private _member: BehaviorSubject<any> = new BehaviorSubject(null);
   private _count: BehaviorSubject<any> = new BehaviorSubject(null);
  constructor(private _httpClient: HttpClient)
@@ -23,9 +24,9 @@ export class KhachhangsService {
   {
       return this._count.asObservable();
   }
-  get Khachhang$(): Observable<any>
+  get Khachhangs$(): Observable<any>
   {
-      return this._data.asObservable();
+      return this._khachhangs.asObservable();
   }
   get Member$(): Observable<any>
   {
@@ -99,6 +100,8 @@ export class KhachhangsService {
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/paged?SDT=${SDT}`).pipe(
           tap((khachhang) => { 
+              console.log(khachhang);
+            
            // this._data.next(khachhang);
             return khachhang;
           })
@@ -118,6 +121,16 @@ export class KhachhangsService {
           tap((khachhang: Khachhang[]) => {
             this._data.next(khachhang);
            //console.log(khachhang);
+          })
+      );
+  }
+  GetDataByDay(BD,KT):  Observable<any>
+  {
+      return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/page?batdau=${BD}&ketthuc=${KT}`).pipe(
+          tap((data) => {
+              console.log(data);
+              
+            this._data.next(data);
           })
       );
   }

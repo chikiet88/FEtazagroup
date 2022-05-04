@@ -151,7 +151,8 @@
     <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-        <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
+        <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
+        <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
    
@@ -164,7 +165,6 @@
       <ng-container matColumnDef="Dathu">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Đã Thu (đ) </th>
         <td mat-cell *matCellDef="let row"> {{row.Dathu| number}}</td>
-        <!-- <td mat-footer-cell *matFooterCellDef mat-sort-footer> Tổng</td> -->
         <td mat-footer-cell *matFooterCellDef mat-sort-footer><span *ngIf="datamember!=undefined">{{Tongcong(datamember.filteredData,'Dathu')|number}}</span></td>
       </ng-container>
 
@@ -203,13 +203,6 @@
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #MemberPag="matPaginator"></mat-paginator>
   </div>
-  
-
-
-
-
-  
-  
   <div class="mt-4">
     <div class="space-x-2 flex flex-row py-4 justify-end" *ngIf="CurrentUser.Role=='admin'"> 
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
@@ -276,7 +269,8 @@
         </ng-container>
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
+          <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
+          <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT">

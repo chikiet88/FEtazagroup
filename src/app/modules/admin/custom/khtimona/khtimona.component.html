@@ -29,6 +29,7 @@
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
       <button mat-menu-item color="primary" (click)="GetAllMember()"
         *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All</button>
+      <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button>
       <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
@@ -134,7 +135,8 @@
       #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-        <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
+        <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
+        <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
 
@@ -256,13 +258,14 @@
         </ng-container>
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td>
+          <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
+          <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
           <td mat-cell *matCellDef="let row">  {{row.SDT}} 
-            <input class="w-full border border-dashed border-blue-500" matInput [value]="row.SDT" (change)="EditData($event.target.value,row)">
+            <input class="w-full border border-dashed border-blue-500" *ngIf="CurrentUser.Role=='dev'" matInput [value]="row.SDT" (change)="EditData($event.target.value,row)">
           </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>

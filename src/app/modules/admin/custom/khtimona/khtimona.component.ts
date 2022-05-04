@@ -211,9 +211,9 @@ export class KhtimonaComponent implements OnInit {
               'Chinhanh': data.Chinhanh,
               'NgayMD': new Date(data.NgayTaoDV),
               'NoiMD': data.Chinhanh,
-              'NgayMC': new Date(x.NgayTaoDV),
-              'NoiMC': x.Chinhanh,
-              'Ghichu': data.Ghichu + ' ' + x.Ghichu
+              'NgayMC': new Date(v.NgayTaoDV),
+              'NoiMC': v.Chinhanh,
+              'Ghichu': data.Ghichu + ' ' + v.Ghichu
             }
               console.log(khachhang);
             this._khtimonaService.UpdateMember(khachhang).subscribe();
