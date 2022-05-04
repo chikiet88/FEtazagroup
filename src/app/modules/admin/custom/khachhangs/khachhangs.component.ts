@@ -159,9 +159,6 @@ export class KhachhangsComponent implements OnInit {
       .subscribe((Khachhang: Khachhang[]) => {
         if (Khachhang != null) {
           this.DataServer = Khachhang.filter(v => new Date(v.NgayTaoDV) >= BD && new Date(v.NgayTaoDV) <= KT);
-          // this.datamember = new MatTableDataSource(this.DataServer);
-          // this.datamember.paginator = this.MemberPag;
-          // this.datamember.sort = this.MemberSort;
         }
        // console.log(this.DataServer);
       })
@@ -178,6 +175,9 @@ export class KhachhangsComponent implements OnInit {
           v.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
         });
         this.DataDrive = Khachhang.filter(v => v.NgayTaoDV >= BD && v.NgayTaoDV <= KT);
+        // this.datamember = new MatTableDataSource(this.DataDrive);
+        // this.datamember.paginator = this.MemberPag;
+        // this.datamember.sort = this.MemberSort;
         console.log(this.DataDrive)
       });
   }

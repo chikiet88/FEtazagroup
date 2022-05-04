@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
 import { Khachhang } from './khachhang.type';
 @Injectable({
   providedIn: 'root'
@@ -31,22 +31,53 @@ export class KhachhangsService {
   {
       return this._member.asObservable();
   }
+
   CreateData(dulieu): Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khachhangs/chitiet`,dulieu).pipe(
-          tap((response: any) => {
-              console.log(response)
-          })
-      );
+    return this.data$.pipe(
+        take(1),
+        switchMap(datas => this._httpClient.post(`${environment.ApiURL}/khachhangs/chitiet`, dulieu).pipe(
+            map((result) => {
+                this._data.next([result, ...datas]);
+                return result;
+            })
+        ))
+    );
   }
+  UpdateData(dulieu,id): Observable<any> {
+    return this.data$.pipe(
+        take(1),
+        switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khachhangs/chitiet/${id}`, dulieu).pipe(
+            map((data) => {
+                const index = datas.findIndex(item => item.id === id);
+                datas[index] = data;
+                this._data.next(datas);
+                return data;
+            }),
+            switchMap(data => this.data$.pipe(
+                take(1),
+                filter(item => item && item.id === id),
+                tap(() => {
+                    this._data.next(data);
+                    return data;
+                })
+            ))
+        ))
+    );
+}
   CreateMember(dulieu): Observable<any>
   {
-      return this._httpClient.post(`${environment.ApiURL}/khachhangs/khachhang`,dulieu).pipe(
-          tap((response: any) => {
-              console.log(response)
-          })
-      );
+    return this.Member$.pipe(
+        take(1),
+        switchMap(members => this._httpClient.post(`${environment.ApiURL}/khachhangs/khachhang`, dulieu).pipe(
+            map((result) => {
+                this._member.next([result, ...members]);
+                return result;
+            })
+        ))
+    );
   }
+
   UpdateMember(dulieu): Observable<any>
   {
       return this._httpClient.patch(`${environment.ApiURL}/khachhangs/khachhang/${dulieu.id}`,dulieu).pipe(
@@ -67,9 +98,9 @@ export class KhachhangsService {
   GetMemberBySDT(SDT):  Observable<any>
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/paged?SDT=${SDT}`).pipe(
-          tap((khachhang) => {
-            console.log(khachhang);
-            this._data.next(khachhang);
+          tap((khachhang) => { 
+           // this._data.next(khachhang);
+            return khachhang;
           })
       );
   }
