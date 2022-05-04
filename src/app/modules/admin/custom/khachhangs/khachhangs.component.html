@@ -29,7 +29,8 @@
     <mat-menu #menu="matMenu" color="primary">
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
       <button mat-menu-item color="primary" (click)="GetAllMember()"cod
-        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All</button>
+        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
+        <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Data</button>
       <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"

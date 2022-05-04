@@ -14,11 +14,12 @@ import { QuanlycongviecService } from '../../quanlycongviec.service';
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
+  isOpen = false;
   public Editor = InlineEditor;
   public config = {
     placeholder: 'Mô Tả Dự Án'
   };
-  displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'duan'];
+  displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'thamgia'];
   Sections: any[] = [];
   Tasks: any[] = [];
   filteredSections: any;
@@ -30,6 +31,7 @@ export class DetailComponent implements OnInit {
   Nhanviens: any[] = [];
   Duan: any = {};
   pjid: any;
+  triggerOrigin:any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -54,7 +56,6 @@ export class DetailComponent implements OnInit {
     this.pjid = this._activatedRoute.snapshot.paramMap.get('id');   
     this._quanlycongviecService.getDuanById(this.pjid).subscribe();
     this._quanlycongviecService.duan$.subscribe((data) => {
-
       if(data.idTao != this.CUser.id && !data.Thamgia.includes(this.CUser.id))
       {
         this._location.back();
@@ -63,6 +64,22 @@ export class DetailComponent implements OnInit {
       {
         this.Duan = data;
       }
+      console.log("Duan",data);
+      this._quanlycongviecService.sections$.subscribe((data) => {
+        console.log("Section",data);
+        this.Sections = this.filteredSections = data.filter(v=>v.pjid == this.Duan.id);
+        this._changeDetectorRef.markForCheck();
+      })
+      this._quanlycongviecService.tasks$.subscribe((data) => {
+        console.log("tasks",data);
+        this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));
+        this._changeDetectorRef.markForCheck();
+      })
+      this._quanlycongviecService.duans$.subscribe((data) => {
+        console.log("Duans",data);
+        this.Duans = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));
+        this._changeDetectorRef.markForCheck();
+      })
       this._changeDetectorRef.markForCheck();
     })
     this._userService.user$
@@ -77,24 +94,24 @@ export class DetailComponent implements OnInit {
         this.Nhanviens = data;
         this._changeDetectorRef.markForCheck();
       });
-    this._quanlycongviecService.sections$.subscribe((data) => {
-      this.Sections = this.filteredSections = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));;
-      this._changeDetectorRef.markForCheck();
-    })
-    this._quanlycongviecService.tasks$.subscribe((data) => {
-      this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));;
-      this._changeDetectorRef.markForCheck();
-    })
-    this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data;
-      this._changeDetectorRef.markForCheck();
-    })
   }
 
   ngOnInit(): void {
-    // const id = this._activatedRoute.snapshot.paramMap.get('id');
-    // this._quanlycongviecService.getDuanById(id).subscribe();
-    // console.log(id);
+  }
+  toggle(trigger: any) {
+    this.triggerOrigin = trigger;
+    this.isOpen = !this.isOpen
+  }
+  EditSection(event, item) {
+    item.Tieude = event.target.value;
+    this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
+    console.log(event.target.value);
+    console.log(item);
+  }
+  UpdateSection(item, type, value) {    
+    item[type] = value;
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    console.log(item);
   }
   GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);

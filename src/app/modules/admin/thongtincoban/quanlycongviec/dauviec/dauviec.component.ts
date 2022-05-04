@@ -58,15 +58,9 @@ export class DauviecComponent implements OnInit {
   ngOnInit(): void {
     this.Uutiens = [
       {id:0,value:'...'},
-      {id:1,value:'Cấp Độ 1'},
-      {id:2,value:'Cấp Độ 2'},
-      {id:3,value:'Cấp Độ 3'},
-      {id:4,value:'Cấp Độ 4'},
-      {id:5,value:'Cấp Độ 5'},
-      {id:6,value:'Cấp Độ 6'},
-      {id:7,value:'Cấp Độ 7'},
-      {id:8,value:'Cấp Độ 8'},
-      {id:9,value:'Cấp Độ 9'}
+      {id:1,value:'Thấp'},
+      {id:2,value:'Vừa'},
+      {id:3,value:'Cao'},
     ]
   }
   GetdataSource(item) {
