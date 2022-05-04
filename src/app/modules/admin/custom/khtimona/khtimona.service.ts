@@ -114,9 +114,9 @@ export class KhtimonaService {
   GetMemberBySDT(SDT):  Observable<any>
   {
       return this._httpClient.get(`${environment.ApiURL}/khtimona/khachhang/paged?SDT=${SDT}`).pipe(
-          tap((khachhang) => {
-           // console.log(khachhang);
-            this._data.next(khachhang);
+          tap((khachhang) => { 
+           // this._data.next(khachhang);
+            return khachhang;
           })
       );
   }
