@@ -15,6 +15,7 @@ import { QuanlycongviecService } from '../../quanlycongviec.service';
 })
 export class DetailComponent implements OnInit {
   isOpen = false;
+  ThanhvienisOpen = false;
   public Editor = InlineEditor;
   public config = {
     placeholder: 'Mô Tả Dự Án'
@@ -25,6 +26,7 @@ export class DetailComponent implements OnInit {
   filteredSections: any;
   filteredTasks: any;
   filteredDuans: any;
+  filterNhanviens:any;
   CUser: any;
   Uutiens: any[] = [];
   Duans: any[] = [];
@@ -83,27 +85,33 @@ export class DetailComponent implements OnInit {
       })
       this._changeDetectorRef.markForCheck();
     })
-    this._userService.user$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((data) => {
-        this.CUser = data;
-        this._changeDetectorRef.markForCheck();
-      });
     this._nhanvienServiceService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data) => {
-        this.Nhanviens = data;
+        this.Nhanviens = this.filterNhanviens = data;
         this._changeDetectorRef.markForCheck();
       });
   }
 
   ngOnInit(): void {
     this.isOpen = false;
+    this.ThanhvienisOpen = false;
   }
+
+  filterThanvien(event): void
+  {
+    const value = event.target.value.toLowerCase();
+    this.filterNhanviens = this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
+  }
+
   toggleThuchien(trigger: any,row) {
     this.SelectThuchien = row;
     this.triggerOrigin = trigger;
     this.isOpen = !this.isOpen
+  }
+  toggleThanhvien(trigger: any) {
+    this.triggerOrigin = trigger;
+    this.ThanhvienisOpen = !this.ThanhvienisOpen
   }
   UpdateTask(item,type, value) {   
     item[type] = value;
@@ -134,7 +142,6 @@ export class DetailComponent implements OnInit {
       this._quanlycongviecService.CreateSection(section).subscribe();
     }
   }
-
   CreateTaks(idSection) {
     const task = { Tieude: "New Task", sid: idSection, idTao: this.CUser.id }
     const checktask = this.Tasks.filter(v => v.sid == idSection);
@@ -154,12 +161,15 @@ export class DetailComponent implements OnInit {
     console.log(item);
   }
   AddMang(item, type, value) {   
+    console.log(item, type, value);
      item[type].push(value);
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    this.ngOnInit();
   }
   RemoveMang(item, type, value) {   
     item[type]= item[type].filter(v=>v!=value);
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    this.ngOnInit();
   }
   UpdateEditorDuan(item, type,{editor}: ChangeEvent ) {   
     item[type] = editor.getData();

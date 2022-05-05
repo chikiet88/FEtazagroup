@@ -1,10 +1,10 @@
 <div class="flex flex-col flex-auto min-w-0">
-  <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-2">
+  <div class="flex flex-wrap w-full mx-auto p-2">
     <div class="flex flex-col w-full p-4 text-center">
       <div class="py-2">Hôm Nay : {{homnay|date:'dd/MM/yyyy'}}</div>
       <div class="text-xl py-2">{{CUser.name}}</div>
       <div class="py-2">
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle-group>
           <mat-button-toggle value="bold"><span class="text-xl text-blue-500 font-bold">{{Duans.length}}</span> Dự Án</mat-button-toggle>
           <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{Hoanthanh.length}}</span> Đầu Việc Hoàn Thành</mat-button-toggle>
           <mat-button-toggle value="underline">0 Người Tham Gia</mat-button-toggle>
@@ -12,7 +12,7 @@
       </div>
 
     </div>
-    <div class="grid grid-cols-2 gap-4 w-full">
+    <div class="grid md:grid-cols-2 gap-4 w-full">
       <fuse-card class="flex flex-col w-full p-4">
         <div class="flex justify-between">
         <div class="py-2 text-center flex flex-auto items-center">
@@ -23,7 +23,7 @@
         </div>
         <button mat-button class="bg-blue-100" [routerLink]="['./dauviec']">Tất Cả</button>
       </div>
-        <div class="py-2">
+      <div class="py-2">
           <mat-tab-group>
             <mat-tab label="Đang làm ({{Danglam.length}})"> 
                <mat-list>

@@ -83,7 +83,7 @@ export class KhachhangsService {
   {
       return this._httpClient.patch(`${environment.ApiURL}/khachhangs/khachhang/${dulieu.id}`,dulieu).pipe(
           tap((response: any) => {
-              console.log(response)
+              //console.log(response)
           })
       );
   }
@@ -92,7 +92,7 @@ export class KhachhangsService {
        return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/${chinhanh}`).pipe(
           tap((member: any) => {
             this._member.next(member);
-            console.log(member);
+            //console.log(member);
           })
       );
   }
@@ -100,8 +100,7 @@ export class KhachhangsService {
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/khachhang/paged?SDT=${SDT}`).pipe(
           tap((khachhang) => { 
-              console.log(khachhang);
-            
+              //console.log(khachhang);
            // this._data.next(khachhang);
             return khachhang;
           })
@@ -128,7 +127,7 @@ export class KhachhangsService {
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/page?batdau=${BD}&ketthuc=${KT}`).pipe(
           tap((data) => {
-              console.log(data);
+             // console.log(data);
               
             this._data.next(data);
           })
@@ -138,7 +137,7 @@ export class KhachhangsService {
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/${SDT}`).pipe(
           tap((khachhang) => {
-            console.log(khachhang);
+           // console.log(khachhang);
             this._data.next(khachhang);
           })
       );
@@ -147,7 +146,7 @@ export class KhachhangsService {
   {
       return this._httpClient.get(`${environment.ApiURL}/khachhangs/chitiet/paged?skip=${skip}&take=${take}`).pipe(
           tap((khachhang) => {
-            console.log(khachhang);
+            //console.log(khachhang);
             this._data.next(khachhang.data);
 
           })

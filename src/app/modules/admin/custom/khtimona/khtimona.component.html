@@ -28,8 +28,8 @@
     <mat-menu #menu="matMenu" color="primary">
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
       <button mat-menu-item color="primary" (click)="GetAllMember()"
-        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All</button>
-      <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button>
+        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
+      <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button> -->
       <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
@@ -51,7 +51,7 @@
     </mat-form-field>
     <mat-form-field class="w-full">
       <mat-label>Hạng Khách Hàng</mat-label>
-      <mat-select matInput (selectionChange)="ChonMember($event);Reset()" placeholder="Hạng Thành Viên"
+      <mat-select matInput (selectionChange)="ChonMember($event);" placeholder="Hạng Thành Viên"
         #MemberSelect="matSelect">
         <mat-option value="0">All</mat-option>
         <mat-option value="1" class="h-auto py-4 leading-none">

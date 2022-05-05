@@ -34,24 +34,24 @@ export class HosoComponent implements OnInit {
                   title      : 'Bảo Mật',
                   description: 'Bảo mật tài khoản'
               },
-              {
-                  id         : 'plan-billing',
-                  icon       : 'heroicons_outline:credit-card',
-                  title      : 'Thanh toán',
-                  description: 'Quản lý thông tin thanh toán'
-              },
-              {
-                  id         : 'notifications',
-                  icon       : 'heroicons_outline:bell',
-                  title      : 'Thông Báo',
-                  description: 'Quản Lý Thông Báo'
-              },
-              {
-                  id         : 'team',
-                  icon       : 'heroicons_outline:user-group',
-                  title      : 'Đội Nhóm',
-                  description: 'Quản Lý Đội Nhóm'
-              }
+            //   {
+            //       id         : 'plan-billing',
+            //       icon       : 'heroicons_outline:credit-card',
+            //       title      : 'Thanh toán',
+            //       description: 'Quản lý thông tin thanh toán'
+            //   },
+            //   {
+            //       id         : 'notifications',
+            //       icon       : 'heroicons_outline:bell',
+            //       title      : 'Thông Báo',
+            //       description: 'Quản Lý Thông Báo'
+            //   },
+            //   {
+            //       id         : 'team',
+            //       icon       : 'heroicons_outline:user-group',
+            //       title      : 'Đội Nhóm',
+            //       description: 'Quản Lý Đội Nhóm'
+            //   }
           ];
   
           

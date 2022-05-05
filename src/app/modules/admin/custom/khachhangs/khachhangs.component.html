@@ -28,9 +28,8 @@
       </span></button>
     <mat-menu #menu="matMenu" color="primary">
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-      <button mat-menu-item color="primary" (click)="GetAllMember()"cod
-        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
-        <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Data</button>
+      <button mat-menu-item color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
+        <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Data</button> -->
       <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
@@ -70,7 +69,7 @@
     </mat-form-field>
     <mat-form-field class="w-full">
       <mat-label>Hạng Khách Hàng</mat-label>
-      <mat-select matInput (selectionChange)="ChonMember($event);ResetSDT()" placeholder="Hạng Thành Viên" #MemberSelect="matSelect">
+      <mat-select matInput (selectionChange)="ChonMember($event)" placeholder="Hạng Thành Viên" #MemberSelect="matSelect">
         <mat-option value="0">All</mat-option>
         <mat-option value="1" class="h-auto py-4 leading-none">         
            <div class="font-medium">Normal</div>
@@ -204,10 +203,10 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #MemberPag="matPaginator"></mat-paginator>
   </div>
   <div class="mt-4">
-    <div class="space-x-2 flex flex-row py-4 justify-end" *ngIf="CurrentUser.Role=='admin'"> 
+    <!-- <div class="space-x-2 flex flex-row py-4 justify-end" *ngIf="CurrentUser.Role=='dev'"> 
         <button mat-raised-button color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
         <button mat-raised-button color="primary" (click)="LoadKHSDT('','SDT')">All Chi Tiết</button>
-    </div>
+    </div> -->
   
   <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">
     <mat-form-field>

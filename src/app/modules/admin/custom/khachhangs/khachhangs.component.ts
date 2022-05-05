@@ -186,17 +186,17 @@ export class KhachhangsComponent implements OnInit {
           this._khachhangsService.GetMemberBySDT(x.SDT).subscribe(data => {
             console.log(data);
             let khachhang = {
-              'id': data.id,
-              'TenKH': data.TenKH,
-              'SDT': data.SDT,
-              'SDT2': data.SDT2,
-              'Dathu': parseInt(data.Dathu) + parseInt(x.Dathu),
-              'Chinhanh': data.Chinhanh,
-              'NgayMD': new Date(data.NgayTaoDV),
-              'NoiMD': data.Chinhanh,
+              'id': x.id,
+              'TenKH': v.TenKH,
+              'SDT': v.SDT,
+              'SDT2': v.SDT2,
+              'Dathu': parseInt(v.Dathu) + parseInt(x.Dathu),
+              'Chinhanh': x.Chinhanh,
+              'NgayMD': new Date(x.NgayTaoDV),
+              'NoiMD': x.Chinhanh,
               'NgayMC': new Date(v.NgayTaoDV),
               'NoiMC': v.Chinhanh,
-              'Ghichu': data.Ghichu + ' ' + v.Ghichu
+              'Ghichu': x.Ghichu + ' ' + v.Ghichu
             }
             this._khachhangsService.UpdateMember(khachhang).subscribe();
           })
@@ -264,10 +264,10 @@ export class KhachhangsComponent implements OnInit {
         return a && b && e && i && c && d;
       }) as (PeriodicElement, string) => boolean;
       this.Filtermember.valueChanges.subscribe(value => {
-        // console.log(value)
+         console.log(value)
         this.datamember.filter = value;
       });
-    }
+      }
     )
   }
   GetAllMember() {
@@ -391,9 +391,13 @@ export class KhachhangsComponent implements OnInit {
       });
   }
   ChonMember(ob) {
+    console.log(ob.value);
     let currentMember = this.Member.find(v => v.id == ob.value);
+    console.log(currentMember);
+    console.log(this.Filtermember);
     this.Filtermember.get('Hanmuctu').setValue(currentMember.Tu);
     this.Filtermember.get('Hanmucden').setValue(currentMember.Den);
+    console.log(this.Filtermember); 
   }
   SelectMember(value) {
     this.Showchitiet = true;

@@ -29,10 +29,11 @@
       <div class="flex">
         <ng-container>
           <div class="flex items-center">
-            <ng-container *ngFor="let member of [].constructor(5);">
+            <ng-container *ngFor="let member of Duan.Thamgia">
               <img
                 class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
-                [src]="'assets/images/avatars/male-02.jpg'" alt="Member avatar">
+                [src]="'assets/images/logo/logo300.png'" matTooltip="{{member|findbyid:Nhanviens:'name'}}"
+                matTooltipClass="example-tooltip-red">
             </ng-container>
             <!-- <ng-container *ngIf="board.members.length > 5">
                           <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
@@ -55,28 +56,13 @@
         <mat-divider></mat-divider>
         <div class="my-4">
           <div class="text-2xl font-bold">Thành Viên Dự Án</div>
-          <div class="grid grid-cols-3 mt-3">
+          <div class="flex flex-row space-x-4 space-y-2 mt-3">
             <div class="flex" *ngIf="Duan.idTao == CUser.id">
-              <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full m-auto">
-                <mat-icon class="icon-size-5" matPrefix>
+                <button class="m-auto bg-blue-500" mat-mini-fab cdkOverlayOrigin #triggerThanhvien="cdkOverlayOrigin" (click)="toggleThanhvien(triggerThanhvien)">
                   <span class="material-icons">
                     person_add
-                  </span>
-                </mat-icon>
-                <mat-select placeholder="Người Tham Gia" (selectionChange)="AddMang(Duan,'Thamgia',$event.value)">
-                  <div class="p-3 border-b">
-                    <input matInput placeholder="Tìm Kiếm" #searchNhanviens>
-                  </div>
-                  <mat-option
-                    *ngFor="let item of Nhanviens|Unique:Duan.Thamgia:'id' | timkiem : searchNhanviens.value:'name'"
-                    [value]="item.id">
-                    {{item.name}}
-                  </mat-option>
-                  <mat-option *ngIf="(Nhanviens | timkiem : searchNhanviens.value:'name').length==0">
-                    Không Tìm Thấy
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                    </span>
+                </button>
             </div>
             <div *ngFor="let item of Duan.Thamgia"
               class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
@@ -400,6 +386,32 @@
           <ng-container *ngFor="let item of Duan.Thamgia">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple (click)="UpdateTask(SelectThuchien,'Thuchien',item)">
               <div class="ml-1">{{item|findbyid:Nhanviens:'name'}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="ThanhvienisOpen"
+  (detach)="ThanhvienisOpen = false" (backdropClick)="ThanhvienisOpen = false">
+  <div class="w-60 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterThanvien($event)">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filterNhanviens|Unique:Duan.Thamgia:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
+              <div class="ml-1">{{item.name}}</div>
             </div>
           </ng-container>
         </div>

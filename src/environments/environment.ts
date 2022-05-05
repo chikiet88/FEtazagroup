@@ -5,8 +5,8 @@
 export const environment = {
     production: false,
    // ApiURL:'https://v2api.tazagroup.vn'
-    ApiURL:'http://localhost:3000',
-    //ApiURL:'http://192.168.1.55:3000',
+    //ApiURL:'http://localhost:3000',
+    ApiURL:'http://192.168.1.55:3000',
    // ApiURL1:'https://tazagroup.vn/api/index.php/v1/users?page[limit]=*',
     googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     // characters: {
@@ -18,7 +18,7 @@ export const environment = {
       worksheetName: 'Realtime',
     },
     khtimona: {
-      spreadsheetId: '1AmEI2LM9qSOmXuIBEozxFGGuOwAepySyBw7VSZf90n0',
+      spreadsheetId: '1j2P9KMtZiyuEMwtPROf3kIGVCGwcZL3MW7H6fEx1fJU',
       //worksheetName: 'All 2021',
       //worksheetName: 'form2022',
       worksheetName: 'Realtime',
