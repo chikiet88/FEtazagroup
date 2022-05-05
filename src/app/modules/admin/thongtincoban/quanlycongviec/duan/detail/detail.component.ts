@@ -19,7 +19,7 @@ export class DetailComponent implements OnInit {
   public config = {
     placeholder: 'Mô Tả Dự Án'
   };
-  displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'thamgia'];
+  displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'thuchien'];
   Sections: any[] = [];
   Tasks: any[] = [];
   filteredSections: any;
@@ -31,6 +31,7 @@ export class DetailComponent implements OnInit {
   Nhanviens: any[] = [];
   Duan: any = {};
   pjid: any;
+  SelectThuchien: any;
   triggerOrigin:any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
@@ -72,7 +73,7 @@ export class DetailComponent implements OnInit {
       })
       this._quanlycongviecService.tasks$.subscribe((data) => {
         console.log("tasks",data);
-        this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));
+        this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thuchien==this.CUser.id);
         this._changeDetectorRef.markForCheck();
       })
       this._quanlycongviecService.duans$.subscribe((data) => {
@@ -97,10 +98,17 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isOpen = false;
   }
-  toggle(trigger: any) {
+  toggleThuchien(trigger: any,row) {
+    this.SelectThuchien = row;
     this.triggerOrigin = trigger;
     this.isOpen = !this.isOpen
+  }
+  UpdateTask(item,type, value) {   
+    item[type] = value;
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+    this.ngOnInit();
   }
   EditSection(event, item) {
     item.Tieude = event.target.value;

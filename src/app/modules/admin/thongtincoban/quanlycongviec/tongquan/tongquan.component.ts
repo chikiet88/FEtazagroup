@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { QuanlycongviecService } from '../quanlycongviec.service';
@@ -10,29 +10,39 @@ import { QuanlycongviecService } from '../quanlycongviec.service';
   selector: 'app-tongquan',
   templateUrl: './tongquan.component.html',
   styleUrls: ['./tongquan.component.scss'],
-  encapsulation:ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None
 })
 export class TongquanComponent implements OnInit {
-  homnay:Date;
-  thisUser:User;
-  Tasks:any;
-  Duans:any;
-  typethamgia:any;
-  constructor( 
-      private _userService:UserService,
-      private _quanlycongviecService:QuanlycongviecService,
-    
-  ) {
-    this._userService.user$.subscribe((data)=>this.thisUser = data);
-    this._quanlycongviecService.getAllTasks().subscribe();
-    this._quanlycongviecService.tasks$.subscribe((data)=>this.Tasks = data);
-    this._quanlycongviecService.getAllDuans().subscribe();
-    this._quanlycongviecService.duans$.subscribe((data)=>this.Duans = data);
-    }
-  ngOnInit(): void {
-    this.homnay = new Date();
-    this.typethamgia = ["Thường Xuyên","Gần Đây","Yêu Thích",]
+  homnay: Date;
+  CUser: User;
+  Tasks: any;
+  Duans: any;
+  Danglam : any;
+  Quahan : any;
+  Hoanthanh : any;
+  typethamgia: any;
+  constructor(
+    private _userService: UserService,
+    private _quanlycongviecService: QuanlycongviecService,
 
-    
+  ) {
+    this._userService.user$.subscribe((data) => this.CUser = data);
+    this._quanlycongviecService.getAllTasks().subscribe();
+    this._quanlycongviecService.getAllDuans().subscribe();
+    this._quanlycongviecService.duans$.subscribe((data) => this.Duans = data||[]);
+  }
+  ngOnInit(): void {
+    this._quanlycongviecService.tasks$.subscribe((data) =>
+    {
+      if(data)
+      {
+      this.Tasks = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id);
+      this.Danglam = this.Tasks.filter(v => v.Trangthai == 1)
+      this.Quahan = this.Tasks.filter(v => v.Trangthai == 1)
+      this.Hoanthanh = this.Tasks.filter(v => v.Trangthai == 2)
+      }
+    });
+    this.homnay = new Date();
+    this.typethamgia = ["Thường Xuyên", "Gần Đây", "Yêu Thích",]
   }
 }

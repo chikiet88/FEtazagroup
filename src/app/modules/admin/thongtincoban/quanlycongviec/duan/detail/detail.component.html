@@ -1,347 +1,333 @@
 <div class="flex flex-col flex-auto min-w-0">
-    <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
-      <div class="flex flex-row space-x-2 py-6 justify-between">
-        <div class="flex space-x-2">
-          <div class="text-2xl font-bold m-auto">
-            <input class="w-full" matInput [value]="Duan.Tieude" (change)="UpdateDuan(Duan,'Tieude',$event.target.value)">
-          </div>
-          <div class="font-bold">
-            <button mat-button [matMenuTriggerFor]="menu">
-              <span class="material-icons">
-                radio_button_unchecked
-              </span>
-              {{Duan.Trangthai}}
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item>Item 1</button>
-              <button mat-menu-item>Item 2</button>
-            </mat-menu>
-          </div>
-          <div class="font-bold m-auto">
-            <ng-container *ngIf="Duan.Noibat==0; else elseTemplate">
-              <span class="material-icons" (click)="UpdateDuan(Duan,'Noibat',true)">star_border</span>
-            </ng-container>
-            <ng-template #elseTemplate>
-              <span class="material-icons text-yellow-500" (click)="UpdateDuan(Duan,'Noibat',false)">star</span>
-            </ng-template>
-          </div>
+  <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
+    <div class="flex flex-row space-x-2 py-6 justify-between">
+      <div class="flex space-x-2">
+        <div class="text-2xl font-bold m-auto">
+          <input class="w-full" matInput [value]="Duan.Tieude" (change)="UpdateDuan(Duan,'Tieude',$event.target.value)">
         </div>
-        <div class="flex">
-          <ng-container>
-            <div class="flex items-center">
-              <ng-container *ngFor="let member of [].constructor(5);">
-                <img
-                  class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
-                  [src]="'assets/images/avatars/male-02.jpg'" alt="Member avatar">
-              </ng-container>
-              <!-- <ng-container *ngIf="board.members.length > 5">
+        <div class="font-bold">
+          <button mat-button [matMenuTriggerFor]="menu">
+            <span class="material-icons">
+              radio_button_unchecked
+            </span>
+            {{Duan.Trangthai}}
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>Item 1</button>
+            <button mat-menu-item>Item 2</button>
+          </mat-menu>
+        </div>
+        <div class="font-bold m-auto">
+          <ng-container *ngIf="Duan.Noibat==0; else elseTemplate">
+            <span class="material-icons" (click)="UpdateDuan(Duan,'Noibat',true)">star_border</span>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <span class="material-icons text-yellow-500" (click)="UpdateDuan(Duan,'Noibat',false)">star</span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="flex">
+        <ng-container>
+          <div class="flex items-center">
+            <ng-container *ngFor="let member of [].constructor(5);">
+              <img
+                class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
+                [src]="'assets/images/avatars/male-02.jpg'" alt="Member avatar">
+            </ng-container>
+            <!-- <ng-container *ngIf="board.members.length > 5">
                           <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
                               <div class="text-md font-semibold">
                                   +{{ board.members.slice(5).length }}
                               </div>
                           </div>
                       </ng-container> -->
-            </div>
-          </ng-container>
-        </div>
-      </div>
-      <mat-tab-group>
-        <mat-tab label="Tổng Quan">
-          <div class="my-4">
-          <div class="text-2xl font-bold">Mô Tả Dự Án</div>
-          <ckeditor [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}" [data]="Duan.Mota"  (change)="UpdateEditorDuan(Duan,'Mota',$event)"></ckeditor>
           </div>
-          <mat-divider></mat-divider>
-          <div class="my-4">
-            <div class="text-2xl font-bold">Thành Viên Dự Án</div>
-            <div class="grid grid-cols-3 mt-3">  
-              <div class="flex" *ngIf="Duan.idTao == CUser.id">
-                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full m-auto">
-                  <mat-icon
-                  class="icon-size-5"
-                  matPrefix>
+        </ng-container>
+      </div>
+    </div>
+    <mat-tab-group>
+      <mat-tab label="Tổng Quan">
+        <div class="my-4">
+          <div class="text-2xl font-bold">Mô Tả Dự Án</div>
+          <ckeditor [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}" [data]="Duan.Mota"
+            (change)="UpdateEditorDuan(Duan,'Mota',$event)"></ckeditor>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="my-4">
+          <div class="text-2xl font-bold">Thành Viên Dự Án</div>
+          <div class="grid grid-cols-3 mt-3">
+            <div class="flex" *ngIf="Duan.idTao == CUser.id">
+              <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full m-auto">
+                <mat-icon class="icon-size-5" matPrefix>
                   <span class="material-icons">
                     person_add
-                    </span>
+                  </span>
                 </mat-icon>
-                  <mat-select placeholder="Người Tham Gia" (selectionChange)="AddMang(Duan,'Thamgia',$event.value)">
-                    <div class="p-3 border-b">
-                    <input matInput placeholder="Tìm Kiếm" #searchNhanviens></div>
-                    <mat-option *ngFor="let item of Nhanviens|Unique:Duan.Thamgia:'id' | timkiem : searchNhanviens.value:'name'"
-                      [value]="item.id">
-                      {{item.name}}
-                    </mat-option>
-                    <mat-option *ngIf="(Nhanviens | timkiem : searchNhanviens.value:'name').length==0">
-                      Không Tìm Thấy
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>      
+                <mat-select placeholder="Người Tham Gia" (selectionChange)="AddMang(Duan,'Thamgia',$event.value)">
+                  <div class="p-3 border-b">
+                    <input matInput placeholder="Tìm Kiếm" #searchNhanviens>
+                  </div>
+                  <mat-option
+                    *ngFor="let item of Nhanviens|Unique:Duan.Thamgia:'id' | timkiem : searchNhanviens.value:'name'"
+                    [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                  <mat-option *ngIf="(Nhanviens | timkiem : searchNhanviens.value:'name').length==0">
+                    Không Tìm Thấy
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div *ngFor="let item of Duan.Thamgia"
+              class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+              <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                <img alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
+                  src="assets/images/logo/logo300.png">
               </div>
-            <div *ngFor="let item of Duan.Thamgia" class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
-                  <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
-                    <img
-                      alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                      src="src/assets/images/logo/logo300.png">
-                  </div>
-                  <div class="min-w-0 ml-4">
-                    <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
-                  </div>
-                  <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)" *ngIf="Duan.idTao == CUser.id">
-                    <span class="material-icons text-red-500">
-                      remove_circle
-                      </span>
-                  </div>
-                </div>
+              <div class="min-w-0 ml-4">
+                <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
+              </div>
+              <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)"
+                *ngIf="Duan.idTao == CUser.id">
+                <span class="material-icons text-red-500">
+                  remove_circle
+                </span>
+              </div>
             </div>
           </div>
-          <mat-divider></mat-divider>
+        </div>
+        <mat-divider></mat-divider>
         <div class="my-4">
-            <div class="text-2xl font-bold">Tóm Tắt Dự Án</div>
-            <ckeditor [editor]="Editor" [config]="{placeholder:'Tóm Tắt Dự Án'}"  [data]="Duan.Tomtat"  (change)="UpdateEditorDuan(Duan,'Tomtat',$event)"></ckeditor>
-          </div> 
-          <mat-divider></mat-divider>
+          <div class="text-2xl font-bold">Tóm Tắt Dự Án</div>
+          <ckeditor [editor]="Editor" [config]="{placeholder:'Tóm Tắt Dự Án'}" [data]="Duan.Tomtat"
+            (change)="UpdateEditorDuan(Duan,'Tomtat',$event)"></ckeditor>
+        </div>
+        <mat-divider></mat-divider>
         <div class="my-4">
-            <div class="text-2xl font-bold">Tài Nguyên</div>
-            <div class="grid grid-cols-3">
-              <div *ngFor="let item of [].constructor(6)" class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
-                <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                    alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                    src="/src/assets/images/logo/logo300.png">
-                </div>
-                <div class="min-w-0 ml-4">
-                  <div class="font-medium leading-5 truncate">Alice Harding</div>
-                  <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-                </div>
+          <div class="text-2xl font-bold">Tài Nguyên</div>
+          <div class="grid grid-cols-3">
+            <div *ngFor="let item of [].constructor(6)"
+              class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+              <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
+                  alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
+                  src="assets/images/logo/logo300.png">
+              </div>
+              <div class="min-w-0 ml-4">
+                <div class="font-medium leading-5 truncate">Alice Harding</div>
+                <div class="leading-5 truncate text-secondary">Track Service Worker</div>
               </div>
             </div>
-          </div> 
-        </mat-tab>
-        <mat-tab label="Đầu Việc">
-          <div class="flex flex-col w-full">
-            <div class="py-2 flex">
-              <mat-button-toggle (click)="CreateSection()"><span class="material-icons">add_circle</span>Thêm Section</mat-button-toggle>
-                <mat-button-toggle class="ml-auto">{{Sections.length}} Sections</mat-button-toggle>
-            </div>
-            <div>
-              <mat-accordion multi>
-                <mat-expansion-panel *ngFor="let item of Sections" class="py-3" [expanded]="item.IsOpen">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title (keydown)="$event.stopPropagation()" class="p-2 border-2 border-dashed">
-                      <input class="w-full" matInput [value]="item.Tieude" (click)="$event.stopPropagation()"
-                        (change)="EditSection($event,item)">
-                    </mat-panel-title>
-                    <mat-panel-description class="justify-end" (click)="toggleSection(item)">
-                      <mat-button-toggle-group multiple (click)="$event.stopPropagation()" class="space-x-1">
-                         <mat-button-toggle>
-                          <div class="text-red-500 flex space-x-2">
-                            <span class="material-icons m-auto">
-                              notifications
-                              </span>
-                             <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':0).length}} </span>
-                          </div>
-                          </mat-button-toggle>
-  
-                         <mat-button-toggle>
-                          <div class="text-yellow-500 flex space-x-2">
-                            <span class="material-icons m-auto">
-                              hourglass_full
-                             </span> 
-                             <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':1).length}} </span>
-                          </div>
-                          </mat-button-toggle>   
-  
-                        <mat-button-toggle>
-                          <div class="text-blue-500 flex space-x-2">
-                            <span class="material-icons m-auto">
-                              check_circle
-                             </span> 
-                             <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':2).length}} </span>
-                          </div>
-                          </mat-button-toggle>
-                      </mat-button-toggle-group>
-                      <button mat-icon-button (click)="DeleteSection(item)">
-                        <span class="material-icons">
-                          delete
-                        </span>
-                      </button>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  <table mat-table [dataSource]="GetdataSource(item)" class="mat-elevation-z8 w-full">
-                    <ng-container matColumnDef="#">
-                      <th mat-header-cell *matHeaderCellDef> # </th>
-                      <td mat-cell *matCellDef="let row; let i =index">
-                        <button mat-mini-fab [matMenuTriggerFor]="menu" class="text-white"
-                          [ngClass]="{'bg-red-500': row.Trangthai==0,'bg-yellow-500': row.Trangthai==1,'bg-blue-500': row.Trangthai==2}">{{i+1}}</button>
-                        <mat-menu #menu="matMenu">
-                          <button class="text-red-500" mat-menu-item (click)="ChangeStatusTasks(row,0)"> 
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Đầu Việc">
+        <div class="flex flex-col w-full">
+          <div class="py-2 flex">
+            <mat-button-toggle (click)="CreateSection()"><span class="material-icons">add_circle</span>Thêm Section
+            </mat-button-toggle>
+            <mat-button-toggle class="ml-auto">{{Sections.length}} Sections</mat-button-toggle>
+          </div>
+          <div>
+            <mat-accordion multi>
+              <mat-expansion-panel *ngFor="let item of Sections" class="py-3" [expanded]="item.IsOpen">
+                <mat-expansion-panel-header>
+                  <mat-panel-title (keydown)="$event.stopPropagation()" class="p-2 border-2 border-dashed">
+                    <input class="w-full" matInput [value]="item.Tieude" (click)="$event.stopPropagation()"
+                      (change)="EditSection($event,item)">
+                  </mat-panel-title>
+                  <mat-panel-description class="justify-end" (click)="toggleSection(item)">
+                    <mat-button-toggle-group multiple (click)="$event.stopPropagation()" class="space-x-1">
+                      <mat-button-toggle>
+                        <div class="text-blue-500 flex space-x-2">
+                          <span class="material-icons m-auto">
+                            notifications
+                          </span>
+                          <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':0).length}} </span>
+                        </div>
+                      </mat-button-toggle>
+
+                      <mat-button-toggle>
+                        <div class="text-yellow-500 flex space-x-2">
+                          <span class="material-icons m-auto">
+                            hourglass_full
+                          </span>
+                          <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':1).length}} </span>
+                        </div>
+                      </mat-button-toggle>
+
+                      <mat-button-toggle>
+                        <div class="text-green-500 flex space-x-2">
+                          <span class="material-icons m-auto">
+                            check_circle
+                          </span>
+                          <span class="m-auto">{{(item.id|DemSo:Tasks:'sid':'Trangthai':2).length}} </span>
+                        </div>
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <button mat-icon-button (click)="DeleteSection(item)">
+                      <span class="material-icons">
+                        delete
+                      </span>
+                    </button>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <table mat-table [dataSource]="GetdataSource(item)" class="mat-elevation-z8 w-full">
+                  <ng-container matColumnDef="#">
+                    <th mat-header-cell *matHeaderCellDef> # </th>
+                    <td mat-cell *matCellDef="let row; let i =index">
+                      <button mat-mini-fab [matMenuTriggerFor]="menu" class="text-white"
+                        [ngClass]="{'bg-blue-500': row.Trangthai==0,'bg-yellow-500': row.Trangthai==1,'bg-green-500': row.Trangthai==2}">{{i+1}}</button>
+                      <mat-menu #menu="matMenu">
+                        <button class="text-blue-500" mat-menu-item (click)="ChangeStatusTasks(row,0)">
                           <span class="material-icons my-auto">
                             notifications
-                            </span>Chưa làm</button>
-                          <button class="text-yellow-500" mat-menu-item (click)="ChangeStatusTasks(row,1)">
-                            <span class="material-icons my-auto">
-                              hourglass_full
-                             </span> 
-                            Đang làm</button>
-                          <button class="text-blue-500" mat-menu-item (click)="ChangeStatusTasks(row,2)">
-                            <span class="material-icons my-auto">
-                              delete
-                            </span>
-                            Hoàn Thành</button>
-                        </mat-menu>
-                      </td>
-                      <td mat-header-cell *matFooterCellDef colspan="4">
-  
-                        <mat-button-toggle mat-button (click)="CreateTaks(item.id)"
-                          class="m-3 border-blue-500 border-2 border-dashed">
-                          <span class="material-icons">
-                            add_circle
-                          </span>Thêm Đầu Việc</mat-button-toggle>
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="tieude">
-                      <th mat-header-cell *matHeaderCellDef> Tiêu Đề </th>
-                      <td mat-cell *matCellDef="let row">
-                        <input class="w-full" matInput [value]="row.Tieude" (change)="EditTasks($event,row)">
-                      </td>
-                  <td mat-header-cell *matFooterCellDef></td>
-                    </ng-container>
-                    <ng-container matColumnDef="uutien">
-                      <th mat-header-cell *matHeaderCellDef> Ưu Tiên </th>
-                      <td mat-cell *matCellDef="let row"> 
-                        <div class="flex">                        <div
-                          class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
-                          [ngClass]="{'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': row.Uutien === 2,
+                          </span>Chưa làm</button>
+                        <button class="text-yellow-500" mat-menu-item (click)="ChangeStatusTasks(row,1)">
+                          <span class="material-icons my-auto">
+                            hourglass_full
+                          </span>
+                          Đang làm</button>
+                        <button class="text-green-500" mat-menu-item (click)="ChangeStatusTasks(row,2)">
+                          <span class="material-icons my-auto">
+                            delete
+                          </span>
+                          Hoàn Thành</button>
+                      </mat-menu>
+                    </td>
+                    <td mat-header-cell *matFooterCellDef colspan="4">
+
+                      <mat-button-toggle mat-button (click)="CreateTaks(item.id)"
+                        class="m-3 border-blue-500 border-2 border-dashed">
+                        <span class="material-icons">
+                          add_circle
+                        </span>Thêm Đầu Việc
+                      </mat-button-toggle>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="tieude">
+                    <th mat-header-cell *matHeaderCellDef> Tiêu Đề </th>
+                    <td mat-cell *matCellDef="let row">
+                      <input class="w-full" matInput [value]="row.Tieude" (change)="EditTasks($event,row)">
+                    </td>
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="uutien">
+                    <th mat-header-cell *matHeaderCellDef> Ưu Tiên </th>
+                    <td mat-cell *matCellDef="let row">
+                      <div class="flex">
+                        <div class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer" [ngClass]="{'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': row.Uutien === 2,
                                       'text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500': row.Uutien === 1,
                                       'text-red-800 bg-red-200 dark:text-red-100 dark:bg-red-500': row.Uutien === 0}"
                           [matMenuTriggerFor]="priorityMenu">
                           <ng-container *ngIf="row.Uutien === 0">
-                              <mat-icon
-                                  class="icon-size-5 text-current"
-                                  [svgIcon]="'heroicons_solid:arrow-narrow-down'"></mat-icon>
-                              <span class="ml-2 mr-1 text-md font-medium">Thấp</span>
+                            <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:arrow-narrow-down'">
+                            </mat-icon>
+                            <span class="ml-2 mr-1 text-md font-medium">Thấp</span>
                           </ng-container>
                           <ng-container *ngIf="row.Uutien === 1">
-                              <mat-icon
-                                  class="icon-size-4 text-current"
-                                  [svgIcon]="'heroicons_solid:minus'"></mat-icon>
-                              <span class="ml-2 mr-1 text-md font-medium">Trung Bình</span>
+                            <mat-icon class="icon-size-4 text-current" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                            <span class="ml-2 mr-1 text-md font-medium">Trung Bình</span>
                           </ng-container>
                           <ng-container *ngIf="row.Uutien === 2">
-                              <mat-icon
-                                  class="icon-size-4 text-current"
-                                  [svgIcon]="'heroicons_solid:arrow-narrow-up'"></mat-icon>
-                              <span class="ml-2 mr-1 text-md font-medium">Cao</span>
+                            <mat-icon class="icon-size-4 text-current" [svgIcon]="'heroicons_solid:arrow-narrow-up'">
+                            </mat-icon>
+                            <span class="ml-2 mr-1 text-md font-medium">Cao</span>
                           </ng-container>
-                      </div></div>
+                        </div>
+                      </div>
 
-                    <mat-menu #priorityMenu="matMenu">
-                        <button
-                            [ngClass]="{'bg-hover': row.Uutien === 0}"
-                            mat-menu-item
-                            (click)="UpdateSection(row,'Uutien',0)">
-                            <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">Thấp</span>
-                                <mat-icon
-                                    class="mr-0 icon-size-4 text-green-600 dark:text-green-500"
-                                    [svgIcon]="'heroicons_solid:arrow-narrow-down'"></mat-icon>
-                            </span>
+                      <mat-menu #priorityMenu="matMenu">
+                        <button [ngClass]="{'bg-hover': row.Uutien === 0}" mat-menu-item
+                          (click)="UpdateSection(row,'Uutien',0)">
+                          <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
+                            <span class="font-medium">Thấp</span>
+                            <mat-icon class="mr-0 icon-size-4 text-green-600 dark:text-green-500"
+                              [svgIcon]="'heroicons_solid:arrow-narrow-down'"></mat-icon>
+                          </span>
                         </button>
-                        <button
-                            [ngClass]="{'bg-hover': row.Uutien === 1}"
-                            mat-menu-item
-                            (click)="UpdateSection(row,'Uutien',1)">
-                            <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">Trung Bình</span>
-                                <mat-icon
-                                    class="mr-0 icon-size-4 text-gray-600 dark:text-gray-500"
-                                    [svgIcon]="'heroicons_solid:minus'"></mat-icon>
-                            </span>
+                        <button [ngClass]="{'bg-hover': row.Uutien === 1}" mat-menu-item
+                          (click)="UpdateSection(row,'Uutien',1)">
+                          <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
+                            <span class="font-medium">Trung Bình</span>
+                            <mat-icon class="mr-0 icon-size-4 text-gray-600 dark:text-gray-500"
+                              [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                          </span>
                         </button>
-                        <button
-                            [ngClass]="{'bg-hover': row.Uutien === 2}"
-                            mat-menu-item
-                            (click)="UpdateSection(row,'Uutien',2)">
-                            <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">Cao</span>
-                                <mat-icon
-                                    class="mr-0 icon-size-4 text-red-600 dark:text-red-500"
-                                    [svgIcon]="'heroicons_solid:arrow-narrow-up'"></mat-icon>
-                            </span>
+                        <button [ngClass]="{'bg-hover': row.Uutien === 2}" mat-menu-item
+                          (click)="UpdateSection(row,'Uutien',2)">
+                          <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
+                            <span class="font-medium">Cao</span>
+                            <mat-icon class="mr-0 icon-size-4 text-red-600 dark:text-red-500"
+                              [svgIcon]="'heroicons_solid:arrow-narrow-up'"></mat-icon>
+                          </span>
                         </button>
-                    </mat-menu>                  
+                      </mat-menu>
                     </td>
-                      <td mat-header-cell *matFooterCellDef></td>
-                    </ng-container>
-                    <ng-container matColumnDef="deadline">
-                      <th mat-header-cell *matHeaderCellDef> Deadline </th>
-                      <td mat-cell *matCellDef="let row"> 
-                        <div class="flex">                        <div
-                          class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="deadline">
+                    <th mat-header-cell *matHeaderCellDef> Deadline </th>
+                    <td mat-cell *matCellDef="let row">
+                      <div class="flex">
+                        <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                           [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !row.Deadline,
                                       'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': row.Deadline}"
                           (click)="DeadlinePicker.open()">
-                          <mat-icon
-                              class="icon-size-5 text-current"
-                              [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                          <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
                           <span class="ml-2 text-md font-medium">
-                              <ng-container *ngIf="row.Deadline">{{row.Deadline | date:'dd/MM/yyyy'}}</ng-container>
-                              <ng-container *ngIf="!row.Deadline">Chưa Chọn</ng-container>
+                            <ng-container *ngIf="row.Deadline">{{row.Deadline | date:'dd/MM/yyyy'}}</ng-container>
+                            <ng-container *ngIf="!row.Deadline">Chưa Chọn</ng-container>
                           </span>
-                          <mat-form-field class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
-                              <input
-                                  matInput
-                                  [value]="row.Deadline"
-                                  [matDatepicker]="DeadlinePicker" #DeadlineInput>
-                              <mat-datepicker #DeadlinePicker>
-                                  <mat-datepicker-actions>
-                                      <button
-                                      (click)="UpdateSection(row,'Deadline',null)"
-                                          mat-button 
-                                          matDatepickerCancel>Xóa
-                                      </button>
-                                      <button
-                                          class=""
-                                          (click)="UpdateSection(row,'Deadline',DeadlineInput.value)"
-                                          mat-flat-button
-                                          [color]="'primary'"
-                                          matDatepickerApply>Chọn
-                                      </button>
-                                  </mat-datepicker-actions>
-                              </mat-datepicker>
+                          <mat-form-field
+                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                            <input matInput [value]="row.Deadline" [matDatepicker]="DeadlinePicker" #DeadlineInput>
+                            <mat-datepicker #DeadlinePicker>
+                              <mat-datepicker-actions>
+                                <button (click)="UpdateSection(row,'Deadline',null)" mat-button matDatepickerCancel>Xóa
+                                </button>
+                                <button class="" (click)="UpdateSection(row,'Deadline',DeadlineInput.value)"
+                                  mat-flat-button [color]="'primary'" matDatepickerApply>Chọn
+                                </button>
+                              </mat-datepicker-actions>
+                            </mat-datepicker>
                           </mat-form-field>
-                      </div></div>
-                    
+                        </div>
+                      </div>
+
                     </td>
-                      <td mat-header-cell *matFooterCellDef></td>
-                    </ng-container>
-                    <ng-container matColumnDef="thamgia">
-                      <th mat-header-cell *matHeaderCellDef> Tham Gia </th>
-                    <td mat-cell *matCellDef="let row"> 
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+                  <ng-container matColumnDef="thuchien">
+                    <th mat-header-cell *matHeaderCellDef> Thực Hiện </th>
+                    <td mat-cell *matCellDef="let row">
                       <div class="flex">
-                        <button cdkOverlayOrigin #trigger="cdkOverlayOrigin"  (click)="toggle(trigger)">
-                          <span class="material-icons">
-                            person_add
+                        <button cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleThuchien(trigger,row)">
+                          <span class="material-icons" *ngIf="!row.Thuchien">
+                            account_circle
                             </span>
-                        </button>             
-                      </div>                 
+                          <span *ngIf="row.Thuchien">
+                            {{row.Thuchien|findbyid:Nhanviens:'name'}}
+                            </span>
+                        </button>
+                      </div>
                     </td>
-                      <td mat-header-cell *matFooterCellDef></td>
-                    </ng-container>
-  
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-                  </table>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
+                    <td mat-header-cell *matFooterCellDef></td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                </table>
+              </mat-expansion-panel>
+            </mat-accordion>
           </div>
-  
-        </mat-tab>
-        <mat-tab label="Dashboard"> Dashboard</mat-tab>
-        <mat-tab label="Tin Nhắn"> Tin Nhắn</mat-tab>
-      </mat-tab-group>
-      <!-- <div class="flex flex-col w-full p-4 text-center">
+        </div>
+
+      </mat-tab>
+      <mat-tab label="Dashboard"> Dashboard</mat-tab>
+      <mat-tab label="Tin Nhắn"> Tin Nhắn</mat-tab>
+    </mat-tab-group>
+    <!-- <div class="flex flex-col w-full p-4 text-center">
           <div class="py-2">
             <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
               <mat-button-toggle value="bold">10 Dự Án</mat-button-toggle>
@@ -351,7 +337,7 @@
           </div>
     
         </div> -->
-      <!-- <div class="grid grid-cols-2 gap-4 w-full">
+    <!-- <div class="grid grid-cols-2 gap-4 w-full">
           <fuse-card class="flex flex-col w-full p-4">
             <div class="flex justify-between">
             <div class="py-2 text-center flex flex-auto items-center">
@@ -391,43 +377,33 @@
           </fuse-card>
     
         </div> -->
-  
-    </div>
-  
+
   </div>
-  
+
+</div>
+
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-      [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
-      [cdkConnectedOverlayOpen]="isOpen" (detach)="isOpen = false" (backdropClick)="isOpen = false">
-<div class="w-60 rounded border shadow-md bg-card m-3">
-  <div class="flex items-center m-3 mr-2">
-    <div class="flex items-center">
-        <mat-icon
-            class="icon-size-5"
-            [svgIcon]="'heroicons_solid:search'"></mat-icon>
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="isOpen"
+  (detach)="isOpen = false" (backdropClick)="isOpen = false">
+  <div class="w-60 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
         <div class="ml-2">
-            <input
-                class="w-full min-w-0 py-1 border-0"
-                type="text"
-                placeholder="Tìm Kiếm"
-                [maxLength]="30"
-                #newTagInput>
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
         </div>
+      </div>
     </div>
-</div>
-<div
-class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-<ng-container>
-    <div class="py-2 space-y-2">
-        <ng-container *ngFor="let item of Duan.Thamgia">
-            <div
-                class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
-                matRipple>
-                <div class="ml-1" (click)="expression">{{item|findbyid:Nhanviens:'name'}}</div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of Duan.Thamgia">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple (click)="UpdateTask(SelectThuchien,'Thuchien',item)">
+              <div class="ml-1">{{item|findbyid:Nhanviens:'name'}}</div>
             </div>
-        </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
-</ng-container>
-</div>
-</div>
-</ng-template> 
+  </div>
+</ng-template>

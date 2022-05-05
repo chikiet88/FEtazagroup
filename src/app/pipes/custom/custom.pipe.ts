@@ -25,6 +25,7 @@ export class FilterPipe implements PipeTransform {
      return items.filter(v=>v[type] == value);
   }
 }
+
 @Pipe({name: 'Unique'})
 export class UniquePipe implements PipeTransform {
   transform(items1:any,items2: any,type: any): any {
