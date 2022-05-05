@@ -40,6 +40,7 @@ export class KhachhangsService {
         switchMap(datas => this._httpClient.post(`${environment.ApiURL}/khachhangs/chitiet`, dulieu).pipe(
             map((result) => {
                 this._data.next([result, ...datas]);
+                console.log(result);         
                 return result;
             })
         ))
@@ -73,17 +74,17 @@ export class KhachhangsService {
         switchMap(members => this._httpClient.post(`${environment.ApiURL}/khachhangs/khachhang`, dulieu).pipe(
             map((result) => {
                 this._member.next([result, ...members]);
+                console.log("Themmoi",result);
                 return result;
             })
         ))
     );
   }
-
   UpdateMember(dulieu): Observable<any>
   {
       return this._httpClient.patch(`${environment.ApiURL}/khachhangs/khachhang/${dulieu.id}`,dulieu).pipe(
           tap((response: any) => {
-              //console.log(response)
+              console.log("capnhat",response)
           })
       );
   }

@@ -12,6 +12,7 @@ import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khtimona.type';
 import { KhtimonaService } from './khtimona.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+const datatimona = require('app/v1json/datatimona.json');
 @Component({
   selector: 'app-khtimona',
   templateUrl: './khtimona.component.html',
@@ -61,6 +62,7 @@ export class KhtimonaComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
+    console.log(datatimona);
     this._khtimonaService.GetData().subscribe();
     this._khtimonaService.GetAllMember().subscribe();
     this.data$ = this._khtimonaService.data$;
@@ -288,84 +290,63 @@ export class KhtimonaComponent implements OnInit {
       }
     )
   } 
-  LoadAll() {
-    this._khtimonaService.ClearKhachhang().subscribe();
-    this._khtimonaService.GetData().subscribe();
-    this.Showchitiet = true;
-    this.data$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((data: Khachhang[]) => {
-        const NewUnique = [... new Set(data.map(v => v.SDT))];
-        const Thanhvien = [];
-        this.data = new MatTableDataSource(data);
-        this.data.paginator = this.DataPag;
-        this.data.sort = this.DataSort;
-        this._changeDetectorRef.markForCheck();
-        
-        // console.log(NewUnique);
-        // NewUnique.forEach(v => {
-        //   let Sum = 0;
-        //   const UniKH = data.filter(v1 => v1.SDT == v);   
-        //   const getKH = data.find(v1 => v1.SDT == v);
-        //   UniKH.forEach(v1 => {
-        //     Sum += parseInt(v1.Dathu);
-        //   });
-        //   let x = UniKH.length-1;
-        //   Thanhvien.push({ 
-        //     'TenKH': getKH.TenKH,
-        //     'SDT': getKH.SDT, 
-        //     'SDT2': getKH.SDT2, 
-        //     'Dathu': Sum, 
-        //     'Chinhanh': getKH.Chinhanh,
-        //     'NgayMD': UniKH[x].NgayTaoDV,
-        //     'NoiMD': UniKH[x].Chinhanh,
-        //     'NgayMC': UniKH[0].NgayTaoDV,
-        //     'NoiMC': UniKH[0].Chinhanh,
-        //     'Ghichu':getKH.Ghichu
-        //   })
-        // });
-        // Thanhvien.forEach((v, k) => {
-        //   setTimeout(() => {
-        //     this._khtimonaService.CreateMember(v)
-        //       .subscribe(() => {
-        //       });
-        //   }, 10 * k);
-        //   this._changeDetectorRef.markForCheck();
-        // });
-        // this.Thanhvien = new MatTableDataSource(Thanhvien);
-        // this.Thanhvien.paginator = this.ThanhvienPag;
-        // this.Thanhvien.sort = this.ThanvienSort;
-        // this.data.filterPredicate = ((data, filter) => {
-        //   const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
-        //   const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
-        //   const c = !filter.SDT2 || data.SDT2.toLowerCase().includes(filter.SDT2);
-        //   const d = !filter.Dichvu || data.Dichvu.toLowerCase().includes(filter.Dichvu);
-        //   const e = !filter.Doanhso || data.Doanhso.toLowerCase().includes(filter.Doanhso);
-        //   const f = !filter.Ghichu || data.Ghichu.toLowerCase().includes(filter.Ghichu);
-        //   const g = !filter.Tonglieutrinh || data.Tonglieutrinh.toLowerCase().includes(filter.Tonglieutrinh);
-        //   const h = !filter.Batdau && !filter.Ketthuc || new Date(data.NgayTaoDV) >= filter.Batdau && new Date(data.NgayTaoDV) <= filter.Ketthuc;
-        //   const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
-        //   return a && b && c && d && e && f && g && h && i;
-        // }) as (PeriodicElement, string) => boolean;
+  // LoadAll() {
+  //   console.log(datatimona);
+  //       const NewUnique = [... new Set(datatimona.map(v => v.SDT))];
+  //       const Thanhvien = [];
+  //       console.log(NewUnique);
+  //       NewUnique.forEach((v,k) => {     
+  //         let Sum = 0;
+  //         const UniKH = datatimona.filter(v1 => v1.SDT == v);   
+  //         const getKH = datatimona.find(v1 => v1.SDT == v);
+  //         console.log(getKH);
+  //         if(getKH!=undefined)
+  //         {
+  //           UniKH.forEach(v1 => {
+  //             Sum += parseInt(v1.Dathu);
+  //           });
+  //           let x = UniKH.length-1;
+  //           Thanhvien.push({ 
+  //             'TenKH': getKH.TenKH,
+  //             'SDT': getKH.SDT, 
+  //             'SDT2': getKH.SDT2, 
+  //             'Dathu': Sum, 
+  //             'Chinhanh': getKH.Chinhanh,
+  //             'NgayMD': UniKH[x].NgayTaoDV,
+  //             'NoiMD': UniKH[x].Chinhanh,
+  //             'NgayMC': UniKH[0].NgayTaoDV,
+  //             'NoiMC': UniKH[0].Chinhanh,
+  //             'Ghichu':getKH.Ghichu
+  //           })
+  //        }
+  //       });
+  //       //console.log(Thanhvien);
+  //       if(Thanhvien.length!=0)
+  //       {
+  //       Thanhvien.forEach((v, k) => {         
+  //         setTimeout(() => {
+  //           this._khtimonaService.CreateMember(v)
+  //             .subscribe(() => {
+  //             });
+  //         }, 10 * k);
+  //         this._changeDetectorRef.markForCheck();
+  //       });
+  //     }
 
-        // this.FilterForm.valueChanges.subscribe(value => {
-        //   console.log(value);
-        //   this.data.filter = value;
-        // });
-        // this.Thanhvien.filterPredicate = ((data, filter) => {
-        //   const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
-        //   const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
-        //   const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
-        //   const e = !filter.Hanmuctu && !filter.Hanmucden || parseInt(data.Dathu) <= parseInt(filter.Hanmucden) && parseInt(data.Dathu) >= parseInt(filter.Hanmuctu);
-        //   return a && b && e && i;
-        // }) as (PeriodicElement, string) => boolean;
-        // this.ThanhvienForm.valueChanges.subscribe(value => {
-        //   console.log(value);
-        //   this.Thanhvien.filter = value;
-        // });
 
-      });
-  }
+  //   this._khtimonaService.ClearKhachhang().subscribe();
+  //   this._khtimonaService.GetData().subscribe();
+  //   this.Showchitiet = true;
+  //   this.data$
+  //     .pipe(takeUntil(this._unsubscribeAll))
+  //     .subscribe((data: Khachhang[]) => {
+  //       console.log(data);
+  //       this.data = new MatTableDataSource(data);
+  //       this.data.paginator = this.DataPag;
+  //       this.data.sort = this.DataSort;
+  //       this._changeDetectorRef.markForCheck();
+  //     });
+  // }
   ChonMember(ob) {
     let currentMember = this.Member.find(v => v.id == ob.value);
     this.Filtermember.get('Hanmuctu').setValue(currentMember.Tu);

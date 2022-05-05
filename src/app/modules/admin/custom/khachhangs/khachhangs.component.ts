@@ -12,6 +12,8 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khachhang.type';
 import { KhachhangsService } from './khachhangs.service';
+const datataza = require('app/v1json/datataza.json');
+const idtaza = require('app/v1json/idtaza.json');
 @Component({
   selector: 'app-khachhangs',
   templateUrl: './khachhangs.component.html',
@@ -44,6 +46,7 @@ export class KhachhangsComponent implements OnInit {
   DataDrive: any = [];
   DataServer: any = [];
   Alldata: any = [];
+  datataza:any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
   @ViewChild('DataSort', { static: false }) DataSort: MatSort;
@@ -66,6 +69,8 @@ export class KhachhangsComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    //this.datataza = datataza;
+      this.datataza = datataza.slice(120001,150000);
     //this._khachhangsService.GetData().subscribe();
     this._khachhangsService.GetAllMember().subscribe();
     this.data$ = this._khachhangsService.data$;
@@ -175,21 +180,20 @@ export class KhachhangsComponent implements OnInit {
         console.log(this.DataDrive)
       });
   }
-  GetKH() {
-  }
   UpdateDulieu(data) {
     data.forEach((v, k) => {
+      //console.log(v); 
+      //console.log(this.Alldata); 
       setTimeout(() => {
         this._khachhangsService.CreateData(v).subscribe();
         const x = this.Alldata.find(v1 => v1.SDT == v.SDT);
         if (x!=undefined) {
-          this._khachhangsService.GetMemberBySDT(x.SDT).subscribe(data => {
-            console.log(data);
+         this._khachhangsService.GetMemberBySDT(x.SDT).subscribe(res => {
             let khachhang = {
               'id': x.id,
-              'TenKH': v.TenKH,
-              'SDT': v.SDT,
-              'SDT2': v.SDT2,
+              'TenKH': x.TenKH,
+              'SDT': x.SDT,
+              'SDT2': x.SDT2,
               'Dathu': parseInt(v.Dathu) + parseInt(x.Dathu),
               'Chinhanh': x.Chinhanh,
               'NgayMD': new Date(x.NgayTaoDV),
@@ -198,6 +202,7 @@ export class KhachhangsComponent implements OnInit {
               'NoiMC': v.Chinhanh,
               'Ghichu': x.Ghichu + ' ' + v.Ghichu
             }
+            console.log(khachhang);
             this._khachhangsService.UpdateMember(khachhang).subscribe();
           })
         }
@@ -216,7 +221,6 @@ export class KhachhangsComponent implements OnInit {
           }
           this._khachhangsService.CreateMember(khachhang).subscribe();
         }
-        console.log(x);
       }, 10 * k);
       this._changeDetectorRef.markForCheck();
     });
@@ -315,80 +319,50 @@ export class KhachhangsComponent implements OnInit {
       });
   }
   LoadAll() {
+    console.log(this.datataza);
     this.Showchitiet = true;
-    this.data$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((data: Khachhang[]) => {
-        // console.log(data);
-        const NewUnique = [... new Set(data.map(v => v.SDT))];
+        //const NewUnique = [... new Set(this.datataza.map(v => v.SDT))];
         const Thanhvien = [];
-        this.data = new MatTableDataSource(data);
-        this.data.paginator = this.DataPag;
-        this.data.sort = this.DataSort;
-        this._changeDetectorRef.markForCheck();
-        // console.log(NewUnique);
-        // NewUnique.forEach(v => {
-        //   let Sum = 0;
-        //   const UniKH = data.filter(v1 => v1.SDT == v);   
-        //   const getKH = data.find(v1 => v1.SDT == v);
-        //   UniKH.forEach(v1 => {
-        //     Sum += parseInt(v1.Dathu);
-        //   });
-        //   let x = UniKH.length-1;
-        //   Thanhvien.push({ 
-        //     'TenKH': getKH.TenKH,
-        //     'SDT': getKH.SDT, 
-        //     'SDT2': getKH.SDT2, 
-        //     'Dathu': Sum, 
-        //     'Chinhanh': getKH.Chinhanh,
-        //     'NgayMD': UniKH[x].NgayTaoDV,
-        //     'NoiMD': UniKH[x].Chinhanh,
-        //     'NgayMC': UniKH[0].NgayTaoDV,
-        //     'NoiMC': UniKH[0].Chinhanh,
-        //     'Ghichu':getKH.Ghichu
-        //   })
-        // });
-        // //console.log(Thanhvien);
-        // Thanhvien.forEach((v, k) => {
-        //   setTimeout(() => {
-        //     this._khachhangsService.CreateMember(v)
-        //       .subscribe(() => {
-        //       });
-        //   }, 10 * k);
-        //   this._changeDetectorRef.markForCheck();
-        // });
-        // this.Thanhvien = new MatTableDataSource(Thanhvien);
-        // this.Thanhvien.paginator = this.ThanhvienPag;
-        // this.Thanhvien.sort = this.ThanvienSort;
-        // this.data.filterPredicate = ((data, filter) => {
-        //   const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
-        //   const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
-        //   const c = !filter.SDT2 || data.SDT2.toLowerCase().includes(filter.SDT2);
-        //   const d = !filter.Dichvu || data.Dichvu.toLowerCase().includes(filter.Dichvu);
-        //   const e = !filter.Doanhso || data.Doanhso.toLowerCase().includes(filter.Doanhso);
-        //   const f = !filter.Ghichu || data.Ghichu.toLowerCase().includes(filter.Ghichu);
-        //   const g = !filter.Tonglieutrinh || data.Tonglieutrinh.toLowerCase().includes(filter.Tonglieutrinh);
-        //   const h = !filter.Batdau && !filter.Ketthuc || new Date(data.NgayTaoDV) >= filter.Batdau && new Date(data.NgayTaoDV) <= filter.Ketthuc;
-        //   const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
-        //   return a && b && c && d && e && f && g && h && i;
-        // }) as (PeriodicElement, string) => boolean;
-
-        // this.FilterForm.valueChanges.subscribe(value => {
-        //   console.log(value);
-        //   this.data.filter = value;
-        // });
-        // this.Thanhvien.filterPredicate = ((data, filter) => {
-        //   const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH);
-        //   const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
-        //   const i = !filter.Chinhanh || data.Chinhanh.toLowerCase().includes(filter.Chinhanh);
-        //   const e = !filter.Hanmuctu && !filter.Hanmucden || parseInt(data.Dathu) <= parseInt(filter.Hanmucden) && parseInt(data.Dathu) >= parseInt(filter.Hanmuctu);
-        //   return a && b && e && i;
-        // }) as (PeriodicElement, string) => boolean;
-        // this.ThanhvienForm.valueChanges.subscribe(value => {
-        //   console.log(value);
-        //   this.Thanhvien.filter = value;
-        // });
-      });
+        console.log(idtaza);
+        idtaza.forEach((v,k) => {   
+          console.log(k);
+                 
+          let Sum = 0;
+          const UniKH = this.datataza.filter(v1 => v1.SDT == v);   
+          const getKH = this.datataza.find(v1 => v1.SDT == v);
+          console.log(getKH);
+          if(getKH!=undefined)
+          {
+            UniKH.forEach(v1 => {
+              Sum += parseInt(v1.Dathu);
+            });
+            let x = UniKH.length-1;
+            Thanhvien.push({ 
+              'TenKH': getKH.TenKH,
+              'SDT': getKH.SDT, 
+              'SDT2': getKH.SDT2, 
+              'Dathu': Sum, 
+              'Chinhanh': getKH.Chinhanh,
+              'NgayMD': UniKH[x].NgayTaoDV,
+              'NoiMD': UniKH[x].Chinhanh,
+              'NgayMC': UniKH[0].NgayTaoDV,
+              'NoiMC': UniKH[0].Chinhanh,
+              'Ghichu':getKH.Ghichu
+            })
+         }
+        });
+        //console.log(Thanhvien);
+        if(Thanhvien.length!=0)
+        {
+        Thanhvien.forEach((v, k) => {         
+          setTimeout(() => {
+            this._khachhangsService.CreateMember(v)
+              .subscribe(() => {
+              });
+          }, 10 * k);
+          this._changeDetectorRef.markForCheck();
+        });
+      }
   }
   ChonMember(ob) {
     console.log(ob.value);

@@ -16,7 +16,7 @@
       <button mat-raised-button (click)="LoadDulieu()">Load Dữ Liệu</button>
       <button mat-button class="text-white bg-red-500">{{DataServer.length}}</button>
       <button mat-button class="text-white bg-blue-500">{{DataDrive.length}}</button>
-      <button mat-button class="text-white bg-green-500" (click)="UpdateDulieu(DataDrive)"><span class="material-icons">
+      <button mat-button class="text-white bg-green-500" (click)="UpdateDulieu(datataza)"><span class="material-icons">
         update
         </span>Cập Nhật</button>
         <!-- *ngIf="DataServer.length=DataDrive.length" -->
@@ -29,7 +29,7 @@
     <mat-menu #menu="matMenu" color="primary">
       <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
       <button mat-menu-item color="primary" (click)="GetAllMember()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
-        <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Data</button> -->
+        <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Data</button>
       <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
       <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
       <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
