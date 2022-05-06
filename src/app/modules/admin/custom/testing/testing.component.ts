@@ -8,7 +8,7 @@ import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
 import { TestingService } from './testing.service';
 // const v1lichhop = require('app/v1json/lichhop.json');
 // const v1loai = require('app/v1json/loaihinhhop.json');
-// const v1nhanvien = require('app/v1json/nhanvien.json');
+// const v1nhanvien = require('app/v1json/nhanvien.json');s
 // const congty = require('app/v1json/congty.json');
 //const v2nhanvien = require('app/v1json/v2nhanvien.json');
 //console.log(v1nhanvien); 

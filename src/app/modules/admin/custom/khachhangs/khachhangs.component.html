@@ -268,13 +268,14 @@
         </ng-container>
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
           <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
-          <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.SDT,'SDT')"> {{row.SDT}} </td>
+          <td mat-cell *matCellDef="let row"> {{row.SDT}} 
+            <input class="w-full border border-dashed border-blue-500" *ngIf="CurrentUser.Role=='dev'" matInput [value]="row.SDT" (change)="EditData($event.target.value,row)">
+          </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT2">
@@ -306,7 +307,11 @@
   
         <ng-container matColumnDef="Chinhanh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
-          <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
+          <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} 
+            <span class="material-icons" (click)="DeleteData(row)">
+              delete
+              </span>
+          </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="Ghichu">

@@ -12,7 +12,7 @@ import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khtimona.type';
 import { KhtimonaService } from './khtimona.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-const datatimona = require('app/v1json/datatimona.json');
+//const datatimona = require('app/v1json/datatimona.json');
 @Component({
   selector: 'app-khtimona',
   templateUrl: './khtimona.component.html',
@@ -62,7 +62,7 @@ export class KhtimonaComponent implements OnInit {
   ) {
   }
   ngOnInit(): void {
-    console.log(datatimona);
+    //console.log(datatimona);
     this._khtimonaService.GetData().subscribe();
     this._khtimonaService.GetAllMember().subscribe();
     this.data$ = this._khtimonaService.data$;

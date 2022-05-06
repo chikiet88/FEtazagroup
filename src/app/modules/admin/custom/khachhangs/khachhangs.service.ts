@@ -67,6 +67,21 @@ export class KhachhangsService {
         ))
     );
 }
+DeleteData(id): Observable<any> {
+    return this.data$.pipe(
+        take(1),
+        switchMap(datas => this._httpClient.delete(`${environment.ApiURL}/khachhangs/chitiet/${id}`).pipe(
+            map((isDeleted: boolean) => {
+                const index = datas.findIndex(item => item.id === id);
+                datas.splice(index, 1);
+                this._data.next(datas);
+                return isDeleted;
+            })
+        ))
+    );
+  }
+
+
   CreateMember(dulieu): Observable<any>
   {
     return this.Member$.pipe(

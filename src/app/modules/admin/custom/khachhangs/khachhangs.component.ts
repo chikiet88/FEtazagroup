@@ -12,8 +12,8 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Khachhang, KhachhangMapping } from './khachhang.type';
 import { KhachhangsService } from './khachhangs.service';
-const datataza = require('app/v1json/datataza.json');
-const idtaza = require('app/v1json/idtaza.json');
+// const datataza = require('app/v1json/datataza.json');
+// const idtaza = require('app/v1json/idtaza.json');
 @Component({
   selector: 'app-khachhangs',
   templateUrl: './khachhangs.component.html',
@@ -70,7 +70,7 @@ export class KhachhangsComponent implements OnInit {
   }
   ngOnInit(): void {
     //this.datataza = datataza;
-      this.datataza = datataza.slice(120001,150000);
+     // this.datataza = datataza.slice(120001,150000);
     //this._khachhangsService.GetData().subscribe();
     this._khachhangsService.GetAllMember().subscribe();
     this.data$ = this._khachhangsService.data$;
@@ -318,52 +318,52 @@ export class KhachhangsComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
       });
   }
-  LoadAll() {
-    console.log(this.datataza);
-    this.Showchitiet = true;
-        //const NewUnique = [... new Set(this.datataza.map(v => v.SDT))];
-        const Thanhvien = [];
-        console.log(idtaza);
-        idtaza.forEach((v,k) => {   
-          console.log(k);
+  // LoadAll() {
+  //   console.log(this.datataza);
+  //   this.Showchitiet = true;
+  //       //const NewUnique = [... new Set(this.datataza.map(v => v.SDT))];
+  //       const Thanhvien = [];
+  //       console.log(idtaza);
+  //       idtaza.forEach((v,k) => {   
+  //         console.log(k);
                  
-          let Sum = 0;
-          const UniKH = this.datataza.filter(v1 => v1.SDT == v);   
-          const getKH = this.datataza.find(v1 => v1.SDT == v);
-          console.log(getKH);
-          if(getKH!=undefined)
-          {
-            UniKH.forEach(v1 => {
-              Sum += parseInt(v1.Dathu);
-            });
-            let x = UniKH.length-1;
-            Thanhvien.push({ 
-              'TenKH': getKH.TenKH,
-              'SDT': getKH.SDT, 
-              'SDT2': getKH.SDT2, 
-              'Dathu': Sum, 
-              'Chinhanh': getKH.Chinhanh,
-              'NgayMD': UniKH[x].NgayTaoDV,
-              'NoiMD': UniKH[x].Chinhanh,
-              'NgayMC': UniKH[0].NgayTaoDV,
-              'NoiMC': UniKH[0].Chinhanh,
-              'Ghichu':getKH.Ghichu
-            })
-         }
-        });
-        //console.log(Thanhvien);
-        if(Thanhvien.length!=0)
-        {
-        Thanhvien.forEach((v, k) => {         
-          setTimeout(() => {
-            this._khachhangsService.CreateMember(v)
-              .subscribe(() => {
-              });
-          }, 10 * k);
-          this._changeDetectorRef.markForCheck();
-        });
-      }
-  }
+  //         let Sum = 0;
+  //         const UniKH = this.datataza.filter(v1 => v1.SDT == v);   
+  //         const getKH = this.datataza.find(v1 => v1.SDT == v);
+  //         console.log(getKH);
+  //         if(getKH!=undefined)
+  //         {
+  //           UniKH.forEach(v1 => {
+  //             Sum += parseInt(v1.Dathu);
+  //           });
+  //           let x = UniKH.length-1;
+  //           Thanhvien.push({ 
+  //             'TenKH': getKH.TenKH,
+  //             'SDT': getKH.SDT, 
+  //             'SDT2': getKH.SDT2, 
+  //             'Dathu': Sum, 
+  //             'Chinhanh': getKH.Chinhanh,
+  //             'NgayMD': UniKH[x].NgayTaoDV,
+  //             'NoiMD': UniKH[x].Chinhanh,
+  //             'NgayMC': UniKH[0].NgayTaoDV,
+  //             'NoiMC': UniKH[0].Chinhanh,
+  //             'Ghichu':getKH.Ghichu
+  //           })
+  //        }
+  //       });
+  //       //console.log(Thanhvien);
+  //       if(Thanhvien.length!=0)
+  //       {
+  //       Thanhvien.forEach((v, k) => {         
+  //         setTimeout(() => {
+  //           this._khachhangsService.CreateMember(v)
+  //             .subscribe(() => {
+  //             });
+  //         }, 10 * k);
+  //         this._changeDetectorRef.markForCheck();
+  //       });
+  //     }
+  // }
   ChonMember(ob) {
     console.log(ob.value);
     let currentMember = this.Member.find(v => v.id == ob.value);
@@ -398,6 +398,7 @@ export class KhachhangsComponent implements OnInit {
           v.forEach(v1 => {
             if (v1[type] == value) { x.push(v1) }
           });
+          console.log(x);      
           this.data = new MatTableDataSource(x);
           this.data.paginator = this.DataPag;
           this.data.sort = this.DataSort;
@@ -429,5 +430,19 @@ export class KhachhangsComponent implements OnInit {
       // 100*k
       this._changeDetectorRef.markForCheck();
     });
+  }
+
+  EditData(value,row)
+  {
+    row.SDT = value;
+    this._khachhangsService.UpdateData(row,row.id).subscribe();
+    console.log(value);
+    console.log(row);
+    
+  }
+  DeleteData(row)
+  {
+    this._khachhangsService.DeleteData(row.id).subscribe();
+    console.log(row);
   }
 }
