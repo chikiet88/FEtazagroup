@@ -288,8 +288,8 @@ import { KhachhangsService } from '../khachhangs.service';
   }
   EditData(value,row)
   {
-    row.SDT = value;
-    this._khachhangsService.UpdateDataTaza(row,row.id).subscribe();
+   row.SDT = value;
+   this._khachhangsService.UpdateDataTaza(row,row.id).subscribe();
   }
   DeleteData(row)
   {

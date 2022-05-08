@@ -130,7 +130,6 @@
       <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
           <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>

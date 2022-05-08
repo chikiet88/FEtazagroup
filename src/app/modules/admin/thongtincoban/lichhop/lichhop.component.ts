@@ -412,6 +412,10 @@ onRemove(event) {
       }
   }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    console.log(date, events);
+    this.Opentoggle();
+    this.LichhopForm.get('Batdau').setValue(date);
+    this.LichhopForm.get('Ketthuc').setValue(date);
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
