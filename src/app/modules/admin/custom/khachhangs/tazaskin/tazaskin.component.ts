@@ -61,7 +61,6 @@ import { KhachhangsService } from '../khachhangs.service';
     this._userService.user$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((user: User) => {
-        console.log(user);
         this.CurrentUser = user;
         Object.keys(this.CurrentUser.Phanquyen).forEach(key => {
           if (!this.CurrentUser.Phanquyen[key]) delete this.CurrentUser.Phanquyen[key];
@@ -73,7 +72,6 @@ import { KhachhangsService } from '../khachhangs.service';
       this.CauhinhChinhanh = data.find(v => v.id == "6e2ea777-f6e8-4738-854b-85e60655f335").detail;
     }
     );
-
     this.Member = [
       { id: 0, tieude: "All", Tu: '', Den: '' },
       { id: 1, tieude: "Normal", Tu: 0, Den: 50000000 },
@@ -113,7 +111,6 @@ import { KhachhangsService } from '../khachhangs.service';
       Batdau: [new Date()],
       Ketthuc: [new Date()],
     });
-
   }
   LoadAll()
   {
@@ -129,8 +126,6 @@ import { KhachhangsService } from '../khachhangs.service';
           {
             UniKH[0].NgayMD = UniKH[0].NgayMC = UniKH[0].NgayTaoDV;
             UniKH[0].NoiMD  = UniKH[0].NoiMC = UniKH[0].Chinhanh;
-            console.log(UniKH);
-            console.log(UniKH[0]);
             Thanhvien.push(UniKH[0]);
           }
           else
@@ -153,10 +148,21 @@ import { KhachhangsService } from '../khachhangs.service';
           }
            
         });
-        console.log(Thanhvien);
         this.datamember = new MatTableDataSource(Thanhvien);
         this.datamember.paginator = this.MemberPag;
         this.datamember.sort = this.MemberSort;
+        this.datamember.filterPredicate = ((data, filter) => {
+          const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH.toLowerCase());
+          const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
+          const i = !filter.Chinhanh || data.Chinhanh.includes(filter.Chinhanh);
+          const e = !filter.Hanmuctu && !filter.Hanmucden || data.Dathu <= filter.Hanmucden && data.Dathu >= filter.Hanmuctu;
+          const c = !filter.NgayMDStart && !filter.NgayMDEnd || new Date(data.NgayMD) <= filter.NgayMDEnd && new Date(data.NgayMD) >= filter.NgayMDStart;
+          const d = !filter.NgayMCStart && !filter.NgayMCEnd || new Date(data.NgayMC) <= filter.NgayMCEnd && new Date(data.NgayMC) >= filter.NgayMCStart;
+          return a && b && e && i && c && d;
+        }) as (PeriodicElement, string) => boolean;
+        this.Filtermember.valueChanges.subscribe(value => {
+          this.datamember.filter = value;
+        });
       }
     )
   }
@@ -174,14 +180,12 @@ import { KhachhangsService } from '../khachhangs.service';
         if (Khachhang != null) {
           this.DataServer = Khachhang.filter(v => new Date(v.NgayTaoDV) >= BD && new Date(v.NgayTaoDV) <= KT);
         }
-       console.log(this.DataServer);
       })
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
       environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
     this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
-        console.log(Khachhang)
         Khachhang.forEach(v => {
           v.Doanhso = v.Doanhso.replace(/\,/g, '').replace(/\./g, '');
           v.Tonglieutrinh = v.Tonglieutrinh.replace(/\,/g, '').replace(/\./g, '');
@@ -190,16 +194,14 @@ import { KhachhangsService } from '../khachhangs.service';
           v.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
         });
         this.DataDrive = Khachhang.filter(v => v.NgayTaoDV >= BD && v.NgayTaoDV <= KT);
-        console.log(this.DataDrive)
       });
   }
-
   UpdateDulieu(data) {
     data.forEach((v, k) => {
       setTimeout(() => {
         this._khachhangsService.CreateDataTaza(v).subscribe();
       this._changeDetectorRef.markForCheck();
-    });
+    },k*10);
   })
   }
   Tongcong(data, field) {
@@ -210,7 +212,6 @@ import { KhachhangsService } from '../khachhangs.service';
     this.Filtermember.reset();
   }
   LoadData(Chinhanh) {
-    console.log(Chinhanh);
     this.Showchitiet = false;
     this._khachhangsService.GetDataTazaByChiNhanh(Chinhanh).subscribe();
     this._khachhangsService.datastaza$.subscribe((data)=>
@@ -224,8 +225,6 @@ import { KhachhangsService } from '../khachhangs.service';
           {
             UniKH[0].NgayMD = UniKH[0].NgayMC = UniKH[0].NgayTaoDV;
             UniKH[0].NoiMD  = UniKH[0].NoiMC = UniKH[0].Chinhanh;
-            console.log(UniKH);
-            console.log(UniKH[0]);
             Thanhvien.push(UniKH[0]);
           }
           else
@@ -248,12 +247,9 @@ import { KhachhangsService } from '../khachhangs.service';
           }
            
         });
-        console.log(Thanhvien);
-
         this.datamember = new MatTableDataSource(Thanhvien);
         this.datamember.paginator = this.MemberPag;
         this.datamember.sort = this.MemberSort;
-
         this.datamember.filterPredicate = ((data, filter) => {
           const a = !filter.TenKH || data.TenKH.toLowerCase().includes(filter.TenKH.toLowerCase());
           const b = !filter.SDT || data.SDT.toLowerCase().includes(filter.SDT);
@@ -264,23 +260,17 @@ import { KhachhangsService } from '../khachhangs.service';
           return a && b && e && i && c && d;
         }) as (PeriodicElement, string) => boolean;
         this.Filtermember.valueChanges.subscribe(value => {
-           console.log(value)
           this.datamember.filter = value;
         });
       }
     )
   }
   ChonMember(ob) {
-    console.log(ob.value);
     let currentMember = this.Member.find(v => v.id == ob.value);
-    console.log(currentMember);
-    console.log(this.Filtermember);
     this.Filtermember.get('Hanmuctu').setValue(currentMember.Tu);
     this.Filtermember.get('Hanmucden').setValue(currentMember.Den);
-    console.log(this.Filtermember); 
   }
-  LoadKHSDT(value, type) {
-    console.log(value, type);
+  LoadKHSDT(value) {
     this.Showchitiet = true;
     this.Filtermember.get('SDT').setValue(value);
     const Selectdata = this.Alldata.filter(v=>v.SDT ==value);
@@ -296,33 +286,13 @@ import { KhachhangsService } from '../khachhangs.service';
       this.Khachhang.paginator.firstPage();
     }
   }
-  // CreateData(dulieu: any): void {
-  //   //console.log(dulieu)
-  //   dulieu.forEach(v1 => {
-  //     let x = v1.NgayTaoDV.toString().split("/");
-  //     v1.NgayTaoDV = new Date(Number(x[2]), Number(x[1]) - 1, Number(x[0]));
-  //   });
-  //   dulieu.forEach((v, k) => {
-  //     setTimeout(() => {
-  //       this._khachhangsService.CreateData(v)
-  //         .subscribe((response) => {
-  //         });
-  //     }, 10 * k);
-  //     // 100*k
-  //     this._changeDetectorRef.markForCheck();
-  //   });
-  // }
-
   EditData(value,row)
   {
     row.SDT = value;
     this._khachhangsService.UpdateDataTaza(row,row.id).subscribe();
-    console.log(value);
-    console.log(row);
   }
   DeleteData(row)
   {
     this._khachhangsService.DeleteDataTaza(row.id).subscribe();
-    console.log(row);
   }
 }
