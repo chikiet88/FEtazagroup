@@ -1,570 +1,246 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { fuseAnimations } from '@fuse/animations';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { TailieunguonService } from './tailieunguon.service';
-import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/admin/apps/ecommerce/inventory/inventory.types';
-import { InventoryService } from 'app/modules/admin/apps/ecommerce/inventory/inventory.service';
+import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+    MatTreeFlatDataSource,
+    MatTreeFlattener,
+} from '@angular/material/tree';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FileUpload } from '../models/file-upload.model';
+import { FileUploadService } from '../services/file-upload.service';
+import { UploadFileComponent } from './upload-file/upload-file.component';
+import { TailienguonService } from './tailienguon.service';
+import { Files } from './tailieunguon.types';
+
+interface ExampleFlatNode {
+    expandable: boolean;
+    item: string;
+    level: number;
+}
 @Component({
-    selector       : 'tailieunguon',
-    templateUrl    : './tailieunguon.component.html',
-    encapsulation  : ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-tailieunguon',
+    templateUrl: './tailieunguon.component.html',
+    styleUrls: ['./tailieunguon.component.scss'],
 })
-export class TailieunguonComponent implements OnInit, OnDestroy
-{
-    @ViewChild(MatPaginator) private _paginator: MatPaginator;
-    @ViewChild(MatSort) private _sort: MatSort;
+export class TailieunguonComponent implements OnInit {
+    selectedFiles?: FileList;
+    currentFileUpload?: FileUpload;
+    percentage = 0;
+    folderList: FormGroup;
+    fileList: FormGroup;
+    dataList: FormGroup;
+    files: any;
+    filedetail: any;
+    public Editor = ClassicEditor;
+    showFiller = true;
+    deleteFile = false;
 
-    products$: Observable<InventoryProduct[]>;
-
-    brands: InventoryBrand[];
-    categories: InventoryCategory[];
-    filteredTags: InventoryTag[];
-    flashMessage: 'success' | 'error' | null = null;
-    isLoading: boolean = false;
-    pagination: InventoryPagination;
-    searchInputControl: FormControl = new FormControl();
-    selectedProduct: InventoryProduct | null = null;
-    selectedProductForm: FormGroup;
-    tags: InventoryTag[];
-    tagsEditMode: boolean = false;
-    vendors: InventoryVendor[];
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    /**
-     * Constructor
-     */
-    constructor(
-        private _changeDetectorRef: ChangeDetectorRef,
-        private _fuseConfirmationService: FuseConfirmationService,
-        private _formBuilder: FormBuilder,
-        private _inventoryService: InventoryService
-    )
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        // Create the selected product form
-        this.selectedProductForm = this._formBuilder.group({
-            id               : [''],
-            category         : [''],
-            name             : ['', [Validators.required]],
-            description      : [''],
-            tags             : [[]],
-            sku              : [''],
-            barcode          : [''],
-            brand            : [''],
-            vendor           : [''],
-            stock            : [''],
-            reserved         : [''],
-            cost             : [''],
-            basePrice        : [''],
-            taxPercent       : [''],
-            price            : [''],
-            weight           : [''],
-            thumbnail        : [''],
-            images           : [[]],
-            currentImageIndex: [0], // Image index that is currently being viewed
-            active           : [false]
-        });
-
-        // Get the brands
-        this._inventoryService.brands$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((brands: InventoryBrand[]) => {
-
-                // Update the brands
-                this.brands = brands;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the categories
-        this._inventoryService.categories$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((categories: InventoryCategory[]) => {
-
-                // Update the categories
-                this.categories = categories;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the pagination
-        this._inventoryService.pagination$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((pagination: InventoryPagination) => {
-
-                // Update the pagination
-                this.pagination = pagination;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the products
-        this.products$ = this._inventoryService.products$;
-
-        // Get the tags
-        this._inventoryService.tags$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((tags: InventoryTag[]) => {
-
-                // Update the tags
-                this.tags = tags;
-                this.filteredTags = tags;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the vendors
-        this._inventoryService.vendors$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((vendors: InventoryVendor[]) => {
-
-                // Update the vendors
-                this.vendors = vendors;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Subscribe to search input field value changes
-        this.searchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(300),
-                switchMap((query) => {
-                    this.closeDetails();
-                    this.isLoading = true;
-                    return this._inventoryService.getProducts(0, 10, 'name', 'asc', query);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                })
-            )
-            .subscribe();
-    }
-
-    /**
-     * After view init
-     */
-    ngAfterViewInit(): void
-    {
-        if ( this._sort && this._paginator )
-        {
-            // Set the initial sort
-            this._sort.sort({
-                id          : 'name',
-                start       : 'asc',
-                disableClear: true
-            });
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-
-            // If the user changes the sort order...
-            this._sort.sortChange
-                .pipe(takeUntil(this._unsubscribeAll))
-                .subscribe(() => {
-                    // Reset back to the first page
-                    this._paginator.pageIndex = 0;
-
-                    // Close the details
-                    this.closeDetails();
-                });
-
-            // Get products if sort or page changes
-            merge(this._sort.sortChange, this._paginator.page).pipe(
-                switchMap(() => {
-                    this.closeDetails();
-                    this.isLoading = true;
-                    return this._inventoryService.getProducts(this._paginator.pageIndex, this._paginator.pageSize, this._sort.active, this._sort.direction);
-                }),
-                map(() => {
-                    this.isLoading = false;
-                })
-            ).subscribe();
-        }
-    }
-
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Toggle product details
-     *
-     * @param productId
-     */
-    toggleDetails(productId: string): void
-    {
-        // If the product is already selected...
-        if ( this.selectedProduct && this.selectedProduct.id === productId )
-        {
-            // Close the details
-            this.closeDetails();
-            return;
-        }
-
-        // Get the product by id
-        this._inventoryService.getProductById(productId)
-            .subscribe((product) => {
-
-                // Set the selected product
-                this.selectedProduct = product;
-
-                // Fill the form
-                this.selectedProductForm.patchValue(product);
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-    }
-
-    /**
-     * Close the details
-     */
-    closeDetails(): void
-    {
-        this.selectedProduct = null;
-    }
-
-    /**
-     * Cycle through images of selected product
-     */
-    cycleImages(forward: boolean = true): void
-    {
-        // Get the image count and current image index
-        const count = this.selectedProductForm.get('images').value.length;
-        const currentIndex = this.selectedProductForm.get('currentImageIndex').value;
-
-        // Calculate the next and previous index
-        const nextIndex = currentIndex + 1 === count ? 0 : currentIndex + 1;
-        const prevIndex = currentIndex - 1 < 0 ? count - 1 : currentIndex - 1;
-
-        // If cycling forward...
-        if ( forward )
-        {
-            this.selectedProductForm.get('currentImageIndex').setValue(nextIndex);
-        }
-        // If cycling backwards...
-        else
-        {
-            this.selectedProductForm.get('currentImageIndex').setValue(prevIndex);
-        }
-    }
-
-    /**
-     * Toggle the tags edit mode
-     */
-    toggleTagsEditMode(): void
-    {
-        this.tagsEditMode = !this.tagsEditMode;
-    }
-
-    /**
-     * Filter tags
-     *
-     * @param event
-     */
-    filterTags(event): void
-    {
-        // Get the value
-        const value = event.target.value.toLowerCase();
-
-        // Filter the tags
-        this.filteredTags = this.tags.filter(tag => tag.title.toLowerCase().includes(value));
-    }
-
-    /**
-     * Filter tags input key down event
-     *
-     * @param event
-     */
-    filterTagsInputKeyDown(event): void
-    {
-        // Return if the pressed key is not 'Enter'
-        if ( event.key !== 'Enter' )
-        {
-            return;
-        }
-
-        // If there is no tag available...
-        if ( this.filteredTags.length === 0 )
-        {
-            // Create the tag
-            this.createTag(event.target.value);
-
-            // Clear the input
-            event.target.value = '';
-
-            // Return
-            return;
-        }
-
-        // If there is a tag...
-        const tag = this.filteredTags[0];
-        const isTagApplied = this.selectedProduct.tags.find(id => id === tag.id);
-
-        // If the found tag is already applied to the product...
-        if ( isTagApplied )
-        {
-            // Remove the tag from the product
-            this.removeTagFromProduct(tag);
-        }
-        else
-        {
-            // Otherwise add the tag to the product
-            this.addTagToProduct(tag);
-        }
-    }
-
-    /**
-     * Create a new tag
-     *
-     * @param title
-     */
-    createTag(title: string): void
-    {
-        const tag = {
-            title
+    private _transformer = (node: Files, level: number) => {
+        return {
+            expandable: !!node.children && node.children.length > 0,
+            id: node.id,
+            parentid: node.parentid,
+            item: node.item,
+            type: node.type,
+            level: level,
         };
+    };
+    constructor(
+        private tailieunguonService: TailienguonService,
+        private fb: FormBuilder,
+        private uploadService: FileUploadService
+    ) {}
 
-        // Create tag on the server
-        this._inventoryService.createTag(tag)
-            .subscribe((response) => {
+    treeControl = new FlatTreeControl<ExampleFlatNode>(
+        (node) => node.level,
+        (node) => node.expandable
+    );
 
-                // Add the tag to the product
-                this.addTagToProduct(response);
-            });
-    }
+    treeFlattener = new MatTreeFlattener(
+        this._transformer,
+        (node) => node.level,
+        (node) => node.expandable,
+        (node) => node.children
+    );
 
-    /**
-     * Update the tag title
-     *
-     * @param tag
-     * @param event
-     */
-    updateTagTitle(tag: InventoryTag, event): void
-    {
-        // Update the title on the tag
-        tag.title = event.target.value;
-
-        // Update the tag on the server
-        this._inventoryService.updateTag(tag.id, tag)
-            .pipe(debounceTime(300))
+    dataSource = new MatTreeFlatDataSource(
+        this.treeControl,
+        this.treeFlattener
+    );
+    hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+    addFolder() {
+        this.folderList = this.fb.group({
+            item: ['New Folder'],
+            type: ['folder'],
+            parentid: 0,
+        });
+        this.tailieunguonService
+            .addFolder(this.folderList.value)
             .subscribe();
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+            alert('Vui lòng đổi tên Folder')
+            
     }
 
-    /**
-     * Delete the tag
-     *
-     * @param tag
-     */
-    deleteTag(tag: InventoryTag): void
-    {
-        // Delete the tag from the server
-        this._inventoryService.deleteTag(tag.id).subscribe();
+    addFolderChild(id) {
+        this.folderList.get('parentid').setValue(id);
 
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+        this.tailieunguonService.addFolder(this.folderList.value).subscribe();
+    }
+    updateFile(data, e) {
+        this.fileList.addControl('id', new FormControl(data.id));
+        this.fileList.get('id').setValue(data.id);
+        this.fileList.get('parentid').setValue(data.parentid);
+
+        this.fileList.get('item').setValue(e.target.value);
+
+        this.tailieunguonService.updateFile(this.fileList.value).subscribe();
+        this.ngOnInit();
+    }
+    updateFolder(data, e) {
+        this.folderList.addControl('id', new FormControl(data.id));
+        this.folderList.get('id').setValue(data.id);
+        this.folderList.get('parentid').setValue(data.parentid);
+        this.folderList.get('item').setValue(e.target.value);
+        this.tailieunguonService.updateFile(this.folderList.value).subscribe();
+        this.ngOnInit();
+    }
+    // getKey(key:string){
+    //     this.folderList.addControl('key', new FormControl(key));
+    //     this.folderList.get('key').setValue(key);
+    // }
+    getFileDetail(data) {
+        this.tailieunguonService.getFileDetail(data.id).subscribe();
+        this.tailieunguonService.file$.subscribe((res) => {
+            this.filedetail = res;
+            this.fileList
+                .get('data.tailieu')
+                .setValue(this.filedetail.data.tailieu);
+            this.fileList.get('data.tag').setValue(this.filedetail.data.tag);
+            this.fileList.get('data.date').setValue(this.filedetail.data.date);
+            this.fileList
+                .get('data.deadline')
+                .setValue(this.filedetail.data.deadline);
+            this.fileList
+                .get('data.content')
+                .setValue(this.filedetail.data.content);
+            this.fileList.get('data.note').setValue(this.filedetail.data.note);
+            this.fileList
+                .get('data.sameAuthor')
+                .setValue(this.filedetail.data.sameAuthor);
+            this.fileList
+                .get('data.censor')
+                .setValue(this.filedetail.data.censor);
+        });
+        this.deleteFile = false;
     }
 
-    /**
-     * Add tag to the product
-     *
-     * @param tag
-     */
-    addTagToProduct(tag: InventoryTag): void
-    {
-        // Add the tag
-        this.selectedProduct.tags.unshift(tag.id);
-
-        // Update the selected product form
-        this.selectedProductForm.get('tags').patchValue(this.selectedProduct.tags);
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+    addFile(id) {
+        this.fileList = this.fb.group({
+            item: ['New File'],
+            type: ['file'],
+            data: this.fb.group({
+                tag: [''],
+                idmenu: [0],
+                tailieu: [''],
+                date: [''],
+                deadline: [''],
+                content: [''],
+                note: [''],
+                author: [''],
+                sameAuthor: [''],
+                censor: [''],
+            }),
+            parentid: [0],
+        });
+        this.fileList.get('parentid').setValue(id);
+        this.tailieunguonService.addFolder(this.fileList.value).subscribe();
+        alert('Vui lòng đổi tên File');
     }
 
-    /**
-     * Remove tag from the product
-     *
-     * @param tag
-     */
-    removeTagFromProduct(tag: InventoryTag): void
-    {
-        // Remove the tag
-        this.selectedProduct.tags.splice(this.selectedProduct.tags.findIndex(item => item === tag.id), 1);
-
-        // Update the selected product form
-        this.selectedProductForm.get('tags').patchValue(this.selectedProduct.tags);
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Toggle product tag
-     *
-     * @param tag
-     * @param change
-     */
-    toggleProductTag(tag: InventoryTag, change: MatCheckboxChange): void
-    {
-        if ( change.checked )
-        {
-            this.addTagToProduct(tag);
+    onSubmit() {
+        if (!this.filedetail.id) {
+            alert('Vui lòng tạo file mới');
+        } else {
+            this.fileList.removeControl('parentid');
+            this.fileList.addControl('id', new FormControl(this.filedetail.id));
+            this.fileList.get('id').setValue(this.filedetail.id);
+            this.tailieunguonService
+                .updateFileDetail(this.fileList.value)
+                .subscribe();
         }
-        else
-        {
-            this.removeTagFromProduct(tag);
-        }
     }
 
-    /**
-     * Should the create tag button be visible
-     *
-     * @param inputValue
-     */
-    shouldShowCreateTagButton(inputValue: string): boolean
-    {
-        return !!!(inputValue === '' || this.tags.findIndex(tag => tag.title.toLowerCase() === inputValue.toLowerCase()) > -1);
+    deleteFileDetail() {
+        this.tailieunguonService
+            .deleteFileDetail(this.filedetail.id)
+            .subscribe();
+        this.deleteFile = true;
+        this.ngOnInit()
     }
 
-    /**
-     * Create product
-     */
-    createProduct(): void
-    {
-        // Create the product
-        this._inventoryService.createProduct().subscribe((newProduct) => {
-
-            // Go to new product
-            this.selectedProduct = newProduct;
-
-            // Fill the form
-            this.selectedProductForm.patchValue(newProduct);
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
+    deleteFileUpload(fileUpload: FileUpload): void {
+        this.fileList = this.fb.group({
+            item: ['New File'],
+            type: ['file'],
+            data: this.fb.group({
+                tag: [''],
+                idmenu: [0],
+                tailieu: [''],
+                date: [''],
+                deadline: [''],
+                content: [''],
+                note: [''],
+                author: [''],
+                sameAuthor: [''],
+                censor: [''],
+            }),
+            parentid: [0],
         });
+        this.uploadService.deleteFile(fileUpload);
     }
 
-    /**
-     * Update the selected product using the form data
-     */
-    updateSelectedProduct(): void
-    {
-        // Get the product object
-        const product = this.selectedProductForm.getRawValue();
+    selectFile(event: any): void {
+        this.selectedFiles = event.target.files;
+    }
 
-        // Remove the currentImageIndex field
-        delete product.currentImageIndex;
-
-        // Update the product on the server
-        this._inventoryService.updateProduct(product.id, product).subscribe(() => {
-
-            // Show a success message
-            this.showFlashMessage('success');
+    ngOnInit(): void {
+        this.folderList = this.fb.group({
+            item: ['New Folder'],
+            type: ['folder'],
+            parentid: 0,
         });
-    }
-
-    /**
-     * Delete the selected product using the form data
-     */
-    deleteSelectedProduct(): void
-    {
-        // Open the confirmation dialog
-        const confirmation = this._fuseConfirmationService.open({
-            title  : 'Delete product',
-            message: 'Are you sure you want to remove this product? This action cannot be undone!',
-            actions: {
-                confirm: {
-                    label: 'Delete'
-                }
-            }
+        this.fileList = this.fb.group({
+            item: ['New File'],
+            type: ['file'],
+            data: this.fb.group({
+                tag: [''],
+                idmenu: [0],
+                tailieu: [''],
+                date: [''],
+                deadline: [''],
+                content: [''],
+                note: [''],
+                author: [''],
+                sameAuthor: [''],
+                censor: [''],
+            }),
+            parentid: [0],
         });
 
-        // Subscribe to the confirmation dialog closed action
-        confirmation.afterClosed().subscribe((result) => {
+        this.tailieunguonService.getFile().subscribe();
+        this.tailieunguonService.files$.subscribe((result) => {
+            // this.files = nest(result)
 
-            // If the confirm button pressed...
-            if ( result === 'confirmed' )
-            {
-
-                // Get the product object
-                const product = this.selectedProductForm.getRawValue();
-
-                // Delete the product on the server
-                this._inventoryService.deleteProduct(product.id).subscribe(() => {
-
-                    // Close the details
-                    this.closeDetails();
-                });
-            }
+            this.dataSource.data = nest(result);
         });
+
+        const nest = (items, id = '', link = 'parentid') =>
+            items
+                .filter((item) => item[link] == id)
+                .map((item) => ({
+                    ...item,
+                    children: nest(items, item.id),
+                }));
     }
-
-    /**
-     * Show flash message
-     */
-    showFlashMessage(type: 'success' | 'error'): void
-    {
-        // Show the message
-        this.flashMessage = type;
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-
-        // Hide it after 3 seconds
-        setTimeout(() => {
-
-            this.flashMessage = null;
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        }, 3000);
-    }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
-    trackByFn(index: number, item: any): any
-    {
-        return item.id || index;
-    }
+    @ViewChild(UploadFileComponent) comp: UploadFileComponent;
 }

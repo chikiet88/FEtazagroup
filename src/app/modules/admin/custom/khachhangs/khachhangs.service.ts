@@ -81,19 +81,27 @@ export class KhachhangsService {
         ))
     );
 }
+// DeleteDataTaza(id): Observable<any> {
+//     return this.datastaza$.pipe(
+//         take(1),
+//         switchMap(datas => this._httpClient.delete(`${environment.ApiURL}/khachhangs/chitiet/${id}`).pipe(
+//             map((isDeleted: boolean) => {
+//                 const index = datas.findIndex(item => item.id === id);
+//                 datas.splice(index, 1);
+//                 this._datastaza.next(datas);
+//                 return isDeleted;
+//             })
+//         ))
+//     );
+//   }
 DeleteDataTaza(id): Observable<any> {
-    return this.datastaza$.pipe(
-        take(1),
-        switchMap(datas => this._httpClient.delete(`${environment.ApiURL}/khachhangs/chitiet/${id}`).pipe(
-            map((isDeleted: boolean) => {
-                const index = datas.findIndex(item => item.id === id);
-                datas.splice(index, 1);
-                this._datastaza.next(datas);
-                return isDeleted;
-            })
-        ))
-    );
-  }
+    return this._httpClient.delete(`${environment.ApiURL}/khachhangs/chitiet/${id}`).pipe(
+      tap(() => {
+          
+      })
+  );
+  } 
+
  GetAllDataTimona():  Observable<Khachhang[]>
   {
       return this._httpClient.get(`${environment.ApiURL}/khtimona/khtimonachitiet`).pipe(
@@ -148,17 +156,25 @@ DeleteDataTaza(id): Observable<any> {
         ))
     );
 }
-DeleteDataTimona(id): Observable<any> {
-    return this.datastimona$.pipe(
-        take(1),
-        switchMap(datas => this._httpClient.delete(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`).pipe(
-            map((isDeleted: boolean) => {
-                const index = datas.findIndex(item => item.id === id);
-                datas.splice(index, 1);
-                this._datastimona.next(datas);
-                return isDeleted;
-            })
-        ))
+
+// DeleteDataTimona(id): Observable<any> {
+//     return this.datastimona$.pipe(
+//         take(1),
+//         switchMap(datas => this._httpClient.delete(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`).pipe(
+//             map((isDeleted: boolean) => {
+//                 const index = datas.findIndex(item => item.id === id);
+//                 datas.splice(index, 1);
+//                 this._datastimona.next(datas);
+//                 return isDeleted;
+//             })
+//         ))
+//     );
+//   }
+  DeleteDataTimona(id): Observable<any> {
+      return this._httpClient.delete(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`).pipe(
+        tap(() => {
+            
+        })
     );
-  }
+    }  
 }
