@@ -1,10 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { Observable } from 'rxjs';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
+import { Khachhang } from '../khachhangs/khachhang.type';
+import { KhachhangsService } from '../khachhangs/khachhangs.service';
 import { TestingService } from './testing.service';
 // const v1lichhop = require('app/v1json/lichhop.json');
 // const v1loai = require('app/v1json/loaihinhhop.json');
@@ -54,15 +60,55 @@ export class TestingComponent implements OnInit {
   nhanviens:Nhanvien[];
   user:User;
   noti:any;
+  data$: Observable<Khachhang[]>;
   constructor(
     private _formBuilder:FormBuilder,
     private _userService:UserService,
     private _nhanvienService:NhanvienService,
-    private _testingService:TestingService
+    private _testingService:TestingService,
+    private _khachhangsService: KhachhangsService,
   ) {}
-
+  @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
+  @ViewChild('DataSort', { static: false }) DataSort: MatSort;
+  UniData:any
   ngOnInit(): void {
-
+    this._khachhangsService.GetAllDataTaza().subscribe();
+    this.data$ = this._khachhangsService.datastaza$;
+    this.data$.subscribe((data)=>
+    {
+      this.UniData = [... new Set(data.map(v => v.SDT))]
+       const Thanhvien = [];
+       this.UniData.forEach((v,k) => {   
+          console.log(k);      
+          let Sum = 0;
+          const UniKH = data.filter(v1 => v1.SDT == v);   
+          const getKH = data.find(v1 => v1.SDT == v);
+          console.log(getKH);
+          if(getKH!=undefined)
+          {
+            UniKH.forEach(v1 => {
+              Sum += parseInt(v1.Dathu);
+            });
+            let x = UniKH.length-1;
+            Thanhvien.push({ 
+              'TenKH': getKH.TenKH,
+              'SDT': getKH.SDT, 
+              'SDT2': getKH.SDT2, 
+              'Dathu': Sum, 
+              'Chinhanh': getKH.Chinhanh,
+              'NgayMD': UniKH[x].NgayTaoDV,
+              'NoiMD': UniKH[x].Chinhanh,
+              'NgayMC': UniKH[0].NgayTaoDV,
+              'NoiMC': UniKH[0].Chinhanh,
+              'Ghichu':getKH.Ghichu
+            })
+         }
+        });
+      console.log(Thanhvien);
+      console.log(this.UniData);
+      
+    }
+    )
     this._userService.user$.subscribe((data)=>
     {
         this.user = data

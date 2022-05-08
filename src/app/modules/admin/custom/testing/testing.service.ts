@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Character, Khachhang } from '../thongkekh/character.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,15 +32,5 @@ export class TestingService {
           })
       );
   }
-  GetData():  Observable<Character[]>
-  {
-      return this._httpClient.get(`${environment.ApiURL}/notification`).pipe(
-          tap((Character: Character[]) => {
-            this._data.next(Character);
-           // console.log(Character);
-          })
-      );
-   }
-
 
 }

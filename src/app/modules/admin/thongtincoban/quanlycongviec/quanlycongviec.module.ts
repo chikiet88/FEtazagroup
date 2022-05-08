@@ -28,8 +28,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FuseMasonryModule } from '@fuse/components/masonry';
 import { SharedModule } from 'app/shared/shared.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
-import { GanttChartAngularModule } from 'gantt-chart-angular';
-
+import { GoogleChartsModule } from 'angular-google-charts';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -64,7 +63,7 @@ const quanlycongviecRoutes: Route[] = [
 @NgModule({
   declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent],
   imports: [
-    GanttChartAngularModule,
+    GoogleChartsModule,
     CKEditorModule,
     FindbyidModule,
     TimkiemModule,

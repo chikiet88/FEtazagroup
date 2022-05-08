@@ -59,7 +59,7 @@ export class FuseLoadingBarComponent implements OnChanges, OnInit, OnDestroy
         this._fuseLoadingService.progress$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((value) => {
-                this.progress = value;
+                this.progress = value;               
             });
 
         this._fuseLoadingService.show$

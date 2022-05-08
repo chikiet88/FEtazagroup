@@ -19,7 +19,6 @@ import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MaterialExampleModule } from 'material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule } from '@tinymce/tinymce-angular';
-import { GanttChartAngularModule } from 'gantt-chart-angular';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -71,7 +70,6 @@ const customNotifierOptions: NotifierOptions = {
         CauhinhComponent,
     ],
     imports     : [
-      GanttChartAngularModule,
       EditorModule,
       BrowserModule,
       HttpClientModule,

@@ -6,68 +6,112 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 
 export class MuctieuComponent implements OnInit {
-  config:any;
   constructor() {
   }
-  
+  title = 'Browser market shares at a specific website, 2014';
+  type = 'Gantt';
+  chartColumns = [
+    { type: 'string', id: 'Task ID' },
+    { type: 'string', id: 'Task Name' },
+    { type: 'string', id: 'Resource' },
+    { type: 'date', id: 'Start' },
+    { type: 'date', id: 'End' },
+    { type: 'number', id: 'Duration' },
+    { type: 'number', id: 'Percent Complete' },
+    { type: 'string', id: 'Dependencies' },
+  ]
+  data = [
+    [
+      "toTrain",
+      "Walk to train stop",
+      "walk",
+      null,
+      null,
+      this.toMilliseconds(5),
+      100,
+      null,
+    ],
+    [
+      "music",
+      "Listen to music",
+      "music",
+      null,
+      null,
+      this.toMilliseconds(70),
+      100,
+      null,
+    ],
+    [
+      "wait",
+      "Wait for train",
+      "wait",
+      null,
+      null,
+      this.toMilliseconds(10),
+      100,
+      "toTrain",
+    ],
+    [
+      "train",
+      "Train ride",
+      "train",
+      null,
+      null,
+      this.toMilliseconds(45),
+      75,
+      "wait",
+    ],
+    [
+      "toWork",
+      "Walk to work",
+      "walk",
+      null,
+      null,
+      this.toMilliseconds(10),
+      0,
+      "train",
+    ]
+  ];
+  options = {
+    height: 275,
+    gantt: {
+      criticalPathEnabled: false, // Critical path arrows will be the same as other arrows.
+      arrow: {
+        angle: 50,
+        width: 1,
+        color: 'white',
+        radius: 2
+      },
+      labelStyle: {
+        fontName: 'Open Sans',
+        fontSize: 14,
+        color: 'white'
+      },
+      barCornerRadius: 2,
+      backgroundColor: {
+        fill: 'transparent',
+      },
+      innerGridHorizLine: {
+        stroke: '#ddd',
+        strokeWidth: 0,
+      },
+      innerGridTrack: {
+        fill: 'transparent'
+      },
+      innerGridDarkTrack: {
+        fill: 'transparent'
+      },
+      percentEnabled:	true, 
+      shadowEnabled: true,	
+      shadowColor: 'white',
+      shadowOffset: 2,
+    }
+  };
   ngOnInit(): void {
-    this.config = {
-      columns: [
-        {type: 'string', name: 'ID', field: 'id'},
-        {type: 'string', name: 'Name', field: 'name'},
-        {type: 'date', name: 'Start Date', field: 'startDate'},
-        {type: 'date', name: 'End Date', field: 'endDate'},
-        {type: 'number', name: 'Duration', field: 'duration'},
-        {type: 'number', name: 'Percentage Complete', field: 'percentComplete'},
-        {type: 'string', name: 'Pending Reasons', field: 'pendingReasons'}
-      ], data: [
-        {
-          id: 'setup',
-          name: 'Angular',
-          startDate: new Date(2021, 2, 10),
-          endDate: new Date(2021, 2, 11),
-          duration: 2,
-          percentComplete:  100,
-          pendingReasons: null
-        }, {
-          id: 'Start Development',
-          name: 'Login Feature',
-          startDate: new Date(2021, 2, 13),
-          endDate: new Date(2021, 2, 14),
-          duration: 2,
-          percentComplete:  0,
-          pendingReasons: null
-        },{
-          id: 'Test',
-          name: 'Test Login Feature',
-          startDate: new Date(2021, 2, 16),
-          endDate: new Date(2021, 2, 17),
-          duration: 2,
-          percentComplete:  0,
-          pendingReasons: null
-        }, {
-          id: 'Deploy',
-          name: 'Deploy to server',
-          startDate: new Date(2021, 2, 18),
-          endDate: new Date(2021, 2, 18),
-          duration: 1,
-          percentComplete:  0,
-          pendingReasons: null
-        }
-      ],
-      options: {
-        height: 275,
-        gantt: {
-          criticalPathEnabled: false,
-          innerGridHorizLine: {
-            stroke: '#ffe0b2',
-            strokeWidth: 2
-          },
-          innerGridTrack: {fill: '#fff3e0'},
-          innerGridDarkTrack: {fill: '#ffcc80'}
-        }
-      }
-    };
+
+  }
+  toMilliseconds(minutes) {
+    return minutes * 60 * 1000;
   }
 
   ngAfterViewInit() {

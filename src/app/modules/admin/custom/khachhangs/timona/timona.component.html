@@ -16,52 +16,51 @@
       <button mat-raised-button (click)="LoadDulieu()">Load Dữ Liệu</button>
       <button mat-button class="text-white bg-red-500">{{DataServer.length}}</button>
       <button mat-button class="text-white bg-blue-500">{{DataDrive.length}}</button>
+    
       <button mat-button class="text-white bg-green-500" (click)="UpdateDulieu(DataDrive)"><span class="material-icons">
         update
         </span>Cập Nhật</button>
-        <!-- *ngIf="DataServer.length=DataDrive.length" -->
-      </div>  
-    <button mat-button [matMenuTriggerFor]="menu">
-      <span class="material-icons text-blue-600">
-        list
-      </span></button>
-    <mat-menu #menu="matMenu" color="primary">
-      <button mat-menu-item color="primary" (click)="exporter.exportTable('csv')">Xuất File</button>
-      <button mat-menu-item color="primary" (click)="GetAllMember()"
-        *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Khách Hàng</button>
-      <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button> -->
-      <!-- <button mat-menu-item color="primary" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Cập Nhật Thành Viên</button>
-      <button mat-menu-item color="primary" (click)="LoadDrive()" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">Load Drive</button>
-      <button mat-menu-item color="primary" (click)="CreateData(Khachhang)"
-        *ngIf="Khachhang$ | async as Khachhang">Cập Nhật Chi Tiết
-        (<span>{{Khachhang.length}}</span>)</button>
-      <button mat-menu-item color="primary" (click)="LoadKHSDT('','SDT')" *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'">All Chi Tiết</button> -->
-    </mat-menu>
-  </div>
 
+      </div>
 
-  <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
+<div class="flex space-x-2">
+<button mat-button class="text-white bg-blue-500" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin' || CurrentUser.Role=='dev'">Load All</button> 
+<button mat-button class="text-white bg-blue-500" (click)="Reset()">Reset</button> 
+</div>
+</div>
+<form class="flex space-x-2 my-2" [formGroup]="Filtermember">
+  <ng-container *ngIf="CurrentUser.Role=='admin'||CurrentUser.Role=='dev'; else elseTemplate">
     <mat-form-field class="w-full">
       <mat-label>Chi Nhánh</mat-label>
-      <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh"
-        (selectionChange)="LoadMember($event);Reset()">
-        <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}
-        </mat-option>
-      </mat-select>
+          <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh">
+            <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}</mat-option>
+          </mat-select>
     </mat-form-field>
+
+  </ng-container>
+  <ng-template #elseTemplate>
+    <mat-form-field class="w-full">
+      <mat-label>Chi Nhánh</mat-label>
+        <mat-select [formControlName]="'Chinhanh'" matInput placeholder="Chi Nhánh" (selectionChange)="LoadData($event.value)">
+      <mat-option *ngFor="let item of UserChinhanh|keyvalue" [value]="item.key">{{CauhinhChinhanh[item.key]}}</mat-option>
+        </mat-select>        
+       </mat-form-field>  
+</ng-template>  
+
+
+
+
     <mat-form-field class="w-full">
       <mat-label>Hạng Khách Hàng</mat-label>
-      <mat-select matInput (selectionChange)="ChonMember($event);" placeholder="Hạng Thành Viên"
-        #MemberSelect="matSelect">
+      <mat-select matInput (selectionChange)="ChonMember($event)" placeholder="Hạng Thành Viên" #MemberSelect="matSelect">
         <mat-option value="0">All</mat-option>
-        <mat-option value="1" class="h-auto py-4 leading-none">
-          <div class="font-medium">Normal</div>
+        <mat-option value="1" class="h-auto py-4 leading-none">         
+           <div class="font-medium">Normal</div>
           <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 0-50 Triệu</div>
         </mat-option>
-        <mat-option value="2" class="h-auto py-4 leading-none">
-          <div class="font-medium">Member</div>
-          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 50-100 Triệu</div>
-        </mat-option>
+        <mat-option value="2" class="h-auto py-4 leading-none">         
+           <div class="font-medium">Member</div>
+          <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 50-100 Triệu</div></mat-option>
         <mat-option value="3" class="h-auto py-4 leading-none">
           <div class="font-medium">Silver</div>
           <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary"> 100-200 Triệu</div>
@@ -83,16 +82,17 @@
     <mat-form-field class="w-full">
       <mat-label>Tên Khách Hàng</mat-label>
       <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
+      <span class="material-icons" matsuffix (click)="Filtermember.controls['TenKH'].setValue('');Showchitiet=false">
+        refresh
+        </span>
     </mat-form-field>
     <mat-form-field class="w-full">
       <mat-label>Số Điện Thoại</mat-label>
       <input matInput [formControlName]="'SDT'" placeholder="SDT">
+      <span class="material-icons" matsuffix (click)="Filtermember.controls['SDT'].setValue('');Showchitiet=false">
+        refresh
+        </span>
     </mat-form-field>
-    <!-- 
-    <mat-form-field>
-      <input matInput [formControlName]="'Doanhso'" placeholder="Đã Thu">
-    </mat-form-field> -->
-
     <mat-form-field class="w-full">
       <mat-label>Số Tiền Từ</mat-label>
       <input matInput [formControlName]="'Hanmuctu'" placeholder="Từ">
@@ -122,40 +122,29 @@
       <mat-datepicker-toggle matSuffix [for]="pickerNMC"></mat-datepicker-toggle>
       <mat-date-range-picker #pickerNMC></mat-date-range-picker>
     </mat-form-field>
-
-    <!-- <mat-form-field class="w-full">
-      <mat-label>Ngày Mua Cuối</mat-label>
-      <input matInput [matDatepicker]="pickerMC" [formControlName]="'NgayMC'">
-      <mat-datepicker-toggle matSuffix [for]="pickerMC"></mat-datepicker-toggle>
-      <mat-datepicker #pickerMC></mat-datepicker>
-    </mat-form-field> -->
   </form>
   <div class="mat-elevation-z8">
-    <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort
-      #exporter="matTableExporter">
+    <table class="w-full" matTableExporter mat-table [dataSource]="datamember" #MemberSort="matSort" matSort #exporter="matTableExporter">
       <ng-container matColumnDef="TenKH">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-        <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
         <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
-
+   
       <ng-container matColumnDef="SDT">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
         <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.SDT,'SDT')"> {{row.SDT}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer>Tổng</td>
       </ng-container>
-
+ 
       <ng-container matColumnDef="Dathu">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Đã Thu (đ) </th>
         <td mat-cell *matCellDef="let row"> {{row.Dathu| number}}</td>
-        <!-- <td mat-footer-cell *matFooterCellDef mat-sort-footer> Tổng</td> -->
-        <td mat-footer-cell *matFooterCellDef mat-sort-footer><span
-            *ngIf="datamember!=undefined">{{Tongcong(datamember.filteredData,'Dathu')|number}}</span></td>
+        <td mat-footer-cell *matFooterCellDef mat-sort-footer><span *ngIf="datamember!=undefined">{{Tongcong(datamember.filteredData,'Dathu')|number}}</span></td>
       </ng-container>
 
       <ng-container matColumnDef="Chinhanh">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header > Chi Nhánh </th>
         <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
@@ -179,71 +168,19 @@
         <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.NoiMC]}} </td>
         <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
       </ng-container>
-
+  
       <tr mat-header-row *matHeaderRowDef="thanhvienColumns ; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: thanhvienColumns;"></tr>
       <tr mat-footer-row *matFooterRowDef="thanhvienColumns ; sticky: true"></tr>
       <!-- <tr mat-footer-row *matFooterRowDef="thanhvienColumns; sticky: true"></tr> -->
-
+      
       <!-- <tr mat-footer-row *matFooterRowDef="thanhvienColumns"></tr> -->
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #MemberPag="matPaginator"></mat-paginator>
   </div>
   <div class="mt-4">
-    <!-- <form class="flex space-x-2" [formGroup]="FilterForm" *ngIf="CurrentUser.Role=='admin'">
-    <mat-form-field>
-      <input matInput 
-        [matDatepicker]="fromDate" 
-        placeholder="Từ Ngày" 
-        [formControlName]="'Batdau'">
-      <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-      <mat-datepicker #fromDate></mat-datepicker>
-    </mat-form-field>
-  
-    <mat-form-field>
-      <input matInput 
-        [matDatepicker]="toDate" 
-        placeholder="Đến Ngày" 
-        [formControlName]="'Ketthuc'">
-      <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-      <mat-datepicker #toDate></mat-datepicker>
-    </mat-form-field>
-  
-    <mat-form-field>
-      <input matInput [formControlName]="'TenKH'" placeholder="Tên Khách Hàng">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'SDT'" placeholder="SDT">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'SDT2'" placeholder="SDT 2">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'Dichvu'" placeholder="Dịch Vụ">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'Doanhso'" placeholder="Doanh Số">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'Tonglieutrinh'" placeholder="Tổng Liệu Trình">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [formControlName]="'Ghichu'" placeholder="Ghi Chú">
-    </mat-form-field> 
-    <mat-form-field>
-      <mat-select [formControlName]="'Chinhanh'" matInput>
-        <mat-option value="Đà Nẵng">Đà Nẵng</mat-option>
-        <mat-option value="Gò Vấp">Gò Vấp</mat-option>
-        <mat-option value="thuduc" for>Thủ Đức</mat-option>
-        <mat-option value="quan10" for>Quận 10</mat-option>
-        <mat-option value="nhatrang" for>Nha Trang</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form> -->
-
     <div class="mat-elevation-z8 mb-8" *ngIf="Showchitiet">
-      <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort #exporter="matTableExporter"
-        matTableExporter>
+      <table class="w-full" mat-table [dataSource]="data" #DataSort="matSort" matSort #exporter="matTableExporter" matTableExporter>
         <ng-container matColumnDef="NgayTaoDV">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày Tạo DV </th>
           <td mat-cell *matCellDef="let row"> {{row.NgayTaoDV|date:'dd/MM/yyyy'}} </td>
@@ -251,19 +188,18 @@
         </ng-container>
         <ng-container matColumnDef="TenKH">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên Khách Hàng </th>
-          <!-- <td mat-cell *matCellDef="let row" (click)="LoadKHSDT(row.TenKH,'TenKH')"> {{row.TenKH}} </td> -->
           <td mat-cell *matCellDef="let row"> {{row.TenKH}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại </th>
-          <td mat-cell *matCellDef="let row">  {{row.SDT}} 
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại  </th>
+          <td mat-cell *matCellDef="let row"> {{row.SDT}} 
             <input class="w-full border border-dashed border-blue-500" *ngIf="CurrentUser.Role=='dev'" matInput [value]="row.SDT" (change)="EditData($event.target.value,row)">
           </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="SDT2">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại 2 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Số Điện Thoại 2  </th>
           <td mat-cell *matCellDef="let row"> {{row.SDT2}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
@@ -275,33 +211,34 @@
         <ng-container matColumnDef="Doanhso">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Doanh Số </th>
           <td mat-cell *matCellDef="let row"> {{row.Doanhso| currency: "VND"}} </td>
-          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span
-              *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Doanhso')|number}}</span></td>
+          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Doanhso')|number}}</span></td>
         </ng-container>
         <ng-container matColumnDef="Tonglieutrinh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Tổng Liệu trình </th>
           <td mat-cell *matCellDef="let row"> {{row.Tonglieutrinh| currency: "VND"}} </td>
-          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span
-              *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Tonglieutrinh')|number}}</span></td>
+          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Tonglieutrinh')|number}}</span></td>
         </ng-container>
-
+  
         <ng-container matColumnDef="Dathu">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Đã Thu </th>
           <td mat-cell *matCellDef="let row"> {{row.Dathu| currency: "VND"}} </td>
-          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span
-              *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Dathu')|number}}</span></td>
+          <td mat-footer-cell *matFooterCellDef mat-sort-footer><span *ngIf="data!=undefined">{{Tongcong(data.filteredData,'Dathu')|number}}</span></td>
         </ng-container>
-
+  
         <ng-container matColumnDef="Chinhanh">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Chi Nhánh </th>
-          <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} </td>
+          <td mat-cell *matCellDef="let row"> {{CauhinhChinhanh[row.Chinhanh]}} 
+            <span class="material-icons" (click)="DeleteData(row)" *ngIf="CurrentUser.Role=='dev'">
+              delete
+              </span>
+          </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
         </ng-container>
         <ng-container matColumnDef="Ghichu">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi Chú</th>
           <td mat-cell *matCellDef="let row"> {{row.Ghichu}} </td>
           <td mat-footer-cell *matFooterCellDef mat-sort-footer></td>
-        </ng-container>
+        </ng-container>   
         <tr mat-header-row *matHeaderRowDef="displayedColumns ; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedColumns ; sticky: true"></tr>
@@ -309,4 +246,5 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100,500]" #DataPag="matPaginator"></mat-paginator>
     </div>
   </div>
-</div>
+  </div>
+  

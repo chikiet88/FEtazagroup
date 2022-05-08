@@ -9,17 +9,35 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
 import { KhachhangsResolver } from './khachhangs.resolver';
 import { MatTableExporterModule } from 'mat-table-exporter';
+import { TazaskinComponent } from './tazaskin/tazaskin.component';
+import { TimonaComponent } from './timona/timona.component';
 const khachhangsRoutes: Route[] = [
   {
       path     : '',
       component: KhachhangsComponent,
+      children:[
+        {
+          path     : 'timona',
+          component: TimonaComponent,
+          resolve  : {
+            tasks    : KhachhangsResolver,
+           },
+        },
+        {
+          path     : 'tazaskin',
+          component: TazaskinComponent,
+          resolve  : {
+            tasks    : KhachhangsResolver,
+           },
+        }
+      ],
       resolve  : {
         tasks    : KhachhangsResolver,
     },
   }
 ];
 @NgModule({
-  declarations: [KhachhangsComponent],
+  declarations: [KhachhangsComponent, TazaskinComponent, TimonaComponent],
   imports: [
     MatTableExporterModule,
     HttpClientModule,
