@@ -16,8 +16,8 @@ import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
- const vitri = require('app/v1json/vitri.json');
- const bophan = require('app/v1json/bophan.json');
+//  const vitri = require('app/v1json/vitri.json');
+//  const bophan = require('app/v1json/bophan.json');
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',

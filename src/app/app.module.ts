@@ -18,7 +18,7 @@ import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MaterialExampleModule } from 'material.module';
 import { HttpClientModule } from '@angular/common/http';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -70,7 +70,8 @@ const customNotifierOptions: NotifierOptions = {
         CauhinhComponent,
     ],
     imports     : [
-      EditorModule,
+    //  EditorModule,
+      CKEditorModule,
       BrowserModule,
       HttpClientModule,
       BrowserAnimationsModule,

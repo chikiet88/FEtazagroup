@@ -12,9 +12,9 @@ import { QuanlycongviecService } from '../quanlycongviec.service';
 })
 export class DauviecComponent implements OnInit {
   displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
-  Sections: any[] = [];
+  Grouptasks: any[] = [];
   Tasks: any[] = [];
-  filteredSections: any;
+  filteredGrouptasks: any;
   filteredTasks: any;
   filteredDuans: any;
   CUser: any;
@@ -23,6 +23,7 @@ export class DauviecComponent implements OnInit {
   triggerOrigin :any;
   isOpenDuan = false;
   SelectDuan:any;
+  TasksNoGroup:any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -32,32 +33,36 @@ export class DauviecComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
-  ) {
-    this._quanlycongviecService.getSectionByType('project').subscribe();
-    this._quanlycongviecService.getAllTasks().subscribe();
-    this._quanlycongviecService.getAllDuans().subscribe();
+  ) {}
+
+   
+  ngOnInit(): void {
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
-      console.log(data);
       this.CUser = data;
       this._changeDetectorRef.markForCheck();         
-    });         
-    this._quanlycongviecService.sections$.subscribe((data) => {
-      this.Sections = this.filteredSections = data.filter(v=>v.idTao == this.CUser.id);
+    });  
+
+    this._quanlycongviecService.grouptasks$.subscribe((data) => {
+      this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
       console.log(data.filter(v=>v.idTao == this.CUser.id));
       this._changeDetectorRef.markForCheck();
     })
+
     this._quanlycongviecService.tasks$.subscribe((data) => {
       this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
       this._changeDetectorRef.markForCheck();
     })
+    
     this._quanlycongviecService.duans$.subscribe((data) => {
       this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
       this._changeDetectorRef.markForCheck();
     })
-   }
-  ngOnInit(): void {
+    const Grouptask = this.Grouptasks.map(v => v.id);
+    console.log(Grouptask);
+    console.log(this.Grouptasks);
+    this.TasksNoGroup =  this.Tasks.filter(v=> !Grouptask.includes(v.sid))
   }
   toggleDuan(trigger: any,row) {
     this.SelectDuan = row
@@ -72,13 +77,13 @@ export class DauviecComponent implements OnInit {
   GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);
   }
-  CreateSection() {
-    let section = { Tieude: "New Section", IsOpen: true, idTao: this.CUser.id, Loai: 'project' }
-    if (this.Sections.length != 0 && this.Sections[0].Tieude == "New Section") {
-      this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
+  CreateGrouptasks() {
+    let section = { Tieude: "New Group", IsOpen: true, idTao: this.CUser.id}
+    if (this.Grouptasks.length != 0 && this.Grouptasks[0].Tieude == "New Group") {
+      this._notifierService.notify('error', 'Có Group Mới Chưa Đổi Tên');
     }
     else {
-      this._quanlycongviecService.CreateSection(section).subscribe();
+      this._quanlycongviecService.CreateGrouptasks(section).subscribe();
     }
   }
   CreateTaks(idSection) {
@@ -96,14 +101,12 @@ export class DauviecComponent implements OnInit {
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     console.log(item);
   }
-  DeleteSection(item) {
-    this._quanlycongviecService.DeleteSection(item.id).subscribe();
+  DeleteGrouptasks(item) {
+    this._quanlycongviecService.DeleteGrouptasks(item.id).subscribe();
   }
-  EditSection(event, item) {
+  EditGrouptasks(event, item) {
     item.Tieude = event.target.value;
-    this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
-    console.log(event.target.value);
-    console.log(item);
+    this._quanlycongviecService.UpdateGrouptasks(item, item.id).subscribe();
   }
   EditTasks(event, item) {
     item.Tieude = event.target.value;
@@ -126,9 +129,9 @@ export class DauviecComponent implements OnInit {
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.ngOnInit();
   }
-  toggleSection(item) {
+  toggleGrouptasks(item) {
     item.IsOpen = !item.IsOpen;
-    this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
+    this._quanlycongviecService.UpdateGrouptasks(item, item.id).subscribe();
   }
 
 }

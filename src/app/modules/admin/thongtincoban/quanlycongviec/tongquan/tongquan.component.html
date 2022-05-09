@@ -65,10 +65,8 @@
         </div>
         <div class="grid grid-cols-2 gap-4 py-2">
         <div class="flex flex-row gap-2 cursor-pointer" *ngFor="let item of Duans.slice(0, 12)" [routerLink]="['./duan',item.id]">
-          <div class="mx-4 flex w-20 h-20  text-center rounded border-dashed border overflow-hidden">
-            <img class="w-full h-full object-cover" src="assets/images/logo/logo300.png">
-          </div>
-          <div class="text-lg leading-4 font-bold my-auto">{{item.Tieude}}</div> 
+            <img class="w-20 h-20 object-cover" src="assets/images/logo/logo300.png">
+          <div class="text-lg leading-4 font-bold my-auto truncate">{{item.Tieude}}</div> 
         </div>
         </div>
       </fuse-card>

@@ -8,6 +8,8 @@ import { environment } from 'environments/environment';
 export class QuanlycongviecService {
     private _sections: BehaviorSubject<any> = new BehaviorSubject(null);
     private _section: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _grouptasks: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _grouptask: BehaviorSubject<any> = new BehaviorSubject(null);
     private _tasks: BehaviorSubject<any> = new BehaviorSubject(null);
     private _task: BehaviorSubject<any> = new BehaviorSubject(null);
     private _duans: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -19,6 +21,12 @@ export class QuanlycongviecService {
     }
     get section$(): Observable<any> {
         return this._section.asObservable();
+    }
+    get grouptasks$(): Observable<any> {
+        return this._grouptasks.asObservable();
+    }
+    get grouptask$(): Observable<any> {
+        return this._grouptask.asObservable();
     }
     get tasks$(): Observable<any> {
         return this._tasks.asObservable();
@@ -36,15 +44,6 @@ export class QuanlycongviecService {
         return this._httpClient.get(`${environment.ApiURL}/section`).pipe(
             tap((response: any) => {
                 this._sections.next(response);
-            })
-        );
-    }
-    getSectionByType(Loai:string): Observable<any> {
-        return this._httpClient.get(`${environment.ApiURL}/section/page?Loai=${Loai}`).pipe(
-            tap((response) => {
-                console.log(response);          
-               const data = response||[]; 
-                this._sections.next(data);
             })
         );
     }
@@ -91,6 +90,59 @@ export class QuanlycongviecService {
                     const index = sections.findIndex(item => item.id === id);
                     sections.splice(index, 1);
                     this._sections.next(sections);
+                    return isDeleted;
+                })
+            ))
+        );
+      }
+
+    getAllGrouptasks(): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/grouptask`).pipe(
+            tap((response: any) => {
+                this._grouptasks.next(response);
+            })
+        );
+    }
+    CreateGrouptasks(grouptask): Observable<any> {
+        return this.grouptasks$.pipe(
+            take(1),
+            switchMap(grouptasks => this._httpClient.post(`${environment.ApiURL}/grouptask`, grouptask).pipe(
+                map((result) => {
+                    this._grouptasks.next([result, ...grouptasks]);
+                    return result;
+                })
+            ))
+        );
+    }
+    UpdateGrouptasks(grouptask,id): Observable<any> {
+        return this.grouptasks$.pipe(
+            take(1),
+            switchMap(grouptasks => this._httpClient.patch(`${environment.ApiURL}/grouptask/${id}`, grouptask).pipe(
+                map((grouptask) => {
+                    const index = grouptasks.findIndex(item => item.id === id);
+                    grouptasks[index] = grouptask;
+                    this._grouptasks.next(grouptasks);
+                    return grouptask;
+                }),
+                switchMap(grouptask => this.grouptask$.pipe(
+                    take(1),
+                    filter(item => item && item.id === id),
+                    tap(() => {
+                        this._grouptask.next(grouptask);
+                        return grouptask;
+                    })
+                ))
+            ))
+        );
+    }
+    DeleteGrouptasks(id): Observable<any> {
+        return this.grouptasks$.pipe(
+            take(1),
+            switchMap(grouptasks => this._httpClient.delete(`${environment.ApiURL}/grouptask/${id}`).pipe(
+                map((isDeleted: boolean) => {
+                    const index = grouptasks.findIndex(item => item.id === id);
+                    grouptasks.splice(index, 1);
+                    this._grouptasks.next(grouptasks);
                     return isDeleted;
                 })
             ))

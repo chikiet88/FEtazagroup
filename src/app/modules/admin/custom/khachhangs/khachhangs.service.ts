@@ -60,26 +60,32 @@ export class KhachhangsService {
         ))
     );
   }
-  UpdateDataTaza(dulieu,id): Observable<any> {
-    return this.datastaza$.pipe(
-        take(1),
-        switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khachhangs/chitiet/${id}`, dulieu).pipe(
-            map((data) => {
-                const index = datas.findIndex(item => item.id === id);
-                datas[index] = data;
-                this._datastaza.next(datas);
-                return data;
-            }),
-            switchMap(data => this.datastaza$.pipe(
-                take(1),
-                filter(item => item && item.id === id),
-                tap(() => {
-                    this._datastaza.next(data);
-                    return data;
-                })
-            ))
-        ))
-    );
+//   UpdateDataTaza(dulieu,id): Observable<any> {
+//     return this.datastaza$.pipe(
+//         take(1),
+//         switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khachhangs/chitiet/${id}`, dulieu).pipe(
+//             map((data) => {
+//                 const index = datas.findIndex(item => item.id === id);
+//                 datas[index] = data;
+//                 this._datastaza.next(datas);
+//                 return data;
+//             }),
+//             switchMap(data => this.datastaza$.pipe(
+//                 take(1),
+//                 filter(item => item && item.id === id),
+//                 tap(() => {
+//                     this._datastaza.next(data);
+//                     return data;
+//                 })
+//             ))
+//         ))
+//     );
+// }
+
+UpdateDataTaza(dulieu,id): Observable<any> {
+    return this._httpClient.patch(`${environment.ApiURL}/khachhangs/chitiet/${id}`, dulieu).pipe(
+      tap(() => {})
+  );
 }
 // DeleteDataTaza(id): Observable<any> {
 //     return this.datastaza$.pipe(
@@ -135,28 +141,32 @@ DeleteDataTaza(id): Observable<any> {
         ))
     );
   }
-  UpdateDataTimona(dulieu,id): Observable<any> {
-    return this.datastimona$.pipe(
-        take(1),
-        switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`, dulieu).pipe(
-            map((data) => {
-                const index = datas.findIndex(item => item.id === id);
-                datas[index] = data;
-                this._datastimona.next(datas);
-                return data;
-            }),
-            switchMap(data => this.datastimona$.pipe(
-                take(1),
-                filter(item => item && item.id === id),
-                tap(() => {
-                    this._datastimona.next(data);
-                    return data;
-                })
-            ))
-        ))
-    );
+//   UpdateDataTimona(dulieu,id): Observable<any> {
+//     return this.datastimona$.pipe(
+//         take(1),
+//         switchMap(datas => this._httpClient.patch(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`, dulieu).pipe(
+//             map((data) => {
+//                 const index = datas.findIndex(item => item.id === id);
+//                 datas[index] = data;
+//                 this._datastimona.next(datas);
+//                 return data;
+//             }),
+//             switchMap(data => this.datastimona$.pipe(
+//                 take(1),
+//                 filter(item => item && item.id === id),
+//                 tap(() => {
+//                     this._datastimona.next(data);
+//                     return data;
+//                 })
+//             ))
+//         ))
+//     );
+// }
+UpdateDataTimona(dulieu,id): Observable<any> {
+    return this._httpClient.patch(`${environment.ApiURL}/khtimona/khtimonachitiet/${id}`, dulieu).pipe(
+      tap(() => {})
+  );
 }
-
 // DeleteDataTimona(id): Observable<any> {
 //     return this.datastimona$.pipe(
 //         take(1),

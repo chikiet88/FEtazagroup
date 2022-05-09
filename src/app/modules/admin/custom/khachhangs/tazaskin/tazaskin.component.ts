@@ -40,6 +40,8 @@ import { KhachhangsService } from '../khachhangs.service';
   DataServer: any = [];
   Alldata: any = [];
   datataza:any;
+  isEditSDT:any = false;
+  isDelete:any = false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
   @ViewChild('DataSort', { static: false }) DataSort: MatSort;
@@ -288,11 +290,16 @@ import { KhachhangsService } from '../khachhangs.service';
   }
   EditData(value,row)
   {
+  console.log(row);
+  
+   this.isEditSDT = true;
    row.SDT = value;
    this._khachhangsService.UpdateDataTaza(row,row.id).subscribe();
   }
   DeleteData(row)
   {
+    console.log(row);
+    this.isDelete = true
     this._khachhangsService.DeleteDataTaza(row.id).subscribe();
   }
 }

@@ -29,6 +29,7 @@ import { FuseMasonryModule } from '@fuse/components/masonry';
 import { SharedModule } from 'app/shared/shared.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { QuanlycongviecResolver } from './quanlycongviec.resolver';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -46,7 +47,9 @@ const quanlycongviecRoutes: Route[] = [
         {
           path     : 'dauviec',
           component: DauviecComponent,
-
+          resolve  : {
+            tasks    : QuanlycongviecResolver,
+        },
         },
         {
           path     : 'duan',

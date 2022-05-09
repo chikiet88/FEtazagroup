@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
@@ -17,10 +16,6 @@ export interface DialogData {
   styleUrls: ['./duan.component.scss']
 })
 export class DuanComponent implements OnInit {
-  public Editor = InlineEditor;
-  public config = {
-    placeholder: 'Mô Tả Dự Án'
-  };
   displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
   Sections: any = [];
   Tasks: any = [];
