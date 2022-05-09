@@ -1,49 +1,51 @@
-<div class="flex flex-col flex-auto min-w-0">
-  <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8">
+<div class="flex flex-col flex-auto min-w-0 h-full">
+  <div class="flex flex-col w-full max-w-screen-xl mx-auto p-6 md:p-8 bg-card">
     <div class="flex flex-row space-x-2 py-6 justify-between">
-      <div class="flex space-x-2">
-        <div class="text-2xl font-bold m-auto">
+      <div class="flex space-x-2 justify-between w-full">
+        <div class="text-2xl font-bold w-2/3">
           <input class="w-full" matInput [value]="Duan.Tieude" (change)="UpdateDuan(Duan,'Tieude',$event.target.value)">
         </div>
-        <div class="font-bold">
-          <button mat-button [matMenuTriggerFor]="menu">
-            <span class="material-icons">
-              radio_button_unchecked
-            </span>
-            {{Duan.Trangthai}}
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
-          </mat-menu>
-        </div>
-        <div class="font-bold m-auto">
-          <ng-container *ngIf="Duan.Noibat==0; else elseTemplate">
-            <span class="material-icons" (click)="UpdateDuan(Duan,'Noibat',true)">star_border</span>
-          </ng-container>
-          <ng-template #elseTemplate>
-            <span class="material-icons text-yellow-500" (click)="UpdateDuan(Duan,'Noibat',false)">star</span>
-          </ng-template>
-        </div>
-      </div>
-      <div class="flex">
-        <ng-container>
-          <div class="flex items-center">
-            <ng-container *ngFor="let member of Duan.Thamgia">
-              <img
-                class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
-                [src]="'assets/images/logo/logo300.png'" matTooltip="{{member|findbyid:Nhanviens:'name'}}"
-                matTooltipClass="example-tooltip-red">
-            </ng-container>
-            <!-- <ng-container *ngIf="board.members.length > 5">
-                          <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
-                              <div class="text-md font-semibold">
-                                  +{{ board.members.slice(5).length }}
-                              </div>
-                          </div>
-                      </ng-container> -->
+        <div class="flex space-x-2">
+          <div class="font-bold">
+            <button mat-button [matMenuTriggerFor]="menu">
+              <span class="material-icons">
+                radio_button_unchecked
+              </span>
+              {{Duan.Trangthai}}
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Item 1</button>
+              <button mat-menu-item>Item 2</button>
+            </mat-menu>
           </div>
-        </ng-container>
+          <div class="font-bold m-auto">
+            <ng-container *ngIf="Duan.Noibat==0; else elseTemplate">
+              <span class="material-icons" (click)="UpdateDuan(Duan,'Noibat',true)">star_border</span>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <span class="material-icons text-yellow-500" (click)="UpdateDuan(Duan,'Noibat',false)">star</span>
+            </ng-template>
+          </div>
+          <div class="flex">
+            <ng-container>
+              <div class="flex items-center">
+                <ng-container *ngFor="let member of Duan.Thamgia.slice(0, 3)">
+                  <img
+                    class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
+                    [src]="'assets/images/logo/logo300.png'" matTooltip="{{member|findbyid:Nhanviens:'name'}}"
+                    matTooltipClass="example-tooltip-red">
+                </ng-container>
+                <ng-container *ngIf="Duan.Thamgia.length > 3">
+                              <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
+                                  <div class="text-md font-semibold">
+                                      +{{ Duan.Thamgia.slice(3).length }}
+                                  </div>
+                              </div>
+                   </ng-container>
+              </div>
+            </ng-container>
+          </div>    
+        </div>
       </div>
     </div>
     <mat-tab-group>

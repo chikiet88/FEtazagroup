@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
@@ -8,10 +8,11 @@ import { QuanlycongviecService } from '../quanlycongviec.service';
 @Component({
   selector: 'app-dauviec',
   templateUrl: './dauviec.component.html',
-  styleUrls: ['./dauviec.component.scss']
+  styleUrls: ['./dauviec.component.scss'],
+  encapsulation:ViewEncapsulation.None,
 })
 export class DauviecComponent implements OnInit {
-  displayedColumns: string[] = ['#','tieude','deadline','uutien','duan'];
+  displayedColumns: string[] = ['No','tieude','deadline','uutien','duan','section','comment'];
   Grouptasks: any[] = [];
   Tasks: any[] = [];
   filteredGrouptasks: any;

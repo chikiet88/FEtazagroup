@@ -76,11 +76,10 @@
         <div class="flex flex-row space-x-4 mb-4">
           <a mat-button [routerLink]="['../']" [color]="'primary'">
             <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
-            <span class="ml-2">Trở Về</span>
           </a>
-          <div class="w-auto">
-            <mat-form-field class="fuse-mat-no-subscript flex-auto w-100">
-              <input matInput [placeholder]="'Tìm Kiếm'" (input)="filterByQuery(query.value)" #query>
+          <div class="w-2/3">
+            <mat-form-field class="fuse-mat-no-subscript flex-auto sm:w-full">
+              <input matInput [placeholder]="'Tìm Kiếm'" (input)="filterByQuery(query.value)" #query class="w-auto">
               <mat-icon matPrefix>
                 <span class="material-icons">
                   search
@@ -94,7 +93,7 @@
           </span>
         </div>
         <div class="w-full">
-          <div class="mat-elevation-z8">
+          <div class="overflow-auto">
             <table mat-table [dataSource]="dataSource" matSort class="w-full">
               <ng-container matColumnDef="#">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="justify-center"> # </th>
@@ -255,8 +254,8 @@
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+          </div>    
             <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-          </div>
 
         </div>
       </div>

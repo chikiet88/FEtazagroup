@@ -1,19 +1,20 @@
-<div class="flex flex-col flex-auto min-w-0">
+<div class="flex flex-col flex-auto min-w-0 light">
   <div class="flex flex-wrap w-full mx-auto p-2">
-    <div class="flex flex-col w-full p-4 text-center">
-      <div class="py-2">Hôm Nay : {{homnay|date:'dd/MM/yyyy'}}</div>
-      <div class="text-xl py-2">{{CUser.name}}</div>
-      <div class="py-2">
-        <mat-button-toggle-group>
-          <mat-button-toggle value="bold"><span class="text-xl text-blue-500 font-bold">{{Duans.length}}</span> Dự Án</mat-button-toggle>
-          <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{Hoanthanh.length}}</span> Đầu Việc Hoàn Thành</mat-button-toggle>
-          <mat-button-toggle value="underline">0 Người Tham Gia</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 hover:grid-cols-6 gap-4 w-full">
 
-    </div>
-    <div class="grid md:grid-cols-2 gap-4 w-full">
-      <fuse-card class="flex flex-col w-full p-4">
+
+      <fuse-card class="flex flex-col w-full p-4 text-center bg-card col-span-2">
+        <div class="py-2">Hôm Nay : {{homnay|date:'dd/MM/yyyy'}}</div>
+        <div class="text-xl py-2">{{CUser.name}}</div>
+        <!-- <div class="py-2 overflow-auto">
+          <mat-button-toggle-group>
+            <mat-button-toggle value="bold"><span class="text-xl text-blue-500 font-bold">{{Duans.length}}</span> Dự Án</mat-button-toggle>
+            <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{Hoanthanh.length}}</span> Hoàn Thành</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div> -->
+      </fuse-card>
+
+      <fuse-card class="flex flex-col w-full p-4 col-span-2 md:col-span-1">
         <div class="flex justify-between">
         <div class="py-2 text-center flex flex-auto items-center">
           <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden">
@@ -58,10 +59,17 @@
           </mat-tab-group>
         </div>
       </fuse-card>
-      <fuse-card class="flex flex-col w-full p-4">
-        <div class="flex justify-between"> 
-          <span  class="text-xl font-bold py-4"> Dự Án</span>  
-          <button mat-button class="bg-blue-100" [routerLink]="['./duan']">Tất Cả</button>
+      <fuse-card class="flex flex-col w-full p-4 col-span-2 md:col-span-1">
+        <div class="flex flex-row justify-between space-x-2"> 
+          <div class="flex space-x-2">
+            <span  class="text-xl font-bold py-4"> Dự Án </span>  
+            <div class="my-auto flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
+              <div class="text-md font-semibold">
+                {{Duans.length}}
+              </div>
+          </div>
+          </div>
+         <div class="mr-auto"> <button mat-button class="bg-blue-100" [routerLink]="['./duan']">Tất Cả</button></div>
         </div>
         <div class="grid grid-cols-2 gap-4 py-2">
         <div class="flex flex-row gap-2 cursor-pointer" *ngFor="let item of Duans.slice(0, 12)" [routerLink]="['./duan',item.id]">
@@ -89,8 +97,6 @@
         </div>
         </div>
       </fuse-card>
-
-
     </div>
 
   </div>

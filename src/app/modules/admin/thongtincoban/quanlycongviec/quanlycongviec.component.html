@@ -7,7 +7,7 @@
           </mat-selection-list>
     </mat-drawer>
   
-    <div>
+    <mat-drawer-content class="bg-card">
       <button type="button" mat-button (click)="drawer.toggle()" class="absolute">
         <span class="material-icons" *ngIf="!drawer.opened">
             navigate_next
@@ -17,8 +17,7 @@
          </span>  
       </button>
       <router-outlet></router-outlet>
-    </div>
-  
+    </mat-drawer-content>
   </mat-drawer-container>
 
 

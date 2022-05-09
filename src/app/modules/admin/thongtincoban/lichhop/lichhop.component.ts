@@ -53,6 +53,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { FindbyidPipe } from 'app/pipes/findbyid/findbyid.pipe';
 import { log } from 'console';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -83,14 +84,15 @@ const colors: any = {
 export class LichhopComponent implements OnInit {
   public Editor = InlineEditor;
   public config = {
-    placeholder: 'Vui lòng nhập nội dung'
+    placeholder: 'Vui lòng nhập nội dung',
+    height:'200px'
   };
-  //   public onReady( editor ) {
-  //     editor.ui.getEditableElement().parentElement.insertBefore(
-  //         editor.ui.view.toolbar.element,
-  //         editor.ui.getEditableElement()
-  //     );
-  // }
+    public onReady( editor ) {
+      editor.ui.getEditableElement().parentElement.insertBefore(
+          editor.ui.view.toolbar.element,
+          editor.ui.getEditableElement()
+      );
+  }
   @ViewChild('picker') picker: any;
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
   @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
@@ -138,6 +140,7 @@ export class LichhopComponent implements OnInit {
   isOpen:any;
   filteredLichhops:any;
   campaignOne:FormGroup;
+  drawerMode: 'side' | 'over';
   private _tagsPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseDrawerService: FuseDrawerService,
@@ -154,6 +157,7 @@ export class LichhopComponent implements OnInit {
     private router:Router,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
+    private _fuseMediaWatcherService: FuseMediaWatcherService
   ) { 
     const today = new Date();
     const month = today.getMonth();
@@ -382,6 +386,20 @@ onRemove(event) {
           this.sidenav.toggle();
         this._changeDetectorRef.markForCheck();
       });
+
+      this._fuseMediaWatcherService.onMediaChange$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(({matchingAliases}) => {
+          if ( matchingAliases.includes('lg') )
+          {
+              this.drawerMode = 'side';
+          }
+          else
+          {
+              this.drawerMode = 'over';
+          }
+          this._changeDetectorRef.markForCheck();
+      });    
 
   }
   ngAfterViewInit() {
