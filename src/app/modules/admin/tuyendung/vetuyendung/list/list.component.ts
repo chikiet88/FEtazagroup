@@ -101,7 +101,7 @@ export class ListComponent implements OnInit {
           this.filteredNguoipheduyet = nhanvien; 
           this._changeDetectorRef.markForCheck();
         });
-        //this.Lydotuyen = {'1':'Tuyển Mới','2':'Thay Thế','3':'Dự Phòng','4':'Khác'};
+        this.Lydotuyen = {'1':'Tuyển Mới','2':'Thay Thế','3':'Dự Phòng','4':'Khác'};
         this.lists = [
             {id : '1',title:'Bước 1',mota:'Tạo Phiếu Tuyển Dụng',vetd:[]},
             {id : '2',title:'Bước 2',mota:'Duyệt phiếu tuyển dụng',vetd:[]},

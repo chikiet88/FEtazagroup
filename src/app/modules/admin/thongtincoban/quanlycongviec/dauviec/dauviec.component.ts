@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
@@ -25,6 +25,7 @@ export class DauviecComponent implements OnInit {
   isOpenDuan = false;
   SelectDuan:any;
   TasksNoGroup:any;
+  @ViewChild('titleInput') titleInput: ElementRef;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,

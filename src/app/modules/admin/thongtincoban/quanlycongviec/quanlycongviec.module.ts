@@ -30,6 +30,9 @@ import { SharedModule } from 'app/shared/shared.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { QuanlycongviecResolver } from './quanlycongviec.resolver';
+import { BoardComponent } from './dauviec/board/board.component';
+import { AddcardComponent } from './dauviec/board/addcard/addcard.component';
+import { AddlistComponent } from './dauviec/board/addlist/addlist.component';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -64,7 +67,7 @@ const quanlycongviecRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent],
+  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent],
   imports: [
     GoogleChartsModule,
     CKEditorModule,
