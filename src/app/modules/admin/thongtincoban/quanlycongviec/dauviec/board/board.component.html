@@ -3,15 +3,16 @@
         <div
             class="flex"
             cdkDropList
-            [cdkDropListData]="BoardGrouptasks"
+            [cdkDropListData]="Grouptasks"
             [cdkDropListOrientation]="'horizontal'"
             (cdkDropListDropped)="listDropped($event)">
             <div
                 class="flex items-start"
-                cdkDropListGroup>
-                <ng-container *ngFor="let list of BoardGrouptasks; trackBy: trackByFn">
+                cdkDropListGroup >
+                
+                <ng-container *ngFor="let list of Grouptasks; trackBy: trackByFn">
                     <div
-                        class="flex-0 w-72 p-2 rounded-2xl bg-default"
+                        class="flex-0 w-72 p-2 rounded-2xl"
                         cdkDrag
                         [cdkDragLockAxis]="'x'">
                         <div
@@ -27,7 +28,7 @@
                                     #listTitleInput>
                             </div>
                             <div class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
-                                {{list.cards.length}}
+                                {{list.tasks.length}}
                             </div>
                             <div class="ml-1">
                                 <button
@@ -59,19 +60,15 @@
                             </div>
                         </div>
 
-                        <!-- Cards -->
                         <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
-                            <app-addcard
-                                (saved)="addCard(list, $event)"
-                                [buttonTitle]="'Thêm Đầu Việc'">
-                            </app-addcard> 
+                            <app-addcard [buttonTitle]="'Thêm Đầu Việc'"  (saved)="addCard(list, $event)"> </app-addcard> 
                             <div
                                 [id]="list.id"
                                 class="px-3 py-5"
                                 cdkDropList
-                                [cdkDropListData]="list.cards"
+                                [cdkDropListData]="list.tasks"
                                 (cdkDropListDropped)="cardDropped($event)">
-                                <ng-container *ngFor="let card of list.cards; trackBy: trackByFn">
+                                <ng-container *ngFor="let card of list.tasks; trackBy: trackByFn">
                                     <a
                                         class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
                                         [routerLink]="['card', card.id]"
@@ -115,7 +112,6 @@
                         </div>
                     </div>
                 </ng-container>
-
                 <app-addlist
                     (saved)="addList($event)"
                     [buttonTitle]="'Thêm Group'">

@@ -14,6 +14,7 @@ export class QuanlycongviecService {
     private _task: BehaviorSubject<any> = new BehaviorSubject(null);
     private _duans: BehaviorSubject<any> = new BehaviorSubject(null);
     private _duan: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _boards: BehaviorSubject<any> = new BehaviorSubject(null);
     constructor(private _httpClient: HttpClient) {
     }
     get sections$(): Observable<any> {
@@ -24,6 +25,9 @@ export class QuanlycongviecService {
     }
     get grouptasks$(): Observable<any> {
         return this._grouptasks.asObservable();
+    }
+    get boards$(): Observable<any> {
+        return this._boards.asObservable();
     }
     get grouptask$(): Observable<any> {
         return this._grouptask.asObservable();
@@ -40,6 +44,15 @@ export class QuanlycongviecService {
     get duan$(): Observable<any> {
         return this._duan.asObservable();
     }
+    
+    getBoards() {
+        const grouptasks = this._grouptasks.value;
+        const tasks = this._tasks.value;
+        grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
+        console.log(grouptasks);
+       return this._boards.next(grouptasks);
+    }
+
     getAllSection(): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/section`).pipe(
             tap((response: any) => {
@@ -47,9 +60,7 @@ export class QuanlycongviecService {
             })
         );
     }
-    CreateSection(section): Observable<any> {
-        console.log(section);
-        
+    CreateSection(section): Observable<any> {       
         return this.sections$.pipe(
             take(1),
             switchMap(sections => this._httpClient.post(`${environment.ApiURL}/section`, section).pipe(
@@ -95,7 +106,6 @@ export class QuanlycongviecService {
             ))
         );
       }
-
     getAllGrouptasks(): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/grouptask`).pipe(
             tap((response: any) => {
@@ -109,6 +119,7 @@ export class QuanlycongviecService {
             switchMap(grouptasks => this._httpClient.post(`${environment.ApiURL}/grouptask`, grouptask).pipe(
                 map((result) => {
                     this._grouptasks.next([result, ...grouptasks]);
+                    this.getBoards();
                     return result;
                 })
             ))
@@ -122,6 +133,7 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks[index] = grouptask;
                     this._grouptasks.next(grouptasks);
+                    this.getBoards();
                     return grouptask;
                 }),
                 switchMap(grouptask => this.grouptask$.pipe(
@@ -143,6 +155,7 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks.splice(index, 1);
                     this._grouptasks.next(grouptasks);
+                    this.getBoards();
                     return isDeleted;
                 })
             ))
@@ -160,7 +173,9 @@ export class QuanlycongviecService {
             take(1),
             switchMap(tasks => this._httpClient.post(`${environment.ApiURL}/tasks`, task).pipe(
                 map((result) => {
+                    console.log(result);
                     this._tasks.next([result, ...tasks]);
+                    this.getBoards();
                     return result;
                 })
             ))
@@ -174,6 +189,7 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks[index] = task;
                     this._tasks.next(tasks);
+                    this.getBoards();
                     return task;
                 }),
                 switchMap(task => this.task$.pipe(
@@ -195,6 +211,7 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks.splice(index, 1);
                     this._tasks.next(tasks);
+                    this.getBoards();
                     return isDeleted;
                 })
             ))

@@ -1,12 +1,17 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import moment from 'moment';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { clone } from 'lodash';
+import { QuanlycongviecService } from '../../quanlycongviec.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
+import { UserService } from 'app/core/user/user.service';
+import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -14,43 +19,93 @@ import { clone } from 'lodash';
 })
 export class BoardComponent implements OnInit {
   listTitleForm: FormGroup;
-  @Input() TTasks!:any;
-  @Input() TDuans!:any;
-  @Input() TTasksNoGroup!:any;
-  @Input() TGrouptasks!:any;
-  @Input() TCUser!:any;
+  @ViewChild('titleInput') titleInput: ElementRef;
   BoardGrouptasks:any;
+  form: FormGroup;
+  formVisible: boolean = false;
+  filteredGrouptasks: any;
+  filteredTasks: any;
+  filteredDuans: any;
+  CUser: any;
+  Uutiens:any[];
+  Duans:any[];
+  triggerOrigin :any;
+  isOpenDuan = false;
+  SelectDuan:any;
+  TasksNoGroup:any;
+  Grouptasks: any[] = [];
+  Tasks: any[] = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _scrumboardService:ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _formBuilder: FormBuilder,
     private _fuseConfirmationService: FuseConfirmationService,
+    private _quanlycongviecService: QuanlycongviecService,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _notifierService: NotifierService,
+    private _userService: UserService,
+    private _nhanvienServiceService: NhanvienService,
+    
     ) { }
     ngOnInit(): void
      {
-        this.BoardGrouptasks = clone(this.TGrouptasks);
-         clone(this.BoardGrouptasks).forEach(v => {
-             v.cards = this.TTasks.filter(v1=>v1.gid==v.id)
-         });
-         const nogroup = {
-            "id": "0",
-            "Tieude": "Chưa có group",
-            "Mota": "",
-            "Ordering": 0,
-            "Trangthai": "0",
-            "IsOpen": true,
-            "Ngaytao": null,
-            "idTao": this.TCUser.id,
-            "cards": this.TTasksNoGroup,
-            "title": "New Group"
-        };
-        this.BoardGrouptasks.unshift(nogroup);
+        this._userService.user$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((data) => {
+          this.CUser = data;
+          this._quanlycongviecService.getBoards();
+          this._changeDetectorRef.markForCheck();         
+        });  
+        this._quanlycongviecService.grouptasks$.subscribe((data) => {
+          this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
+          console.log(data.filter(v=>v.idTao == this.CUser.id));
+          this._changeDetectorRef.markForCheck();
+        })
+        this._quanlycongviecService.tasks$.subscribe((data) => {
+          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
+          this._changeDetectorRef.markForCheck();
+        })
+        this._quanlycongviecService.duans$.subscribe((data) => {
+          this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
+          this._changeDetectorRef.markForCheck();
+        })
+        this._quanlycongviecService.boards$.subscribe((data)=>
+        {
+            this.Grouptasks = data; 
+        })
+        // const Grouptask = this.Grouptasks.map(v => v.id);
+        // console.log(Grouptask);
+        // console.log(this.Grouptasks);
+        // this.TasksNoGroup =  this.Tasks.filter(v=> !Grouptask.includes(v.sid))  
         
-         console.log(this.BoardGrouptasks);
+        // this.Grouptasks.forEach(v => {
+        //      v.cards = this.Tasks.filter(v1=>v1.gid==v.id)
+        //  });
+
+        //  const nogroup = {
+        //     "id": "0",
+        //     "Tieude": "Chưa có group",
+        //     "Mota": "",
+        //     "Ordering": 0,
+        //     "Trangthai": "0",
+        //     "IsOpen": true,
+        //     "Ngaytao": null,
+        //     "idTao": this.CUser.id,
+        //     "cards": this.TasksNoGroup,
+        //     "title": "New Group"
+        // };
+        // this.Grouptasks.unshift(nogroup);
+        // console.log(this.Grouptasks);
+        
+        // this._Grouptasks.next(this.Grouptasks);
          this.listTitleForm = this._formBuilder.group({
              title: ['']
          });
+         this.form = this._formBuilder.group({
+            title: ['']
+        });
      }
      ngOnDestroy(): void
      {
@@ -106,17 +161,25 @@ export class BoardComponent implements OnInit {
              }
          });
      }
-     addCard(list: List, title: string): void
+     addCard(list: any, title: string): void
      {
-         const card = new Card({
-             boardId : this.BoardGrouptasks.id,
-             listId  : list.id,
-             position: 0,
-             title   : title
-         });
- 
-         this._scrumboardService.createCard(card).subscribe();
+        //  // Create a new card model
+        //  const card = new Card({
+        //      boardId : this.board.id,
+        //      listId  : list.id,
+        //      position: list.cards.length ? list.cards[list.cards.length - 1].position + this._positionStep : this._positionStep,
+        //      title   : title
+        //  });
+        // console.log(list);
+        //  const x =  this.Grouptasks.find(v=>v.id ==list.id);
+         const task = { Tieude: title, gid: list.id, idTao: this.CUser.id }
+        // const index = this.Grouptasks.findIndex(item => item.id === list.id);
+        // this.Grouptasks[index].cards.unshift(task);
+        // this._Grouptasks.next(this.Grouptasks);
+         this._quanlycongviecService.CreateTasks(task).subscribe(
+         );
      }
+
      listDropped(event: CdkDragDrop<List[]>): void
      {
          //change ordering
@@ -146,5 +209,13 @@ export class BoardComponent implements OnInit {
      trackByFn(index: number, item: any): any
      {
          return item.id || index;
+     }
+     toggleFormVisibility(): void
+     {
+         this.formVisible = !this.formVisible;
+         if ( this.formVisible )
+         {
+             this.titleInput.nativeElement.focus();
+         }
      }
 }
