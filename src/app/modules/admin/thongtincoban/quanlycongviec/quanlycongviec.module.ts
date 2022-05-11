@@ -33,6 +33,8 @@ import { QuanlycongviecResolver } from './quanlycongviec.resolver';
 import { BoardComponent } from './dauviec/board/board.component';
 import { AddcardComponent } from './dauviec/board/addcard/addcard.component';
 import { AddlistComponent } from './dauviec/board/addlist/addlist.component';
+import { ListComponent } from './dauviec/list/list.component';
+import { CardComponent } from './dauviec/card/card.component';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -46,14 +48,22 @@ const quanlycongviecRoutes: Route[] = [
           path     : 'muctieu',
           component: MuctieuComponent,
         },
-
         {
           path     : 'dauviec',
           component: DauviecComponent,
           resolve  : {
             tasks    : QuanlycongviecResolver,
         },
-        },
+        children : [
+            {
+               path     : 'dauviec/:id',
+                component: DauviecComponent,
+                resolve  : {
+                tasks    : QuanlycongviecResolver,
+            }
+          }
+        ]
+       },
         {
           path     : 'duan',
           component: DuanComponent,
@@ -67,7 +77,7 @@ const quanlycongviecRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent],
+  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, CardComponent],
   imports: [
     GoogleChartsModule,
     CKEditorModule,

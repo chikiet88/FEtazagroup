@@ -74,12 +74,12 @@ import { KhachhangsService } from '../khachhangs.service';
     );
     this.Member = [
       { id: 0, tieude: "All", Tu: '', Den: '' },
-      { id: 1, tieude: "Normal", Tu: 0, Den: 50000000 },
-      { id: 2, tieude: "Member", Tu: 50000000, Den: 100000000 },
-      { id: 3, tieude: "Silver", Tu: 100000000, Den: 200000000 },
-      { id: 4, tieude: "Gold", Tu: 200000000, Den: 350000000 },
-      { id: 5, tieude: "Platinum", Tu: 350000000, Den: 500000000 },
-      { id: 6, tieude: "Diamond", Tu: 500000000, Den: 9900000000 },
+      { id: 1, tieude: "Normal", Tu: 0, Den: 49999999 },
+      { id: 2, tieude: "Member", Tu: 50000000, Den: 99999999 },
+      { id: 3, tieude: "Silver", Tu: 100000000, Den: 199999999 },     
+      { id: 4, tieude: "Gold", Tu: 200000000, Den: 349999999 },       
+      { id: 5, tieude: "Platinum", Tu: 350000000, Den: 499999999 },   
+      { id: 6, tieude: "Diamond", Tu: 500000000, Den: 9999999999 },   
     ]
     this.FilterForm = this._formBuilder.group({
       NgayTaoDV: [''],

@@ -49,6 +49,7 @@ export class QuanlycongviecService {
         const grouptasks = this._grouptasks.value;
         const tasks = this._tasks.value;
         grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
+        grouptasks.sort((a, b) => b.Ordering - a.Ordering);
         console.log(grouptasks);
        return this._boards.next(grouptasks);
     }

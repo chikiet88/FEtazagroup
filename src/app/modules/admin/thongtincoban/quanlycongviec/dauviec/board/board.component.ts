@@ -120,16 +120,9 @@ export class BoardComponent implements OnInit {
      }
      addList(title: string): void
      {
-         if ( this.BoardGrouptasks.lists.length >= 200 )
-         {
-             return;
-         }
-         const list = new List({
-             boardId : this.BoardGrouptasks.id,
-             position: 0,
-             title   : title
-         });
-         this._scrumboardService.createList(list).subscribe();
+         let ordering = Math.max(...this.Grouptasks.map(o => o.Ordering)) + 1;
+         let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id,Ordering:ordering}  
+         this._quanlycongviecService.CreateGrouptasks(group).subscribe();
      }
      updateListTitle(event: any, list: List): void
      {

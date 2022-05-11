@@ -37,7 +37,6 @@ export class DauviecComponent implements OnInit {
     private _nhanvienServiceService: NhanvienService,
   ) {}
 
-   
   ngOnInit(): void {
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
