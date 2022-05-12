@@ -41,7 +41,7 @@ const quanlycongviecRoutes: Route[] = [
       component: QuanlycongviecComponent,
       children : [
         {
-            path     : '',
+            path     : 'tongquan',
             component: TongquanComponent,
         },
         {
@@ -57,7 +57,7 @@ const quanlycongviecRoutes: Route[] = [
         children : [
             {
                path     : 'dauviec/:id',
-                component: DauviecComponent,
+                component: BoardComponent,
                 resolve  : {
                 tasks    : QuanlycongviecResolver,
             }

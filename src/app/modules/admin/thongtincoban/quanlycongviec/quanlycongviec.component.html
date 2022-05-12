@@ -1,4 +1,4 @@
-<mat-drawer-container class="w-full" autosize>
+<!-- <mat-drawer-container class="w-full" autosize>
     <mat-drawer #drawer mode="side" opened="true">
         <mat-selection-list #items [multiple]="false">
             <mat-list-option *ngFor="let item of MenuCongviec" [value]="item" [routerLink]="['./'+ item.link]">
@@ -6,7 +6,6 @@
             </mat-list-option>
           </mat-selection-list>
     </mat-drawer>
-  
     <mat-drawer-content class="bg-card flex flex-col flex-auto">
       <button type="button" mat-button (click)="drawer.toggle()" class="absolute">
         <span class="material-icons" *ngIf="!drawer.opened">
@@ -16,8 +15,18 @@
             navigate_before
          </span>  
       </button>
-      <router-outlet></router-outlet>
     </mat-drawer-content>
-  </mat-drawer-container>
+  </mat-drawer-container> -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+  
+  <div class="flex flex-row justify-center space-x-4 p-4 bg-card">
+    <button mat-button *ngFor="let item of MenuCongviec" [value]="item" [routerLink]="['./'+ item.link]" [routerLinkActive]="['bg-blue-500', 'text-white']">{{item.title}}</button>
+  </div>
+  <div class="flex flex-col flex-auto">  
+    <router-outlet></router-outlet>
+  </div>
+
+</div>
+
 
 
