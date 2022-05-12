@@ -44,7 +44,10 @@ export class QuanlycongviecService {
     get duan$(): Observable<any> {
         return this._duan.asObservable();
     }
-    
+    changeTask(task)
+    {
+        this._task.next(task);
+    }
     getBoards() {
         const grouptasks = this._grouptasks.value;
         const tasks = this._tasks.value;

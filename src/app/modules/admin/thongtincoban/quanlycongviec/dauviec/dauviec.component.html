@@ -6,23 +6,18 @@
       </h2>
   </div>
   <div class="flex flex-row space-x-4">
-    <span class="material-icons text-blue-500" (click)="chosenView(1)">
-      view_kanban
-      </span>
-    <span class="material-icons text-blue-500" (click)="chosenView(2)">
-      view_list
-      </span>
-    <span class="material-icons text-blue-500" (click)="chosenView(3)">
-      calendar_month
-      </span>
-    <span class="material-icons text-blue-500" (click)="chosenView(4)">
-      view_timeline
-      </span>
+    <mat-button-toggle-group>
+      <mat-button-toggle value="item.id" *ngFor="let item of listview" (click)="chosenView(item.id)">
+        <span class="material-icons text-blue-500">
+          {{item.value}}
+          </span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
-
 </div>
 <div class="flex flex-col flex-auto">
   <app-board class="absolute inset-0 top-22 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1"></app-board>
    <app-list *ngIf="view==2"></app-list>
+   <app-timeline *ngIf="view==3"></app-timeline>
 </div>
 </div>

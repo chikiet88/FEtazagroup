@@ -446,6 +446,11 @@ onRemove(event) {
       this.viewDate = date;
     }
   }
+  eventClicked({ events }: { events: CalendarEvent[] }): void {
+    console.log(events);
+    
+   // this.handleEvent(events);
+  }
   eventTimesChanged({event,newStart,newEnd}): void {
     const confirmation = this._fuseConfirmationService.open({
       title: 'Chuyển Lịch',
@@ -495,7 +500,7 @@ onRemove(event) {
     });
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
+  handleEvent(event: CalendarEvent): void {
     this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);

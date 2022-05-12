@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
+import { QuanlycongviecComponent } from '../../quanlycongviec.component';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -36,6 +37,8 @@ export class BoardComponent implements OnInit {
   Grouptasks: any[] = [];
   Tasks: any[] = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     private _scrumboardService:ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -47,6 +50,7 @@ export class BoardComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
+    public _quanlycongviecComponent:QuanlycongviecComponent,
     
     ) { }
     ngOnInit(): void
@@ -111,6 +115,11 @@ export class BoardComponent implements OnInit {
      {
          this._unsubscribeAll.next(null);
          this._unsubscribeAll.complete();
+     }
+     OpenEdit(card)
+     {
+        this._quanlycongviecService.changeTask(card);
+        this._quanlycongviecComponent.matDrawer.toggle();
      }
      renameList(listTitleInput: HTMLElement): void
      {
@@ -179,16 +188,35 @@ export class BoardComponent implements OnInit {
          console.log(event);
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
      }
-     cardDropped(event: CdkDragDrop<Card[]>): void
+     cardDropped(event: CdkDragDrop<any[]>,list): void
      {
-         console.log(event);
-         
+        //  console.log(list);
+        //  console.log(event.previousContainer.id);
+        //  console.log(event.previousContainer.data);
+        //  console.log(event.container.id);
+        //  console.log(event.container.data);
+         console.log(event.previousContainer);
+         console.log(event.container.);
          if ( event.previousContainer === event.container )
          {
+             console.log('true');
+             
              moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
          }
          else
          {
+            console.log('false');
+            console.log(event.previousContainer.data.length);
+            console.log(event.previousContainer.data);
+            
+            const item  = event.container.data;
+            item.forEach(v => {
+                v.gid = event.container.id;
+                console.log(v);
+                
+                this._quanlycongviecService.UpdateTasks(v,v.id).subscribe();
+            });
+
              transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
              event.container.data[event.currentIndex].listId = event.container.id;
          }
