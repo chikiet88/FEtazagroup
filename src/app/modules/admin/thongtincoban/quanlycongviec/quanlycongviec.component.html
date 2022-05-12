@@ -1,5 +1,5 @@
 <mat-drawer-container class="w-full" autosize fuseScrollbar>
-  <mat-drawer #matDrawer class="w-1/2" mode="over" position="end">
+  <mat-drawer #matDrawer class="w-3/5" mode="over" position="end">
     <div class="flex flex-row justify-between p-4">
       <div>
         <h2 class="text-2xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate"> Cập Nhật</h2>
@@ -8,58 +8,30 @@
         cancel
       </span>
     </div>
-    <!-- <form [formGroup]="TaskForm">
-      <div class="flex flex-col mt-4 pt-6 space-y-3">
-        <ng-container> 
-          <div class="flex justify-center">
-            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-2/3">
-              <div class="material-icons icon-size-5" matPrefix>account_circle</div><input [formControlName]="'name'"
-                matInput class="mat-select-value-text">
-            </mat-form-field>
-            <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix ml-3 w-1/3">
-              <mat-select placeholder="Phân Quyền" [formControlName]="'Role'" #roleselect="matSelect">
-                <mat-select-trigger class="text-md"><span>Role:</span><span class="ml-1 font-medium">{{roleSelect.value
-                    | titlecase}}</span></mat-select-trigger>
-                <mat-option [value]="'admin'" class="h-auto py-4 leading-none">
-                  <div class="font-medium">Admin</div>
-                  <div class="mt-1.5 text-sm whitespace-normal leading-normal text-secondary">Toàn quyền quản lý</div>
-                </mat-option>
-                <mat-option [value]="'manager'">Quản Lý</mat-option>
-                <mat-option [value]="'user'">Nhân Viên</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </ng-container>
-      </div>
-      <div
-        class="flex items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-        <button mat-button [color]="'warn'">Xóa</button><button class="ml-auto" mat-button>Hủy</button><button
-          class="ml-2" mat-flat-button [color]="'primary'"
-          [disabled]="MenuForm.invalid || MenuForm.disabled">Lưu</button></div>
-    </form> -->
     <div class="flex flex-col flex-auto p-4 space-y-3" *ngIf="CurretTask">
       <div class="flex flex-row space-x-4">
-      <div class="my-auto font-bold w-1/4"> Tiêu Đề </div>
+        <div class="my-auto font-bold w-1/4"> Tiêu Đề </div>
         <input [value]="CurretTask.Tieude" matInput (change)="ChangeTask(CurretTask,'Tieude',$event.target.value)">
-      </div>  
+      </div>
       <div class="flex flex-col space-y-4">
         <div class="my-auto font-bold w-1/4"> Mô Tả </div>
-        <ckeditor [editor]="Editor" [config]="config" [data]="CurretTask.Mota" (change)="UpdateEditor(CurretTask,'Mota',$event)" (ready)="onReady($event)"></ckeditor>
-        </div>    
+        <ckeditor [editor]="Editor" [config]="config" [data]="CurretTask.Mota"
+          (change)="UpdateEditor(CurretTask,'Mota',$event)" (ready)="onReady($event)"></ckeditor>
+      </div>
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Deadline </div>
         <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
           [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !CurretTask.Batdau&&!CurretTask.Ketthuc,
-                    'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': CurretTask.Batdau && CurretTask.Ketthuc}"
-          (click)="DeadlinePicker.open()">
+                    'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': CurretTask.Batdau && CurretTask.Ketthuc}" (click)="DeadlinePicker.open()">
           <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
           <span class="ml-2 text-md font-medium">
-            <ng-container *ngIf="CurretTask.Batdau || CurretTask.Ketthuc">{{CurretTask.Batdau | date:'dd/MM/yyyy'}} - {{CurretTask.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
+            <ng-container *ngIf="CurretTask.Batdau || CurretTask.Ketthuc">{{CurretTask.Batdau | date:'dd/MM/yyyy'}} -
+              {{CurretTask.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
             <ng-container *ngIf="!CurretTask.Batdau && !CurretTask.Ketthuc">Chưa Chọn</ng-container>
           </span>
           <mat-form-field
             class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
-         <mat-form-field appearance="fill" class="example-form-field">
+            <mat-form-field appearance="fill" class="example-form-field">
               <mat-date-range-input [rangePicker]="DeadlinePicker">
                 <input matStartDate placeholder="Start date" #DeadlineBg>
                 <input matEndDate placeholder="End date" #DeadlineKt>
@@ -67,13 +39,15 @@
               <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
               <mat-date-range-picker #DeadlinePicker>
                 <mat-date-range-picker-actions>
-                  <button mat-button matDateRangePickerCancel (click)="UpdateDeadlineTask(CurretTask,null,null)">xóa</button>
-                  <button mat-raised-button color="primary" matDateRangePickerApply (click)="UpdateDeadlineTask(CurretTask,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
+                  <button mat-button matDateRangePickerCancel
+                    (click)="UpdateDeadlineTask(CurretTask,null,null)">xóa</button>
+                  <button mat-raised-button color="primary" matDateRangePickerApply
+                    (click)="UpdateDeadlineTask(CurretTask,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
                 </mat-date-range-picker-actions>
               </mat-date-range-picker>
             </mat-form-field>
 
-            
+
           </mat-form-field>
         </div>
       </div>
@@ -84,8 +58,8 @@
             <div
               class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
               <span class="ml-2 mr-1 text-md font-medium">
-                <ng-container *ngIf="CurretTask.pjid">
-                  {{CurretTask.pjid|findbyid:Duans:'Tieude'}}
+                <ng-container *ngIf="CurretTask.sid">
+                  {{(CurretTask.sid|findbyid:Sections:'pjid')|findbyid:Duans:'Tieude'}} / {{CurretTask.sid|findbyid:Sections:'Tieude'}} 
                 </ng-container>
                 <ng-container *ngIf="!CurretTask.pjid">
                   Chưa Chọn
@@ -104,7 +78,7 @@
 
 
     <div class="flex flex-row justify-end space-x-3 mr-4">
-      <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Cập Nhật</button>
+      <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
       <button mat-button class="bg-red-500 text-white">Xóa</button>
     </div>
   </mat-drawer>
@@ -125,28 +99,38 @@
 </mat-drawer-container>
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-[cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
-[cdkConnectedOverlayOpen]="isOpenDuan" (detach)="isOpenDuan = false" (backdropClick)="isOpenDuan = false">
-<div class="w-60 rounded border shadow-md bg-card m-3">
-  <div class="flex items-center m-3 mr-2">
-    <div class="flex items-center">
-      <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
-      <div class="ml-2">
-        <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpenDuan" (detach)="isOpenDuan = false" (backdropClick)="isOpenDuan = false">
+  <div class="w-84 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+        </div>
       </div>
     </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <!-- <ng-container *ngFor="let item of Duans">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+              (click)="ChonDuan(SelectDuan,item.id)">
+              <div class="ml-1">{{item.Tieude}}</div>
+            </div>
+          </ng-container> -->
+          <ng-container *ngFor="let item of Duansections">
+            <ng-container *ngFor="let item1 of item.sections">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple (click)="ChonDuan(SelectDuan,item1.id)">
+              <div class="ml-1">{{item.Tieude}}/{{item1.Tieude}}</div>
+              <ng-container *ngIf="!CurretTask.sid">
+                Chưa Chọn
+              </ng-container>
+            </div>
+          </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
   </div>
-  <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-    <ng-container>
-      <div class="py-2 space-y-2">
-        <ng-container *ngFor="let item of Duans">
-          <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
-            (click)="ChonDuan(SelectDuan,item.id)">
-            <div class="ml-1">{{item.Tieude}}</div>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
-  </div>
-</div>
-</ng-template> 
+</ng-template>

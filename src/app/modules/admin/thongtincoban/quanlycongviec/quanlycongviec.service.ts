@@ -15,6 +15,7 @@ export class QuanlycongviecService {
     private _duans: BehaviorSubject<any> = new BehaviorSubject(null);
     private _duan: BehaviorSubject<any> = new BehaviorSubject(null);
     private _boards: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _duansections: BehaviorSubject<any> = new BehaviorSubject(null);
     constructor(private _httpClient: HttpClient) {
     }
     get sections$(): Observable<any> {
@@ -25,6 +26,9 @@ export class QuanlycongviecService {
     }
     get grouptasks$(): Observable<any> {
         return this._grouptasks.asObservable();
+    }
+    get Duansections$(): Observable<any> {
+        return this._duansections.asObservable();
     }
     get boards$(): Observable<any> {
         return this._boards.asObservable();
@@ -55,6 +59,13 @@ export class QuanlycongviecService {
         grouptasks.sort((a, b) => b.Ordering - a.Ordering);
         console.log(grouptasks);
        return this._boards.next(grouptasks);
+    }
+    getDuans() {
+        const duans = this._duans.value;
+        const secstions = this._sections.value;
+        duans.forEach(v => {v.sections = secstions.filter(v1=>v1.pjid==v.id)});
+        console.log(duans);
+       return this._duansections.next(duans);
     }
 
     getAllSection(): Observable<any> {
@@ -190,6 +201,7 @@ export class QuanlycongviecService {
             take(1),
             switchMap(tasks => this._httpClient.patch(`${environment.ApiURL}/tasks/${id}`, task).pipe(
                 map((task) => {
+                    console.log(task);
                     const index = tasks.findIndex(item => item.id === id);
                     tasks[index] = task;
                     this._tasks.next(tasks);

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { UserService } from 'app/core/user/user.service';
+import { Subject, takeUntil } from 'rxjs';
+import { QuanlycongviecService } from '../../quanlycongviec.service';
 
 @Component({
   selector: 'app-timeline',
@@ -6,39 +9,62 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./timeline.component.scss']
 })
 export class TimelineComponent implements OnInit {
-  constructor() {
+  constructor(
+    private _quanlycongviecService: QuanlycongviecService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _userService: UserService,
+  ) {
+
   }
-  title = 'Browser market shares at a specific website, 2014';
+  Tasks: any[] = [];
+  Grouptasks: any[] = [];
+  filteredTasks: any;
+  CUser: any;
+  private _unsubscribeAll: Subject<any> = new Subject();
+  title = 'Timeline';
   type = 'Timeline';
   chartColumns= [
-    { type: 'string', id: 'President' },
-    { type: 'string', id: 'Abc' },
+    { type: 'string', id: 'Group' },
+    { type: 'string', id: 'Task' },
     { type: 'date', id: 'Start' },
     { type: 'date', id: 'End' },
     ];
-    data= [
-      [ 'Washington','ABC', new Date(2022, 5, 10), new Date(2022, 5, 11) ],
-      [ 'Adams','DEF',      new Date(2022, 5, 7), new Date(2022, 5, 9) ],
-      [ 'Jefferson','IJK',  new Date(2022, 5, 2), new Date(2022, 5, 6) ]];
+  data = [];
+
     options= {
-      height: 275,
-      gantt: {
-        criticalPathEnabled: false,
-        innerGridHorizLine: {
-          stroke: '#ffe0b2',
-          strokeWidth: 2
-        },
-        innerGridTrack: {fill: '#fff3e0'},
-        innerGridDarkTrack: {fill: '#ffcc80'}
-      }
+
     }
   ngOnInit(): void {
-
+    this._quanlycongviecService.getDuans();
+    this._userService.user$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data) => {
+      this.CUser = data;
+      this._changeDetectorRef.markForCheck();         
+    });  
+    // this._quanlycongviecService.tasks$.subscribe((data) => {
+    //   this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
+    //   console.log(data);
+    //   this._changeDetectorRef.markForCheck();
+    // })
+    this._quanlycongviecService.boards$.subscribe((data)=>{
+      console.log(data);
+      this.Grouptasks = data; 
+      const Arrayobject = [];
+      data.forEach(v => {
+        v.tasks.forEach(v1 => {
+          Arrayobject.push({group:v.Tieude,task:v1.Tieude,start:new Date(v1.Batdau),end:new Date(v1.Ketthuc)}) 
+        });
+      });
+      this.data = Arrayobject.map(function(obj) {
+      return Object.keys(obj).map(function(key) { 
+        return obj[key];
+      });
+    });
+    })
+    console.log(this.data);
+    
   }
-  toMilliseconds(minutes) {
-    return minutes * 60 * 1000;
-  }
-
   ngAfterViewInit() {
 
   }

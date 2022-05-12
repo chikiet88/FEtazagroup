@@ -33,11 +33,14 @@ export class QuanlycongviecComponent implements OnInit {
   CurretTask:any;
   SelectDuan:any;
   isOpenDuan = false;
-  filteredDuans: any;
+  filteredDuans: any[];
+  filteredSections: any[];
   CUser: any;
   Uutiens:any[];
   Duans:any[];
+  Sections:any[];
   triggerOrigin :any;
+  Duansections :any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -46,6 +49,7 @@ export class QuanlycongviecComponent implements OnInit {
     ) { }
 
    ngOnInit(): void {
+    this._quanlycongviecService.getDuans();
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
@@ -56,10 +60,18 @@ export class QuanlycongviecComponent implements OnInit {
       this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
       this._changeDetectorRef.markForCheck();
     })
+     this._quanlycongviecService.sections$.subscribe((data) => {
+      this.Sections = data;
+      this._changeDetectorRef.markForCheck();
+    })
     this._quanlycongviecService.task$.subscribe((data)=>{this.CurretTask = data})
+    this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data; 
+      console.log(data);
+      
+    })
   } 
   ChonDuan(item,id) {
-    item.pjid = id;
+    item.sid = id;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.isOpenDuan =false;
   }

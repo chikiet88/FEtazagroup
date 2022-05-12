@@ -79,31 +79,6 @@ export class BoardComponent implements OnInit {
         {
             this.Grouptasks = data; 
         })
-        // const Grouptask = this.Grouptasks.map(v => v.id);
-        // console.log(Grouptask);
-        // console.log(this.Grouptasks);
-        // this.TasksNoGroup =  this.Tasks.filter(v=> !Grouptask.includes(v.sid))  
-        
-        // this.Grouptasks.forEach(v => {
-        //      v.cards = this.Tasks.filter(v1=>v1.gid==v.id)
-        //  });
-
-        //  const nogroup = {
-        //     "id": "0",
-        //     "Tieude": "Chưa có group",
-        //     "Mota": "",
-        //     "Ordering": 0,
-        //     "Trangthai": "0",
-        //     "IsOpen": true,
-        //     "Ngaytao": null,
-        //     "idTao": this.CUser.id,
-        //     "cards": this.TasksNoGroup,
-        //     "title": "New Group"
-        // };
-        // this.Grouptasks.unshift(nogroup);
-        // console.log(this.Grouptasks);
-        
-        // this._Grouptasks.next(this.Grouptasks);
          this.listTitleForm = this._formBuilder.group({
              title: ['']
          });
@@ -120,6 +95,7 @@ export class BoardComponent implements OnInit {
      {
         this._quanlycongviecService.changeTask(card);
         this._quanlycongviecComponent.matDrawer.toggle();
+        
      }
      renameList(listTitleInput: HTMLElement): void
      {
@@ -133,7 +109,7 @@ export class BoardComponent implements OnInit {
          let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id,Ordering:ordering}  
          this._quanlycongviecService.CreateGrouptasks(group).subscribe();
      }
-     updateListTitle(event: any, list: List): void
+     updateListTitle(event: any, list): void
      {
          const element: HTMLInputElement = event.target;
          const newTitle = element.value;
@@ -142,26 +118,33 @@ export class BoardComponent implements OnInit {
              element.value = list.title;
              return;
          }
-         list.title = element.value = newTitle.trim();
-         this._scrumboardService.updateList(list).subscribe();
+         list.Tieude = element.value = newTitle.trim();
+         delete list.tasks;
+         this._quanlycongviecService.UpdateGrouptasks(list,list.id).subscribe();
      }
-     deleteList(id): void
+     deleteGroup(item): void
      {
-         const confirmation = this._fuseConfirmationService.open({
-             title  : 'Delete list',
-             message: 'Are you sure you want to delete this list and its cards? This action cannot be undone!',
-             actions: {
-                 confirm: {
-                     label: 'Delete'
-                 }
-             }
-         });
-         confirmation.afterClosed().subscribe((result) => {
-             if ( result === 'confirmed' )
-             {
-                 this._scrumboardService.deleteList(id).subscribe();
-             }
-         });
+         console.log(item.tasks.length);
+         
+         if(item.tasks.length==0)
+         {
+            const confirmation = this._fuseConfirmationService.open({
+                title  : 'Xóa Group',
+                message: 'Bạn Có Chắc Chắn Xóa Group Này',
+                actions: {
+                    confirm: {
+                        label: 'Xóa'
+                    }
+                }
+            });
+            confirmation.afterClosed().subscribe((result) => {
+                if ( result === 'confirmed' )
+                {
+                    this._quanlycongviecService.DeleteGrouptasks(item.id).subscribe();
+                }
+            });
+         }
+         else { this._notifierService.notify('error', 'Group Có Đầu Việc. Vui Lòng Xóa Hết Đầu Việc Trước Khi Xóa Group'); }
      }
      addCard(list: any, title: string): void
      {
@@ -190,35 +173,22 @@ export class BoardComponent implements OnInit {
      }
      cardDropped(event: CdkDragDrop<any[]>,list): void
      {
-        //  console.log(list);
-        //  console.log(event.previousContainer.id);
-        //  console.log(event.previousContainer.data);
-        //  console.log(event.container.id);
-        //  console.log(event.container.data);
-         console.log(event.previousContainer);
-         console.log(event.container.);
+         console.log(event.container.data);
          if ( event.previousContainer === event.container )
          {
              console.log('true');
              
              moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+             
          }
          else
          {
-            console.log('false');
-            console.log(event.previousContainer.data.length);
-            console.log(event.previousContainer.data);
-            
-            const item  = event.container.data;
-            item.forEach(v => {
-                v.gid = event.container.id;
-                console.log(v);
-                
-                this._quanlycongviecService.UpdateTasks(v,v.id).subscribe();
-            });
 
              transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-             event.container.data[event.currentIndex].listId = event.container.id;
+             event.container.data[event.currentIndex].gid = event.container.id;    
+             const item  = event.container.data[event.currentIndex]
+             this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
+
          }
  
      }

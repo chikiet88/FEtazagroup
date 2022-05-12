@@ -12,7 +12,7 @@ import { QuanlycongviecService } from '../../quanlycongviec.service';
   encapsulation:ViewEncapsulation.None,
 })
 export class ListComponent implements OnInit {
-  displayedColumns: string[] = ['No','tieude','deadline','uutien','duan','section','comment'];
+  displayedColumns: string[] = ['No','tieude','deadline','uutien','duan','comment'];
   Grouptasks: any[] = [];
   Tasks: any[] = [];
   filteredGrouptasks: any;
@@ -60,10 +60,14 @@ export class ListComponent implements OnInit {
       this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
       this._changeDetectorRef.markForCheck();
     })
-    const Grouptask = this.Grouptasks.map(v => v.id);
-    console.log(Grouptask);
-    console.log(this.Grouptasks);
-    this.TasksNoGroup =  this.Tasks.filter(v=> !Grouptask.includes(v.sid))
+    // const Grouptask = this.Grouptasks.map(v => v.id);
+    // console.log(Grouptask);
+    // console.log(this.Grouptasks);
+    // this.TasksNoGroup =  this.Tasks.filter(v=> !Grouptask.includes(v.sid))
+    this._quanlycongviecService.boards$.subscribe((data)=>
+    {
+        this.Grouptasks = data; 
+    })
   }
   toggleDuan(trigger: any,row) {
     this.SelectDuan = row
@@ -76,6 +80,7 @@ export class ListComponent implements OnInit {
     this.isOpenDuan =false;
   }
   GetdataSource(item) {
+    console.log(item);
     return this.Tasks.filter(v => v.sid == item.id);
   }
   CreateGrouptasks() {

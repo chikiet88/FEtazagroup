@@ -38,3 +38,17 @@ export class UniquePipe implements PipeTransform {
      return items1;
   }
 }
+@Pipe({name: 'Findnested'})
+export class FindnestedPipe implements PipeTransform {
+  transform(id:any,items: any,child:any,type:any): any { 
+
+    return items.find(v => v[child].some(v1 => v1[type] === id));
+
+    // let data = items.find(v=>v.id == id);
+    // if(data)
+    // {
+    //   return items.find(v=>v.id == id)[result];
+    // }
+   
+  }
+}

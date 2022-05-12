@@ -34,8 +34,9 @@ import { BoardComponent } from './dauviec/board/board.component';
 import { AddcardComponent } from './dauviec/board/addcard/addcard.component';
 import { AddlistComponent } from './dauviec/board/addlist/addlist.component';
 import { ListComponent } from './dauviec/list/list.component';
-import { CardComponent } from './dauviec/card/card.component';
 import { TimelineComponent } from './dauviec/timeline/timeline.component';
+import { AddgroupComponent } from './dauviec/list/addgroup/addgroup.component';
+import { AddtaskComponent } from './dauviec/list/addtask/addtask.component';
 const quanlycongviecRoutes: Route[] = [
   {
       path     : '',
@@ -78,7 +79,7 @@ const quanlycongviecRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, CardComponent, TimelineComponent],
+  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent],
   imports: [
     GoogleChartsModule,
     CKEditorModule,

@@ -20,6 +20,7 @@ export class QuanlycongviecResolver implements Resolve<boolean> {
       this._quanlycongviecService.getAllGrouptasks(),
       this._quanlycongviecService.getAllTasks(),
       this._quanlycongviecService.getAllDuans(),
+      this._quanlycongviecService.getAllSection(),
     ]);
   }
 }
