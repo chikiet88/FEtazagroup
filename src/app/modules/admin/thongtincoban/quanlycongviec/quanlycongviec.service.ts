@@ -75,6 +75,13 @@ export class QuanlycongviecService {
             })
         );
     }
+    getSectionByuser(id): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/section/user/${id}`).pipe(
+            tap((response: any) => {
+                this._sections.next(response);
+            })
+        );
+    }
     CreateSection(section): Observable<any> {       
         return this.sections$.pipe(
             take(1),
@@ -124,6 +131,14 @@ export class QuanlycongviecService {
     getAllGrouptasks(): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/grouptask`).pipe(
             tap((response: any) => {
+                this._grouptasks.next(response);
+            })
+        );
+    }
+    getGrouptasksByuser(id): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/grouptask/user/${id}`).pipe(
+            tap((response: any) => {
+                console.log(response);
                 this._grouptasks.next(response);
             })
         );
@@ -179,6 +194,15 @@ export class QuanlycongviecService {
    getAllTasks(): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/tasks`).pipe(
             tap((response: any) => {
+                this._tasks.next(response);
+            })
+        );
+    }
+   getTasksByuser(id): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/tasks/user/${id}`).pipe(
+            tap((response: any) => {
+                console.log(response);
+                
                 this._tasks.next(response);
             })
         );
@@ -243,6 +267,14 @@ export class QuanlycongviecService {
     getDuanById(id): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/project/${id}`).pipe(
             tap((response: any) => {
+                this._duan.next(response);
+            })
+        );
+    }
+    getDuanByuser(id): Observable<any> {
+        return this._httpClient.get(`${environment.ApiURL}/project/user/${id}`).pipe(
+            tap((response: any) => {
+                console.log(response);  
                 this._duan.next(response);
             })
         );

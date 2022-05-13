@@ -35,6 +35,7 @@ export class BoardComponent implements OnInit {
   SelectDuan:any;
   TasksNoGroup:any;
   Grouptasks: any[] = [];
+  Boards: any[] = [];
   Tasks: any[] = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
@@ -52,32 +53,36 @@ export class BoardComponent implements OnInit {
     private _nhanvienServiceService: NhanvienService,
     public _quanlycongviecComponent:QuanlycongviecComponent,
     
-    ) { }
-    ngOnInit(): void
-     {
+    ) {
         this._userService.user$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data) => {
           this.CUser = data;
-          this._quanlycongviecService.getBoards();
           this._changeDetectorRef.markForCheck();         
         });  
+        this._quanlycongviecService.getGrouptasksByuser(this.CUser.id).subscribe();
+        this._quanlycongviecService.getTasksByuser(this.CUser.id).subscribe();
+        this._quanlycongviecService.getDuanByuser(this.CUser.id).subscribe();
+        this._quanlycongviecService.getSectionByuser(this.CUser.id).subscribe();
+     }
+    ngOnInit(): void
+     {
+        this._quanlycongviecService.getBoards();
         this._quanlycongviecService.grouptasks$.subscribe((data) => {
-          this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
-          console.log(data.filter(v=>v.idTao == this.CUser.id));
+          this.Grouptasks = this.filteredTasks = data
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.tasks$.subscribe((data) => {
-          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
+          this.Tasks = this.filteredTasks = data
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.duans$.subscribe((data) => {
-          this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
+          this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.boards$.subscribe((data)=>
         {
-            this.Grouptasks = data; 
+            this.Boards = data; 
         })
          this.listTitleForm = this._formBuilder.group({
              title: ['']
@@ -105,7 +110,8 @@ export class BoardComponent implements OnInit {
      }
      addList(title: string): void
      {
-         let ordering = Math.max(...this.Grouptasks.map(o => o.Ordering)) + 1;
+        let ordering = 0;
+         if(this.Grouptasks.length!=0){ordering = Math.max(...this.Grouptasks.map(o => o.Ordering)) + 1}
          let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id,Ordering:ordering}  
          this._quanlycongviecService.CreateGrouptasks(group).subscribe();
      }

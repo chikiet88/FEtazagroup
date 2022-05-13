@@ -46,18 +46,23 @@ export class QuanlycongviecComponent implements OnInit {
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _userService: UserService,
-    ) { }
+    ) { 
+      this._userService.user$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data) => {
+        this.CUser = data;
+        this._changeDetectorRef.markForCheck();         
+      });
+      this._quanlycongviecService.getGrouptasksByuser(this.CUser.id).subscribe();
+      this._quanlycongviecService.getTasksByuser(this.CUser.id).subscribe();
+      this._quanlycongviecService.getDuanByuser(this.CUser.id).subscribe();
+      this._quanlycongviecService.getSectionByuser(this.CUser.id).subscribe();
+    }
 
    ngOnInit(): void {
-    this._quanlycongviecService.getDuans();
-    this._userService.user$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((data) => {
-      this.CUser = data;
-      this._changeDetectorRef.markForCheck();         
-    });  
+   this._quanlycongviecService.getDuans();
      this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id||v.Thamgia.some(v1=>v1==this.CUser.id));
+      this.Duans = this.filteredDuans = data
       this._changeDetectorRef.markForCheck();
     })
      this._quanlycongviecService.sections$.subscribe((data) => {

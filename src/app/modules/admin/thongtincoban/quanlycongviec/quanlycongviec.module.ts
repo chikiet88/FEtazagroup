@@ -29,7 +29,7 @@ import { FuseMasonryModule } from '@fuse/components/masonry';
 import { SharedModule } from 'app/shared/shared.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { QuanlycongviecResolver } from './quanlycongviec.resolver';
+import { QuanlycongviecByUserResolver, QuanlycongviecResolver } from './quanlycongviec.resolver';
 import { BoardComponent } from './dauviec/board/board.component';
 import { AddcardComponent } from './dauviec/board/addcard/addcard.component';
 import { AddlistComponent } from './dauviec/board/addlist/addlist.component';
@@ -39,47 +39,43 @@ import { AddgroupComponent } from './dauviec/list/addgroup/addgroup.component';
 import { AddtaskComponent } from './dauviec/list/addtask/addtask.component';
 const quanlycongviecRoutes: Route[] = [
   {
-      path     : '',
-      component: QuanlycongviecComponent,
-      children : [
-        {
-            path     : 'tongquan',
-            component: TongquanComponent,
-        },
-        {
-          path     : 'muctieu',
-          component: MuctieuComponent,
-        },
-        {
-          path     : 'dauviec',
-          component: DauviecComponent,
-          resolve  : {
-            tasks    : QuanlycongviecResolver,
-        },
-        children : [
-            {
-               path     : 'dauviec/:id',
-                component: BoardComponent,
-                resolve  : {
-                tasks    : QuanlycongviecResolver,
-            }
+    path: '',
+    component: QuanlycongviecComponent,
+    resolve: {
+      tasks: QuanlycongviecByUserResolver,
+    },
+    children: [
+      {
+        path: 'tongquan',
+        component: TongquanComponent,
+      },
+      {
+        path: 'muctieu',
+        component: MuctieuComponent,
+      },
+      {
+        path: 'dauviec',
+        component: DauviecComponent,
+        children: [
+          {
+            path: 'dauviec/:id',
+            component: BoardComponent,
           }
         ]
-       },
-        {
-          path     : 'duan',
-          component: DuanComponent,
-
-        },
-        {
-          path     : 'duan/:id',
-          component: DetailComponent,
-        },
+      },
+      {
+        path: 'duan',
+        component: DuanComponent,
+      },
+      {
+        path: 'duan/:id',
+        component: DetailComponent,
+      },
     ]
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent,TongquanComponent,MuctieuComponent,DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent],
+  declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent],
   imports: [
     GoogleChartsModule,
     CKEditorModule,
