@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { QuanlycongviecService } from './quanlycongviec.service';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'app/core/user/user.service';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
@@ -102,6 +102,11 @@ export class QuanlycongviecComponent implements OnInit {
   UpdateTask()
   {
     this._quanlycongviecService.UpdateTasks(this.CurretTask, this.CurretTask.id).subscribe();
+    this.matDrawer.toggle();
+  }
+  DeleteTask()
+  {
+    this._quanlycongviecService.DeleteTasks(this.CurretTask.id).subscribe();
     this.matDrawer.toggle();
   }
   UpdateEditor(item, type,{editor}: ChangeEvent ) {   

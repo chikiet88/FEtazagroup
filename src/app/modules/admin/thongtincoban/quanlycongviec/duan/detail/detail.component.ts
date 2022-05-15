@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angula
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';

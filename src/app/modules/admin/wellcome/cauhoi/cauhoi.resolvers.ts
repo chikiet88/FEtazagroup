@@ -32,3 +32,29 @@ export class CauhoiResolver implements Resolve<any>
         ]);
     }
 }
+@Injectable({
+    providedIn: 'root'
+})
+export class HuongdanResolver implements Resolve<any>
+{
+    /**
+     * Constructor
+     */
+    constructor(
+        private _cauhoiService: CauhoiService,
+        private _cauhinhService: CauhinhService,
+        private _nhanvienService: NhanvienService,
+        )
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
+    {
+       
+        return forkJoin([
+            this._cauhoiService.getAllHotro(),
+            this._cauhinhService.getCauhinhs(),
+            this._cauhinhService.getAllDanhmuc(),
+            this._nhanvienService.getNhanviens(),
+        ]);
+    }
+}

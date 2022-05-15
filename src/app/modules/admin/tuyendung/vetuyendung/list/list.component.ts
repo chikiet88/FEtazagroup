@@ -15,7 +15,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Nhanvien } from 'app/modules/admin/baocao/nhanvien/nhanvien.type';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';

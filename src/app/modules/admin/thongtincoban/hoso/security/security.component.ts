@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NotifierService } from 'angular-notifier';
+import { AuthService } from 'app/core/auth/auth.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 @Component({
     selector       : 'hoso-security',
@@ -10,31 +14,41 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class HosoSecurityComponent implements OnInit
 {
     securityForm: FormGroup;
-
-    /**
-     * Constructor
-     */
     constructor(
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private _authService: AuthService,
+        private _userService: UserService,
+        private _notifierService: NotifierService,
     )
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
+    {}
+    CUser:User;
     ngOnInit(): void
     {
-        // Create the form
+        this._userService.user$.subscribe((data)=>
+        {
+            this.CUser = data
+        })
         this.securityForm = this._formBuilder.group({
-            currentPassword  : [''],
-            newPassword      : [''],
-            twoStep          : [true],
-            askPasswordChange: [false]
+            oldpass  : ['', Validators.required ],
+            newpass      : ['',Validators.required],
         });
+        
+    }
+    ChangePassword()
+    {
+        const password = this.securityForm.getRawValue();
+        const data =  Object.assign({user:this.CUser}, password);
+        this._authService.changepass(data).subscribe((res)=>
+        {
+            if(res==1)
+            {
+                this._notifierService.notify('error','Sai Mật Khẩu Hiện Tại')
+            }
+            else {
+                this.securityForm.reset();
+                this._notifierService.notify('success','Cập Nhật Mật Khẩu Thành Công')
+            }
+        }  
+        );
     }
 }

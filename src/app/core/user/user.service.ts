@@ -30,7 +30,6 @@ export class UserService
             })
         );
     }
-
     // update(user: User): Observable<any>
     // {
     //     return this._httpClient.patch<User>('api/common/user', {user}).pipe(

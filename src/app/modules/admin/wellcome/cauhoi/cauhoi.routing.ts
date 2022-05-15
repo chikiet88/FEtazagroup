@@ -4,6 +4,7 @@ import { CauhoiResolver } from './cauhoi.resolvers';
 import { CauhoiadminComponent } from './cauhoiadmin/cauhoiadmin.component';
 import { FaqComponent } from './faq/faq.component';
 import { HotroComponent } from './hotro/hotro.component';
+import { AdminComponent } from './huongdan/admin/admin.component';
 import { HuongdanComponent } from './huongdan/huongdan.component';
 
 export const cauhoiRoutes: Route[] = [
@@ -22,6 +23,12 @@ export const cauhoiRoutes: Route[] = [
     },
     {
         path: 'huongdan', component: HuongdanComponent,
+        resolve: {
+            data: CauhoiResolver
+        }
+    },
+    {
+        path: 'huongdanadmin', component: AdminComponent,
         resolve: {
             data: CauhoiResolver
         }

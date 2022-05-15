@@ -84,10 +84,7 @@ export class HosoComponent implements OnInit {
        }
        goToPanel(panel: string): void
        {
-         console.log(panel);
-           this.selectedPanel = panel;
-   
-           
+           this.selectedPanel = panel;          
            if ( this.drawerMode === 'over' )
            {
                this.drawer.close();

@@ -153,20 +153,8 @@ export class BoardComponent implements OnInit {
          else { this._notifierService.notify('error', 'Group Có Đầu Việc. Vui Lòng Xóa Hết Đầu Việc Trước Khi Xóa Group'); }
      }
      addCard(list: any, title: string): void
-     {
-        //  // Create a new card model
-        //  const card = new Card({
-        //      boardId : this.board.id,
-        //      listId  : list.id,
-        //      position: list.cards.length ? list.cards[list.cards.length - 1].position + this._positionStep : this._positionStep,
-        //      title   : title
-        //  });
-        // console.log(list);
-        //  const x =  this.Grouptasks.find(v=>v.id ==list.id);
+     {         
          const task = { Tieude: title, gid: list.id, idTao: this.CUser.id }
-        // const index = this.Grouptasks.findIndex(item => item.id === list.id);
-        // this.Grouptasks[index].cards.unshift(task);
-        // this._Grouptasks.next(this.Grouptasks);
          this._quanlycongviecService.CreateTasks(task).subscribe(
          );
      }

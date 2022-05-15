@@ -27,7 +27,7 @@ export class NhanviensNhanvienResolver implements Resolve<any>
                            this._router.navigateByUrl(parentUrl);
                            return throwError(error);
                        })
-                   );
+                   );   
     }
 }
 @Injectable({

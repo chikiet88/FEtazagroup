@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',

@@ -12,7 +12,7 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'currentPassword'"
+                        [formControlName]="'oldpass'"
                         type="password"
                         matInput>
                 </mat-form-field>
@@ -25,34 +25,20 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'newPassword'"
+                        [formControlName]="'newpass'"
                         type="password"
                         matInput>
                 </mat-form-field>
-            </div>
-            <div class="sm:col-span-4">
-                <mat-form-field class="fuse-mat-no-subscript w-full">
-                    <mat-label>Xác Nhận Mật Khẩu Mới</mat-label>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:key'"
-                        matPrefix></mat-icon>
-                    <input
-                        [formControlName]="'newPassword'"
-                        type="password"
-                        matInput>
-                </mat-form-field>
-            </div>           
+            </div>     
+                <button
+                [disabled]="!securityForm.valid"
+                    mat-flat-button
+                    type="button"
+                    [color]="'primary'" (click)="ChangePassword()">Cập Nhật
+                    
+                </button> 
         </div>
-        <div class="my-10 border-t"></div>
-        <div class="flex items-center justify-end">
-            <button
-                class="ml-4"
-                mat-flat-button
-                type="button"
-                [color]="'primary'">Cập Nhật
-            </button>
-        </div>
+
     </form>
 
 </div>

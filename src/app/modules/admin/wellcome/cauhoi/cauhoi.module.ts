@@ -22,13 +22,15 @@ import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { AdminComponent } from './huongdan/admin/admin.component';
 @NgModule({
     declarations: [
         CauhoiComponent,
         FaqComponent,
         HuongdanComponent,
         HotroComponent,
-        CauhoiadminComponent
+        CauhoiadminComponent,
+        AdminComponent
     ],
     imports     : [
         EditorModule,

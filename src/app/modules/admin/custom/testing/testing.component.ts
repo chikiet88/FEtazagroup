@@ -8,7 +8,7 @@ import { User } from 'app/core/user/user.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { Observable } from 'rxjs';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
-import { Nhanvien } from '../../baocao/nhanvien/nhanvien.type';
+import { Nhanvien, profile } from '../../baocao/nhanvien/nhanvien.type';
 import { Khachhang } from '../khachhangs/khachhang.type';
 import { KhachhangsService } from '../khachhangs/khachhangs.service';
 import { TestingService } from './testing.service';
@@ -59,6 +59,7 @@ export class TestingComponent implements OnInit {
   notification: FormGroup;
   nhanviens:Nhanvien[];
   user:User;
+  profile:profile;
   noti:any;
   data$: Observable<Khachhang[]>;
   constructor(
@@ -72,50 +73,35 @@ export class TestingComponent implements OnInit {
   @ViewChild('DataSort', { static: false }) DataSort: MatSort;
   UniData:any
   ngOnInit(): void {
-    this._khachhangsService.GetAllDataTaza().subscribe();
-    this.data$ = this._khachhangsService.datastaza$;
-    this.data$.subscribe((data)=>
-    {
-      this.UniData = [... new Set(data.map(v => v.SDT))]
-       const Thanhvien = [];
-       this.UniData.forEach((v,k) => {   
-          console.log(k);      
-          let Sum = 0;
-          const UniKH = data.filter(v1 => v1.SDT == v);   
-          const getKH = data.find(v1 => v1.SDT == v);
-          console.log(getKH);
-          if(getKH!=undefined)
-          {
-            UniKH.forEach(v1 => {
-              Sum += parseInt(v1.Dathu);
-            });
-            let x = UniKH.length-1;
-            Thanhvien.push({ 
-              'TenKH': getKH.TenKH,
-              'SDT': getKH.SDT, 
-              'SDT2': getKH.SDT2, 
-              'Dathu': Sum, 
-              'Chinhanh': getKH.Chinhanh,
-              'NgayMD': UniKH[x].NgayTaoDV,
-              'NoiMD': UniKH[x].Chinhanh,
-              'NgayMC': UniKH[0].NgayTaoDV,
-              'NoiMC': UniKH[0].Chinhanh,
-              'Ghichu':getKH.Ghichu
-            })
-         }
-        });
-      console.log(Thanhvien);
-      console.log(this.UniData);
-      
-    }
-    )
     this._userService.user$.subscribe((data)=>
     {
         this.user = data
     })
     this._nhanvienService.getNhanviens().subscribe();
-    this._nhanvienService.nhanviens$.subscribe((data)=>{ this.nhanviens = data 
-    //console.log(data);
+    this._nhanvienService.nhanviens$.subscribe((data)=>{ 
+      this.nhanviens = data 
+      console.log(data);
+      // data.forEach(v => {
+      //   const x = {
+      //     idUser: v.id,
+      //     Congty: v.profile['Congty'],
+      //     Khoi: v.profile['Khoi'],
+      //     Phongban: v.profile['Phongban'],
+      //     Vitri: v.profile['Vitri'],
+      //     MaNV: v.profile['MaNV'],
+      //     CMND: v.profile['CMND'],
+      //     Ngaysinh: new Date(v.profile['Ngaysinh']),
+      //     Ngayvao: new Date(v.profile['Datein']),
+      //     Ngaynghi:new Date(v.profile['Dateout']),
+      //     Diachi: v.profile['Diachi'],
+      //     Facebook: v.profile['Facebook'],
+      //     Zalo: v.profile['Zalo'],
+      //     Trangthai: v.profile['TTLV'],
+      //     idTao: this.user['id'],
+      //   }      
+      //   console.log(x);
+      //      this._nhanvienService.createProfile(x).subscribe();
+      // });      
     });
     this.notification = this._formBuilder.group({
       idTo         : [''],
@@ -132,6 +118,8 @@ export class TestingComponent implements OnInit {
         console.log(data)
     });
   }
+
+  
 
 
 }

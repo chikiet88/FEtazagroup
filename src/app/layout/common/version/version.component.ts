@@ -8,7 +8,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationEntity } from 'app/layout/common/notifications/notifications.types';
 import { environment } from 'environments/environment.prod';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { VersionService } from './version.service';
 import { UserService } from 'app/core/user/user.service';
 @Component({

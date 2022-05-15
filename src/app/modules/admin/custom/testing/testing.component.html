@@ -1,5 +1,5 @@
 <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-start py-8 px-6 md:px-8 border-b">
-    <form [formGroup]="notification" class="columns space-y-3">
+    <!-- <form [formGroup]="notification" class="columns space-y-3">
 
         <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
             <div class="text-secondary" matPrefix>
@@ -29,10 +29,49 @@
             <input [formControlName]="'Lienket'" matInput class="mat-select-value-text">
         </mat-form-field>      
         <button mat-flat-button (click)="CreateNoti()" color="primary">Gửi</button>  
-    </form>
+    </form> -->
   <div class="flex mt-4">
       <!-- {{((data$| async).slice(0,10))|json}} -->
   </div>
+
+  <div *ngFor="let item of nhanviens" class="flex flex-col space-y-2">
+      <div>{{item.profile|json}}</div>
+      <div class="flex flex-row space-x-2">
+        <span>ID</span>
+        <span>{{item.id}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>name</span>
+        <span>{{item.name}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>SDT</span>
+        <span>{{item.SDT}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>email</span>
+        <span>{{item.email}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>avatar</span>
+        <span>{{item.avatar}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>Role</span>
+        <span>{{item.Role}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>Trangthai</span>
+        <span>{{item.Trangthai}}</span>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <span>Ngaytao</span>
+        <span>{{item.Ngaytao}}</span>
+      </div>
+
+</div>
+
+
 </div>
 
 

@@ -56,12 +56,12 @@ export class QuanlycongviecService {
         const grouptasks = this._grouptasks.value;
         const tasks = this._tasks.value;
         grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
-        grouptasks.sort((a, b) => b.Ordering - a.Ordering);
+        grouptasks.sort((a, b) => a.Ordering - b.Ordering);
         console.log(grouptasks);
        return this._boards.next(grouptasks);
     }
     getDuans() {
-        const duans = this._duans.value;
+        const duans = this._duans.value||[];
         const secstions = this._sections.value;
         duans.forEach(v => {v.sections = secstions.filter(v1=>v1.pjid==v.id)});
         console.log(duans);

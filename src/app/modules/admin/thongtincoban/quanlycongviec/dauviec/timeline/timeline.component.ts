@@ -42,18 +42,16 @@ export class TimelineComponent implements OnInit {
       this.CUser = data;
       this._changeDetectorRef.markForCheck();         
     });  
-    // this._quanlycongviecService.tasks$.subscribe((data) => {
-    //   this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id);
-    //   console.log(data);
-    //   this._changeDetectorRef.markForCheck();
-    // })
     this._quanlycongviecService.boards$.subscribe((data)=>{
       console.log(data);
       this.Grouptasks = data; 
       const Arrayobject = [];
       data.forEach(v => {
         v.tasks.forEach(v1 => {
-          Arrayobject.push({group:v.Tieude,task:v1.Tieude,start:new Date(v1.Batdau),end:new Date(v1.Ketthuc)}) 
+          if(v1.Batdau || v1.Ketthuc)
+          {
+            Arrayobject.push({group:v.Tieude,task:v1.Tieude,start:new Date(v1.Batdau),end:new Date(v1.Ketthuc)}) 
+          }
         });
       });
       this.data = Arrayobject.map(function(obj) {

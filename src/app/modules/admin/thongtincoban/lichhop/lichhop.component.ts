@@ -34,7 +34,7 @@ import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { LichhopService } from './lichhop.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';

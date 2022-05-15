@@ -5,7 +5,7 @@ export class Nhanvien {
     email: string;
     password: string;
     avatar:string;
-    profile: any;
+    profile: string;
     Ngaytao: Date;
     Role:string;
     Phanquyen:string;
@@ -13,24 +13,23 @@ export class Nhanvien {
     Trangthai:number;
 }
 export class profile {
+    id: string;
+    idUser: string;
     Congty: string;
     Khoi: string;
     Phongban: string;
-    Bophan: string;
     Vitri: string;
-    Vitri1: string;
-    TTLV:number;
     MaNV: string;
-    CMND: string;
-    Datein: Date;
-    Dateout: Date;
+    CMND: Number;
+    Ngayvao: Date;
+    Ngaynghi: Date;
     Diachi: string;
-    Fb: string;
-    Gioitinh: number;
-    Ngaysinh: any;
-    PQDT: string[];
-    PQTD: string[];
+    Facebook: string;
+    Ngaysinh: Date;
     Zalo: string;
+    Trangthai: number;
+    Ngaytao: Date;
+    idTao: string;
 }
 export enum Role {
     Admin = 'admin',
