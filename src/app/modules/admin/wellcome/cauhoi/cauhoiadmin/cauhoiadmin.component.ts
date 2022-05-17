@@ -9,7 +9,7 @@ import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { BehaviorSubject, combineLatest, filter, Subject, takeUntil } from 'rxjs';
 import { CauhoiService } from '../cauhoi.service';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -23,7 +23,7 @@ import { MatOption } from '@angular/material/core';
   encapsulation: ViewEncapsulation.None
 })
 export class CauhoiadminComponent implements OnInit {
-  public Editor = InlineEditor;
+  public Editor = Editor ;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
   };

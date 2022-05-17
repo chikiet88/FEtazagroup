@@ -8,7 +8,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationEntity } from 'app/layout/common/notifications/notifications.types';
 import { environment } from 'environments/environment.prod';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { VersionService } from './version.service';
 import { UserService } from 'app/core/user/user.service';
 @Component({
@@ -38,7 +38,7 @@ export class VersionComponent implements OnInit {
     ) {
     }
     version = environment.version;
-    public Editor = InlineEditor;
+    public Editor = Editor ;
     public config = {
         placeholder: 'Vui lòng nhập nội dung'
     };

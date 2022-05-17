@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-//import * as Editor from 'ckeditor5/build/ckeditor'
+//import * as Editor from 'ckeditor5/build/ckEditor'
 
 @Component({
   selector: 'app-admin',

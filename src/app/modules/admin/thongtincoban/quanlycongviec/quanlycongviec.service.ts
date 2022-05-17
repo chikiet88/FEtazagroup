@@ -275,7 +275,7 @@ export class QuanlycongviecService {
         return this._httpClient.get(`${environment.ApiURL}/project/user/${id}`).pipe(
             tap((response: any) => {
                 console.log(response);  
-                this._duan.next(response);
+                this._duans.next(response);
             })
         );
     }

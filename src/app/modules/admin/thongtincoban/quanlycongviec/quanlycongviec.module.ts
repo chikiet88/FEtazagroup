@@ -42,7 +42,7 @@ const quanlycongviecRoutes: Route[] = [
     path: '',
     component: QuanlycongviecComponent,
     resolve: {
-      tasks: QuanlycongviecByUserResolver,
+      tasks: QuanlycongviecResolver,
     },
     children: [
       {

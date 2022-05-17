@@ -33,8 +33,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { MatDrawer, MatSidenav } from '@angular/material/sidenav';
 import { LichhopService } from './lichhop.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
@@ -82,7 +81,7 @@ const colors: any = {
   ],
 })
 export class LichhopComponent implements OnInit {
-  public Editor = InlineEditor;
+  public Editor = Editor ;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
     height:'200px'

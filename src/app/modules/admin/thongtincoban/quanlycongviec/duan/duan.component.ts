@@ -36,7 +36,6 @@ export class DuanComponent implements OnInit {
     private _nhanvienServiceService: NhanvienService,
     public dialog: MatDialog
   ) { 
-    this._quanlycongviecService.getAllDuans().subscribe();
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
@@ -44,7 +43,7 @@ export class DuanComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
     this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));
+      this.Duans = this.filteredDuans = data;
       console.log(data);
       this._changeDetectorRef.markForCheck();
     })

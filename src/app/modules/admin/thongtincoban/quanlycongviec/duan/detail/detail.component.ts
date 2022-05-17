@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angula
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
@@ -121,7 +121,7 @@ export class DetailComponent implements OnInit {
 
   isOpen = false;
   ThanhvienisOpen = false;
-  public Editor = InlineEditor;
+  public Editor = Editor ;
   public onReady( editor ) {
     editor.ui.getEditableElement().parentElement.insertBefore(
         editor.ui.view.toolbar.element,

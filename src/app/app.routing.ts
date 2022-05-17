@@ -121,6 +121,9 @@ export const appRoutes: Route[] = [
                     { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
                 ]
             },
+            {
+                path: 'quanlyads', loadChildren: () => import('app/modules/admin/quanlyads/quanlyads.module').then(m => m.QuanlyadsModule) 
+            },
             // Dashboards
             {
                 path: 'dashboards',

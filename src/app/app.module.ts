@@ -18,6 +18,7 @@ import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MaterialExampleModule } from 'material.module';
 import { HttpClientModule } from '@angular/common/http';
+import { QuanlyadsComponent } from './modules/admin/quanlyads/quanlyads.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -68,11 +69,11 @@ const customNotifierOptions: NotifierOptions = {
     declarations: [
         AppComponent,
         CauhinhComponent,
+        QuanlyadsComponent,
     ],
     imports     : [
-    //  EditorModule,
-      CKEditorModule,
       BrowserModule,
+      CKEditorModule,
       HttpClientModule,
       BrowserAnimationsModule,
         MaterialExampleModule,

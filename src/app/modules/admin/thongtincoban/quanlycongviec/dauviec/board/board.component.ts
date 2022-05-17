@@ -37,9 +37,10 @@ export class BoardComponent implements OnInit {
   Grouptasks: any[] = [];
   Boards: any[] = [];
   Tasks: any[] = [];
+  Sections: any[] = [];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
-
+  Duansections :any;
   constructor(
     private _scrumboardService:ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -60,20 +61,27 @@ export class BoardComponent implements OnInit {
           this.CUser = data;
           this._changeDetectorRef.markForCheck();         
         });  
-        this._quanlycongviecService.getGrouptasksByuser(this.CUser.id).subscribe();
-        this._quanlycongviecService.getTasksByuser(this.CUser.id).subscribe();
-        this._quanlycongviecService.getDuanByuser(this.CUser.id).subscribe();
-        this._quanlycongviecService.getSectionByuser(this.CUser.id).subscribe();
+        this._quanlycongviecService.getBoards();
+        this._quanlycongviecService.getDuans();
      }
     ngOnInit(): void
      {
-        this._quanlycongviecService.getBoards();
         this._quanlycongviecService.grouptasks$.subscribe((data) => {
-          this.Grouptasks = this.filteredTasks = data
+            console.log(data);
+            
+          this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.tasks$.subscribe((data) => {
-          this.Tasks = this.filteredTasks = data
+          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id)
+          this._changeDetectorRef.markForCheck();
+        })
+        this._quanlycongviecService.sections$.subscribe((data) => {
+          this.Sections = data.filter(v=>v.idTao==this.CUser.id)
+          this._changeDetectorRef.markForCheck();
+        })
+        this._quanlycongviecService.tasks$.subscribe((data) => {
+          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.duans$.subscribe((data) => {
@@ -82,7 +90,10 @@ export class BoardComponent implements OnInit {
         })
         this._quanlycongviecService.boards$.subscribe((data)=>
         {
-            this.Boards = data; 
+            console.log(data);
+            this.Boards = data;
+            console.log(this.Boards);
+            
         })
          this.listTitleForm = this._formBuilder.group({
              title: ['']
@@ -90,6 +101,7 @@ export class BoardComponent implements OnInit {
          this.form = this._formBuilder.group({
             title: ['']
         });
+        this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data;})
      }
      ngOnDestroy(): void
      {
@@ -101,6 +113,10 @@ export class BoardComponent implements OnInit {
         this._quanlycongviecService.changeTask(card);
         this._quanlycongviecComponent.matDrawer.toggle();
         
+     }
+     CloseMat()
+     {
+        this._quanlycongviecComponent.matDrawer.close();
      }
      renameList(listTitleInput: HTMLElement): void
      {
@@ -203,4 +219,26 @@ export class BoardComponent implements OnInit {
              this.titleInput.nativeElement.focus();
          }
      }
+     ChangeStatusTasks(item, status) {
+        item.Trangthai = status;
+        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this.ngOnInit();
+      }
+      UpdateDeadlineTask(item,StartValue,EndValue)
+      {
+        item.Batdau = StartValue;
+        item.Ketthuc = EndValue;
+        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+      }
+      toggleDuan(trigger: any,row) {
+        this.SelectDuan = row
+        this.triggerOrigin = trigger;
+        this.isOpenDuan = !this.isOpenDuan
+      }
+      ChonDuan(item,id) {
+        item.sid = id;
+        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this.isOpenDuan =false;
+      }
+
 }

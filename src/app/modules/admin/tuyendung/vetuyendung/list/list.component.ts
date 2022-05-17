@@ -15,7 +15,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Nhanvien } from 'app/modules/admin/baocao/nhanvien/nhanvien.type';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
@@ -26,7 +26,7 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
   encapsulation: ViewEncapsulation.None,
 })
 export class ListComponent implements OnInit {
-  public Editor = InlineEditor;
+  public Editor = Editor ;
   public config = {
     placeholder: 'Vui lòng nhập ghi chú'
   };

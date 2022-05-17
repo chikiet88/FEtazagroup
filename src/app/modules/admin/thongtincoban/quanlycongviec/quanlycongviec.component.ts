@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { QuanlycongviecService } from './quanlycongviec.service';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'app/core/user/user.service';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
@@ -12,17 +12,12 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
   styleUrls: ['./quanlycongviec.component.scss']
 })
 export class QuanlycongviecComponent implements OnInit {
-  public Editor = InlineEditor;
+  public Editor = Editor;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
     height:'200px'
   };
-    public onReady( editor ) {
-      editor.ui.getEditableElement().parentElement.insertBefore(
-          editor.ui.view.toolbar.element,
-          editor.ui.getEditableElement()
-      );
-  }
+
   @ViewChild('matDrawer', {static: false}) matDrawer: MatDrawer;
   MenuCongviec: any[] = [
     {title:'Tổng Quan',link:'tongquan'},
@@ -53,16 +48,13 @@ export class QuanlycongviecComponent implements OnInit {
         this.CUser = data;
         this._changeDetectorRef.markForCheck();         
       });
-      this._quanlycongviecService.getGrouptasksByuser(this.CUser.id).subscribe();
-      this._quanlycongviecService.getTasksByuser(this.CUser.id).subscribe();
-      this._quanlycongviecService.getDuanByuser(this.CUser.id).subscribe();
-      this._quanlycongviecService.getSectionByuser(this.CUser.id).subscribe();
     }
 
    ngOnInit(): void {
    this._quanlycongviecService.getDuans();
+   this._quanlycongviecService.getBoards();
      this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data
+      this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
       this._changeDetectorRef.markForCheck();
     })
      this._quanlycongviecService.sections$.subscribe((data) => {
@@ -70,9 +62,8 @@ export class QuanlycongviecComponent implements OnInit {
       this._changeDetectorRef.markForCheck();
     })
     this._quanlycongviecService.task$.subscribe((data)=>{this.CurretTask = data})
-    this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data; 
-      console.log(data);
-      
+    this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data;
+            
     })
   } 
   ChonDuan(item,id) {

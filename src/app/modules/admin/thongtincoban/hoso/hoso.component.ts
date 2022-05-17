@@ -22,12 +22,12 @@ export class HosoComponent implements OnInit {
   ngOnInit(): void {
             
             this.panels = [
-              {
-                  id         : 'account',
-                  icon       : 'heroicons_outline:user-circle',
-                  title      : 'Tài Khoản',
-                  description: 'Thông tin cá nhân'
-              },
+            //   {
+            //       id         : 'account',
+            //       icon       : 'heroicons_outline:user-circle',
+            //       title      : 'Tài Khoản',
+            //       description: 'Thông tin cá nhân'
+            //   },
               {
                   id         : 'security',
                   icon       : 'heroicons_outline:lock-closed',

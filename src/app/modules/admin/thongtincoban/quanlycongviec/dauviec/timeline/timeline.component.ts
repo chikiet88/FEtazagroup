@@ -31,9 +31,7 @@ export class TimelineComponent implements OnInit {
     ];
   data = [];
 
-    options= {
-
-    }
+  options = {}
   ngOnInit(): void {
     this._quanlycongviecService.getDuans();
     this._userService.user$
@@ -44,7 +42,8 @@ export class TimelineComponent implements OnInit {
     });  
     this._quanlycongviecService.boards$.subscribe((data)=>{
       console.log(data);
-      this.Grouptasks = data; 
+      
+      this.Grouptasks = data = data.filter(v1=>v1.tasks.some(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id));
       const Arrayobject = [];
       data.forEach(v => {
         v.tasks.forEach(v1 => {
@@ -60,6 +59,11 @@ export class TimelineComponent implements OnInit {
       });
     });
     })
+    const rowHeight = 41;
+    var chartHeight = this.data.length * rowHeight + 50;
+    this.options = {
+      height: chartHeight
+    }
     console.log(this.data);
     
   }

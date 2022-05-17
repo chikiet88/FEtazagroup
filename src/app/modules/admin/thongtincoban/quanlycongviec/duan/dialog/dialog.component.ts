@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
-import InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import Editor from 'ckeditor5/build/ckEditor';
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -9,7 +9,7 @@ import InlineEditor from '@ckeditor/ckeditor5-build-inline';
 })
 export class DialogComponent implements OnInit {
   Duan:any
-  public Editor = InlineEditor;
+  public Editor = Editor ;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _quanlycongviecService: QuanlycongviecService,

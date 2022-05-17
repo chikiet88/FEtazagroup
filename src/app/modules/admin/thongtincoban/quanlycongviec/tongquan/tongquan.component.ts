@@ -27,15 +27,11 @@ export class TongquanComponent implements OnInit {
 
   ) {
     this._userService.user$.subscribe((data) => this.CUser = data);
-    this._quanlycongviecService.getAllTasks().subscribe();
-    this._quanlycongviecService.getAllDuans().subscribe();
+    this._quanlycongviecService.getDuans(),
+    this._quanlycongviecService.getBoards(),
     this._quanlycongviecService.duans$.subscribe((data) => 
    {
-     if(data)
-     {
-      this.Duans = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id)
-     }
-     else this.Duans =[]
+     this.Duans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
    }
     );
   }
