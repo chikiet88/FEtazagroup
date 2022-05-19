@@ -13,7 +13,7 @@ export class HosoComponent implements OnInit {
   drawerMode: 'over' | 'side' = 'side';
   drawerOpened: boolean = true;
   panels: any[] = [];
-  selectedPanel: string = 'account';
+  selectedPanel: string = 'security';
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(       
     private _changeDetectorRef: ChangeDetectorRef,

@@ -14,11 +14,11 @@ import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import { QuanlycongviecComponent } from '../../quanlycongviec.component';
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.component.html',
-  styleUrls: ['./board.component.scss']
+  selector: 'app-duanboard',
+  templateUrl: './duanboard.component.html',
+  styleUrls: ['./duanboard.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class DuanboardComponent implements OnInit {
   listTitleForm: FormGroup;
   @ViewChild('titleInput') titleInput: ElementRef;
   BoardGrouptasks:any;
@@ -87,20 +87,23 @@ export class BoardComponent implements OnInit {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
         })
-        this._quanlycongviecService.boards$.subscribe((data)=>
-        {
-            console.log(data);
-            this.Boards = data;
-            console.log(this.Boards);
-            
-        })
          this.listTitleForm = this._formBuilder.group({
              title: ['']
          });
          this.form = this._formBuilder.group({
             title: ['']
         });
-        this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data;})
+        this._quanlycongviecService.boards$.subscribe((data)=>
+        {
+            console.log(data);
+            this.Boards = data;
+            console.log(this.Boards); 
+        })
+        this._quanlycongviecService.Duansections$.subscribe((data)=>{
+          this.Duansections = data
+          console.log(data);
+          
+          ;})
      }
      ngOnDestroy(): void
      {

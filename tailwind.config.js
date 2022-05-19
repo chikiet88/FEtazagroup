@@ -199,7 +199,13 @@ const config = {
                 '320': '80rem',
                 '360': '90rem',
                 '400': '100rem',
-                '480': '120rem'
+                '480': '120rem',
+                // Vheight
+                '80vh': '80vh',
+                '70vh': '70vh',
+                '60vh': '60vh',
+                '50vh': '50vh',
+
             },
             height                  : theme => ({
                 ...theme('extendedSpacing')

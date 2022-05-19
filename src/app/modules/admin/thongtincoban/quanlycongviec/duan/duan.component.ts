@@ -43,7 +43,7 @@ export class DuanComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
     this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data;
+      this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
       console.log(data);
       this._changeDetectorRef.markForCheck();
     })
