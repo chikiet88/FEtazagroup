@@ -1,8 +1,9 @@
 <div class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto h-60vh" cdkScrollable>
-    <div class="flex" cdkDropList [cdkDropListData]="Duansections" [cdkDropListOrientation]="'horizontal'"
+
+    <div class="flex" cdkDropList [cdkDropListData]="Boards" [cdkDropListOrientation]="'horizontal'"
         (cdkDropListDropped)="listDropped($event)">
         <div class="flex items-start" cdkDropListGroup>
-            <ng-container *ngFor="let list of Duansections; trackBy: trackByFn">
+            <ng-container *ngFor="let list of Boards; trackBy: trackByFn">
                 <div class="flex-0 w-96 p-2 rounded-2xl" cdkDrag [cdkDragLockAxis]="'x'">
                     <div class="flex items-center justify-between" cdkDragHandle>
                         <div
@@ -13,7 +14,7 @@
                         </div>
                         <div
                             class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
-                            {{list.sections.length}}
+                            {{list.tasks.length}}
                         </div>
                         <div class="ml-1">
                             <button class="w-8 h-8 min-h-8" mat-icon-button [matMenuTriggerFor]="listMenu">
@@ -23,7 +24,7 @@
                             <mat-menu #listMenu="matMenu">
                                 <button mat-menu-item (click)="deleteGroup(list)">
                                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
-                                    Xóa Group
+                                    Xóa Section
                                 </button>
                             </mat-menu>
                         </div>
@@ -31,9 +32,9 @@
 
                     <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
 
-                        <div [id]="list.id" class="px-3 py-5" cdkDropList [cdkDropListData]="list.sections"
-                            (cdkDropListDropped)="cardDropped($event,list.sections)">
-                            <ng-container *ngFor="let card of list.sections; trackBy: trackByFn">
+                        <div [id]="list.id" class="px-3 py-5" cdkDropList [cdkDropListData]="list.tasks"
+                            (cdkDropListDropped)="cardDropped($event,list.tasks)">
+                            <ng-container *ngFor="let card of list.tasks; trackBy: trackByFn">
                                 <a class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
                                     cdkDrag>
                                     <div class="flex flex-row space-x-2 text-lg font-medium leading-5">
@@ -120,6 +121,23 @@
                                             </mat-form-field>
                                         </mat-form-field>
                                     </div>
+                                    <button cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
+                                        (click)="toggleUser(trigger1,card)">
+                                        <div
+                                            class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
+                                            <span class="material-icons">
+                                                person_add
+                                                </span>
+                                            <span class="ml-2 mr-1 text-md font-medium truncate">
+                                                <ng-container *ngIf="card.Thuchien">
+                                                   {{card.Thuchien|findbyid:Nhanviens:'name'}}
+                                                </ng-container>
+                                                <ng-container *ngIf="!card.Thuchien">
+                                                    Chưa Chọn
+                                                </ng-container>
+                                            </span>
+                                        </div>
+                                    </button>
                                     <button cdkOverlayOrigin #trigger="cdkOverlayOrigin"
                                         (click)="toggleDuan(trigger,card)">
                                         <div
@@ -167,19 +185,51 @@
                                 </a>
                             </ng-container>
 
-                            <app-addcard [buttonTitle]="'Thêm Đầu Việc'" (saved)="addCard(list, $event)"> </app-addcard>
+                            <app-duanaddcard [buttonTitle]="'Thêm Đầu Việc'" (saved)="addCard(list, $event)"> </app-duanaddcard>
                         </div>
 
                     </div>
                 </div>
             </ng-container>
-            <app-addlist (saved)="addList($event)" [buttonTitle]="'Thêm Group'">
-            </app-addlist>
+            <app-duanaddlist (saved)="addList($event)" [buttonTitle]="'Thêm Section'">
+            </app-duanaddlist>
         </div>
 
     </div>
 
 </div>
+
+
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+    [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin1"
+    [cdkConnectedOverlayOpen]="isOpenUser" (detach)="isOpenUser = false" (backdropClick)="isOpenUser = false">
+    <div class="w-84 rounded border shadow-md bg-card m-3">
+        <div class="flex items-center m-3 mr-2">
+            <div class="flex items-center">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <div class="ml-2">
+                    <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+                        #newTagInput>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+            <ng-container>
+                <div class="py-2 space-y-2">
+                    <ng-container *ngFor="let item of Nhanviens">
+                            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+                                (click)="ChonUser(SelectDuan,item.id)">
+                                <div class="ml-1">{{item.name}}</div>
+                            </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>
+
+
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
     [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
     [cdkConnectedOverlayOpen]="isOpenDuan" (detach)="isOpenDuan = false" (backdropClick)="isOpenDuan = false">

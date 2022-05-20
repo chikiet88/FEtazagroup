@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
-import { forkJoin, Observable, of, takeUntil } from 'rxjs';
+import { catchError, forkJoin, Observable, of, takeUntil, throwError } from 'rxjs';
 import { QuanlycongviecService } from './quanlycongviec.service';
 
 @Injectable({
@@ -45,4 +45,29 @@ export class QuanlycongviecByUserResolver implements Resolve<boolean> {
     this._quanlycongviecService.getSectionByuser(this.User.id),
   ]);
   }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class QuanlycongviecDuanResolver implements Resolve<any>
+{
+    constructor(
+      private _quanlycongviecService: QuanlycongviecService,
+        private _router: Router
+    )
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
+    {
+        return this._quanlycongviecService.getDuanById(route.paramMap.get('id'))
+                   .pipe(
+                       catchError((error) => {
+                           console.error(error);
+                           const parentUrl = state.url.split('/').slice(0, -1).join('/');
+                           this._router.navigateByUrl(parentUrl);
+                           return throwError(error);
+                       })
+                   );
+    }
 }

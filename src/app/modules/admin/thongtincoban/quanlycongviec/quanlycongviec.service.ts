@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class QuanlycongviecService {
     private _duan: BehaviorSubject<any> = new BehaviorSubject(null);
     private _boards: BehaviorSubject<any> = new BehaviorSubject(null);
     private _duansections: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _duanboards: BehaviorSubject<any> = new BehaviorSubject(null);
     constructor(private _httpClient: HttpClient) {
     }
     get sections$(): Observable<any> {
@@ -32,6 +33,9 @@ export class QuanlycongviecService {
     }
     get boards$(): Observable<any> {
         return this._boards.asObservable();
+    }
+    get duanboards$(): Observable<any> {
+        return this._duanboards.asObservable();
     }
     get grouptask$(): Observable<any> {
         return this._grouptask.asObservable();
@@ -58,7 +62,16 @@ export class QuanlycongviecService {
         grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
         grouptasks.sort((a, b) => a.Ordering - b.Ordering);
         console.log(grouptasks);
-       return this._boards.next(grouptasks);
+        return this._boards.next(grouptasks);
+    }
+    getDuanBoards() {
+        const duan = this._duan.value;
+        const secstions = this._sections.value.filter(v1=>v1.pjid==duan.id);
+        const tasks = this._tasks.value;
+        secstions.forEach(v => {v.tasks = tasks.filter(v1=>v1.sid==v.id)});
+        secstions.sort((a, b) => a.Ordering - b.Ordering);
+        console.log(secstions);
+       return this._duanboards.next(secstions);
     }
     getDuans() {
         const duans = this._duans.value||[];
@@ -89,6 +102,7 @@ export class QuanlycongviecService {
                 map((result) => {
                     console.log(sections);
                     this._sections.next([result, ...sections]);
+                    this.getDuanBoards();
                     return result;
                 })
             ))
@@ -102,6 +116,7 @@ export class QuanlycongviecService {
                     const index = sections.findIndex(item => item.id === id);
                     sections[index] = section;
                     this._sections.next(sections);
+                    this.getDuanBoards();
                     return section;
                 }),
                 switchMap(section => this.section$.pipe(
@@ -123,6 +138,7 @@ export class QuanlycongviecService {
                     const index = sections.findIndex(item => item.id === id);
                     sections.splice(index, 1);
                     this._sections.next(sections);
+                    this.getDuanBoards();
                     return isDeleted;
                 })
             ))
@@ -215,6 +231,7 @@ export class QuanlycongviecService {
                     console.log(result);
                     this._tasks.next([result, ...tasks]);
                     this.getBoards();
+                    this.getDuanBoards();
                     return result;
                 })
             ))
@@ -230,6 +247,7 @@ export class QuanlycongviecService {
                     tasks[index] = task;
                     this._tasks.next(tasks);
                     this.getBoards();
+                    this.getDuanBoards();
                     return task;
                 }),
                 switchMap(task => this.task$.pipe(
@@ -252,6 +270,7 @@ export class QuanlycongviecService {
                     tasks.splice(index, 1);
                     this._tasks.next(tasks);
                     this.getBoards();
+                    this.getDuanBoards();
                     return isDeleted;
                 })
             ))
@@ -265,12 +284,32 @@ export class QuanlycongviecService {
         );
     }
     getDuanById(id): Observable<any> {
-        return this._httpClient.get(`${environment.ApiURL}/project/${id}`).pipe(
-            tap((response: any) => {
-                this._duan.next(response);
+        // return this._httpClient.get(`${environment.ApiURL}/project/${id}`).pipe(
+        //     tap((response: any) => {
+        //         this._duan.next(response);
+        //     })
+        // );
+        return this._duans.pipe(
+            take(1),
+            map((duans) => {
+                const duan = duans.find(item => item.id === id) || null;
+                this._duan.next(duan);
+                return duan;
+            }),
+            switchMap((duan) => {
+
+                if ( !duan )
+                {
+                    return throwError('Could not found contact with id of ' + id + '!');
+                }
+                return of(duan);
             })
         );
+
     }
+
+
+    
     getDuanByuser(id): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/project/user/${id}`).pipe(
             tap((response: any) => {

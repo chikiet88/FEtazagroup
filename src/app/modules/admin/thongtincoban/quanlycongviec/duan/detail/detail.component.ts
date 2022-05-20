@@ -8,6 +8,7 @@ import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import { Subject, takeUntil } from 'rxjs';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -15,6 +16,7 @@ import { QuanlycongviecService } from '../../quanlycongviec.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class DetailComponent implements OnInit {
+  selectedIndex:any
   toMilliseconds(minutes) {
     return minutes * 60 * 1000;
   }
@@ -131,6 +133,7 @@ export class DetailComponent implements OnInit {
   displayedColumns: string[] = ['#', 'tieude', 'deadline', 'uutien', 'thuchien'];
   Sections: any[] = [];
   Tasks: any[] = [];
+  Grouptasks: any[] = [];
   filteredSections: any;
   filteredTasks: any;
   filteredDuans: any;
@@ -163,18 +166,12 @@ export class DetailComponent implements OnInit {
     });
     this._quanlycongviecService.getAllSection().subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
+    this._quanlycongviecService.getBoards();
     this._nhanvienServiceService.getNhanviens().subscribe();
     this.pjid = this._activatedRoute.snapshot.paramMap.get('id');   
-    this._quanlycongviecService.getDuanById(this.pjid).subscribe();
     this._quanlycongviecService.duan$.subscribe((data) => {
-      if(data.idTao != this.CUser.id && !data.Thamgia.includes(this.CUser.id))
-      {
-        this._location.back();
-      }
-      else
-      {
-        this.Duan = data;
-      }
+      this.Duan = data;
+      this.selectedIndex = data.selectedIndex;
       console.log("Duan",data);
       this._quanlycongviecService.sections$.subscribe((data) => {
         console.log("Section",data);
@@ -192,13 +189,19 @@ export class DetailComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
       })
       this._changeDetectorRef.markForCheck();
-    })
+   })
     this._nhanvienServiceService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data) => {
         this.Nhanviens = this.filterNhanviens = data;
         this._changeDetectorRef.markForCheck();
       });
+
+   this._quanlycongviecService.boards$.subscribe((data) => {
+     console.log(data);
+        this.Grouptasks = data
+        this._changeDetectorRef.markForCheck();
+      })
   }
 
   ngOnInit(): void {
@@ -312,5 +315,12 @@ export class DetailComponent implements OnInit {
   toggleSection(item) {
     item.IsOpen = !item.IsOpen;
     this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
+  }
+  UpdateSelectIndex(item,event: MatTabChangeEvent)
+  {
+    item.selectedIndex = event.index;
+    console.log(item,event.index);
+    delete item.sections;
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
   }
 }

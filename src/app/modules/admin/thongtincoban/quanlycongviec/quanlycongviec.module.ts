@@ -29,7 +29,7 @@ import { FuseMasonryModule } from '@fuse/components/masonry';
 import { SharedModule } from 'app/shared/shared.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { GoogleChartsModule } from 'angular-google-charts';
-import { QuanlycongviecByUserResolver, QuanlycongviecResolver } from './quanlycongviec.resolver';
+import { QuanlycongviecByUserResolver, QuanlycongviecDuanResolver, QuanlycongviecResolver } from './quanlycongviec.resolver';
 import { BoardComponent } from './dauviec/board/board.component';
 import { AddcardComponent } from './dauviec/board/addcard/addcard.component';
 import { AddlistComponent } from './dauviec/board/addlist/addlist.component';
@@ -40,6 +40,7 @@ import { AddtaskComponent } from './dauviec/list/addtask/addtask.component';
 import { DuanboardComponent } from './duan/duanboard/duanboard.component';
 import { DuanaddcardComponent } from './duan/duanboard/duanaddcard/duanaddcard.component';
 import { DuanaddlistComponent } from './duan/duanboard/duanaddlist/duanaddlist.component';
+import { DuantimelineComponent } from './duan/duantimeline/duantimeline.component';
 const quanlycongviecRoutes: Route[] = [
   {
     path: '',
@@ -73,12 +74,15 @@ const quanlycongviecRoutes: Route[] = [
       {
         path: 'duan/:id',
         component: DetailComponent,
+        resolve: {
+          tasks: QuanlycongviecDuanResolver,
+        },  
       },
     ]
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent, DuanboardComponent, DuanaddcardComponent, DuanaddlistComponent],
+  declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent, DuanboardComponent, DuanaddcardComponent, DuanaddlistComponent, DuantimelineComponent],
   imports: [
     GoogleChartsModule,
     CKEditorModule,

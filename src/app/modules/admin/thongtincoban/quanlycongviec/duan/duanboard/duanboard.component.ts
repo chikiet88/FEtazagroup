@@ -30,14 +30,18 @@ export class DuanboardComponent implements OnInit {
   CUser: any;
   Uutiens:any[];
   Duans:any[];
+  Duan:any;
+  triggerOrigin1 :any;
   triggerOrigin :any;
   isOpenDuan = false;
+  isOpenUser = false;
   SelectDuan:any;
   TasksNoGroup:any;
   Grouptasks: any[] = [];
   Boards: any[] = [];
   Tasks: any[] = [];
   Sections: any[] = [];
+  Nhanviens: any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;
@@ -61,11 +65,15 @@ export class DuanboardComponent implements OnInit {
           this.CUser = data;
           this._changeDetectorRef.markForCheck();         
         });  
-        this._quanlycongviecService.getBoards();
+        this._quanlycongviecService.getDuanBoards();
         this._quanlycongviecService.getDuans();
      }
     ngOnInit(): void
      {
+        this._nhanvienServiceService.nhanvien$.subscribe((data) => { 
+          this.Nhanviens = data
+          this._changeDetectorRef.markForCheck();
+        })
         this._quanlycongviecService.grouptasks$.subscribe((data) => {
             console.log(data);   
           this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id)
@@ -87,22 +95,24 @@ export class DuanboardComponent implements OnInit {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
         })
+        this._quanlycongviecService.duan$.subscribe((data) => {
+          this.Duan = data
+          this._changeDetectorRef.markForCheck();
+        })
          this.listTitleForm = this._formBuilder.group({
              title: ['']
          });
          this.form = this._formBuilder.group({
             title: ['']
         });
-        this._quanlycongviecService.boards$.subscribe((data)=>
+        this._quanlycongviecService.duanboards$.subscribe((data)=>
         {
-            console.log(data);
             this.Boards = data;
-            console.log(this.Boards); 
+            console.log('board',this.Boards); 
         })
         this._quanlycongviecService.Duansections$.subscribe((data)=>{
           this.Duansections = data
-          console.log(data);
-          
+          console.log('duansection',data);
           ;})
      }
      ngOnDestroy(): void
@@ -128,10 +138,12 @@ export class DuanboardComponent implements OnInit {
      }
      addList(title: string): void
      {
+       console.log(title);
+       console.log(this.Sections);
         let ordering = 0;
-         if(this.Grouptasks.length!=0){ordering = Math.max(...this.Grouptasks.map(o => o.Ordering)) + 1}
-         let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id,Ordering:ordering}  
-         this._quanlycongviecService.CreateGrouptasks(group).subscribe();
+         if(this.Sections.length!=0){ordering = Math.max(...this.Sections.map(o => o.Ordering)) + 1}
+         let section = { Tieude: title,pjid:this.Duan.id, IsOpen: true, idTao: this.CUser.id,Ordering:ordering}  
+         this._quanlycongviecService.CreateSection(section).subscribe();
      }
      updateListTitle(event: any, list): void
      {
@@ -144,17 +156,18 @@ export class DuanboardComponent implements OnInit {
          }
          list.Tieude = element.value = newTitle.trim();
          delete list.tasks;
-         this._quanlycongviecService.UpdateGrouptasks(list,list.id).subscribe();
+         this._quanlycongviecService.UpdateSection(list,list.id).subscribe();
      }
      deleteGroup(item): void
      {
          console.log(item.tasks.length);
+         console.log(item);
          
          if(item.tasks.length==0)
          {
             const confirmation = this._fuseConfirmationService.open({
-                title  : 'Xóa Group',
-                message: 'Bạn Có Chắc Chắn Xóa Group Này',
+                title  : 'Xóa Section',
+                message: 'Bạn Có Chắc Chắn Xóa Section Này',
                 actions: {
                     confirm: {
                         label: 'Xóa'
@@ -164,15 +177,15 @@ export class DuanboardComponent implements OnInit {
             confirmation.afterClosed().subscribe((result) => {
                 if ( result === 'confirmed' )
                 {
-                    this._quanlycongviecService.DeleteGrouptasks(item.id).subscribe();
+                    this._quanlycongviecService.DeleteSection(item.id).subscribe();
                 }
             });
          }
-         else { this._notifierService.notify('error', 'Group Có Đầu Việc. Vui Lòng Xóa Hết Đầu Việc Trước Khi Xóa Group'); }
+         else { this._notifierService.notify('error', 'Section Có Đầu Việc. Vui Lòng Xóa Hết Đầu Việc Trước Khi Xóa Section'); }
      }
      addCard(list: any, title: string): void
      {         
-         const task = { Tieude: title, gid: list.id, idTao: this.CUser.id }
+         const task = { Tieude: title, sid: list.id, idTao: this.CUser.id }
          this._quanlycongviecService.CreateTasks(task).subscribe(
          );
      }
@@ -187,17 +200,13 @@ export class DuanboardComponent implements OnInit {
      {
          console.log(event.container.data);
          if ( event.previousContainer === event.container )
-         {
-             console.log('true');
-             
-             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-             
+         {             
+             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);     
          }
          else
          {
-
              transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-             event.container.data[event.currentIndex].gid = event.container.id;    
+             event.container.data[event.currentIndex].sid = event.container.id;    
              const item  = event.container.data[event.currentIndex]
              this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
 
@@ -232,15 +241,24 @@ export class DuanboardComponent implements OnInit {
         item.Ketthuc = EndValue;
         this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
       }
-      toggleDuan(trigger: any,row) {
-        this.SelectDuan = row
+      toggleDuan(trigger: any,item) {
+        this.SelectDuan = item;
         this.triggerOrigin = trigger;
         this.isOpenDuan = !this.isOpenDuan
+      }
+      toggleUser(trigger: any,item) {
+        this.SelectDuan = item;
+        this.triggerOrigin1 = trigger;
+        this.isOpenUser = !this.isOpenUser
       }
       ChonDuan(item,id) {
         item.sid = id;
         this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
         this.isOpenDuan =false;
       }
-
+      ChonUser(item,id) {
+        item.Thuchien = id;
+        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this.isOpenUser =false;
+      }
 }
