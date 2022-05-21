@@ -172,19 +172,15 @@ export class DetailComponent implements OnInit {
     this._quanlycongviecService.duan$.subscribe((data) => {
       this.Duan = data;
       this.selectedIndex = data.selectedIndex;
-      console.log("Duan",data);
       this._quanlycongviecService.sections$.subscribe((data) => {
-        console.log("Section",data);
         this.Sections = this.filteredSections = data.filter(v=>v.pjid == this.Duan.id);
         this._changeDetectorRef.markForCheck();
       })
       this._quanlycongviecService.tasks$.subscribe((data) => {
-        console.log("tasks",data);
         this.Tasks = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thuchien==this.CUser.id);
         this._changeDetectorRef.markForCheck();
       })
       this._quanlycongviecService.duans$.subscribe((data) => {
-        console.log("Duans",data);
         this.Duans = this.filteredTasks = data.filter(v=>v.idTao == this.CUser.id || v.Thamgia.some(v2=>v2==this.CUser.id));
         this._changeDetectorRef.markForCheck();
       })
@@ -198,7 +194,6 @@ export class DetailComponent implements OnInit {
       });
 
    this._quanlycongviecService.boards$.subscribe((data) => {
-     console.log(data);
         this.Grouptasks = data
         this._changeDetectorRef.markForCheck();
       })
@@ -236,13 +231,10 @@ export class DetailComponent implements OnInit {
   EditSection(event, item) {
     item.Tieude = event.target.value;
     this._quanlycongviecService.UpdateSection(item, item.id).subscribe();
-    console.log(event.target.value);
-    console.log(item);
   }
   UpdateSection(item, type, value) {    
     item[type] = value;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
-    console.log(item);
   }
   GetdataSource(item) {
     return this.Tasks.filter(v => v.sid == item.id);
@@ -253,7 +245,6 @@ export class DetailComponent implements OnInit {
       this._notifierService.notify('error', 'Có Section Mới Chưa Đổi Tên');
     }
     else {
-      console.log(section);
       this._quanlycongviecService.CreateSection(section).subscribe();
     }
   }
@@ -273,10 +264,8 @@ export class DetailComponent implements OnInit {
   UpdateDuan(item, type, value) {      
     item[type] = value;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
-    console.log(item);
   }
   AddMang(item, type, value) {   
-    console.log(item, type, value);
      item[type].push(value);
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
     this.ngOnInit();
@@ -289,13 +278,10 @@ export class DetailComponent implements OnInit {
   UpdateEditorDuan(item, type,{editor}: ChangeEvent ) {   
     item[type] = editor.getData();
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
-    console.log(item);
   }
   EditTasks(event, item) {
     item.Tieude = event.target.value;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
-    console.log(event.target.value);
-    console.log(item);
   }
   ChangeStatusTasks(item, status) {
     item.Trangthai = status;
@@ -319,7 +305,6 @@ export class DetailComponent implements OnInit {
   UpdateSelectIndex(item,event: MatTabChangeEvent)
   {
     item.selectedIndex = event.index;
-    console.log(item,event.index);
     delete item.sections;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
   }

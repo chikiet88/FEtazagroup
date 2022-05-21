@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 @Injectable({
@@ -61,7 +61,7 @@ export class QuanlycongviecService {
         const tasks = this._tasks.value;
         grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
         grouptasks.sort((a, b) => a.Ordering - b.Ordering);
-        console.log(grouptasks);
+        //console.log(grouptasks);
         return this._boards.next(grouptasks);
     }
     getDuanBoards() {
@@ -70,14 +70,14 @@ export class QuanlycongviecService {
         const tasks = this._tasks.value;
         secstions.forEach(v => {v.tasks = tasks.filter(v1=>v1.sid==v.id)});
         secstions.sort((a, b) => a.Ordering - b.Ordering);
-        console.log(secstions);
+        //console.log(secstions);
        return this._duanboards.next(secstions);
     }
     getDuans() {
         const duans = this._duans.value||[];
         const secstions = this._sections.value;
         duans.forEach(v => {v.sections = secstions.filter(v1=>v1.pjid==v.id)});
-        console.log(duans);
+        //console.log(duans);
        return this._duansections.next(duans);
     }
 
@@ -100,7 +100,7 @@ export class QuanlycongviecService {
             take(1),
             switchMap(sections => this._httpClient.post(`${environment.ApiURL}/section`, section).pipe(
                 map((result) => {
-                    console.log(sections);
+                   // console.log(sections);
                     this._sections.next([result, ...sections]);
                     this.getDuanBoards();
                     return result;
@@ -154,7 +154,7 @@ export class QuanlycongviecService {
     getGrouptasksByuser(id): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/grouptask/user/${id}`).pipe(
             tap((response: any) => {
-                console.log(response);
+                //console.log(response);
                 this._grouptasks.next(response);
             })
         );
@@ -217,7 +217,7 @@ export class QuanlycongviecService {
    getTasksByuser(id): Observable<any> {
         return this._httpClient.get(`${environment.ApiURL}/tasks/user/${id}`).pipe(
             tap((response: any) => {
-                console.log(response);
+                //console.log(response);
                 
                 this._tasks.next(response);
             })
@@ -228,7 +228,7 @@ export class QuanlycongviecService {
             take(1),
             switchMap(tasks => this._httpClient.post(`${environment.ApiURL}/tasks`, task).pipe(
                 map((result) => {
-                    console.log(result);
+                    //console.log(result);
                     this._tasks.next([result, ...tasks]);
                     this.getBoards();
                     this.getDuanBoards();
@@ -242,7 +242,7 @@ export class QuanlycongviecService {
             take(1),
             switchMap(tasks => this._httpClient.patch(`${environment.ApiURL}/tasks/${id}`, task).pipe(
                 map((task) => {
-                    console.log(task);
+                    //console.log(task);
                     const index = tasks.findIndex(item => item.id === id);
                     tasks[index] = task;
                     this._tasks.next(tasks);

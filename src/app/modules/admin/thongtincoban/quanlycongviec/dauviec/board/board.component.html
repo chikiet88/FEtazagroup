@@ -128,7 +128,7 @@
                                             <span class="material-icons">topic</span>
                                             <span class="ml-2 mr-1 text-md font-medium truncate">
                                                 <ng-container *ngIf="card.sid">
-                                                    {{list.Tieude}}/{{card.sid|findbyid:Sections:'Tieude'}}
+                                                    {{(card.sid|findbyid:Sections:'pjid')|findbyid:Duans:'Tieude'}}/{{card.sid|findbyid:Sections:'Tieude'}}
                                                 </ng-container>
                                                 <ng-container *ngIf="!card.sid">
                                                     Chưa Chọn

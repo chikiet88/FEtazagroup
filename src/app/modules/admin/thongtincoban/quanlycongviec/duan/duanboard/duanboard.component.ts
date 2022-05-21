@@ -35,13 +35,15 @@ export class DuanboardComponent implements OnInit {
   triggerOrigin :any;
   isOpenDuan = false;
   isOpenUser = false;
-  SelectDuan:any;
+  SelectCard:any;
   TasksNoGroup:any;
   Grouptasks: any[] = [];
   Boards: any[] = [];
   Tasks: any[] = [];
   Sections: any[] = [];
   Nhanviens: any;
+  filterNhanviens:any;
+  Overgroup:any;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;
@@ -70,12 +72,14 @@ export class DuanboardComponent implements OnInit {
      }
     ngOnInit(): void
      {
-        this._nhanvienServiceService.nhanvien$.subscribe((data) => { 
+      this._nhanvienServiceService.getNhanviens().subscribe();
+        this._nhanvienServiceService.nhanviens$.subscribe((data) => { 
           this.Nhanviens = data
+          console.log(data);
+          
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.grouptasks$.subscribe((data) => {
-            console.log(data);   
           this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
@@ -87,16 +91,15 @@ export class DuanboardComponent implements OnInit {
           this.Sections = data.filter(v=>v.idTao==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
-        this._quanlycongviecService.tasks$.subscribe((data) => {
-          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id)
-          this._changeDetectorRef.markForCheck();
-        })
         this._quanlycongviecService.duans$.subscribe((data) => {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.duan$.subscribe((data) => {
+          console.log(data);
+          
           this.Duan = data
+          this.filterNhanviens = data.Thamgia;
           this._changeDetectorRef.markForCheck();
         })
          this.listTitleForm = this._formBuilder.group({
@@ -108,11 +111,9 @@ export class DuanboardComponent implements OnInit {
         this._quanlycongviecService.duanboards$.subscribe((data)=>
         {
             this.Boards = data;
-            console.log('board',this.Boards); 
         })
         this._quanlycongviecService.Duansections$.subscribe((data)=>{
           this.Duansections = data
-          console.log('duansection',data);
           ;})
      }
      ngOnDestroy(): void
@@ -241,18 +242,19 @@ export class DuanboardComponent implements OnInit {
         item.Ketthuc = EndValue;
         this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
       }
-      toggleDuan(trigger: any,item) {
-        this.SelectDuan = item;
+      toggleGroup(trigger: any,item) {
+        this.Overgroup = this.Grouptasks.filter(v=>v.idTao ==item.Thuchien)
+        console.log(this.Overgroup);
         this.triggerOrigin = trigger;
         this.isOpenDuan = !this.isOpenDuan
       }
       toggleUser(trigger: any,item) {
-        this.SelectDuan = item;
+        this.SelectCard = item;
         this.triggerOrigin1 = trigger;
         this.isOpenUser = !this.isOpenUser
       }
-      ChonDuan(item,id) {
-        item.sid = id;
+      ChonGroup(item,id) {
+        item.gid = id;
         this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
         this.isOpenDuan =false;
       }

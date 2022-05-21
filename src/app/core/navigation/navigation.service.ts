@@ -28,8 +28,6 @@ export class NavigationService {
     get(): Observable<Navigation> {
         return this._httpClient.get<any>(`${environment.ApiURL}/navigation`).pipe(
             tap((navigation) => {
-                console.log(navigation);
-                
                 const nav = [];
                 this._userService.get().subscribe((data) => {
                     navigation.forEach(v => {

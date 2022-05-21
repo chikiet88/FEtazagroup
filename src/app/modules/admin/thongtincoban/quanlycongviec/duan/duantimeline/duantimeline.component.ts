@@ -42,12 +42,10 @@ export class DuantimelineComponent implements OnInit {
     });  
     this.boards$ = this._quanlycongviecService.boards$;
     this._quanlycongviecService.duanboards$.subscribe((data)=>{
-      console.log(data);
       //this.Sectiontasks = data = data.filter(v1=>v1.tasks.some(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id));
       const Arrayobject = [];
       data.forEach(v => {
         v.tasks.forEach(v1 => {
-          console.log(v1);
           if(v1.Batdau && v1.Ketthuc)
           {
             Arrayobject.push({group:v.Tieude,task:v1.Tieude,start:new Date(v1.Batdau),end:new Date(v1.Ketthuc)}) 
@@ -64,9 +62,7 @@ export class DuantimelineComponent implements OnInit {
     var chartHeight = this.data.length * rowHeight + 50;
     this.options = {
       height: chartHeight
-    }
-    console.log(this.data);
-    
+    }    
   }
   ngAfterViewInit() {
 

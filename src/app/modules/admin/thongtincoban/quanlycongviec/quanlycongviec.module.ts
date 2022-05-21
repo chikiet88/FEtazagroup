@@ -41,6 +41,8 @@ import { DuanboardComponent } from './duan/duanboard/duanboard.component';
 import { DuanaddcardComponent } from './duan/duanboard/duanaddcard/duanaddcard.component';
 import { DuanaddlistComponent } from './duan/duanboard/duanaddlist/duanaddlist.component';
 import { DuantimelineComponent } from './duan/duantimeline/duantimeline.component';
+import { TainguyenComponent } from './duan/tainguyen/tainguyen.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 const quanlycongviecRoutes: Route[] = [
   {
     path: '',
@@ -82,8 +84,9 @@ const quanlycongviecRoutes: Route[] = [
   }
 ];
 @NgModule({
-  declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent, DuanboardComponent, DuanaddcardComponent, DuanaddlistComponent, DuantimelineComponent],
+  declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent, DuanboardComponent, DuanaddcardComponent, DuanaddlistComponent, DuantimelineComponent, TainguyenComponent],
   imports: [
+    NgxDropzoneModule,
     GoogleChartsModule,
     CKEditorModule,
     FindbyidModule,

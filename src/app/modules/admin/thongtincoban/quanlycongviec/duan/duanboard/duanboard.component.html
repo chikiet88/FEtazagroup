@@ -139,15 +139,15 @@
                                         </div>
                                     </button>
                                     <button cdkOverlayOrigin #trigger="cdkOverlayOrigin"
-                                        (click)="toggleDuan(trigger,card)">
+                                        (click)="toggleGroup(trigger,card)">
                                         <div
                                             class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
                                             <span class="material-icons">topic</span>
                                             <span class="ml-2 mr-1 text-md font-medium truncate">
-                                                <ng-container *ngIf="card.sid">
-                                                    {{list.Tieude}}/{{card.sid|findbyid:Sections:'Tieude'}}
+                                                <ng-container *ngIf="card.gid">
+                                                    {{card.gid|findbyid:Grouptasks:'Tieude'}}
                                                 </ng-container>
-                                                <ng-container *ngIf="!card.sid">
+                                                <ng-container *ngIf="!card.gid">
                                                     Chưa Chọn
                                                 </ng-container>
                                             </span>
@@ -201,34 +201,33 @@
 
 
 
+
+
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
     [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin1"
     [cdkConnectedOverlayOpen]="isOpenUser" (detach)="isOpenUser = false" (backdropClick)="isOpenUser = false">
-    <div class="w-84 rounded border shadow-md bg-card m-3">
-        <div class="flex items-center m-3 mr-2">
-            <div class="flex items-center">
-                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                <div class="ml-2">
-                    <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
-                        #newTagInput>
-                </div>
-            </div>
+  <div class="w-60 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30">
         </div>
-        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-            <ng-container>
-                <div class="py-2 space-y-2">
-                    <ng-container *ngFor="let item of Nhanviens">
-                            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
-                                (click)="ChonUser(SelectDuan,item.id)">
-                                <div class="ml-1">{{item.name}}</div>
-                            </div>
-                    </ng-container>
-                </div>
-            </ng-container>
-        </div>
+      </div>
     </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filterNhanviens|Unique:Duan.Thamgia:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="ChonUser(SelectCard,item)">
+              <div class="ml-1">{{item|findbyid:Nhanviens:'name'}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </ng-template>
-
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
     [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
@@ -246,13 +245,11 @@
         <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
             <ng-container>
                 <div class="py-2 space-y-2">
-                    <ng-container *ngFor="let item of Duansections">
-                        <ng-container *ngFor="let item1 of item.sections">
+                    <ng-container *ngFor="let item of Overgroup">
                             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
-                                (click)="ChonDuan(SelectDuan,item1.id)">
-                                <div class="ml-1">{{item.Tieude}}/{{item1.Tieude}}</div>
+                                (click)="ChonGroup(SelectCard,item.id)">
+                                <div class="ml-1">{{item.Tieude}}</div>
                             </div>
-                        </ng-container>
                     </ng-container>
                 </div>
             </ng-container>
