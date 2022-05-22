@@ -92,25 +92,12 @@
         <mat-divider></mat-divider>
         <div class="my-4">
           <div class="text-2xl font-bold">Tài Nguyên</div>
-          <app-tainguyen></app-tainguyen>
-          <div class="grid grid-cols-3">
-            <div *ngFor="let item of [].constructor(6)"
-              class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
-              <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
-                  alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
-                  src="assets/images/logo/logo300.png">
-              </div>
-              <div class="min-w-0 ml-4">
-                <div class="font-medium leading-5 truncate">Alice Harding</div>
-                <div class="leading-5 truncate text-secondary">Track Service Worker</div>
-              </div>
-            </div>
-          </div>
+          <app-tainguyen [CurentDuan]="Duan"></app-tainguyen>
         </div>
       </mat-tab>
       <mat-tab label="Đầu Việc">
 
-      <app-duanboard></app-duanboard>
+      <app-duanboard ></app-duanboard>
 
         <!-- <div class="flex flex-col w-full">
           <div class="py-2 flex">

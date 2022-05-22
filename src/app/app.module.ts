@@ -20,6 +20,7 @@ import { MaterialExampleModule } from 'material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { QuanlyadsComponent } from './modules/admin/quanlyads/quanlyads.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { UploadComponent } from './modules/admin/upload/upload.component';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -70,6 +71,7 @@ const customNotifierOptions: NotifierOptions = {
         AppComponent,
         CauhinhComponent,
         QuanlyadsComponent,
+        UploadComponent,
     ],
     imports     : [
       BrowserModule,

@@ -27,10 +27,11 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    SharedModule
+    SharedModule,
   ],
   exports     : [
     VersionComponent  
   ]
 })
+
 export class VersionModule { }

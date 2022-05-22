@@ -48,4 +48,5 @@ import { VersionModule } from 'app/layout/common/version/version.module';
 })
 export class CompactLayoutModule
 {
+
 }

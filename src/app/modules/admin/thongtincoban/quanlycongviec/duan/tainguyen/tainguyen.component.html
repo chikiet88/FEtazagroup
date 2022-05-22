@@ -1,6 +1,42 @@
-<input type="file" (change)="upload($event.target.files)" />
+<!-- <input type="file" (change)="upload($event)" />
 Upload Percent: {{percentDone}}% <br />
 
 <ng-container *ngIf="uploadSuccess">
   Upload Successful
-</ng-container> 
+</ng-container>  -->
+<div class="grid grid-cols-5 p-4">
+  <ngx-dropzone (change)="onSelect($event)" class="w-24 h-24 m-auto">
+    <ngx-dropzone-label><span class="material-icons">add</span></ngx-dropzone-label>
+  </ngx-dropzone>
+<div *ngFor="let item of files"
+class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+<div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+  <img
+    alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
+    src="assets/images/logo/logo300.png">
+</div>
+<div class="min-w-0 ml-4">
+  <div class="font-medium leading-5 truncate" [matTooltip]="item.name">{{item.name}}</div>
+  <div class="leading-5 truncate text-secondary" *ngIf="!uploadSuccess">
+    <mat-progress-bar
+    class="example-margin"
+    [color]="color"
+    [mode]="mode"
+    [value]="percentDone">
+  </mat-progress-bar>
+    {{percentDone}}%</div>
+  
+</div>
+</div>
+  <!-- <div *ngFor="let item of [].constructor(6)"
+    class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+    <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden"><img
+        alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
+        src="assets/images/logo/logo300.png">
+    </div>
+    <div class="min-w-0 ml-4">
+      <div class="font-medium leading-5 truncate">Alice Harding</div>
+      <div class="leading-5 truncate text-secondary">Track Service Worker</div>
+    </div>
+  </div> -->
+</div>
