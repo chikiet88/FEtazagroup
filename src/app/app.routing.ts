@@ -96,7 +96,7 @@ export const appRoutes: Route[] = [
                 //canActivate: [AdminGuard],
                 children: [
                     { path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
-                   // { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
+                    { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
                    
 
                 ]

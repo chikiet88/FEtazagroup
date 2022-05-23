@@ -19,6 +19,7 @@ export class QuanlycongviecComponent implements OnInit {
   };
 
   @ViewChild('matDrawer', {static: false}) matDrawer: MatDrawer;
+  @ViewChild('matDrawerMenu', {static: false}) matDrawerMenu: MatDrawer;
   MenuCongviec: any[] = [
     {title:'Tổng Quan',link:'tongquan'},
     {title:'Dự Án',link:'duan'},

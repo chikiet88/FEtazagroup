@@ -21,6 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuanlyadsComponent } from './modules/admin/quanlyads/quanlyads.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { UploadComponent } from './modules/admin/upload/upload.component';
+import { AngularFireModule} from '@angular/fire/compat'
+import {AngularFireDatabaseModule} from '@angular/fire/compat/database';
+import {AngularFireStorageModule } from '@angular/fire/compat/storage'
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
@@ -96,12 +99,17 @@ const customNotifierOptions: NotifierOptions = {
 
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({}),
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireDatabaseModule,
+        AngularFireStorageModule,
          ServiceWorkerModule.register('ngsw-worker.js', {
            enabled: environment.production,
            // Register the ServiceWorker as soon as the app is stable
            // or after 30 seconds (whichever comes first).
            registrationStrategy: 'registerWhenStable:30000'
          })
+
+         
     ],
     bootstrap   : [
         AppComponent

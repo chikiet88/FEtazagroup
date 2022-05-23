@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
 import { Files } from './tailieunguon.types';
-
 @Injectable({
   providedIn: 'root'
 })
 export class TailienguonService {
   private urlApi = 'http://localhost:3000/tailieu';
-  private _files: BehaviorSubject<Files[] | null> = new BehaviorSubject(null);
+  private _files: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   private _file: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private http: HttpClient) {}
 
@@ -20,19 +20,18 @@ export class TailienguonService {
       return this._file.asObservable();
   }
 
-  getFile() {
+  getAllTailieunguon() {
       return this.http.get<any>(this.urlApi).pipe(
           tap((files) => {
-
               this._files.next(files);
           })
       );
   }
-  addFolder(data) {
+   CreateTailieunguon(data) {
       return this.files$.pipe(
           take(1),
           switchMap((files) =>
-              this.http.post(this.urlApi, data).pipe(
+              this.http.post(`${environment.ApiURL}/danhmuc`, data).pipe(
                   map((file: Files) => {
                       this._files.next([file, ...files]);
                       return file;
@@ -41,8 +40,7 @@ export class TailienguonService {
           )
       );
   }
-
-  updateFile(data) {
+ UpdateTailieunguon(data) {
       return this.files$.pipe(
           take(1),
           switchMap((files) =>
@@ -67,6 +65,54 @@ export class TailienguonService {
           )
       );
   }
+
+  getFile() {
+    return this.http.get<any>(this.urlApi).pipe(
+        tap((files) => {
+
+            this._files.next(files);
+        })
+    );
+}
+addFolder(data) {
+    return this.files$.pipe(
+        take(1),
+        switchMap((files) =>
+            this.http.post(this.urlApi, data).pipe(
+                map((file: Files) => {
+                    this._files.next([file, ...files]);
+                    return file;
+                })
+            )
+        )
+    );
+}
+
+updateFile(data) {
+    return this.files$.pipe(
+        take(1),
+        switchMap((files) =>
+            this.http.patch(this.urlApi + `/${data.id}`, data).pipe(
+                map((updateCourse) => {
+                    // Find the index of the updated tag
+                    const index = files.findIndex(
+                        (item) => item.id === item.id
+                    );
+
+                    // Update the tag
+                    files[index] = data;
+                    console.log(updateCourse);
+
+                    // Update the tags
+                    this._files.next(files);
+
+                    // Return the updated tag
+                    return updateCourse;
+                })
+            )
+        )
+    );
+}
   getFileDetail(id){
       return this.http.get(this.urlApi + `/${id}`).pipe(
           tap((res) => {

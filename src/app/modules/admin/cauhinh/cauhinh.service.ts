@@ -138,7 +138,7 @@ CreateDanhmuc(danhmuc): Observable<any> {
     return this.danhmucs$.pipe(
         take(1),
         switchMap(danhmucs => this._httpClient.post(`${environment.ApiURL}/danhmuc`, danhmuc).pipe(
-            map((result) => {
+            map((result) => {    
                 this._danhmucs.next([result, ...danhmucs]);
                 return result;
             })

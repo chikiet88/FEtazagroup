@@ -111,11 +111,12 @@ export class BoardComponent implements OnInit {
      {
         this._quanlycongviecService.changeTask(card);
         this._quanlycongviecComponent.matDrawer.toggle();
-        
+        this._quanlycongviecComponent.matDrawerMenu.toggle();
      }
      CloseMat()
      {
         this._quanlycongviecComponent.matDrawer.close();
+        this._quanlycongviecComponent.matDrawerMenu.close();
      }
      renameList(listTitleInput: HTMLElement): void
      {

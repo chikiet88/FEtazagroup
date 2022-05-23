@@ -36,7 +36,7 @@ export class DuanboardComponent implements OnInit {
   isOpenDuan = false;
   isOpenUser = false;
   SelectCard:any;
-  TasksNoGroup:any;
+  TasksNoGroup:any; 
   Grouptasks: any[] = [];
   Boards: any[] = [];
   Tasks: any[] = [];

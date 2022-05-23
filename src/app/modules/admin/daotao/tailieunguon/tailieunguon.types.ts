@@ -1,7 +1,7 @@
 export interface Files {
     item: string;
-    id:number;
+    id:string;
     type:string;
-    parentid:number;
+    pid:string;
     children?: Files[];
   }

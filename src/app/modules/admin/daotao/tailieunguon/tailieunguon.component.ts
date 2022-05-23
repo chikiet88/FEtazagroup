@@ -4,19 +4,18 @@ import {
     MatTreeFlattener,
 } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from 'ckeditor5/build/ckEditor';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FileUpload } from '../models/file-upload.model';
 import { FileUploadService } from '../services/file-upload.service';
-import { UploadFileComponent } from './upload-file/upload-file.component';
 import { TailienguonService } from './tailienguon.service';
 import { Files } from './tailieunguon.types';
-
-interface ExampleFlatNode {
-    expandable: boolean;
-    item: string;
-    level: number;
-}
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
+// interface ExampleFlatNode {
+//     expandable: boolean;
+//     item: string;
+//     level: number;
+// }
 @Component({
     selector: 'app-tailieunguon',
     templateUrl: './tailieunguon.component.html',
@@ -34,24 +33,29 @@ export class TailieunguonComponent implements OnInit {
     public Editor = ClassicEditor;
     showFiller = true;
     deleteFile = false;
-
-    private _transformer = (node: Files, level: number) => {
-        return {
-            expandable: !!node.children && node.children.length > 0,
-            id: node.id,
-            parentid: node.parentid,
-            item: node.item,
-            type: node.type,
-            level: level,
-        };
+    danhmuc:any
+    private _transformer = (node: any, level: number) => {
+        console.log(node);
+        node.expandable =!!node.children && node.children.length > 0;
+        node.level =level;
+        return node;
+        // return {
+        //     expandable: !!node.children && node.children.length > 0,
+        //     id: node.id,
+        //     pid: node.pid,
+        //     Tieude: node.Tieude,
+        //     Type: node.Type,
+        //     level: level,
+        // };
     };
     constructor(
         private tailieunguonService: TailienguonService,
         private fb: FormBuilder,
-        private uploadService: FileUploadService
+        private uploadService: FileUploadService,
+        private _cauhinhService: CauhinhService
     ) {}
 
-    treeControl = new FlatTreeControl<ExampleFlatNode>(
+    treeControl = new FlatTreeControl<any>(
         (node) => node.level,
         (node) => node.expandable
     );
@@ -67,41 +71,42 @@ export class TailieunguonComponent implements OnInit {
         this.treeControl,
         this.treeFlattener
     );
-    hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+    hasChild = (_: number, node: any) => node.expandable;
+   
     addFolder() {
+        const danhmuc = {Tieude:'Danh Mục Mới',Type:'folder',pid:'0'};
         this.folderList = this.fb.group({
-            item: ['New Folder'],
-            type: ['folder'],
-            parentid: 0,
+            Tieude: ['New Folder'],
+            Type: ['folder'],
+            pid: 0,
         });
-        this.tailieunguonService
-            .addFolder(this.folderList.value)
-            .subscribe();
-            alert('Vui lòng đổi tên Folder')
-            
+        this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
     }
 
     addFolderChild(id) {
-        this.folderList.get('parentid').setValue(id);
-
-        this.tailieunguonService.addFolder(this.folderList.value).subscribe();
+        const danhmuc = {Tieude:'Danh Mục Mới',Type:'folder',pid:id};
+       // this.folderList.get('pid').setValue(id);
+        this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
     }
     updateFile(data, e) {
         this.fileList.addControl('id', new FormControl(data.id));
         this.fileList.get('id').setValue(data.id);
-        this.fileList.get('parentid').setValue(data.parentid);
-
-        this.fileList.get('item').setValue(e.target.value);
-
-        this.tailieunguonService.updateFile(this.fileList.value).subscribe();
+        this.fileList.get('pid').setValue(data.pid);
+        this.fileList.get('Tieude').setValue(e.target.value);
+        this._cauhinhService.UpdateDanhmuc(this.fileList.value).subscribe();
         this.ngOnInit();
     }
     updateFolder(data, e) {
-        this.folderList.addControl('id', new FormControl(data.id));
-        this.folderList.get('id').setValue(data.id);
-        this.folderList.get('parentid').setValue(data.parentid);
-        this.folderList.get('item').setValue(e.target.value);
-        this.tailieunguonService.updateFile(this.folderList.value).subscribe();
+        data.Tieude = e.target.value;
+        delete data.children;
+        delete data.expandable;
+        delete data.level;
+        console.log(data,e);       
+        // this.folderList.addControl('id', new FormControl(data.id));
+        // this.folderList.get('id').setValue(data.id);
+        // this.folderList.get('pid').setValue(data.pid);
+        // this.folderList.get('Tieude').setValue(e.target.value);
+        this._cauhinhService.UpdateDanhmuc(data).subscribe();
         this.ngOnInit();
     }
     // getKey(key:string){
@@ -150,9 +155,9 @@ export class TailieunguonComponent implements OnInit {
                 sameAuthor: [''],
                 censor: [''],
             }),
-            parentid: [0],
+            pid: [0],
         });
-        this.fileList.get('parentid').setValue(id);
+        this.fileList.get('pid').setValue(id);
         this.tailieunguonService.addFolder(this.fileList.value).subscribe();
         alert('Vui lòng đổi tên File');
     }
@@ -161,7 +166,7 @@ export class TailieunguonComponent implements OnInit {
         if (!this.filedetail.id) {
             alert('Vui lòng tạo file mới');
         } else {
-            this.fileList.removeControl('parentid');
+            this.fileList.removeControl('pid');
             this.fileList.addControl('id', new FormControl(this.filedetail.id));
             this.fileList.get('id').setValue(this.filedetail.id);
             this.tailieunguonService
@@ -175,7 +180,10 @@ export class TailieunguonComponent implements OnInit {
             .deleteFileDetail(this.filedetail.id)
             .subscribe();
         this.deleteFile = true;
-        this.ngOnInit()
+        this.ngOnInit();
+    }
+    removefolder(id) {
+        this.tailieunguonService.deleteFileDetail(id).subscribe();
     }
 
     deleteFileUpload(fileUpload: FileUpload): void {
@@ -194,7 +202,7 @@ export class TailieunguonComponent implements OnInit {
                 sameAuthor: [''],
                 censor: [''],
             }),
-            parentid: [0],
+            pid: [0],
         });
         this.uploadService.deleteFile(fileUpload);
     }
@@ -202,12 +210,20 @@ export class TailieunguonComponent implements OnInit {
     selectFile(event: any): void {
         this.selectedFiles = event.target.files;
     }
+    nest = (items, id = '0', link = 'pid') =>
+        items
+            .filter((item) => item[link] == id)
+            .map((item) => ({
+                ...item,
+                children: this.nest(items, item.id),
+            }));
 
     ngOnInit(): void {
+        this.danhmuc = [];
         this.folderList = this.fb.group({
             item: ['New Folder'],
             type: ['folder'],
-            parentid: 0,
+            pid: 0,
         });
         this.fileList = this.fb.group({
             item: ['New File'],
@@ -224,23 +240,17 @@ export class TailieunguonComponent implements OnInit {
                 sameAuthor: [''],
                 censor: [''],
             }),
-            parentid: [0],
+            pid: [0],
         });
 
-        this.tailieunguonService.getFile().subscribe();
-        this.tailieunguonService.files$.subscribe((result) => {
+        this._cauhinhService.getAllDanhmuc().subscribe();
+        this._cauhinhService.danhmucs$.subscribe((result) => {
+            console.log(result);
+            
             // this.files = nest(result)
-
-            this.dataSource.data = nest(result);
+            this.dataSource.data = this.nest(result);
+            console.log(this.dataSource.data);
+            
         });
-
-        const nest = (items, id = '', link = 'parentid') =>
-            items
-                .filter((item) => item[link] == id)
-                .map((item) => ({
-                    ...item,
-                    children: nest(items, item.id),
-                }));
     }
-    @ViewChild(UploadFileComponent) comp: UploadFileComponent;
 }

@@ -1,7 +1,3 @@
-<div class="flex flex-col w-full">
-
-
-<h2 class="text-center my-3">Tài Liệu Nguồn</h2>
 <div class="flex w-full">
     <mat-drawer-container class="example-container w-full" autosize>
         <mat-drawer #drawer class="example-sidenav w-full" mode="over">
@@ -198,7 +194,7 @@
                         (click)="addFolder()"
                     >
                         <div class="rounded-full px-1 bg-blue-100 mr-2">+</div>
-                        <div class="text-gray-500">Danh Mục</div>
+                        <div class="text-gray-500">New Folder</div>
                     </div>
                     <div>
                         <mat-tree
@@ -212,7 +208,7 @@
                                 matTreeNodePadding
                             >
                                 <div
-                                    *ngIf="node.Type == 'file'"
+                                    *ngIf="node.type == 'file'"
                                     class="flex items center lg:hidden"
                                     (click)="drawer.toggle()"
                                 >
@@ -220,10 +216,10 @@
                                     <span class="material-icons">
                                         description
                                     </span>
-                                    <p>{{ node.Tieude }}</p>
+                                    <p>{{ node.item }}</p>
                                 </div>
                                 <div
-                                    *ngIf="node.Type == 'file'"
+                                    *ngIf="node.type == 'file'"
                                     class="items center hidden lg:flex"
                                 >
                                     <button mat-icon-button disabled></button>
@@ -234,13 +230,13 @@
                                         class="w-32"
                                         type="text"
                                         placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFile(node, $event)"
+                                        value="{{ node.item }}"
+                                        (change)="updateFile(node, $event)"
                                         (click)="getFileDetail(node)"
                                     />
                                 </div>
                                 <div
-                                    *ngIf="node.Type == 'folder'"
+                                    *ngIf="node.type == 'folder'"
                                     class="flex items-center"
                                 >
                                     <button mat-icon-button disabled></button>
@@ -251,8 +247,8 @@
                                         class="w-32"
                                         type="text"
                                         placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFolder(node, $event)"
+                                        value="{{ node.item }}"
+                                        (change)="updateFolder(node, $event)"
                                     />
                                     <button [matMenuTriggerFor]="menu">
                                         +
@@ -287,14 +283,14 @@
                                 matTreeNodePadding
                             >
                                 <div
-                                    *ngIf="node.Type == 'folder'"
+                                    *ngIf="node.type == 'folder'"
                                     class="flex items-center"
                                 >
                                     <button
                                         mat-icon-button
                                         matTreeNodeToggle
                                         [attr.aria-label]="
-                                            'Toggle ' + node.Tieude
+                                            'Toggle ' + node.item
                                         "
                                     >
                                         <mat-icon class="mat-icon-rtl-mirror">
@@ -312,8 +308,8 @@
                                         class="w-32"
                                         type="text"
                                         placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFolder(node, $event)"
+                                        value="{{ node.item }}"
+                                        (change)="updateFolder(node, $event)"
                                     />
                                     <button [matMenuTriggerFor]="menu">
                                         +
@@ -538,6 +534,4 @@
             </div>
         </div>
     </mat-drawer-container>
-</div>
-
 </div>

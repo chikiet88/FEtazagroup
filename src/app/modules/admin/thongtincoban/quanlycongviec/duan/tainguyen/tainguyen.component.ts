@@ -24,7 +24,6 @@ export class TainguyenComponent implements OnInit {
   ngOnInit(): void {
 
   }
-
   files: File[] = [];
   onSelect(event) {
     this.files.push(...event.addedFiles);
