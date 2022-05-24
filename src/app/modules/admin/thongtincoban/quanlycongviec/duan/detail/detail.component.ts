@@ -9,6 +9,7 @@ import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.serv
 import { Subject, takeUntil } from 'rxjs';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { QuanlycongviecComponent } from '../../quanlycongviec.component';
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -17,110 +18,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class DetailComponent implements OnInit {
   selectedIndex:any
-  toMilliseconds(minutes) {
-    return minutes * 60 * 1000;
-  }
-  title = 'Browser market shares at a specific website, 2014';
-  type = 'Gantt';
-  chartColumns = [
-    { type: 'string', id: 'ID' },
-    { type: 'string', id: 'Titlte' },
-    { type: 'string', id: 'Resource' },
-    { type: 'date', id: 'Start' },
-    { type: 'date', id: 'End' },
-    { type: 'number', id: 'Duration' },
-    { type: 'number', id: 'Percent Complete' },
-    { type: 'string', id: 'Dependencies' },
-  ]
-  homnay = new Date();
-  data = [
-    [
-      "toTrain",
-      "Walk to train stop",
-      "walk",
-      this.homnay,
-      this.homnay,
-      this.toMilliseconds(5),
-      100,
-      null,
-    ],
-    [
-      "music",
-      "Listen to music",
-      "music",
-      null,
-      null,
-      this.toMilliseconds(70),
-      100,
-      null,
-    ],
-    [
-      "wait",
-      "Wait for train",
-      "wait",
-      null,
-      null,
-      this.toMilliseconds(10),
-      100,
-      "toTrain",
-    ],
-    [
-      "train",
-      "Train ride",
-      "train",
-      null,
-      null,
-      this.toMilliseconds(45),
-      75,
-      "wait",
-    ],
-    [
-      "toWork",
-      "Walk to work",
-      "walk",
-      null,
-      null,
-      this.toMilliseconds(10),
-      0,
-      "train",
-    ]
-  ];
-  options = {
-    height: 275,
-    gantt: {
-      criticalPathEnabled: false, // Critical path arrows will be the same as other arrows.
-      arrow: {
-        angle: 50,
-        width: 1,
-        color: 'white',
-        radius: 2
-      },
-      labelStyle: {
-        fontName: 'Open Sans',
-        fontSize: 14,
-        color: 'white'
-      },
-      barCornerRadius: 2,
-      backgroundColor: {
-        fill: 'transparent',
-      },
-      innerGridHorizLine: {
-        stroke: '#ddd',
-        strokeWidth: 0,
-      },
-      innerGridTrack: {
-        fill: 'transparent'
-      },
-      innerGridDarkTrack: {
-        fill: 'transparent'
-      },
-      percentEnabled:	true, 
-      shadowEnabled: true,	
-      shadowColor: 'white',
-      shadowOffset: 2,
-    }
-  };
-
   isOpen = false;
   ThanhvienisOpen = false;
   public Editor = Editor ;
@@ -156,6 +53,7 @@ export class DetailComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
+    private _quanlycongviecComponent: QuanlycongviecComponent,
     
   ) {
     this._userService.user$
@@ -307,5 +205,9 @@ export class DetailComponent implements OnInit {
     item.selectedIndex = event.index;
     delete item.sections;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+  }
+  MenuToggle()
+  {
+     this._quanlycongviecComponent.matDrawerMenu.toggle();
   }
 }

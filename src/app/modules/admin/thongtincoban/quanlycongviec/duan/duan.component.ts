@@ -5,6 +5,7 @@ import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import { Subject, takeUntil } from 'rxjs';
+import { QuanlycongviecComponent } from '../quanlycongviec.component';
 import { QuanlycongviecService } from '../quanlycongviec.service';
 import { DialogComponent } from './dialog/dialog.component';
 export interface DialogData {
@@ -34,6 +35,7 @@ export class DuanComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
+    private _quanlycongviecComponent: QuanlycongviecComponent,
     public dialog: MatDialog
   ) { 
     this._userService.user$
@@ -58,5 +60,9 @@ export class DuanComponent implements OnInit {
       },
       minWidth:'50%'
     });
+  }
+  MenuToggle()
+  {
+     this._quanlycongviecComponent.matDrawerMenu.toggle();
   }
 }

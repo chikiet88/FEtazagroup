@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { QuanlycongviecService } from '../quanlycongviec.service';
+import { QuanlycongviecComponent } from '../quanlycongviec.component';
 
 @Component({
   selector: 'app-tongquan',
@@ -24,6 +25,7 @@ export class TongquanComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _quanlycongviecService: QuanlycongviecService,
+    private _quanlycongviecComponent: QuanlycongviecComponent,
 
   ) {
     this._userService.user$.subscribe((data) => this.CUser = data);
@@ -48,5 +50,9 @@ export class TongquanComponent implements OnInit {
     });
     this.homnay = new Date();
     this.typethamgia = ["Thường Xuyên", "Gần Đây", "Yêu Thích",]
+  }
+  MenuToggle()
+  {
+     this._quanlycongviecComponent.matDrawerMenu.toggle();
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
@@ -13,6 +13,7 @@ import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import { QuanlycongviecComponent } from '../../quanlycongviec.component';
+import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 @Component({
   selector: 'app-duanboard',
   templateUrl: './duanboard.component.html',
@@ -47,6 +48,8 @@ export class DuanboardComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;
+  @ViewChildren(FuseScrollbarDirective)
+  private _fuseScrollbarDirectives!: QueryList<FuseScrollbarDirective>;
   constructor(
     private _scrumboardService:ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -59,7 +62,6 @@ export class DuanboardComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
     public _quanlycongviecComponent:QuanlycongviecComponent,
-    
     ) {
         this._userService.user$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -116,6 +118,12 @@ export class DuanboardComponent implements OnInit {
           this.Duansections = data
           ;})
      }
+     ngAfterViewInit(): void
+        {
+              fuseScrollbarDirectives.forEach((fuseScrollbarDirective) => {
+                fuseScrollbarDirective.update();
+            });
+        }
      ngOnDestroy(): void
      {
          this._unsubscribeAll.next(null);

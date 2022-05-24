@@ -53,7 +53,6 @@ export class BoardComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
     public _quanlycongviecComponent:QuanlycongviecComponent,
-    
     ) {
         this._userService.user$
         .pipe(takeUntil(this._unsubscribeAll))

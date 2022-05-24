@@ -1,15 +1,21 @@
 <div class="flex flex-col flex-auto min-w-0 light">
   <div class="flex flex-wrap w-full mx-auto p-2">
     <div class="grid grid-cols-1 md:grid-cols-2 hover:grid-cols-6 gap-4 w-full">
-      <fuse-card class="flex flex-col w-full p-4 text-center bg-card col-span-2">
-        <div class="py-2">Hôm Nay : {{homnay|date:'dd/MM/yyyy'}}</div>
-        <div class="text-xl py-2">{{CUser.name}}</div>
-        <div class="py-2 overflow-auto">
+      <fuse-card class="flex flex-row space-x-4 w-full p-4 text-center bg-card col-span-2">
+       <div class="my-auto" (click)="MenuToggle()">
+        <span class="material-icons">
+          dashboard
+          </span>
+       </div>
+       <div class="flex flex-row overflow-auto space-x-4">
+        <div class="m-auto">Hôm Nay : {{homnay|date:'dd/MM/yyyy'}}</div>
+        <div class="text-xl m-auto">{{CUser.name}}</div>          
           <mat-button-toggle-group>
             <mat-button-toggle value="bold"><span class="text-xl text-blue-500 font-bold">{{Duans.length}}</span> Dự Án</mat-button-toggle>
             <mat-button-toggle value="italic"><span class="text-xl text-blue-500 font-bold">{{Hoanthanh.length}}</span> Hoàn Thành</mat-button-toggle>
           </mat-button-toggle-group>
-        </div>
+       </div>
+
       </fuse-card>
 
       <fuse-card class="flex flex-col w-full p-4 col-span-2 md:col-span-1">

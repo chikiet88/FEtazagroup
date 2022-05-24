@@ -4,7 +4,7 @@
         (cdkDropListDropped)="listDropped($event)">
         <div class="flex items-start" cdkDropListGroup>
             <ng-container *ngFor="let list of Boards; trackBy: trackByFn">
-                <div class="flex-0 w-96 p-2 rounded-2xl" cdkDrag [cdkDragLockAxis]="'x'">
+                <div class="flex-0 w-96 p-2 rounded-2xl overflow-auto" cdkDrag [cdkDragLockAxis]="'x'">
                     <div class="flex items-center justify-between" cdkDragHandle>
                         <div
                             class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
@@ -87,56 +87,54 @@
                                         <span class="m-auto cursor-pointer" (click)="OpenEdit(card)">
                                             {{card.Tieude}}</span>
                                     </div>
-
-                                    <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
-                                        [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !card.Batdau&&!card.Ketthuc,
-                                            'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': card.Batdau && card.Ketthuc}"
-                                        (click)="DeadlinePicker.open()">
-                                        <mat-icon class="icon-size-5 text-current"
-                                            [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
-                                        <span class="ml-2 text-md font-medium">
-                                            <ng-container *ngIf="card.Batdau || card.Ketthuc">{{card.Batdau |
-                                                date:'dd/MM/yyyy'}} -
-                                                {{card.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
-                                            <ng-container *ngIf="!card.Batdau && !card.Ketthuc">Chưa Chọn</ng-container>
-                                        </span>
-                                        <mat-form-field
-                                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
-                                            <mat-form-field appearance="fill" class="example-form-field">
-                                                <mat-date-range-input [rangePicker]="DeadlinePicker">
-                                                    <input matStartDate placeholder="Start date" #DeadlineBg>
-                                                    <input matEndDate placeholder="End date" #DeadlineKt>
-                                                </mat-date-range-input>
-                                                <mat-datepicker-toggle matSuffix [for]="rangePicker">
-                                                </mat-datepicker-toggle>
-                                                <mat-date-range-picker #DeadlinePicker>
-                                                    <mat-date-range-picker-actions>
-                                                        <button mat-button matDateRangePickerCancel
-                                                            (click)="UpdateDeadlineTask(card,null,null)">xóa</button>
-                                                        <button mat-raised-button color="primary"
-                                                            matDateRangePickerApply
-                                                            (click)="UpdateDeadlineTask(card,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
-                                                    </mat-date-range-picker-actions>
-                                                </mat-date-range-picker>
+                  <!-- <ng-container *ngIf="card.Batdau&&card.Ketthuc">
+                                            <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+                                            [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !card.Batdau&&!card.Ketthuc,
+                                                'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': card.Batdau && card.Ketthuc}"
+                                            (click)="DeadlinePicker.open()">
+                                            <mat-icon class="icon-size-5 text-current"
+                                                [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                                            <span class="ml-2 text-md font-medium">
+                                                <ng-container>{{card.Batdau |
+                                                    date:'dd/MM/yyyy'}} -
+                                                    {{card.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
+                                            </span>
+                                            <mat-form-field
+                                                class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                                                <mat-form-field appearance="fill" class="example-form-field">
+                                                    <mat-date-range-input [rangePicker]="DeadlinePicker">
+                                                        <input matStartDate placeholder="Start date" #DeadlineBg>
+                                                        <input matEndDate placeholder="End date" #DeadlineKt>
+                                                    </mat-date-range-input>
+                                                    <mat-datepicker-toggle matSuffix [for]="rangePicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-date-range-picker #DeadlinePicker>
+                                                        <mat-date-range-picker-actions>
+                                                            <button mat-button matDateRangePickerCancel
+                                                                (click)="UpdateDeadlineTask(card,null,null)">xóa</button>
+                                                            <button mat-raised-button color="primary"
+                                                                matDateRangePickerApply
+                                                                (click)="UpdateDeadlineTask(card,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
+                                                        </mat-date-range-picker-actions>
+                                                    </mat-date-range-picker>
+                                                </mat-form-field>
                                             </mat-form-field>
-                                        </mat-form-field>
-                                    </div>
+                                        </div>
+                    </ng-container>
+                                        
+                    <ng-container *ngIf="card.sid">
                                     <button cdkOverlayOrigin #trigger="cdkOverlayOrigin"
                                         (click)="toggleDuan(trigger,card)">
                                         <div
                                             class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
                                             <span class="material-icons">topic</span>
                                             <span class="ml-2 mr-1 text-md font-medium truncate">
-                                                <ng-container *ngIf="card.sid">
                                                     {{(card.sid|findbyid:Sections:'pjid')|findbyid:Duans:'Tieude'}}/{{card.sid|findbyid:Sections:'Tieude'}}
-                                                </ng-container>
-                                                <ng-container *ngIf="!card.sid">
-                                                    Chưa Chọn
-                                                </ng-container>
                                             </span>
                                         </div>
 
                                     </button>
+                        </ng-container> -->
                                     <!-- <span class="ml-2 text-md font-medium">
                                       <ng-container *ngIf="card.sid">{{list.Tieude}}/{{card.sid|findbyid:Sections:'Tieude'}}</ng-container>
                                       <ng-container *ngIf="!card.sid">Chưa Chọn</ng-container>
