@@ -15,6 +15,7 @@ import { LophocComponent } from './lophoc/lophoc.component';
 import { CauhoiComponent } from './cauhoi/cauhoi.component';
 import { KythiComponent } from './kythi/kythi.component';
 import { DethiComponent } from './dethi/dethi.component';
+import { YeucaudaotaoComponent } from './yeucaudaotao/yeucaudaotao.component';
 export const DaotaoRoutes: Route[] = [
     {
         path: '',
@@ -26,6 +27,9 @@ export const DaotaoRoutes: Route[] = [
             { path: 'cauhoi', component: CauhoiComponent },
             { path: 'dethi', component: DethiComponent },
             { path: 'kythi', component: KythiComponent },
+            { path: 'yeucaudaotao', component: YeucaudaotaoComponent },
+
+            
         ],
     },
 ];
@@ -38,6 +42,7 @@ export const DaotaoRoutes: Route[] = [
         CauhoiComponent,
         DethiComponent,
         KythiComponent,
+        YeucaudaotaoComponent
     ],
     imports: [
         RouterModule.forChild(DaotaoRoutes),

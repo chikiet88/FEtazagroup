@@ -95,7 +95,7 @@ export class TailieunguonComponent implements OnInit {
                 this.treeControl.expand(
                     this.treeControl.dataNodes.find((v) => v.id == x.id)
                 );
-                x = this.files.find((v) => v.id == x.parenpidtid);
+                x = this.files.find((v) => v.id == x.pid);
             }
         });
     }
