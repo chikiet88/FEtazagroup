@@ -2,7 +2,7 @@
     <div class="flex" cdkDropList [cdkDropListData]="Boards" [cdkDropListOrientation]="'horizontal'"
         (cdkDropListDropped)="listDropped($event)">
         <div class="flex items-start" cdkDropListGroup>
-            <ng-container *ngFor="let list of Boards; trackBy: trackByFn">
+            <ng-container *ngFor="let list of Boards; trackBy: trackByFn; let i = index">
                 <div class="flex-0 w-96 p-2 rounded-2xl overflow-auto" fuseScrollbar
                 [fuseScrollbarOptions]="{wheelPropagation: false, suppressScrollX: true}" cdkDrag [cdkDragLockAxis]="'x'" fuseScrollbar>
                     <div class="flex items-center justify-between" cdkDragHandle>
@@ -30,7 +30,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+                    <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border" [ngClass]="{'overflow-auto':setScroll[i]}" (mouseenter)="setScroll[i]=true" (mouseleave)="setScroll[i]=false">
 
                         <div [id]="list.id" class="px-3 py-5" cdkDropList [cdkDropListData]="list.tasks"
                             (cdkDropListDropped)="cardDropped($event,list.tasks)">

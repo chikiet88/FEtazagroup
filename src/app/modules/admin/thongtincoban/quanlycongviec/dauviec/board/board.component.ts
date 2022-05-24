@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
@@ -16,7 +16,8 @@ import { QuanlycongviecComponent } from '../../quanlycongviec.component';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
-  styleUrls: ['./board.component.scss']
+  styleUrls: ['./board.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class BoardComponent implements OnInit {
   listTitleForm: FormGroup;
@@ -38,6 +39,7 @@ export class BoardComponent implements OnInit {
   Boards: any[] = [];
   Tasks: any[] = [];
   Sections: any[] = [];
+  setScroll:[]=[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;

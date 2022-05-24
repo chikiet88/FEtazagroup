@@ -48,8 +48,7 @@ export class DuanboardComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;
-  @ViewChildren(FuseScrollbarDirective)
-  private _fuseScrollbarDirectives!: QueryList<FuseScrollbarDirective>;
+  setScroll:[]=[];
   constructor(
     private _scrumboardService:ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -118,12 +117,6 @@ export class DuanboardComponent implements OnInit {
           this.Duansections = data
           ;})
      }
-     ngAfterViewInit(): void
-        {
-              fuseScrollbarDirectives.forEach((fuseScrollbarDirective) => {
-                fuseScrollbarDirective.update();
-            });
-        }
      ngOnDestroy(): void
      {
          this._unsubscribeAll.next(null);
