@@ -1,347 +1,369 @@
 <div class="flex flex-col w-full">
-
-
-<h2 class="text-center my-3">Tài Liệu Nguồn</h2>
-<div class="flex w-full">
-    <mat-drawer-container class="example-container w-full" autosize>
-        <mat-drawer #drawer class="example-sidenav w-full" mode="over">
-            <div class="lg:w-4/5 w-full p-5 bg-card shadow lg:hidden">
-                <span
-                    class="material-icons lg:hidden px-0 pb-5"
-                    (click)="drawer.toggle()"
-                >
-                    close
-                </span>
-
-               <form [formGroup]="fileList">
-                   <form [formGroupName]="'data'">
-                    <div class="h-full">
-                        <div class="pb-3">
-                            <mat-form-field
-                                class="fuse-mat-emphasized-affix w-full"
-                                appearance="fill"
-                            >
-                                <span matPrefix> Tài Liệu</span>
-                                <input
-                                    matInput
-                                    type="text"
-                                    class="w-full h-full text-red-500"
-                                    placeholder="Tài Liệu"
-                                    [formControlName]="'tailieu'"
-                                />
-                            </mat-form-field>
-                        </div>
-    
-                        <div class="flex justify-between flex-col lg:flex-row">
-                            <mat-form-field
-                                class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
-                                appearance="fill"
-                            >
-                                <span matPrefix>Chọn Menu </span>
-                                <mat-select>
-                                    <mat-option>a</mat-option>
-                                </mat-select>
-                                <div
-                                    matSuffix
-                                    class="flex justify-around items-center"
-                                >
-                                    <div
-                                        class="h-3 w-3 rounded-sm bg-white mr-2"
-                                    ></div>
-                                    <span>Sửa</span>
-                                </div>
-                            </mat-form-field>
-    
-                            <mat-form-field
-                                class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
-                                appearance="fill"
-                            >
-                                <span matPrefix>Tags </span>
-                                <input
-                                    matInput
-                                    type="text"
-                                    class="w-full h-full text-red-500"
-                                    placeholder="Tài Liệu"
-                                    [formControlName]="'tag'"
-    
-                                />
-                            </mat-form-field>
-                        </div>
-    
-                        <div class="flex justify-between flex-col lg:flex-row">
-                            <mat-form-field
-                                class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
-                                appearance="fill"
-                            >
-                                <span matPrefix>Dự kiến triển khai </span>
-                                <input
-                                    matInput
-                                    type="datetime-local"
-                                    class="w-full h-full text-red-500"
-                                    placeholder="start date"
-                                    [formControlName]="'date'"
-    
-                                />
-                            </mat-form-field>
-                            <mat-form-field
-                                class="fuse-mat-emphasized-affix lg:w-1/2 lg:ml-3 w-full"
-                                appearance="fill"
-                            >
-                                <span matPrefix>Deadling </span>
-                                <input
-                                    matInput
-                                    type="datetime-local"
-                                    class="w-full h-full text-red-500"
-                                    placeholder="end date"
-                                    [formControlName]="'deadline'"
-    
-                                />
-                            </mat-form-field>
-                        </div>
-    
-                        <div class="flex flex-col lg:flex-row">
-                            <div class="lg:w-1/2 w-full lg:mr-3">
-                                <p>Nội dung</p>
-                                <ckeditor
-                                    [editor]="Editor"
-                                    data="<p>Hello, world!</p>"
-                                    [formControlName]="'content'"
-    
-                                ></ckeditor>
-                            </div>
-                            <div class="lg:w-1/2 w-full lg:ml-3">
-                                <p>Ghi chú</p>
-                                <ckeditor
-                                    [editor]="Editor"
-                                    data="<p>Hello, world!</p>"
-                                    [formControlName]="'note'"
-    
-                                ></ckeditor>
-                            </div>
-                        </div>
-                        <div class="flex justify-between pt-3 flex-col lg:flex-row">
-                            <div class="lg:w-2/6">
-                                <p>Tác Giả Chính</p>
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix w-full"
-                                    appearance="fill"
-                                >
-                                    <mat-select>
-                                        <mat-option>a</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div class="lg:w-2/6 lg:mx-3">
-                                <p>Đồng Tác Giả</p>
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix w-full"
-                                    appearance="fill"
-                                >
-                                    <input
-                                        matInput
-                                        type="text"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="Tài Liệu"
-                                    [formControlName]="'sameAuthor'"
-    
-                                    />
-                                </mat-form-field>
-                            </div>
-                            <div class="lg:w-2/6">
-                                <p>Kiểm Duyệt</p>
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix w-full"
-                                    appearance="fill"
-                                >
-                                    <input
-                                        matInput
-                                        type="text"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="Tài Liệu"
-                                    [formControlName]="'censor'"
-    
-                                    />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div
-                            class="form-group py-5 flex lg:justify-start justify-between"
-                        >
-                            <button
-                                type="submit"
-                                class="btn text-white bg-indigo-900 p-3 rounded-lg"
-                            >
-                                Submit
-                            </button>
-    
-                            
-    
-                            <button
-                                type="delete"
-                                class="btn text-white bg-red-500 p-3 rounded-lg"
-                                (click)="deleteFileDetail()"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                   </form>
-               </form>
-            </div>
-        </mat-drawer>
-
-        <div class="example-sidenav-content w-full flex h-full">
-            <div class="lg:w-1/5 w-full h-full bg-card shadow pt-5">
-                <div class="w-full h-full bg-card shadow">
-                    <div
-                        class="mx-3 bg-gray-300 flex justify-center items-center py-2 rounded-lg cursor-pointer addFolder"
-                        (click)="addFolder()"
+    <h2 class="text-center my-3">Tài Liệu Nguồn</h2>
+    <div class="flex w-full">
+        <mat-drawer-container class="example-container w-full" autosize>
+            <mat-drawer #drawer class="example-sidenav w-full" mode="over">
+                <div class="lg:w-4/5 w-full p-5 bg-card shadow lg:hidden">
+                    <span
+                        class="material-icons lg:hidden px-0 pb-5"
+                        (click)="drawer.toggle()"
                     >
-                        <div class="rounded-full px-1 bg-blue-100 mr-2">+</div>
-                        <div class="text-gray-500">Danh Mục</div>
-                    </div>
-                    <div>
-                        <mat-tree
-                            [dataSource]="dataSource"
-                            [treeControl]="treeControl"
-                            class="bg-[#fafafa]"
-                        >
-                            <!-- This is the tree node template for leaf nodes -->
-                            <mat-tree-node
-                                *matTreeNodeDef="let node"
-                                matTreeNodePadding
-                            >
-                                <div
-                                    *ngIf="node.Type == 'file'"
-                                    class="flex items center lg:hidden"
-                                    (click)="drawer.toggle()"
-                                >
-                                    <button mat-icon-button disabled></button>
-                                    <span class="material-icons">
-                                        description
-                                    </span>
-                                    <p>{{ node.Tieude }}</p>
-                                </div>
-                                <div
-                                    *ngIf="node.Type == 'file'"
-                                    class="items center hidden lg:flex"
-                                >
-                                    <button mat-icon-button disabled></button>
-                                    <span class="material-icons pr-4">
-                                        description
-                                    </span>
-                                    <input
-                                        class="w-32"
-                                        type="text"
-                                        placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFile(node, $event)"
-                                        (click)="getFileDetail(node)"
-                                    />
-                                </div>
-                                <div
-                                    *ngIf="node.Type == 'folder'"
-                                    class="flex items-center"
-                                >
-                                    <button mat-icon-button disabled></button>
-                                    <span class="material-icons pr-4">
-                                        folder
-                                    </span>
-                                    <input
-                                        class="w-32"
-                                        type="text"
-                                        placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFolder(node, $event)"
-                                    />
-                                    <button [matMenuTriggerFor]="menu">
-                                        +
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                        <button
-                                            mat-menu-item
-                                            (click)="addFolderChild(node.id)"
-                                        >
-                                            Add Folder
-                                        </button>
+                        close
+                    </span>
 
-                                        <button
-                                            mat-menu-item
-                                            (click)="addFile(node.id)"
-                                        >
-                                            Add File
-                                        </button>
-                                        <button
-                                        mat-menu-item
-                                        (click)="removefolder(node.id)"
+                    <form [formGroup]="fileList">
+                        <form [formGroupName]="'data'">
+                            <div class="h-full">
+                                <div class="pb-3">
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix w-full"
+                                        appearance="fill"
                                     >
-                                        Remove Folder
-                                    </button>
-                                    </mat-menu>
+                                        <span matPrefix> Tài Liệu</span>
+                                        <input
+                                            matInput
+                                            type="text"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="Tài Liệu"
+                                            [formControlName]="'tailieu'"
+                                        />
+                                    </mat-form-field>
                                 </div>
-                                <!-- use a disabled button to provide padding for tree leaf -->
-                            </mat-tree-node>
-                            <!-- This is the tree node template for expandable nodes -->
-                            <mat-tree-node
-                                *matTreeNodeDef="let node; when: hasChild"
-                                matTreeNodePadding
-                            >
+
                                 <div
-                                    *ngIf="node.Type == 'folder'"
-                                    class="flex items-center"
+                                    class="flex justify-between flex-col lg:flex-row"
+                                >
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix>Chọn Menu </span>
+                                        <mat-select>
+                                            <mat-option>a</mat-option>
+                                        </mat-select>
+                                        <div
+                                            matSuffix
+                                            class="flex justify-around items-center"
+                                        >
+                                            <div
+                                                class="h-3 w-3 rounded-sm bg-white mr-2"
+                                            ></div>
+                                            <span>Sửa</span>
+                                        </div>
+                                    </mat-form-field>
+
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix>Tags </span>
+                                        <input
+                                            matInput
+                                            type="text"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="Tài Liệu"
+                                            [formControlName]="'tag'"
+                                        />
+                                    </mat-form-field>
+                                </div>
+
+                                <div
+                                    class="flex justify-between flex-col lg:flex-row"
+                                >
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix
+                                            >Dự kiến triển khai
+                                        </span>
+                                        <input
+                                            matInput
+                                            type="datetime-local"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="start date"
+                                            [formControlName]="'date'"
+                                        />
+                                    </mat-form-field>
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 lg:ml-3 w-full"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix>Deadling </span>
+                                        <input
+                                            matInput
+                                            type="datetime-local"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="end date"
+                                            [formControlName]="'deadline'"
+                                        />
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="flex flex-col lg:flex-row">
+                                    <div class="lg:w-1/2 w-full lg:mr-3">
+                                        <p>Nội dung</p>
+                                        <ckeditor
+                                            [editor]="Editor"
+                                            data="<p>Hello, world!</p>"
+                                            [formControlName]="'content'"
+                                        ></ckeditor>
+                                    </div>
+                                    <div class="lg:w-1/2 w-full lg:ml-3">
+                                        <p>Ghi chú</p>
+                                        <ckeditor
+                                            [editor]="Editor"
+                                            data="<p>Hello, world!</p>"
+                                            [formControlName]="'note'"
+                                        ></ckeditor>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex justify-between pt-3 flex-col lg:flex-row"
+                                >
+                                    <div class="lg:w-2/6">
+                                        <p>Tác Giả Chính</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <mat-select>
+                                                <mat-option>a</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="lg:w-2/6 lg:mx-3">
+                                        <p>Đồng Tác Giả</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <input
+                                                matInput
+                                                type="text"
+                                                class="w-full h-full text-red-500"
+                                                placeholder="Tài Liệu"
+                                                [formControlName]="'sameAuthor'"
+                                            />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="lg:w-2/6">
+                                        <p>Kiểm Duyệt</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <input
+                                                matInput
+                                                type="text"
+                                                class="w-full h-full text-red-500"
+                                                placeholder="Tài Liệu"
+                                                [formControlName]="'censor'"
+                                            />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div
+                                    class="form-group py-5 flex lg:justify-start justify-between"
                                 >
                                     <button
-                                        mat-icon-button
-                                        matTreeNodeToggle
-                                        [attr.aria-label]="
-                                            'Toggle ' + node.Tieude
-                                        "
+                                        type="submit"
+                                        class="btn text-white bg-indigo-900 p-3 rounded-lg"
                                     >
-                                        <mat-icon class="mat-icon-rtl-mirror">
-                                            {{
-                                                treeControl.isExpanded(node)
-                                                    ? "expand_more"
-                                                    : "chevron_right"
-                                            }}
-                                        </mat-icon>
+                                        Thêm mới
                                     </button>
-                                    <span class="material-icons pr-4">
-                                        folder
-                                    </span>
-                                    <input
-                                        class="w-32"
-                                        type="text"
-                                        placeholder="Enter Text"
-                                        value="{{ node.Tieude }}"
-                                        (keydown.enter)="updateFolder(node, $event)"
-                                    />
-                                    <button [matMenuTriggerFor]="menu">
-                                        +
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                        <button
-                                            mat-menu-item
-                                            (click)="addFolderChild(node.id)"
-                                        >
-                                            Add Folder
-                                        </button>
 
-                                        <button
-                                            mat-menu-item
-                                            (click)="addFile(node.id)"
-                                        >
-                                            Add File
-                                        </button>
-                                    </mat-menu>
+                                    <button
+                                        type="delete"
+                                        class="btn text-white bg-red-500 p-3 rounded-lg"
+                                        (click)="deleteFileDetail()"
+                                    >
+                                        Xóa
+                                    </button>
                                 </div>
-                            </mat-tree-node>
-                        </mat-tree>
+                            </div>
+                        </form>
+                    </form>
+                </div>
+            </mat-drawer>
+
+            <div class="example-sidenav-content w-full flex h-full">
+                <div class="lg:w-auto w-full h-full bg-card shadow pt-5">
+                    <div class="w-full h-full bg-card shadow">
+                        <div
+                            class="mx-3 bg-gray-300 flex justify-center items-center py-2 rounded-lg cursor-pointer addFolder"
+                            (click)="addFolder()"
+                        >
+                            <div class="rounded-full px-1 bg-blue-100 mr-2">
+                                +
+                            </div>
+                            <div class="text-gray-500">Danh Mục</div>
+                        </div>
+                        <div>
+                            <mat-tree
+                                [dataSource]="dataSource"
+                                [treeControl]="treeControl"
+                                class="bg-[#fafafa]"
+                            >
+                                <!-- This is the tree node template for leaf nodes -->
+                                <mat-tree-node
+                                    *matTreeNodeDef="let node"
+                                    matTreeNodePadding
+                                >
+                                    <div
+                                        *ngIf="node.Type == 'file'"
+                                        class="flex items center lg:hidden"
+                                        (click)="drawer.toggle()"
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            disabled
+                                        ></button>
+                                        <span class="material-icons">
+                                            description
+                                        </span>
+                                        <p>{{ node.Tieude }}</p>
+                                    </div>
+                                    <div
+                                        *ngIf="node.Type == 'file'"
+                                        class="items center hidden lg:flex"
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            disabled
+                                        ></button>
+                                        <span class="material-icons pr-4">
+                                            description
+                                        </span>
+                                        <input
+                                            class="w-32"
+                                            type="text"
+                                            placeholder="Enter Text"
+                                            value="{{ node.Tieude }}"
+                                            (keydown.enter)="
+                                                updateFile(node, $event)
+                                            "
+                                            (click)="getFileDetail(node)"
+                                        />
+                                    </div>
+                                    <div
+                                        *ngIf="node.Type == 'folder'"
+                                        class="flex items-center"
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            disabled
+                                        ></button>
+                                        <span class="material-icons pr-4">
+                                            folder
+                                        </span>
+                                        <input
+                                            class="w-32"
+                                            type="text"
+                                            placeholder="Enter Text"
+                                            value="{{ node.Tieude }}"
+                                            (keydown.enter)="
+                                                updateFolder(node, $event)
+                                            "
+                                        />
+                                        <button [matMenuTriggerFor]="menu">
+                                            +
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button
+                                                mat-menu-item
+                                                (click)="addFolderChild(node)"
+                                            >
+                                                Tạo Danh Mục
+                                            </button>
+
+                                            <button
+                                                mat-menu-item
+                                                (click)="addFile(node.id)"
+                                            >
+                                                Tạo Tài Liệu Nguồn
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="removefolder(node.id)"
+                                            >
+                                                Xóa Danh Mục
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                    <!-- use a disabled button to provide padding for tree leaf -->
+                                </mat-tree-node>
+                                <!-- This is the tree node template for expandable nodes -->
+                                <mat-tree-node
+                                    *matTreeNodeDef="let node; when: hasChild"
+                                    matTreeNodePadding
+                                >
+                                    <div
+                                        *ngIf="node.Type == 'folder'"
+                                        class="flex items-center"
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            matTreeNodeToggle
+                                            [attr.aria-label]="
+                                                'Toggle ' + node.Tieude
+                                            "
+                                        >
+                                            <mat-icon
+                                                class="mat-icon-rtl-mirror"
+                                            >
+                                                {{
+                                                    treeControl.isExpanded(node)
+                                                        ? "expand_more"
+                                                        : "chevron_right"
+                                                }}
+                                            </mat-icon>
+                                        </button>
+                                        <span class="material-icons pr-4">
+                                            folder
+                                        </span>
+                                        <input
+                                            class="w-32"
+                                            type="text"
+                                            placeholder="Enter Text"
+                                            value="{{ node.Tieude }}"
+                                            (keydown.enter)="
+                                                updateFolder(node, $event)
+                                            "
+                                        />
+                                        <button [matMenuTriggerFor]="menu">
+                                            +
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button
+                                                mat-menu-item
+                                                (click)="addFolderChild(node)"
+                                            >
+                                                Tạo Danh Mục
+                                            </button>
+
+                                            <button
+                                                mat-menu-item
+                                                (click)="addFile(node.id)"
+                                            >
+                                                Tạo Tài Liệu Nguồn
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="removefolder(node.id)"
+                                            >
+                                                Xóa Danh Mục
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                </mat-tree-node>
+                            </mat-tree>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="lg:w-4/5 w-full p-5 bg-card shadow hidden lg:block">
-                <!-- <button
+                <div class="w-full p-5 bg-card shadow hidden lg:block">
+                    <!-- <button
                   type="button"
                   (click)="drawer.toggle()"
                   class="lg:hidden px-0 pb-5"
@@ -352,192 +374,187 @@
                       <div class="w-8 h-0.5 bg-gray-600"></div>
                   </div>
               </button> -->
-                <form [formGroup]="fileList">
-                    <form [formGroupName]="'data'">
-                        <div class="h-full">
-                            <div class="pb-3">
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix w-full"
-                                    appearance="fill"
-                                >
-                                    <span matPrefix> Tài Liệu</span>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="Tài Liệu"
-                                        [formControlName]="'tailieu'"
-                                    />
-                                </mat-form-field>
-                            </div>
-
-                            <div
-                                class="flex justify-between flex-col lg:flex-row"
-                            >
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
-                                    appearance="fill"
-                                >
-                                    <span matPrefix>Chọn Menu </span>
-                                    <mat-select>
-                                        <mat-option>a</mat-option>
-                                    </mat-select>
-                                    <div
-                                        matSuffix
-                                        class="flex justify-around items-center"
-                                    >
-                                        <div
-                                            class="h-3 w-3 rounded-sm bg-white mr-2"
-                                        ></div>
-                                        <span>Sửa</span>
-                                    </div>
-                                </mat-form-field>
-
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
-                                    appearance="fill"
-                                >
-                                    <span matPrefix>Tags </span>
-                                    <input
-                                        matInput
-                                        type="text"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="Tài Liệu"
-                                        [formControlName]="'tag'"
-                                    />
-                                </mat-form-field>
-                            </div>
-
-                            <div
-                                class="flex justify-between flex-col lg:flex-row"
-                            >
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
-                                    appearance="fill"
-                                >
-                                    <span matPrefix>Dự kiến triển khai </span>
-                                    <input
-                                        matInput
-                                        type="datetime-local"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="start date"
-                                        [formControlName]="'date'"
-                                    />
-                                </mat-form-field>
-                                <mat-form-field
-                                    class="fuse-mat-emphasized-affix lg:w-1/2 lg:ml-3 w-full"
-                                    appearance="fill"
-                                >
-                                    <span matPrefix>Deadling </span>
-                                    <input
-                                        matInput
-                                        type="datetime-local"
-                                        class="w-full h-full text-red-500"
-                                        placeholder="end date"
-                                        [formControlName]="'deadline'"
-
-                                    />
-                                </mat-form-field>
-                            </div>
-
-                            <div class="flex flex-col lg:flex-row">
-                                <div class="lg:w-1/2 w-full lg:mr-3">
-                                    <p>Nội dung</p>
-                                    <ckeditor
-                                        [editor]="Editor"
-                                        data="<p>Hello, world!</p>"
-                                        [formControlName]="'content'"
-
-                                    ></ckeditor>
-                                </div>
-                                <div class="lg:w-1/2 w-full lg:ml-3">
-                                    <p>Ghi chú</p>
-                                    <ckeditor
-                                        [editor]="Editor"
-                                        data="<p>Hello, world!</p>"
-                                        [formControlName]="'note'"
-
-                                    ></ckeditor>
-                                </div>
-                            </div>
-                            <div
-                                class="flex justify-between pt-3 flex-col lg:flex-row"
-                            >
-                                <div class="lg:w-2/6">
-                                    <p>Tác Giả Chính</p>
+                    <form [formGroup]="fileList">
+                        <form [formGroupName]="'data'">
+                            <div class="h-full">
+                                <div class="pb-3">
                                     <mat-form-field
                                         class="fuse-mat-emphasized-affix w-full"
                                         appearance="fill"
-
                                     >
+                                        <span matPrefix> Tài Liệu</span>
+                                        <input
+                                            matInput
+                                            type="text"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="Tài Liệu"
+                                            [formControlName]="'tailieu'"
+                                        />
+                                    </mat-form-field>
+                                </div>
+
+                                <div
+                                    class="flex justify-between flex-col lg:flex-row"
+                                >
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix>Chọn Menu </span>
                                         <mat-select>
                                             <mat-option>a</mat-option>
                                         </mat-select>
+                                        <div
+                                            matSuffix
+                                            class="flex justify-around items-center"
+                                        >
+                                            <div
+                                                class="h-3 w-3 rounded-sm bg-white mr-2"
+                                            ></div>
+                                            <span>Sửa</span>
+                                        </div>
                                     </mat-form-field>
-                                </div>
-                                <div class="lg:w-2/6 lg:mx-3">
-                                    <p>Đồng Tác Giả</p>
-                                    <mat-form-field
-                                        class="fuse-mat-emphasized-affix w-full"
-                                        appearance="fill"
 
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                                        appearance="fill"
                                     >
+                                        <span matPrefix>Tags </span>
                                         <input
                                             matInput
                                             type="text"
                                             class="w-full h-full text-red-500"
                                             placeholder="Tài Liệu"
-                                        [formControlName]="'sameAuthor'"
-
+                                            [formControlName]="'tag'"
                                         />
                                     </mat-form-field>
                                 </div>
-                                <div class="lg:w-2/6">
-                                    <p>Kiểm Duyệt</p>
-                                    <mat-form-field
-                                        class="fuse-mat-emphasized-affix w-full"
-                                        appearance="fill"
 
+                                <div
+                                    class="flex justify-between flex-col lg:flex-row"
+                                >
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                                        appearance="fill"
                                     >
+                                        <span matPrefix
+                                            >Dự kiến triển khai
+                                        </span>
                                         <input
                                             matInput
-                                            type="text"
+                                            type="datetime-local"
                                             class="w-full h-full text-red-500"
-                                            placeholder="Tài Liệu"
-
+                                            placeholder="start date"
+                                            [formControlName]="'date'"
+                                        />
+                                    </mat-form-field>
+                                    <mat-form-field
+                                        class="fuse-mat-emphasized-affix lg:w-1/2 lg:ml-3 w-full"
+                                        appearance="fill"
+                                    >
+                                        <span matPrefix>Deadling </span>
+                                        <input
+                                            matInput
+                                            type="datetime-local"
+                                            class="w-full h-full text-red-500"
+                                            placeholder="end date"
+                                            [formControlName]="'deadline'"
                                         />
                                     </mat-form-field>
                                 </div>
-                            </div>
-                            <div *ngIf="filedetail">
-                                <app-upload-file [id]="filedetail.id" [deleteFile]="deleteFile" ></app-upload-file>
-                            </div>
-                            
-                            <div
-                                class="form-group py-5 flex lg:justify-start justify-between"
-                            >
-                                <button
-                                    type="submit"
-                                    class="btn text-white bg-indigo-900 p-3 rounded-lg"
-                                    (click)="onSubmit()"
+
+                                <div class="flex flex-col lg:flex-row">
+                                    <div class="lg:w-1/2 w-full lg:mr-3">
+                                        <p>Nội dung</p>
+                                        <ckeditor
+                                            [editor]="Editor"
+                                            data="<p>Hello, world!</p>"
+                                            [formControlName]="'content'"
+                                        ></ckeditor>
+                                    </div>
+                                    <div class="lg:w-1/2 w-full lg:ml-3">
+                                        <p>Ghi chú</p>
+                                        <ckeditor
+                                            [editor]="Editor"
+                                            data="<p>Hello, world!</p>"
+                                            [formControlName]="'note'"
+                                        ></ckeditor>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex justify-between pt-3 flex-col lg:flex-row"
                                 >
-                                    Submit
-                                </button>
-                                <button
-                                    type="delete"
-                                    class="btn text-white bg-red-500 p-3 rounded-lg mx-5"
-                                    (click)="deleteFileDetail()"
+                                    <div class="lg:w-2/6">
+                                        <p>Tác Giả Chính</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <mat-select>
+                                                <mat-option>a</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="lg:w-2/6 lg:mx-3">
+                                        <p>Đồng Tác Giả</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <input
+                                                matInput
+                                                type="text"
+                                                class="w-full h-full text-red-500"
+                                                placeholder="Tài Liệu"
+                                                [formControlName]="'sameAuthor'"
+                                            />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="lg:w-2/6">
+                                        <p>Kiểm Duyệt</p>
+                                        <mat-form-field
+                                            class="fuse-mat-emphasized-affix w-full"
+                                            appearance="fill"
+                                        >
+                                            <input
+                                                matInput
+                                                type="text"
+                                                class="w-full h-full text-red-500"
+                                                placeholder="Tài Liệu"
+                                            />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div *ngIf="filedetail">
+                                    <app-upload-file
+                                        [id]="filedetail.id"
+                                        [deleteFile]="deleteFile"
+                                    ></app-upload-file>
+                                </div>
+
+                                <div
+                                    class="form-group py-5 flex lg:justify-start justify-between"
                                 >
-                                    Delete
-                                </button>
+                                    <button
+                                        type="submit"
+                                        class="btn text-white bg-indigo-900 p-3 rounded-lg"
+                                        (click)="onSubmit()"
+                                    >
+                                        Submit
+                                    </button>
+                                    <button
+                                        type="delete"
+                                        class="btn text-white bg-red-500 p-3 rounded-lg mx-5"
+                                        (click)="deleteFileDetail()"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </form>
-                </form>
-
+                </div>
             </div>
-        </div>
-    </mat-drawer-container>
-</div>
-
+        </mat-drawer-container>
+    </div>
 </div>

@@ -1,509 +1,297 @@
-<div class="flex flex-col flex-auto w-full">
-
-    <div class="flex flex-wrap w-full max-w-screen-xl mx-auto p-6 md:p-8">
-
-        <!-- Title and action buttons -->
-        <div class="flex items-center justify-between w-full">
-            <div>
-                <div class="text-3xl font-semibold tracking-tight leading-8">Analytics dashboard</div>
-                <div class="font-medium tracking-tight text-secondary">Monitor metrics, check reports and review performance</div>
+<div class="example-sidenav-content w-full flex h-full">
+    <div class="lg:w-1/5 w-full h-full bg-card shadow pt-5 hidden lg:block">
+        <div class="w-full h-full bg-card shadow">
+            <div
+                class="mx-3 bg-gray-300 flex justify-center items-center py-2 rounded-lg cursor-pointer addFolder"
+            >
+                <div class="text-gray-500 text-xl">Danh sách câu hỏi</div>
             </div>
-            <div class="flex items-center ml-6">
-                <button
-                    class="hidden sm:inline-flex"
-                    mat-stroked-button>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:cog'"></mat-icon>
-                    <span class="ml-2">Settings</span>
-                </button>
-                <button
-                    class="hidden sm:inline-flex ml-3"
-                    mat-flat-button
-                    [color]="'primary'">
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:save'"></mat-icon>
-                    <span class="ml-2">Export</span>
-                </button>
-
-                <!-- Actions menu (visible on xs) -->
-                <div class="sm:hidden">
-                    <button
-                        [matMenuTriggerFor]="actionsMenu"
-                        mat-icon-button>
-                        <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
-                    </button>
-                    <mat-menu #actionsMenu="matMenu">
-                        <button mat-menu-item>Export</button>
-                        <button mat-menu-item>Settings</button>
-                    </mat-menu>
+            <div class="flex flex-col items-center">
+                <div
+                    class="py-2"
+                    *ngFor="let item of cauhoi"
+                    (click)="onChange(item)"
+                >
+                    {{ item.name }}
                 </div>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-8">
-            <!-- Visitors overview -->
-            <div class="sm:col-span-2 lg:col-span-3 dark flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
-                <div class="flex items-center justify-between mt-10 ml-10 mr-6 sm:mr-10">
-                    <div class="flex flex-col">
-                        <div class="mr-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7">Visitors Overview</div>
-                        <div class="font-medium text-secondary">Number of unique visitors</div>
-                    </div>
-                    <div class="ml-2">
-                        <mat-button-toggle-group
-                            class="hidden sm:inline-flex border-none space-x-1"
-                            value="this-year"
-                            #visitorsYearSelector="matButtonToggleGroup">
-                            <mat-button-toggle
-                                class="px-1.5 rounded-full overflow-hidden border-none font-medium"
-                                value="last-year">Last Year
-                            </mat-button-toggle>
-                            <mat-button-toggle
-                                class="px-1.5 rounded-full overflow-hidden border-none font-medium"
-                                value="this-year">This Year
-                            </mat-button-toggle>
-                        </mat-button-toggle-group>
-                        <div class="sm:hidden">
-                            <button
-                                mat-icon-button
-                                [matMenuTriggerFor]="visitorsMenu">
-                                <mat-icon [svgIcon]="'heroicons_outline:dots-vertical'"></mat-icon>
-                            </button>
-                            <mat-menu #visitorsMenu="matMenu">
-                                <button mat-menu-item>This Year</button>
-                                <button mat-menu-item>Last Year</button>
-                            </mat-menu>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto h-80">
-                    <apx-chart
-                        class="flex-auto w-full h-full"
-                        [chart]="chartVisitors.chart"
-                        [colors]="chartVisitors.colors"
-                        [dataLabels]="chartVisitors.dataLabels"
-                        [fill]="chartVisitors.fill"
-                        [grid]="chartVisitors.grid"
-                        [series]="chartVisitors.series[visitorsYearSelector.value]"
-                        [stroke]="chartVisitors.stroke"
-                        [tooltip]="chartVisitors.tooltip"
-                        [xaxis]="chartVisitors.xaxis"
-                        [yaxis]="chartVisitors.yaxis"></apx-chart>
-                </div>
-            </div>
-            <!-- Conversions -->
-            <div class="sm:col-span-2 lg:col-span-1 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
-                <div class="flex items-start justify-between m-6 mb-0">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Conversions</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col lg:flex-row lg:items-center mx-6 mt-3">
-                    <div class="text-7xl font-bold tracking-tighter leading-tight">{{data.conversions.amount | number:'1.0-0'}}</div>
-                    <div class="flex lg:flex-col lg:ml-3">
-                        <mat-icon
-                            class="icon-size-5 text-red-500"
-                            [svgIcon]="'heroicons_solid:trending-down'"></mat-icon>
-                        <div class="flex items-center ml-1 lg:ml-0 lg:mt-0.5 text-md leading-none whitespace-nowrap text-secondary">
-                            <span class="font-medium text-red-500">2%</span>
-                            <span class="ml-1">below target</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto h-20">
-                    <apx-chart
-                        class="flex-auto w-full h-full"
-                        [chart]="chartConversions.chart"
-                        [colors]="chartConversions.colors"
-                        [series]="chartConversions.series"
-                        [stroke]="chartConversions.stroke"
-                        [tooltip]="chartConversions.tooltip"
-                        [xaxis]="chartConversions.xaxis"
-                        [yaxis]="chartConversions.yaxis"></apx-chart>
-                </div>
-            </div>
-            <!-- Impressions -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
-                <div class="flex items-start justify-between m-6 mb-0">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Impressions</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="impressionsMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #impressionsMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col lg:flex-row lg:items-center mx-6 mt-3">
-                    <div class="text-7xl font-bold tracking-tighter leading-tight">{{data.impressions.amount | number:'1.0-0'}}</div>
-                    <div class="flex lg:flex-col lg:ml-3">
-                        <mat-icon
-                            class="icon-size-5 text-red-500"
-                            [svgIcon]="'heroicons_solid:trending-down'"></mat-icon>
-                        <div class="flex items-center ml-1 lg:ml-0 lg:mt-0.5 text-md leading-none whitespace-nowrap text-secondary">
-                            <span class="font-medium text-red-500">4%</span>
-                            <span class="ml-1">below target</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto h-20">
-                    <apx-chart
-                        class="flex-auto w-full h-full"
-                        [chart]="chartImpressions.chart"
-                        [colors]="chartImpressions.colors"
-                        [series]="chartImpressions.series"
-                        [stroke]="chartImpressions.stroke"
-                        [tooltip]="chartImpressions.tooltip"
-                        [xaxis]="chartImpressions.xaxis"
-                        [yaxis]="chartImpressions.yaxis"></apx-chart>
-                </div>
-            </div>
-            <!-- Visits -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
-                <div class="flex items-start justify-between m-6 mb-0">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Visits</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="impressionsMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #impressionsMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col lg:flex-row lg:items-center mx-6 mt-3">
-                    <div class="text-7xl font-bold tracking-tighter leading-tight">{{data.visits.amount | number:'1.0-0'}}</div>
-                    <div class="flex lg:flex-col lg:ml-3">
-                        <mat-icon
-                            class="icon-size-5 text-red-500"
-                            [svgIcon]="'heroicons_solid:trending-down'"></mat-icon>
-                        <div class="flex items-center ml-1 lg:ml-0 lg:mt-0.5 text-md leading-none whitespace-nowrap text-secondary">
-                            <span class="font-medium text-red-500">4%</span>
-                            <span class="ml-1">below target</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto h-20">
-                    <apx-chart
-                        class="flex-auto w-full h-full"
-                        [chart]="chartVisits.chart"
-                        [colors]="chartVisits.colors"
-                        [series]="chartVisits.series"
-                        [stroke]="chartVisits.stroke"
-                        [tooltip]="chartVisits.tooltip"
-                        [xaxis]="chartVisits.xaxis"
-                        [yaxis]="chartVisits.yaxis"></apx-chart>
-                </div>
-            </div>
-        </div>
-
-        <!-- Visitors vs. Page Views -->
-        <div class="flex flex-col flex-auto mt-8 bg-card shadow rounded-2xl overflow-hidden">
-            <div class="flex items-start justify-between m-6 mb-0">
-                <div class="text-lg font-medium tracking-tight leading-6 truncate">Visitors vs. Page Views</div>
-                <div class="ml-2">
-                    <button
-                        class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                        mat-button
-                        [matMenuTriggerFor]="conversionMenu">
-                        <span class="font-medium text-sm text-secondary">30 days</span>
-                    </button>
-                    <mat-menu #conversionMenu="matMenu">
-                        <button mat-menu-item>30 days</button>
-                        <button mat-menu-item>3 months</button>
-                        <button mat-menu-item>9 months</button>
-                    </mat-menu>
-                </div>
-            </div>
-            <div class="flex items-start mt-6 mx-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
-                    <div class="flex flex-col">
-                        <div class="flex items-center">
-                            <div class="font-medium text-secondary leading-5">Overall Score</div>
-                            <mat-icon
-                                class="ml-1.5 icon-size-4 text-hint"
-                                [svgIcon]="'heroicons_solid:information-circle'"
-                                [matTooltip]="'Score is calculated by using the historical ratio between Page Views and Visitors. Best score is 1000, worst score is 0.'"></mat-icon>
-                        </div>
-                        <div class="flex items-start mt-2">
-                            <div class="text-4xl font-bold tracking-tight leading-none">{{data.visitorsVsPageViews.overallScore}}</div>
-                            <div class="flex items-center ml-2">
-                                <mat-icon
-                                    class="icon-size-5 text-green-500"
-                                    [svgIcon]="'heroicons_solid:arrow-circle-up'"></mat-icon>
-                                <div class="ml-1 text-md font-medium text-green-500">42.9%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center">
-                            <div class="font-medium text-secondary leading-5">Average Ratio</div>
-                            <mat-icon
-                                class="ml-1.5 icon-size-4 text-hint"
-                                [svgIcon]="'heroicons_solid:information-circle'"
-                                [matTooltip]="'Average Ratio is the average ratio between Page Views and Visitors'"></mat-icon>
-                        </div>
-                        <div class="flex items-start mt-2">
-                            <div class="text-4xl font-bold tracking-tight leading-none">{{data.visitorsVsPageViews.averageRatio | number:'1.0-0'}}%</div>
-                            <div class="flex items-center ml-2">
-                                <mat-icon
-                                    class="icon-size-5 text-red-500"
-                                    [svgIcon]="'heroicons_solid:arrow-circle-down'"></mat-icon>
-                                <div class="ml-1 text-md font-medium text-red-500">13.1%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center">
-                            <div class="font-medium text-secondary leading-5">Predicted Ratio</div>
-                            <mat-icon
-                                class="ml-1.5 icon-size-4 text-hint"
-                                [svgIcon]="'heroicons_solid:information-circle'"
-                                [matTooltip]="'Predicted Ratio is calculated by using historical ratio, current trends and your goal targets.'"></mat-icon>
-                        </div>
-                        <div class="flex items-start mt-2">
-                            <div class="text-4xl font-bold tracking-tight leading-none">{{data.visitorsVsPageViews.predictedRatio | number:'1.0-0'}}%</div>
-                            <div class="flex items-center ml-2">
-                                <mat-icon
-                                    class="icon-size-5 text-green-500"
-                                    [svgIcon]="'heroicons_solid:arrow-circle-up'"></mat-icon>
-                                <div class="ml-1 text-md font-medium text-green-500">22.2%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col flex-auto h-80 mt-3">
-                <apx-chart
-                    class="flex-auto w-full h-full"
-                    [chart]="chartVisitorsVsPageViews.chart"
-                    [colors]="chartVisitorsVsPageViews.colors"
-                    [dataLabels]="chartVisitorsVsPageViews.dataLabels"
-                    [grid]="chartVisitorsVsPageViews.grid"
-                    [legend]="chartVisitorsVsPageViews.legend"
-                    [series]="chartVisitorsVsPageViews.series"
-                    [stroke]="chartVisitorsVsPageViews.stroke"
-                    [tooltip]="chartVisitorsVsPageViews.tooltip"
-                    [xaxis]="chartVisitorsVsPageViews.xaxis"
-                    [yaxis]="chartVisitorsVsPageViews.yaxis"></apx-chart>
-            </div>
-        </div>
-
-        <!-- Section title -->
-        <div class="w-full mt-12">
-            <div class="text-2xl font-semibold tracking-tight leading-6">Your Audience</div>
-            <div class="font-medium tracking-tight text-secondary">Demographic properties of your users</div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full mt-6 md:mt-8">
-            <!-- New vs. Returning -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
-                <div class="flex items-start justify-between">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">New vs. Returning</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto mt-6 h-44">
-                    <apx-chart
-                        class="flex flex-auto items-center justify-center w-full h-full"
-                        [chart]="chartNewVsReturning.chart"
-                        [colors]="chartNewVsReturning.colors"
-                        [labels]="chartNewVsReturning.labels"
-                        [plotOptions]="chartNewVsReturning.plotOptions"
-                        [series]="chartNewVsReturning.series"
-                        [states]="chartNewVsReturning.states"
-                        [tooltip]="chartNewVsReturning.tooltip"></apx-chart>
-                </div>
-                <div class="mt-8">
-                    <div class="-my-3 divide-y">
-                        <ng-container *ngFor="let dataset of data.newVsReturning.series; let i = index">
-                            <div class="grid grid-cols-3 py-3">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-0 w-2 h-2 rounded-full"
-                                        [style.backgroundColor]="chartNewVsReturning.colors[i]"></div>
-                                    <div class="ml-3 truncate">{{data.newVsReturning.labels[i]}}</div>
-                                </div>
-                                <div class="font-medium text-right">{{data.newVsReturning.uniqueVisitors * dataset / 100 | number:'1.0-0'}}</div>
-                                <div class="text-right text-secondary">{{dataset}}%</div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-            <!-- Gender -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
-                <div class="flex items-start justify-between">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Gender</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto mt-6 h-44">
-                    <apx-chart
-                        class="flex flex-auto items-center justify-center w-full h-full"
-                        [chart]="chartGender.chart"
-                        [colors]="chartGender.colors"
-                        [labels]="chartGender.labels"
-                        [plotOptions]="chartGender.plotOptions"
-                        [series]="chartGender.series"
-                        [states]="chartGender.states"
-                        [tooltip]="chartGender.tooltip"></apx-chart>
-                </div>
-                <div class="mt-8">
-                    <div class="-my-3 divide-y">
-                        <ng-container *ngFor="let dataset of data.gender.series; let i = index">
-                            <div class="grid grid-cols-3 py-3">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-0 w-2 h-2 rounded-full"
-                                        [style.backgroundColor]="chartGender.colors[i]"></div>
-                                    <div class="ml-3 truncate">{{data.gender.labels[i]}}</div>
-                                </div>
-                                <div class="font-medium text-right">{{data.gender.uniqueVisitors * dataset / 100 | number:'1.0-0'}}</div>
-                                <div class="text-right text-secondary">{{dataset}}%</div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-            <!-- Age -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
-                <div class="flex items-start justify-between">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Age</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto mt-6 h-44">
-                    <apx-chart
-                        class="flex flex-auto items-center justify-center w-full h-full"
-                        [chart]="chartAge.chart"
-                        [colors]="chartAge.colors"
-                        [labels]="chartAge.labels"
-                        [plotOptions]="chartAge.plotOptions"
-                        [series]="chartAge.series"
-                        [states]="chartAge.states"
-                        [tooltip]="chartAge.tooltip"></apx-chart>
-                </div>
-                <div class="mt-8">
-                    <div class="-my-3 divide-y">
-                        <ng-container *ngFor="let dataset of data.age.series; let i = index">
-                            <div class="grid grid-cols-3 py-3">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-0 w-2 h-2 rounded-full"
-                                        [style.backgroundColor]="chartAge.colors[i]"></div>
-                                    <div class="ml-3 truncate">{{data.age.labels[i]}}</div>
-                                </div>
-                                <div class="font-medium text-right">{{data.age.uniqueVisitors * dataset / 100 | number:'1.0-0'}}</div>
-                                <div class="text-right text-secondary">{{dataset}}%</div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-            <!-- Language -->
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden p-6">
-                <div class="flex items-start justify-between">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Language</div>
-                    <div class="ml-2">
-                        <button
-                            class="h-6 min-h-6 px-2 rounded-full bg-hover"
-                            mat-button
-                            [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
-                        </button>
-                        <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="flex flex-col flex-auto mt-6 h-44">
-                    <apx-chart
-                        class="flex flex-auto items-center justify-center w-full h-full"
-                        [chart]="chartLanguage.chart"
-                        [colors]="chartLanguage.colors"
-                        [labels]="chartLanguage.labels"
-                        [plotOptions]="chartLanguage.plotOptions"
-                        [series]="chartLanguage.series"
-                        [states]="chartLanguage.states"
-                        [tooltip]="chartLanguage.tooltip"></apx-chart>
-                </div>
-                <div class="mt-8">
-                    <div class="-my-3 divide-y">
-                        <ng-container *ngFor="let dataset of data.language.series; let i = index">
-                            <div class="grid grid-cols-3 py-3">
-                                <div class="flex items-center">
-                                    <div
-                                        class="flex-0 w-2 h-2 rounded-full"
-                                        [style.backgroundColor]="chartLanguage.colors[i]"></div>
-                                    <div class="ml-3 truncate">{{data.language.labels[i]}}</div>
-                                </div>
-                                <div class="font-medium text-right">{{data.language.uniqueVisitors * dataset / 100 | number:'1.0-0'}}</div>
-                                <div class="text-right text-secondary">{{dataset}}%</div>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
+    <div class="lg:w-4/5 w-full p-5 bg-card shadow">
+        <!-- <button
+          type="button"
+          (click)="drawer.toggle()"
+          class="lg:hidden px-0 pb-5"
+      >
+          <div class="space-y-2">
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+          </div>
+      </button> -->
+        <form [formGroup]="cauhoiList"  (keydown.enter)="$event.preventDefault()">
+            <div class="h-full">
+                <div class="flex justify-between flex-col lg:flex-row">
+                    <div class="lg:w-2/6 w-full flex mb-3">
+                        <span
+                            class="rounded-l-xl border border-gray-200 flex items-center justify-center text-center w-20 py-3 h-12"
+                            >Chủ đề</span
+                        >
+                        <input
+                            type="text"
+                            class="w-full pl-3 py-3 border-none rounded-r-xl border border-gray-500 h-12"
+                            [formControlName]="'chude'"
+                            readonly
+                        />
+                    </div>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mx-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Tài liệu nguồn</span>
+
+                        <mat-select
+                            (selectionChange)="tailieunguonChange($event)"
+                        >
+                            <mat-option
+                                [value]="item"
+                                *ngFor="let item of tailieunguon"
+                                >{{ item.item }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="lg:w-2/6 w-full flex mb-3 items-center">
+                        <span
+                            class="rounded-l-xl border border-gray-200 flex items-center justify-center text-center w-36 py-3 h-12"
+                            >Mã câu hỏi</span
+                        >
+                        <input
+                            type="text"
+                            class="w-full pl-3 py-3 border-none rounded-r-xl border border-gray-500 h-12"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="w-full">
+                        <p>Câu hỏi</p>
+                        <ckeditor
+                            [editor]="Editor"
+                            data="Câu hỏi"
+                            [formControlName]="'cauhoi'"
+                        ></ckeditor>
+                    </div>
+                </div>
+                <div class="pt-5">
+                    <mat-radio-group
+                        aria-label="Select an option"
+                        (change)="dangCauhoiChange($event)"
+                    >
+                        <mat-radio-button
+                            value="1"
+                            class="mr-5"
+                            (click)="dangCauhoi = 1"
+                            >Trắc nghiêm</mat-radio-button
+                        >
+                        <mat-radio-button value="2" (click)="dangCauhoi = 2"
+                            >Tự luận</mat-radio-button
+                        >
+                    </mat-radio-group>
+                </div>
+
+                <div
+                    class="flex justify-between flex-col lg:flex-row pt-5"
+                    [ngClass]="{ hidden: dangCauhoi != 1 }"
+                >
+                    <div
+                        class="flex items-center w-1/2 border border-gray-500 rounded-xl mr-3"
+                    >
+                        <span class="border-r border-gray-500 h-full">
+                            <div
+                                class="flex flex-col w-20 h-full items-center justify-center p-2"
+                            >
+                                <p>Trả lời</p>
+                                <div class="px-3 py-2 bg-black rounded-xl">
+                                    <p
+                                        class="px-1 rounded-full bg-white text-black cursor-pointer"
+                                        (click)="addCauhoi()"
+                                    >
+                                        +
+                                    </p>
+                                </div>
+                            </div>
+                        </span>
+                        <div class="w-full">
+                            <fieldset
+                                class="w-full px-3 py-2"
+                                *ngFor="
+                                    let item of sothutuCauhoi;
+                                    let indexOfelement = index
+                                "
+                            >
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p
+                                            class="px-2 py-1 rounded-full bg-black text-white flex items-center justify-center"
+                                        >
+                                            {{
+                                                indexOfelement + 1
+                                                    | tracnghiemPipe
+                                            }}
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        class="w-full h-full mx-2 pl-3 py-3 rounded-xl border border-gray-500"
+                                        placeholder="đáp án"
+                                        (change)="inputChange(indexOfelement,$event.target.value )"
+                                    />
+                                    <p
+                                        class="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center cursor-poniter"
+                                        (click)="
+                                            removeTracnghiemItem(indexOfelement)
+                                        "
+                                    >
+                                        -
+                                    </p>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center w-1/2 border border-gray-500 rounded-xl ml-3"
+                    >
+                        <span class="border-r border-gray-500 h-full">
+                            <div
+                                class="flex flex-col w-20 h-full items-center justify-center p-2"
+                            >
+                                <p>Đáp án</p>
+                            </div>
+                        </span>
+                        <div class="w-full">
+                            <fieldset
+                                class="w-full px-3 py-2"
+                                *ngFor="
+                                    let item of sothutuCauhoi;
+                                    let indexOfelement = index
+                                "
+                            >
+                                <div class="flex justify-between items-center">
+                                    <div >
+                                        <p
+                                            class="px-2 py-1 rounded-full  text-white flex items-center justify-center cursos-pointer {{isActive ==  indexOfelement? 'bg-red-500' : 'bg-black'}}"
+                                            (click)="getDapan(listTracnghiem , indexOfelement)"
+                                            >
+                                            {{
+                                                indexOfelement + 1
+                                                    | tracnghiemPipe
+                                            }}
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value="{{listTracnghiem[indexOfelement]}}"
+                                        class="w-full h-full mx-2 pl-3 py-3 rounded-xl border border-gray-500"
+                                        placeholder="đáp án"
+                                        readonly
+                                    />
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="flex w-full pt-5"
+                    [ngClass]="{ hidden: dangCauhoi != 2 }"
+                >
+                    <div class="w-full">
+                        <ckeditor
+                            [editor]="Editor"
+                            data="Câu hỏi"
+                            [formControlName]="'dapan'"
+                        ></ckeditor>
+                    </div>
+                </div>
+                <div class="flex justify-between flex-col lg:flex-row pt-5">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Cấp độ </span>
+                        <mat-select [formControlName]="'capdo'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                            <mat-option value="Dễ">Dễ</mat-option>
+                            <mat-option value="Trung bình"
+                                >Trung bình</mat-option
+                            >
+                            <mat-option value="Khó">Khó</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Người duyệt</span>
+                        <mat-select [formControlName]="'idNguoiduyet'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <div class="w-2/3 pr-3">
+                        <p>Ghi chú</p>
+                        <ckeditor
+                            [editor]="Editor"
+                            data="<p>Ghi Chú</p>"
+                            [formControlName]="'note'"
+                        ></ckeditor>
+                    </div>
+                    <div class="w-1/3 pt-5">
+                        <mat-form-field
+                            class="fuse-mat-emphasized-affix w-full lg:pl-3"
+                            appearance="fill"
+                        >
+                            <span matPrefix>Tags</span>
+                            <mat-select [formControlName]="'tags'">
+                                <mat-option value="Vui lòng chọn"
+                                    >Vui lòng chọn</mat-option
+                                >
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div
+                    class="form-group py-5 flex lg:justify-start justify-between"
+                >
+                    <button
+                        type="submit"
+                        class="btn text-white bg-indigo-900 p-3 rounded-lg"
+                        (click)="onSubmit()"
+                    >
+                        Submit
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn text-white bg-indigo-600 p-3 rounded-lg mx-5"
+                        (click)="updateCauhoi()"
+                    >
+                        Update
+                    </button>
+                    <button
+                        type="delete"
+                        class="btn text-white bg-red-500 p-3 rounded-lg"
+                        (click)="deleteCauhoi()"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

@@ -33,11 +33,11 @@ export class TailieunguonComponent implements OnInit {
     public Editor = ClassicEditor;
     showFiller = true;
     deleteFile = false;
-    danhmuc:any
+    danhmuc: any;
     private _transformer = (node: any, level: number) => {
         console.log(node);
-        node.expandable =!!node.children && node.children.length > 0;
-        node.level =level;
+        node.expandable = !!node.children && node.children.length > 0;
+        node.level = level;
         return node;
         // return {
         //     expandable: !!node.children && node.children.length > 0,
@@ -72,9 +72,9 @@ export class TailieunguonComponent implements OnInit {
         this.treeFlattener
     );
     hasChild = (_: number, node: any) => node.expandable;
-   
+
     addFolder() {
-        const danhmuc = {Tieude:'Danh Mục Mới',Type:'folder',pid:'0'};
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0' };
         this.folderList = this.fb.group({
             Tieude: ['New Folder'],
             Type: ['folder'],
@@ -83,10 +83,21 @@ export class TailieunguonComponent implements OnInit {
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
     }
 
-    addFolderChild(id) {
-        const danhmuc = {Tieude:'Danh Mục Mới',Type:'folder',pid:id};
-       // this.folderList.get('pid').setValue(id);
-        this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
+    addFolderChild(node) {
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id };
+        // this.folderList.get('pid').setValue(id);
+        this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
+            this.treeControl.expand(
+                this.treeControl.dataNodes.find((v) => v.id == node.id)
+            );
+            let x = this.files.find((v) => v.id == node.pid);
+            while (x) {
+                this.treeControl.expand(
+                    this.treeControl.dataNodes.find((v) => v.id == x.id)
+                );
+                x = this.files.find((v) => v.id == x.pid);
+            }
+        });
     }
     updateFile(data, e) {
         this.fileList.addControl('id', new FormControl(data.id));
@@ -101,7 +112,7 @@ export class TailieunguonComponent implements OnInit {
         delete data.children;
         delete data.expandable;
         delete data.level;
-        console.log(data,e);       
+        console.log(data, e);
         // this.folderList.addControl('id', new FormControl(data.id));
         // this.folderList.get('id').setValue(data.id);
         // this.folderList.get('pid').setValue(data.pid);
@@ -245,12 +256,9 @@ export class TailieunguonComponent implements OnInit {
 
         this._cauhinhService.getAllDanhmuc().subscribe();
         this._cauhinhService.danhmucs$.subscribe((result) => {
-            console.log(result);
-            
-            // this.files = nest(result)
+            this.files = result
             this.dataSource.data = this.nest(result);
             console.log(this.dataSource.data);
-            
         });
-    }
+    }   
 }

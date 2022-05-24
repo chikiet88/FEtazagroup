@@ -164,6 +164,8 @@ export class QuanlycongviecService {
             take(1),
             switchMap(grouptasks => this._httpClient.post(`${environment.ApiURL}/grouptask`, grouptask).pipe(
                 map((result) => {
+                    console.log(result);
+                    
                     this._grouptasks.next([result, ...grouptasks]);
                     this.getBoards();
                     return result;

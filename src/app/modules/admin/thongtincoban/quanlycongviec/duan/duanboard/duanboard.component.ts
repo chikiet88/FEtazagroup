@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
@@ -17,7 +17,8 @@ import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.dir
 @Component({
   selector: 'app-duanboard',
   templateUrl: './duanboard.component.html',
-  styleUrls: ['./duanboard.component.scss']
+  styleUrls: ['./duanboard.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class DuanboardComponent implements OnInit {
   listTitleForm: FormGroup;
@@ -112,6 +113,8 @@ export class DuanboardComponent implements OnInit {
         this._quanlycongviecService.duanboards$.subscribe((data)=>
         {
             this.Boards = data;
+            console.log(data);
+            
         })
         this._quanlycongviecService.Duansections$.subscribe((data)=>{
           this.Duansections = data

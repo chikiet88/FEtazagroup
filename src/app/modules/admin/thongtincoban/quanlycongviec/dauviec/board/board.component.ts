@@ -40,6 +40,7 @@ export class BoardComponent implements OnInit {
   Tasks: any[] = [];
   Sections: any[] = [];
   setScroll:[]=[];
+  setInput:[]=[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
   Duansections :any;
@@ -89,9 +90,8 @@ export class BoardComponent implements OnInit {
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.boards$.subscribe((data)=>
-        {
-            console.log(data);
-            this.Boards = data;
+        {        
+            this.Boards =  data.filter(v=>v.idTao ==this.CUser.id || v.tasks.some(v1=>v1.idTao==this.CUser.id ||v1.Thuchien==this.CUser.id)) 
             console.log(this.Boards);
             
         })
@@ -113,6 +113,31 @@ export class BoardComponent implements OnInit {
         this._quanlycongviecService.changeTask(card);
         this._quanlycongviecComponent.matDrawer.toggle();
         this._quanlycongviecComponent.matDrawerMenu.toggle();
+     }
+     ChangeTask(item,type,value)
+     {      
+       item[type] = value;
+       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
+     }
+     DeleteCard(item)
+     {
+         console.log(item);
+         
+        const confirmation = this._fuseConfirmationService.open({
+            title  : 'Xóa Đầu Việc',
+            message: 'Bạn Có Chắc Chắn Xóa Đầu Việc Này',
+            actions: {
+                confirm: {
+                    label: 'Xóa'
+                }
+            }
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if ( result === 'confirmed' )
+            {
+                this._quanlycongviecService.DeleteTasks(item.id).subscribe();
+            }
+        });
      }
      CloseMat()
      {

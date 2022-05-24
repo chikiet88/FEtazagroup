@@ -16,7 +16,9 @@ class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100
     src="assets/images/logo/logo300.png">
 </div>
 <div class="min-w-0 ml-4">
-  <div class="font-medium leading-5 truncate" [matTooltip]="item.name">{{item.name}}</div>
+  <a [href]="item.path" class="font-medium leading-5 truncate" [matTooltip]="item.Tieude">
+    {{item.Tieude}}
+  </a>
   <div class="leading-5 truncate text-secondary" *ngIf="!uploadSuccess">
     <mat-progress-bar
     class="example-margin"

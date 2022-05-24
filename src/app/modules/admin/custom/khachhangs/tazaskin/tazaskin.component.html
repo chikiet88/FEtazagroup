@@ -26,6 +26,7 @@
 <div class="flex space-x-2">
   <button mat-button class="text-white bg-blue-500" (click)="LoadAll()" *ngIf="CurrentUser.Role=='admin' || CurrentUser.Role=='dev'">Load All</button> 
   <button mat-button class="text-white bg-blue-500" (click)="Reset()">Reset</button> 
+  <button mat-button class="text-white bg-blue-500" (click)="exporter.exportTable('csv')" *ngIf="CurrentUser.Role=='admin' || CurrentUser.Role=='dev'">Excel</button>
 </div>
   </div>
 <form class="flex space-x-2 my-2" [formGroup]="Filtermember">
