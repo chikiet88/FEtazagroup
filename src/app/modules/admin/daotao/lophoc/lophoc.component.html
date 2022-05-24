@@ -1,0 +1,235 @@
+<div class="example-sidenav-content w-full flex h-full">
+    <div class="lg:w-1/5 w-full h-full bg-card shadow pt-5">
+        <div class="w-full h-full bg-card shadow">
+            <div
+                class="mx-3 bg-gray-300 flex justify-center items-center py-2 rounded-lg cursor-pointer addFolder"
+            >
+                <div class="text-gray-500 text-xl">Danh sách lớp học</div>
+            </div>
+            <div class="flex flex-col items-center">
+                <div
+                    class="py-2"
+                    *ngFor="let item of lophoc"
+                    (click)="onChange(item)"
+                >
+                    {{ item.name }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:w-4/5 w-full p-5 bg-card shadow hidden lg:block">
+        <!-- <button
+          type="button"
+          (click)="drawer.toggle()"
+          class="lg:hidden px-0 pb-5"
+      >
+          <div class="space-y-2">
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+              <div class="w-8 h-0.5 bg-gray-600"></div>
+          </div>
+      </button> -->
+        <form [formGroup]="lophocList">
+            <div class="h-full">
+                <div class="flex justify-between flex-col lg:flex-row">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-2/6 w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Bài Học </span>
+
+                        <mat-select  [formControlName]="'idBaihoc'">
+                            
+                            <mat-option
+                                [value]="item.id"
+                                *ngFor="let item of baihoc"
+                                >{{ item.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-2/6 w-full lg:mx-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Tên Lớp Học </span>
+                        <input
+                            matInput
+                            type="text"
+                            class="w-full h-full text-red-500"
+                            placeholder="Tên Lớp học"
+                            [formControlName]="'name'"
+                        />
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Hình Thức </span>
+                        <mat-select [formControlName]="'idHinhthuc'">
+                            <mat-option value="Chọn Hình Thức"
+                                >Chọn Hình Thức</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex justify-between flex-col lg:flex-row">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-2/6 w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Dự kiến triển khai </span>
+                        <input
+                            matInput
+                            type="datetime-local"
+                            class="w-full h-full text-red-500"
+                            placeholder="start date"
+                            [formControlName]="'date'"
+                        />
+                        
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-2/6 lg:mx-3 w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Thời Gian Kết Thúc </span>
+                        <input
+                            matInput
+                            type="datetime-local"
+                            class="w-full h-full text-red-500"
+                            placeholder="end date"
+                            [formControlName]="'deadline'"
+                        />
+
+                        
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-2/6 w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Thời Gian Kiểm Tra </span>
+                        <input
+                            matInput
+                            type="text"
+                            class="w-full h-full text-red-500"
+                            placeholder="99"
+                            [formControlName]="'minute'"
+                        />
+                        <span MatSuffix>Phút</span>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex justify-between flex-col lg:flex-row pt-5">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Giảng Viên </span>
+                        <mat-select [formControlName]="'idGiangvien'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Học Viên</span>
+                        <mat-select [formControlName]="'idHocvien'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex justify-between flex-col lg:flex-row pt-5">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Mã Yêu Cầu Đào Tạo</span>
+                        <mat-select [formControlName]="'idMaDT'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Nhóm Được Đào Tạo</span>
+                        <mat-select [formControlName]="'idNhomdcDT'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex justify-between flex-col lg:flex-row pt-5">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Người Duyệt</span>
+                        <mat-select [formControlName]="'idNguoiduyet'">
+                            <mat-option value="Vui lòng chọn"
+                                >Vui lòng chọn</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Link Meet</span>
+                        <input
+                            matInput
+                            type="text"
+                            class="w-full h-full text-red-500"
+                            placeholder="Nhập Link"
+                            [formControlName]="'linkmeet'"
+                        />
+                    </mat-form-field>
+                </div>
+                <div class="flex flex-col">
+                    <div class="w-full">
+                        <ckeditor
+                            [editor]="Editor"
+                            data="<p>Ghi Chú</p>"
+                            [formControlName]="'note'"
+                        ></ckeditor>
+                    </div>
+                </div>
+                <div
+                    class="form-group py-5 flex lg:justify-start justify-between"
+                >
+                    <button
+                        type="submit"
+                        class="btn text-white bg-indigo-900 p-3 rounded-lg"
+                        (click)="onSubmit()"
+                    >
+                        Submit
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn text-white bg-indigo-600 p-3 rounded-lg mx-5"
+                        (click)="updateLophoc()"
+                    >
+                        Update
+                    </button>
+                    <button
+                        type="delete"
+                        class="btn text-white bg-red-500 p-3 rounded-lg"
+                        (click)="deleteLophoc()"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

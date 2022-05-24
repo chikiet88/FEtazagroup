@@ -73,57 +73,44 @@ export const appRoutes: Route[] = [
 
                 ]
             },
-            {
-                path: 'thongtin',    
-                    children: [
-                        { path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule) },
-                        { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
-                        { path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule) },
-
-                    ]
-            },
-            {
-                path: 'tuyendung',
-                //canActivate: [AdminGuard],
-                children: [
-                    { path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule) },
-                    { path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule) },
-
-                ]
-            },
+           
+           
             {
                 path: 'daotao',
                 //canActivate: [AdminGuard],
-                children: [
-                    { path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
-                    { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
-                   
+                loadChildren: () => import('app/modules/admin/daotao/daotao.module').then(m => m.DaotaoModule)
 
-                ]
+                // children: [
+                //     { path: 'dashboard', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
+                //     { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao1/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
+                //     { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao1/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
+                    
+
+                // ]
             },
             {
                 path: 'cauhinh',
                 //canActivate: [AdminGuard],
                 loadChildren: () => import('app/modules/admin/cauhinh/cauhinh.module').then(m => m.CauhinhModule)
             },
-            {
-                path: 'custom',
-                //canActivate: [AdminGuard],
-                children: [
-                    { path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule) },
-                    { path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule) },
-                ]
-            },
-            {
-                path: 'baocao',
-                //canActivate: [AdminGuard],
-                children: [
-                    { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
-                ]
-            },
-            {
-                path: 'quanlyads', loadChildren: () => import('app/modules/admin/quanlyads/quanlyads.module').then(m => m.QuanlyadsModule) 
-            },
+            // {
+            //     path: 'custom',
+            //     //canActivate: [AdminGuard],
+            //     children: [
+            //         { path: 'testing', loadChildren: () => import('app/modules/admin/custom/testing/testing.module').then(m => m.TestingModule) },
+            //         { path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule) },
+            //     ]
+            // },
+            // {
+            //     path: 'baocao',
+            //     //canActivate: [AdminGuard],
+            //     children: [
+            //         { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
+            //     ]
+            // },
+            // {
+            //     path: 'quanlyads', loadChildren: () => import('app/modules/admin/quanlyads/quanlyads.module').then(m => m.QuanlyadsModule) 
+            // },
             // Dashboards
             {
                 path: 'dashboards',

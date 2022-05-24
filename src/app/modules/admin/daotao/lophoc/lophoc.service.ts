@@ -5,37 +5,37 @@ import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CauhoiService {
+export class LophocService {
 
-  private urlApi = 'http://localhost:3000/cauhoi';
-  private _cauhois: BehaviorSubject<any | null> = new BehaviorSubject(null);
-  private _cauhoi: BehaviorSubject<any> = new BehaviorSubject(null);
+  private urlApi = 'http://localhost:3000/lophoc';
+  private _lophoc: BehaviorSubject<any | null> = new BehaviorSubject(null);
+  private _file: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private http: HttpClient) {}
 
-  get cauhois$(): Observable<any[]> {
-      return this._cauhois.asObservable();
+  get lophoc$(): Observable<any[]> {
+      return this._lophoc.asObservable();
   }
   
-  get cauhoi$(): Observable<any> {
-      return this._cauhoi.asObservable();
+  get file$(): Observable<any> {
+      return this._file.asObservable();
   }
 
-  getCauhoi() {
+  getLophoc() {
       return this.http.get<any>(this.urlApi).pipe(
-          tap((cauhoi) => {
+          tap((lophoc) => {
 
-              this._cauhois.next(cauhoi);
+              this._lophoc.next(lophoc);
           })
       );
   }
-  addCauhoi(data) {
-      return this.cauhois$.pipe(
+  addLophoc(data) {
+      return this.lophoc$.pipe(
           take(1),
           switchMap((arr) =>
               this.http.post(this.urlApi, data).pipe(
-                  map((cauhoi:any) => {
-                      this._cauhois.next([cauhoi, ...arr]);
-                      return cauhoi;
+                  map((lophoc:any) => {
+                      this._lophoc.next([lophoc, ...arr]);
+                      return lophoc;
                   })
               )
           )
@@ -43,22 +43,22 @@ export class CauhoiService {
   }
 
   updateFile(id, data) {
-      return this.cauhois$.pipe(
+      return this.lophoc$.pipe(
           take(1),
-          switchMap((cauhoi) =>
+          switchMap((lophoc) =>
               this.http.patch(this.urlApi + `/${id}`, data).pipe(
                   map((updateCourse) => {
                       // Find the index of the updated tag
-                      const index = cauhoi.findIndex(
+                      const index = lophoc.findIndex(
                           (item) => item.id === item.id
                       );
 
                       // Update the tag
-                      cauhoi[index] = data;
+                      lophoc[index] = data;
                       console.log(updateCourse);
 
                       // Update the tags
-                      this._cauhois.next(cauhoi);
+                      this._lophoc.next(lophoc);
 
                       // Return the updated tag
                       return updateCourse;
@@ -70,7 +70,7 @@ export class CauhoiService {
   // getFileDetail(id){
   //     return this.http.get(this.urlApi + `/${id}`).pipe(
   //         tap((res) => {
-  //             this._cauhoi.next(res)
+  //             this._file.next(res)
   //             return res;
   //         })
   //     );
@@ -79,19 +79,19 @@ export class CauhoiService {
   //     return this.http.patch(this.urlApi + `/${file.id}`,file).pipe(
   //         tap((res)=>{
               
-  //             this._cauhoi.next(res)
+  //             this._file.next(res)
   //             return res;
   //         })
   //     )
   // }
-  deleteCauhoi(id){
-      return this.cauhois$.pipe(
+  deleteLophoc(id){
+      return this.lophoc$.pipe(
           take(1),
           switchMap(data=>this.http.delete(this.urlApi + `/${id}`).pipe(map((isDelete => {
             
            const updateFile =  data.filter(e => e.id != id);
             
-            this._cauhois.next(updateFile)
+            this._lophoc.next(updateFile)
             return isDelete
     
           }))))

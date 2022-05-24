@@ -191,7 +191,7 @@
         </mat-drawer>
 
         <div class="example-sidenav-content w-full flex h-full">
-            <div class="lg:w-auto w-full h-full bg-card shadow pt-5">
+            <div class="lg:w-1/5 w-full h-full bg-card shadow pt-5">
                 <div class="w-full h-full bg-card shadow">
                     <div
                         class="mx-3 bg-gray-300 flex justify-center items-center py-2 rounded-lg cursor-pointer addFolder"
@@ -260,7 +260,7 @@
                                     <mat-menu #menu="matMenu">
                                         <button
                                             mat-menu-item
-                                            (click)="addFolderChild(node)"
+                                            (click)="addFolderChild(node.id)"
                                         >
                                             Add Folder
                                         </button>
@@ -321,16 +321,16 @@
                                     <mat-menu #menu="matMenu">
                                         <button
                                             mat-menu-item
-                                            (click)="addFolderChild(node)"
+                                            (click)="addFolderChild(node.id)"
                                         >
-                                            Tạo Danh Mục
+                                            Add Folder
                                         </button>
 
                                         <button
                                             mat-menu-item
                                             (click)="addFile(node.id)"
                                         >
-                                            Tạo Tài Liệu Nguồn
+                                            Add File
                                         </button>
                                     </mat-menu>
                                 </div>
@@ -340,7 +340,7 @@
                 </div>
             </div>
 
-            <div class=" w-full p-5 bg-card shadow hidden lg:block">
+            <div class="lg:w-4/5 w-full p-5 bg-card shadow hidden lg:block">
                 <!-- <button
                   type="button"
                   (click)="drawer.toggle()"

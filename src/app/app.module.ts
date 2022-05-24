@@ -23,7 +23,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { UploadComponent } from './modules/admin/upload/upload.component';
 import { AngularFireModule} from '@angular/fire/compat'
 import {AngularFireDatabaseModule} from '@angular/fire/compat/database';
-import {AngularFireStorageModule } from '@angular/fire/compat/storage'
+import {AngularFireStorageModule } from '@angular/fire/compat/storage';
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
     scrollPositionRestoration: 'enabled'
