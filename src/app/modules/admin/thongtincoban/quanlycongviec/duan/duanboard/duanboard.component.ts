@@ -76,9 +76,7 @@ export class DuanboardComponent implements OnInit {
      {
       this._nhanvienServiceService.getNhanviens().subscribe();
         this._nhanvienServiceService.nhanviens$.subscribe((data) => { 
-          this.Nhanviens = data
-          console.log(data);
-          
+          this.Nhanviens = data          
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.grouptasks$.subscribe((data) => {

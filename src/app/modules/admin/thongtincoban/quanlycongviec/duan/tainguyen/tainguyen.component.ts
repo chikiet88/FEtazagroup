@@ -22,35 +22,29 @@ export class TainguyenComponent implements OnInit {
   color: ThemePalette = 'primary';
   mode: ProgressBarMode = 'determinate';
   percentDone: any;
-  uploadSuccess: boolean =false;
-  uploadFiles:[];
+  uploadSuccess: boolean = false;
+  uploadFiles: [];
   files: File[] = [];
   ngOnInit(): void {
-    this._sharedService.getAllUpload().subscribe();
-    this._sharedService.uploads$.subscribe((data)=>
-      {
-        data.forEach(v => {
-          v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;
-         // v.path = this._sharedService.getPath(v.Lienket).subscribe();         
-        });
-        this.files = data;
-        console.log(this.files);
-      }
+    this._sharedService.uploads$.subscribe((data) => {     
+      data.forEach(v => {
+        v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;     
+      });
+      this.files = data;
+    }
     )
-
   }
   onSelect(event) {
-    this.files.push(...event.addedFiles);
-    this.files.forEach(v => {
-      console.log(v);
-      this.uploadAndProgress(v)
+
+    event.addedFiles.forEach((v,k) => {
+      setTimeout(() => {
+        this.uploadAndProgress(v)
+      }, k*100);
     });
   }
   onRemove(item) {
-    console.log(item);
-    this.files.splice(this.files.indexOf(item), 1);
-    this._sharedService.deletePath(item.Lienket).subscribe();       
-    this.ngOnInit();  
+    this._sharedService.deletePath(item.Lienket).subscribe();
+    this._sharedService.DeleteUpload(item.id).subscribe();
   }
   uploadAndProgress(file) {
     console.log(file)
@@ -62,9 +56,8 @@ export class TainguyenComponent implements OnInit {
           this.percentDone = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           this.uploadSuccess = true;
-          const upload = {uuid:this.CurentDuan.id,Tieude:event.body['originalname'],Lienket:event.body['filename'],Exten:event.body['Exten']};
+          const upload = { uuid: this.CurentDuan.id, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
           this._sharedService.CreateUpload(upload).subscribe();
-          this.ngOnInit();
         }
       })
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { QuanlycongviecComponent } from '../quanlycongviec.component';
 @Component({
   selector: 'app-muctieu',
   templateUrl: './muctieu.component.html',
@@ -6,7 +7,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 
 export class MuctieuComponent implements OnInit {
-  constructor() {
+  constructor(
+    private _quanlycongviecComponent: QuanlycongviecComponent
+  ) {
   }
   title = 'Browser market shares at a specific website, 2014';
   type = 'Timeline';
@@ -42,5 +45,8 @@ export class MuctieuComponent implements OnInit {
   ngAfterViewInit() {
 
   }
-
+  MenuToggle()
+  {
+     this._quanlycongviecComponent.matDrawerMenu.toggle();
+  }
 }

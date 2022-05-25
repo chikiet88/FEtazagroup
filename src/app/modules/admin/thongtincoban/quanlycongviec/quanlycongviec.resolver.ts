@@ -5,7 +5,9 @@ import {
   ActivatedRouteSnapshot
 } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
+import { SharedService } from 'app/shared/shared.service';
 import { catchError, forkJoin, Observable, of, takeUntil, throwError } from 'rxjs';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { QuanlycongviecService } from './quanlycongviec.service';
 
 @Injectable({
@@ -14,14 +16,18 @@ import { QuanlycongviecService } from './quanlycongviec.service';
 export class QuanlycongviecResolver implements Resolve<boolean> {
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
+    private _nhanvienServiceService: NhanvienService,
+    private _sharedService: SharedService,
     ){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return forkJoin([
+      this._sharedService.getAllUpload(),
       this._quanlycongviecService.getAllGrouptasks(),
       this._quanlycongviecService.getAllTasks(),
       this._quanlycongviecService.getAllDuans(),
       this._quanlycongviecService.getAllSection(),
+      this._nhanvienServiceService.getNhanviens(),
     ]);
   }
 }

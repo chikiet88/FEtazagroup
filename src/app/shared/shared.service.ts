@@ -29,8 +29,8 @@ export class SharedService {
   }
   getAllUpload(): Observable<any> {
     return this._httpClient.get(`${environment.ApiURL}/upload`).pipe(
-      tap((response: any) => {
-        this._uploads.next(response);
+      tap((response) => {
+        this._uploads.next(response);        
       })
     );
   }
@@ -53,16 +53,17 @@ export class SharedService {
   deletePath(path) {  
     return this._httpClient.delete(`${environment.ApiURL}/upload/path/${path}`).pipe(
       tap((response: any) => {
-        console.log(response);
+          console.log(response);
             return response;
       })
     );
   }
   CreateUpload(upload): Observable<any> {
-    return this.upload$.pipe(
+    return this.uploads$.pipe(
       take(1),
       switchMap(uploads => this._httpClient.post(`${environment.ApiURL}/upload`, upload).pipe(
         map((result) => {
+          console.log(result);        
           this._uploads.next([result, ...uploads]);
           return result;
         })
@@ -91,18 +92,19 @@ export class SharedService {
   //     ))
   //   );
   // }
-  // DeleteSection(id): Observable<any> {
-  //   return this.sections$.pipe(
-  //     take(1),
-  //     switchMap(sections => this._httpClient.delete(`${environment.ApiURL}/section/${id}`).pipe(
-  //       map((isDeleted: boolean) => {
-  //         const index = sections.findIndex(item => item.id === id);
-  //         sections.splice(index, 1);
-  //         this._sections.next(sections);
-  //         this.getDuanBoards();
-  //         return isDeleted;
-  //       })
-  //     ))
-  //   );
-  // }
+  DeleteUpload(id): Observable<any> {
+    return this.uploads$.pipe(
+      take(1),
+      switchMap(uploads => this._httpClient.delete(`${environment.ApiURL}/upload/${id}`).pipe(
+        map((isDeleted: boolean) => {
+          const index = uploads.findIndex(item => item.id === id);
+          uploads.splice(index, 1);
+          this._uploads.next(uploads);
+          console.log(isDeleted);
+          console.log(this._uploads);
+          return isDeleted;
+        })
+      ))
+    );
+  }
 }

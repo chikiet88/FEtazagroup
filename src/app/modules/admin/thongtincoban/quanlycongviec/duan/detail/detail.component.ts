@@ -65,7 +65,7 @@ export class DetailComponent implements OnInit {
     this._quanlycongviecService.getAllSection().subscribe();
     this._quanlycongviecService.getAllTasks().subscribe();
     this._quanlycongviecService.getBoards();
-    this._nhanvienServiceService.getNhanviens().subscribe();
+    //this._nhanvienServiceService.getNhanviens().subscribe();
     this.pjid = this._activatedRoute.snapshot.paramMap.get('id');   
     this._quanlycongviecService.duan$.subscribe((data) => {
       this.Duan = data;

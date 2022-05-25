@@ -61,17 +61,19 @@
         </div>
         <mat-divider></mat-divider>
         <div class="my-4">
-          <div class="flex flex-row space-x-4 py-3">
-            <span class="text-2xl font-bold my-auto"> Thành Viên Dự Án </span>              
-              <button *ngIf="Duan.idTao == CUser.id" class="m-auto bg-blue-500" mat-mini-fab cdkOverlayOrigin #triggerThanhvien="cdkOverlayOrigin" (click)="toggleThanhvien(triggerThanhvien)">
-              <span class="material-icons">
-                person_add
-                </span>
-            </button>
+          <div class="flex flex-row py-3">
+            <span class="text-2xl font-bold"> Thành Viên Dự Án </span>              
           </div>
-          <div class="grid md:grid-cols-4 space-y-2">
+          <div class="flex flex-auto flex-wrap gap-4 w-full">
+            <div class="p-4 my-auto border border-dashed w-20 h-20">
+              <button *ngIf="Duan.idTao == CUser.id" class="m-auto bg-blue-500" mat-mini-fab cdkOverlayOrigin #triggerThanhvien="cdkOverlayOrigin" (click)="toggleThanhvien(triggerThanhvien)">
+                <span class="material-icons">
+                  person_add
+                  </span>
+              </button>
+            </div>
             <div *ngFor="let item of Duan.Thamgia"
-              class="z-20 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
+              class="relative ring-bg-card p-4 border border-dashed flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-hover">
               <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
                 <img alt="Contact avatar" class="object-cover w-full h-full ng-star-inserted"
                   src="assets/images/logo/logo300.png">
@@ -79,9 +81,9 @@
               <div class="min-w-0 ml-4">
                 <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
               </div>
-              <div class="text-xs ml-2 my-auto" (click)="RemoveMang(Duan,'Thamgia',item)"
+              <div class="absolute -top-2 -right-2" (click)="RemoveMang(Duan,'Thamgia',item)"
                 *ngIf="Duan.idTao == CUser.id">
-                <span class="material-icons text-red-500">
+                <span class="material-icons text-red-500 text-xl">
                   remove_circle
                 </span>
               </div>

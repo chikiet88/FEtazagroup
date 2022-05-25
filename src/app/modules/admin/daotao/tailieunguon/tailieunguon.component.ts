@@ -73,7 +73,7 @@ export class TailieunguonComponent implements OnInit {
     );
     hasChild = (_: number, node: any) => node.expandable;
 
-    addFolder() {
+    addFolder() {       
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0' };
         this.folderList = this.fb.group({
             Tieude: ['New Folder'],
@@ -117,8 +117,19 @@ export class TailieunguonComponent implements OnInit {
         // this.folderList.get('id').setValue(data.id);
         // this.folderList.get('pid').setValue(data.pid);
         // this.folderList.get('Tieude').setValue(e.target.value);
-        this._cauhinhService.UpdateDanhmuc(data).subscribe();
-        this.ngOnInit();
+        this._cauhinhService.UpdateDanhmuc(data).subscribe(res=>{
+            this.treeControl.expand(
+                this.treeControl.dataNodes.find((v) => v.id == data.id)
+            );
+            let x = this.files.find((v) => v.id == data.pid);
+            while (x) {
+                this.treeControl.expand(
+                    this.treeControl.dataNodes.find((v) => v.id == x.id)
+                );
+                x = this.files.find((v) => v.id == x.pid);
+            }
+        });
+        e.stoppropagation()
     }
     // getKey(key:string){
     //     this.folderList.addControl('key', new FormControl(key));
@@ -256,6 +267,7 @@ export class TailieunguonComponent implements OnInit {
 
         this._cauhinhService.getAllDanhmuc().subscribe();
         this._cauhinhService.danhmucs$.subscribe((result) => {
+            console.log(result);
             this.files = result
             this.dataSource.data = this.nest(result);
             console.log(this.dataSource.data);

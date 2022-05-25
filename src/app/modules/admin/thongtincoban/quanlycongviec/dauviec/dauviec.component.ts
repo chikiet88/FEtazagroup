@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { QuanlycongviecComponent } from '../quanlycongviec.component';
 @Component({
   selector: 'app-dauviec',
   templateUrl: './dauviec.component.html',
@@ -8,7 +9,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class DauviecComponent implements OnInit {
   view:any ;
   listview:any;
-  constructor() { }
+  constructor(
+    private _quanlycongviecComponent: QuanlycongviecComponent
+  ) { }
 
   ngOnInit(): void {
     this.listview = [
@@ -23,5 +26,10 @@ export class DauviecComponent implements OnInit {
   {
     this.view = view;
   }
+  MenuToggle()
+  {
+     this._quanlycongviecComponent.matDrawerMenu.toggle();
+  }
+  
 
 }

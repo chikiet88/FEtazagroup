@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { QuanlycongviecRoutingModule } from './quanlycongviec-routing.module';
 import { Route, RouterModule } from '@angular/router';
 import { QuanlycongviecComponent } from './quanlycongviec.component';
