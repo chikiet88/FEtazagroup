@@ -30,7 +30,7 @@ export class TainguyenComponent implements OnInit {
     this._sharedService.uploads$.subscribe((data)=>
       {
         data.forEach(v => {
-          v.path = this._sharedService.getPath(v.Lienket).subscribe();
+          v.path = this._sharedService.getPath(v.Lienket).subscribe();         
           this.files.push(v);
         });
         console.log(this.files);

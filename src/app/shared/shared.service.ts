@@ -44,6 +44,8 @@ export class SharedService {
   getPath(path) {
     return this._httpClient.get(`${environment.ApiURL}/upload/path/${path}`).pipe(
       tap((response: any) => {
+        console.log(response);
+        
             return response;
       })
     );
