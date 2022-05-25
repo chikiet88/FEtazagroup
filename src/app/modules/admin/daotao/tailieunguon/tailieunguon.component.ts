@@ -117,8 +117,19 @@ export class TailieunguonComponent implements OnInit {
         // this.folderList.get('id').setValue(data.id);
         // this.folderList.get('pid').setValue(data.pid);
         // this.folderList.get('Tieude').setValue(e.target.value);
-        this._cauhinhService.UpdateDanhmuc(data).subscribe();
-        this.ngOnInit();
+        this._cauhinhService.UpdateDanhmuc(data).subscribe(res=>{
+            this.treeControl.expand(
+                this.treeControl.dataNodes.find((v) => v.id == data.id)
+            );
+            let x = this.files.find((v) => v.id == data.pid);
+            while (x) {
+                this.treeControl.expand(
+                    this.treeControl.dataNodes.find((v) => v.id == x.id)
+                );
+                x = this.files.find((v) => v.id == x.pid);
+            }
+        });
+        e.stoppropagation()
     }
     // getKey(key:string){
     //     this.folderList.addControl('key', new FormControl(key));

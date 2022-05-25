@@ -12,7 +12,7 @@ import { YeucaudaotaoService } from './yeucaudaotao.service';
 })
 export class YeucaudaotaoComponent implements OnInit {
     tailieu: any;
-    kythi: any[];
+    yeucau: any[];
     dethi: any[];
     baihocDetail: any;
     yeucaudaotaoList: FormGroup;
@@ -87,7 +87,7 @@ export class YeucaudaotaoComponent implements OnInit {
         this._yeucaudaotaoService.yeucaudaotao$.subscribe((res) => {
             console.log(res);
 
-            return (this.kythi = res);
+            return (this.yeucau = res);
         });
         this.tailieunguonService.getFile().subscribe();
         this.tailieunguonService.files$

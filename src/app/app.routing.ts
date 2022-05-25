@@ -101,13 +101,13 @@ export const appRoutes: Route[] = [
             //         { path: 'khachhangs', loadChildren: () => import('app/modules/admin/custom/khachhangs/khachhangs.module').then(m => m.KhachhangsModule) },
             //     ]
             // },
-            // {
-            //     path: 'baocao',
-            //     //canActivate: [AdminGuard],
-            //     children: [
-            //         { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
-            //     ]
-            // },
+            {
+                path: 'baocao',
+                //canActivate: [AdminGuard],
+                children: [
+                    { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
+                ]
+            },
             // {
             //     path: 'quanlyads', loadChildren: () => import('app/modules/admin/quanlyads/quanlyads.module').then(m => m.QuanlyadsModule) 
             // },
