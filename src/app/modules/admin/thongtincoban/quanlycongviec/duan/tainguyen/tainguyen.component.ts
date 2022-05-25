@@ -30,9 +30,10 @@ export class TainguyenComponent implements OnInit {
     this._sharedService.uploads$.subscribe((data)=>
       {
         data.forEach(v => {
-          v.path = this._sharedService.getPath(v.Lienket).subscribe();         
-          this.files.push(v);
+          v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;
+         // v.path = this._sharedService.getPath(v.Lienket).subscribe();         
         });
+        this.files = data;
         console.log(this.files);
       }
     )
@@ -45,9 +46,11 @@ export class TainguyenComponent implements OnInit {
       this.uploadAndProgress(v)
     });
   }
-  onRemove(event) {
-    console.log(event);
-    this.files.splice(this.files.indexOf(event), 1);
+  onRemove(item) {
+    console.log(item);
+    this.files.splice(this.files.indexOf(item), 1);
+    this._sharedService.deletePath(item.Lienket).subscribe();       
+    this.ngOnInit();  
   }
   uploadAndProgress(file) {
     console.log(file)
@@ -59,10 +62,9 @@ export class TainguyenComponent implements OnInit {
           this.percentDone = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           this.uploadSuccess = true;
-          const upload = {uuid:this.CurentDuan.id,Tieude:event.body['originalname'],Lienket:event.body['filename']};
+          const upload = {uuid:this.CurentDuan.id,Tieude:event.body['originalname'],Lienket:event.body['filename'],Exten:event.body['Exten']};
           this._sharedService.CreateUpload(upload).subscribe();
-          console.log(event.body);
-          console.log(event);
+          this.ngOnInit();
         }
       })
   }

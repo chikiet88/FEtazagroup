@@ -41,11 +41,19 @@ export class SharedService {
       })
     );
   }
-  getPath(path) {
-    return this._httpClient.get(`${environment.ApiURL}/upload/path/${path}`).pipe(
+  // getPath(path) {  
+  //   return this._httpClient.get(`${environment.ApiURL}/upload/path/${path}`).pipe(
+  //     tap((response: any) => {
+  //       console.log(response);
+        
+  //           return response;
+  //     })
+  //   );
+  // }
+  deletePath(path) {  
+    return this._httpClient.delete(`${environment.ApiURL}/upload/path/${path}`).pipe(
       tap((response: any) => {
         console.log(response);
-        
             return response;
       })
     );
@@ -55,7 +63,6 @@ export class SharedService {
       take(1),
       switchMap(uploads => this._httpClient.post(`${environment.ApiURL}/upload`, upload).pipe(
         map((result) => {
-          // console.log(sections);
           this._uploads.next([result, ...uploads]);
           return result;
         })

@@ -16,10 +16,10 @@ class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100
     src="assets/images/logo/logo300.png">
 </div>
 <div class="min-w-0 ml-4">
-  <a [href]="item.path" class="font-medium leading-5 truncate" [matTooltip]="item.Tieude">
+  <a [href]="item.path" class="font-medium leading-5 text-ellipsis overflow-hidden" [matTooltip]="item.Tieude">
     {{item.Tieude}}
   </a>
-  <div class="leading-5 truncate text-secondary" *ngIf="!uploadSuccess">
+  <div class="leading-5 text-ellipsis overflow-hidden text-secondary" *ngIf="uploadSuccess">
     <mat-progress-bar
     class="example-margin"
     [color]="color"
@@ -29,6 +29,9 @@ class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100
     {{percentDone}}%</div>
   
 </div>
+<span class="material-icons text-xl text-red-500" (click)="onRemove(item)">
+  remove_circle
+  </span>
 </div>
   <!-- <div *ngFor="let item of [].constructor(6)"
     class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-hover ng-star-inserted">
