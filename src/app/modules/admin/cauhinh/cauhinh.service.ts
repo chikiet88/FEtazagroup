@@ -166,20 +166,25 @@ UpdateDanhmuc(data): Observable<any> {
         ))
     );
 }
-Deletedanhmuc(data): Observable<any> {
-    return this._httpClient.delete(`${environment.ApiURL}/danhmuc/${data.id}`).pipe(
-      tap(() => {
-          this.getAllDanhmuc().subscribe();
-      })
-  );
-}
-
+Deletedanhmuc(id): Observable<any> {
+    return this.danhmucs$.pipe(
+        take(1),
+        switchMap(danhmucs => this._httpClient.delete(`${environment.ApiURL}/danhmuc/${id}`).pipe(
+            map((isDeleted: boolean) => {
+                const index = danhmucs.findIndex(item => item.id === id);
+                danhmucs.splice(index, 1);
+                this._danhmucs.next(danhmucs);
+                return isDeleted;
+            })
+        ))
+    );
+  }
 //   createDetail(detail: Detail): Observable<Detail>
 //   {
 //       return this._httpClient.post<Detail>('api/apps/notes', {detail}).pipe(
 //           switchMap(response => this.getDetails().pipe(
 //               switchMap(() => this.getNoteById(response.id).pipe(
-//                   map(() => response)
+//                   mdanhmucsap(() => response)
 //               ))
 //           )));
 //   }

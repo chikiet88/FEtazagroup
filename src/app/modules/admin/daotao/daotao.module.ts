@@ -16,12 +16,15 @@ import { CauhoiComponent } from './cauhoi/cauhoi.component';
 import { KythiComponent } from './kythi/kythi.component';
 import { DethiComponent } from './dethi/dethi.component';
 import { YeucaudaotaoComponent } from './yeucaudaotao/yeucaudaotao.component';
+import { DaotaoResolver } from './daotao.resolver';
 export const DaotaoRoutes: Route[] = [
     {
         path: '',
         component: DaotaoComponent,
         children: [
-            { path: 'tailieunguon', component: TailieunguonComponent },
+            { path: 'tailieunguon', component: TailieunguonComponent,
+                resolve:{data:DaotaoResolver}
+            },
             { path: 'baihoc', component: BaihocComponent },
             { path: 'lophoc', component: LophocComponent },
             { path: 'cauhoi', component: CauhoiComponent },
