@@ -19,6 +19,9 @@ export class NotificationsService
     {
         return this._notifications.asObservable();
     }
+    addPushSubscriber(data:any) {
+        return this._httpClient.post(`${environment.ApiURL}/notification/subscriber`, data);
+    }
     getAll(): Observable<NotificationEntity[]>
     {
         return this._httpClient.get<NotificationEntity[]>(`${environment.ApiURL}/notification`).pipe(

@@ -57,7 +57,7 @@ import { TestingService } from './testing.service';
 
 export class TestingComponent implements OnInit {
   notification: FormGroup;
-  nhanviens:Nhanvien[];
+  nhanviens:any;
   user:User;
   profile:profile;
   noti:any;
@@ -79,7 +79,9 @@ export class TestingComponent implements OnInit {
     })
     this._nhanvienService.getNhanviens().subscribe();
     this._nhanvienService.nhanviens$.subscribe((data)=>{ 
-      this.nhanviens = data 
+      this.nhanviens = data.filter(v=> v.id == '763cf5b9-8878-4db7-b727-6c8644f68ef9');
+      console.log();
+      
       console.log(data);
       // data.forEach(v => {
       //   const x = {

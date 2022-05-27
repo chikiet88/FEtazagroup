@@ -20,8 +20,6 @@ export class NotificationsComponent implements OnInit, OnDestroy
 {
     sub: PushSubscription;
     readonly VAPID_PUBLIC_KEY = "BJe-03OtBqwjGbpangu282m8R_E5qtjanOUANBF-ID37Fq-V2hZoOJ5hZJlW0qeXt0prcfIsu63gNQ_xmXPCE3M";
-    //{"publicKey":"BJe-03OtBqwjGbpangu282m8R_E5qtjanOUANBF-ID37Fq-V2hZoOJ5hZJlW0qeXt0prcfIsu63gNQ_xmXPCE3M"
-    //"privateKey":"zLRVEtYggf-sYOJmkhdFp3-pMD67V9DhASO0xLR-QDw"}
 
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
@@ -57,13 +55,13 @@ export class NotificationsComponent implements OnInit, OnDestroy
             serverPublicKey: this.VAPID_PUBLIC_KEY
         })
         .then(sub => {
-            this.sub = sub;
+           const data = {idUser:this.User.id,Subscription:sub}
+            this.sub = sub;  
             console.log("Notification Subscription: ", sub);
-            // this.newsletterService.addPushSubscriber(sub).subscribe(
-            //     () => console.log('Sent push subscription object to server.'),
-            //     err =>  console.log('Could not send subscription object to server, reason: ', err)
-            // );
-
+            this._notificationsService.addPushSubscriber(data).subscribe(
+                () => console.log('Sent push subscription object to server.'),
+                err =>  console.log('Could not send subscription object to server, reason: ', err)
+            );
         })
         .catch(err => console.error("Could not subscribe to notifications", err));
     }
