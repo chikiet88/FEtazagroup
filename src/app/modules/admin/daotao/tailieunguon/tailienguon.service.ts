@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, map, Observable, switchMap, take, tap } from 'rxjs';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Files } from './tailieunguon.types';
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class TailienguonService {
   private _tree: BehaviorSubject<any> = new BehaviorSubject(null);
   private _files: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   private _file: BehaviorSubject<any> = new BehaviorSubject(null);
-  constructor(private http: HttpClient) {}
+  constructor(
+      private http: HttpClient,
+      private _cauhinhService: CauhinhService
+      ) {}
 
   get tailieunguons$(): Observable<any[]> {
       return this._tailieunguons.asObservable();
@@ -30,6 +34,16 @@ export class TailienguonService {
   get file$(): Observable<any> {
       return this._file.asObservable();
   }
+  
+//   getTree()
+//   {
+//     const Danhmuc = this._cauhinhService.danhmuc$.
+//     this.Tailieunguon.forEach(v => {
+//         v.Type= 'file';
+//         v.pid = v.idDM
+//         this.Tree.push(v);
+// });
+//   }
   getAllTailieunguon(): Observable<any> {
       return this.http.get(`${environment.ApiURL}/tailieunguon`).pipe(
           tap((res) => {

@@ -13,6 +13,7 @@
                             <span class="material-icons">
                                 add_circle
                             </span>
+                            
                             <div class="text-gray-500">Danh Mục</div>
                         </div>
                         <div>
@@ -41,7 +42,7 @@
                                         </span>
                                         <input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}"
                                             (change)="
-                                                updateFolder(node, $event)
+                                                updateFolder(node, $event);$event.stopPropagation()
                                             " />
                                         <button [matMenuTriggerFor]="menu">
                                             <span class="material-icons">
@@ -79,10 +80,7 @@
                                         <span class="material-icons pr-4">
                                             folder
                                         </span>
-                                        <input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}"
-                                            (change)="
-                                                updateFolder(node, $event)
-                                            " />
+<input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}" (change)="updateFolder(node, $event);$event.stopPropagation()" />
                                         <button [matMenuTriggerFor]="menu">
                                             <span class="material-icons">more_vert</span>
                                         </button>

@@ -31,9 +31,9 @@ export class TailieunguonComponent implements OnInit {
     showFiller = true;
     deleteFile = false;
     Danhmuc: any;
-    Tailieunguon:any;
-    Tree:any;
-    CurrentTailieu:any;
+    Tailieunguon: any;
+    Tree: any;
+    CurrentTailieu: any;
     private _tree: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transformer = (node: any, level: number) => {
         node.expandable = !!node.children && node.children.length > 0;
@@ -45,7 +45,7 @@ export class TailieunguonComponent implements OnInit {
         private fb: FormBuilder,
         private uploadService: FileUploadService,
         private _cauhinhService: CauhinhService
-    ) {}
+    ) { }
 
     treeControl = new FlatTreeControl<any>(
         (node) => node.level,
@@ -65,7 +65,7 @@ export class TailieunguonComponent implements OnInit {
     );
     hasChild = (_: number, node: any) => node.expandable;
 
-    addFolder() {       
+    addFolder() {
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0' };
         this.folderList = this.fb.group({
             Tieude: ['New Folder'],
@@ -76,6 +76,7 @@ export class TailieunguonComponent implements OnInit {
     }
 
     addFolderChild(node) {
+        console.log(node);
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id };
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
             this.treeControl.expand(
@@ -93,15 +94,15 @@ export class TailieunguonComponent implements OnInit {
     updateFile(data, e) {
         data.Tieude = e.target.value;
         console.log(data);
-       // this._cauhinhService.UpdateDanhmuc(this.fileList.value).subscribe();
+        // this._cauhinhService.UpdateDanhmuc(this.fileList.value).subscribe();
     }
-    updateFolder(data, e) {
+    updateFolder(data, e) {       
+        const olddata = clone(data);
         data.Tieude = e.target.value;
-        delete data.children;
-        delete data.expandable;
-        delete data.level;
-        console.log(data, e);
-        this._cauhinhService.UpdateDanhmuc(data).subscribe(res=>{
+        delete olddata.children;
+        delete olddata.expandable;
+        delete olddata.level;
+        this._cauhinhService.UpdateDanhmuc(olddata).subscribe((res) => {
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == data.id)
             );
@@ -113,12 +114,9 @@ export class TailieunguonComponent implements OnInit {
                 x = this.files.find((v) => v.id == x.pid);
             }
         });
-        e.stoppropagation()
     }
     removefolder(data) {
-        console.log(data);
-        
-        this._cauhinhService.Deletedanhmuc(data.id).subscribe(res=>{
+        this._cauhinhService.Deletedanhmuc(data.id).subscribe(res => {
             let x = this.files.find((v) => v.id == data.pid);
             while (x) {
                 this.treeControl.expand(
@@ -128,29 +126,27 @@ export class TailieunguonComponent implements OnInit {
             }
         });
     }
-    getFileDetail(data) {    
+    getFileDetail(data) {
         this.CurrentTailieu = clone(data);
         delete this.CurrentTailieu.Type
         delete this.CurrentTailieu.children
         delete this.CurrentTailieu.expandable
-        delete this.CurrentTailieu.level      
-        delete this.CurrentTailieu.pid 
+        delete this.CurrentTailieu.level
+        delete this.CurrentTailieu.pid
         console.log(this.CurrentTailieu);
     }
-    ChangeValue(field,e)
-    {
+    ChangeValue(field, e) {
         this.CurrentTailieu[field] = e.target.value;
-        console.log(e.target.value);  
+        console.log(e.target.value);
     }
 
     CreateTailieunguon(node) {
-        const tailieunguon = 
+        const tailieunguon =
         {
-            Tieude:'Tài Liệu Mới',
+            Tieude: 'Tài Liệu Mới',
             idDM: node.id,
         }
-        this._tailieunguonService.CreateTailieunguon(tailieunguon).subscribe((data)=>
-        {
+        this._tailieunguonService.CreateTailieunguon(tailieunguon).subscribe((data) => {
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -164,11 +160,12 @@ export class TailieunguonComponent implements OnInit {
         }
 
         );
+
     }
 
     UpdateTailieu() {
         this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
-        
+
     }
     onSubmit() {
         // if (!this.filedetail.id) {
@@ -226,18 +223,27 @@ export class TailieunguonComponent implements OnInit {
 
     ngOnInit(): void {
         this._cauhinhService.danhmucs$.subscribe((result) => {
-            this.Danhmuc = this.Tree = result;
+            this.Danhmuc =  this.files = result;
+            this._tailieunguonService.tailieunguons$.subscribe((data) => {
+                this.Tailieunguon = data;
+                this.Tailieunguon.forEach(v => {
+                    v.Type = 'file';
+                    v.pid = v.idDM
+                    //this.Tree.push(v);
+                });
+                this.Tree = [...this.Danhmuc, ...this.Tailieunguon]
+                this.dataSource.data = this.nest(this.Tree);
+            })
         });
-        this._tailieunguonService.tailieunguons$.subscribe((data)=>{this.Tailieunguon = data;})
-        this.Tailieunguon.forEach(v => {
-                v.Type= 'file';
-                v.pid = v.idDM
-                this.Tree.push(v);
-        });
-        this._tree.next(this.Tree);
-        console.log(this.Danhmuc);
-        // this.files = result
-         this.dataSource.data = this.nest(this._tree.value);
-        console.log(this.dataSource.data);
-    }   
+
+        // this.Tailieunguon.forEach(v => {
+        //         v.Type= 'file';
+        //         v.pid = v.idDM
+        //         this.Tree.push(v);
+        // });
+        // this._tree.next(this.Tree);
+        // console.log(this.Danhmuc);
+        // this.dataSource.data = this.nest(this._tree.value);
+        // console.log(this.dataSource.data);
+    }
 }
