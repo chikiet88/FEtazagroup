@@ -41,8 +41,7 @@ export class TimelineComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     });  
     this._quanlycongviecService.boards$.subscribe((data)=>{
-      console.log(data);
-      
+      console.log(data);  
       this.Grouptasks = data = data.filter(v1=>v1.tasks.some(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id));
       const Arrayobject = [];
       data.forEach(v => {

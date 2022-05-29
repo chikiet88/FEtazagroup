@@ -86,12 +86,12 @@ export class LichhopComponent implements OnInit {
     placeholder: 'Vui lòng nhập nội dung',
     height:'200px'
   };
-    public onReady( editor ) {
-      editor.ui.getEditableElement().parentElement.insertBefore(
-          editor.ui.view.toolbar.element,
-          editor.ui.getEditableElement()
-      );
-  }
+  //   public onReady( editor ) {
+  //     editor.ui.getEditableElement().parentElement.insertBefore(
+  //         editor.ui.view.toolbar.element,
+  //         editor.ui.getEditableElement()
+  //     );
+  // }
   @ViewChild('picker') picker: any;
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
   @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
@@ -257,8 +257,9 @@ export class LichhopComponent implements OnInit {
     this.Title = "Thêm Mới";
     this.CRUD =1;
     this.idThamgia = [];
-    this.LichhopForm.enable();
+    //this.LichhopForm.enable();
     this.LichhopForm = this._formBuilder.group({
+
       Loaihinh: [{ value: '', disabled: false }],
       Tieude: [{ value: '', disabled: false }],
       Congty: [{ value: '', disabled: false }],
@@ -267,6 +268,7 @@ export class LichhopComponent implements OnInit {
       Ngansach: [{ value: '', disabled: false }],
       Batdau: [{ value: new Date(), disabled: false }],
       Ketthuc: [{ value: new Date(), disabled: false }],
+      
       Review: [''],
       Hoanthanh: [''],
       Noidung: [''],
@@ -362,7 +364,7 @@ onRemove(event) {
         this.CRUD =2;
         this.LichhopForm.patchValue(
           {
-            id: lichhop.id||'',
+            id: lichhop.id,
             Loaihinh: lichhop.Loaihinh,
             Tieude: lichhop.Tieude,
             Congty: lichhop.Congty,
@@ -447,8 +449,7 @@ onRemove(event) {
   }
   eventClicked({ events }: { events: CalendarEvent[] }): void {
     console.log(events);
-    
-   // this.handleEvent(events);
+    //this.handleEvent(events);
   }
   eventTimesChanged({event,newStart,newEnd}): void {
     const confirmation = this._fuseConfirmationService.open({
@@ -503,6 +504,9 @@ onRemove(event) {
     this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == event.id);
+    console.log(this.user.id);
+    console.log(this.Lichhop.Chutri);
+    
     if(this.user.id!=this.Lichhop.Chutri)
     {
       this.LichhopForm.get('Loaihinh').disable();
@@ -531,6 +535,9 @@ onRemove(event) {
     this.CRUD = 2;
     this.sidenav.toggle();
     this.Lichhop = this.Lichhops.find(v => v.id == lichhop.id);
+    console.log(this.Lichhop.Chutri);
+    console.log(this.user.id);
+    
     if(this.user.id!=this.Lichhop.Chutri)
     {
       this.LichhopForm.get('Loaihinh').disable();

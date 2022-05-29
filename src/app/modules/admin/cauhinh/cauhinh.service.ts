@@ -145,14 +145,14 @@ CreateDanhmuc(danhmuc): Observable<any> {
         ))
     );
 }
-UpdateDanhmuc(data): Observable<any> {
+UpdateDanhmuc(data): Observable<any> {    
     return this.danhmucs$.pipe(
         take(1),
         switchMap(danhmucs => this._httpClient.patch(`${environment.ApiURL}/danhmuc/${data.id}`, data).pipe(
             map((danhmuc) => {
                 const index = danhmucs.findIndex(item => item.id === data.id);
                 danhmucs[index] = danhmuc;
-                this._danhmucs.next(danhmucs);
+               // this._danhmucs.next(danhmucs);
                 return danhmuc;
             }),
             switchMap(danhmuc => this.danhmuc$.pipe(

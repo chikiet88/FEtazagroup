@@ -41,7 +41,7 @@
                                             folder
                                         </span>
                                         <input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}"
-                                            (change)="
+                                            (keydown.enter)="
                                                 updateFolder(node, $event);$event.stopPropagation()
                                             " />
                                         <button [matMenuTriggerFor]="menu">
@@ -80,7 +80,7 @@
                                         <span class="material-icons pr-4">
                                             folder
                                         </span>
-<input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}" (change)="updateFolder(node, $event);$event.stopPropagation()" />
+<input class="w-32" type="text" placeholder="Trống" value="{{ node.Tieude }}" (keydown.enter)="updateFolder(node, $event);$event.stopPropagation()" />
                                         <button [matMenuTriggerFor]="menu">
                                             <span class="material-icons">more_vert</span>
                                         </button>

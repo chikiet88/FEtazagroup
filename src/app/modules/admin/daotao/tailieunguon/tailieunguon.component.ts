@@ -76,8 +76,9 @@ export class TailieunguonComponent implements OnInit {
     }
 
     addFolderChild(node) {
-        console.log(node);
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id };
+        console.log(this.treeControl.dataNodes);
+        
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
@@ -98,22 +99,19 @@ export class TailieunguonComponent implements OnInit {
     }
     updateFolder(data, e) {       
         const olddata = clone(data);
-        data.Tieude = e.target.value;
+        olddata.Tieude = e.target.value;
         delete olddata.children;
         delete olddata.expandable;
         delete olddata.level;
-        this._cauhinhService.UpdateDanhmuc(olddata).subscribe((res) => {
+        this.treeControl.expand(this.treeControl.dataNodes.find((v) => v.id == data.id));
+        let x = this.files.find((v) => v.id == data.pid);
+        while (x) {
             this.treeControl.expand(
-                this.treeControl.dataNodes.find((v) => v.id == data.id)
+                this.treeControl.dataNodes.find((v) => v.id == x.id)
             );
-            let x = this.files.find((v) => v.id == data.pid);
-            while (x) {
-                this.treeControl.expand(
-                    this.treeControl.dataNodes.find((v) => v.id == x.id)
-                );
-                x = this.files.find((v) => v.id == x.pid);
-            }
-        });
+            x = this.files.find((v) => v.id == x.pid);
+        }
+        this._cauhinhService.UpdateDanhmuc(olddata).subscribe();     
     }
     removefolder(data) {
         this._cauhinhService.Deletedanhmuc(data.id).subscribe(res => {
