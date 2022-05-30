@@ -134,6 +134,13 @@ getAllDanhmuc(): Observable<any> {
         })
     );
 }
+getDanhmucByModule(module): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/danhmuc/module/${module}`).pipe(
+        tap((response: any) => {
+            this._danhmucs.next(response);
+        })
+    );
+}
 CreateDanhmuc(danhmuc): Observable<any> {
     return this.danhmucs$.pipe(
         take(1),

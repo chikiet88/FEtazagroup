@@ -4,7 +4,9 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
+import { SharedService } from 'app/shared/shared.service';
 import { catchError, forkJoin, Observable, of, takeUntil, throwError } from 'rxjs';
+import { NhanvienService } from '../baocao/nhanvien/nhanvien.service';
 import { CauhinhService } from '../cauhinh/cauhinh.service';
 import { TailienguonService } from './tailieunguon/tailienguon.service';
 
@@ -15,12 +17,18 @@ export class DaotaoResolver implements Resolve<boolean> {
   constructor(
     private _tailienguonService: TailienguonService,
     private _cauhinhService: CauhinhService,
+    private _nhanvienService: NhanvienService,
+    private _sharedService: SharedService,
     ){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return forkJoin([
           this._tailienguonService.getAllTailieunguon(),
-          this._cauhinhService.getAllDanhmuc()
+          this._cauhinhService.getDanhmucByModule(2),
+          this._nhanvienService.getNhanviens(),
+          this._sharedService.getAllUpload(),
+          
+
     ]);
   }
 }

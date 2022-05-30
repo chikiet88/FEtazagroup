@@ -73,7 +73,7 @@ export class TailienguonService {
                       const index = tailieunguons.findIndex(item => item.id === data.id);
                       tailieunguons[index] = data;
                       console.log(res);
-                      this._tailieunguons.next(tailieunguons);
+                     // this._tailieunguons.next(tailieunguons);
                       return res;
                   })
               )

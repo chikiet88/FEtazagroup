@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ChangeDetectorRef } from '@angular/core';
 import {
     MatTreeFlatDataSource,
     MatTreeFlattener,
@@ -12,7 +12,10 @@ import { TailienguonService } from './tailienguon.service';
 import { Files } from './tailieunguon.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { clone } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { UserService } from 'app/core/user/user.service';
 @Component({
     selector: 'app-tailieunguon',
     templateUrl: './tailieunguon.component.html',
@@ -34,6 +37,13 @@ export class TailieunguonComponent implements OnInit {
     Tailieunguon: any;
     Tree: any;
     CurrentTailieu: any;
+    triggerOrigin:any;
+    CUser:any;
+    isOpen = false;
+    isOpenPheduyet = false;
+    filterNhanviens:any[] = [];
+    Nhanviens: any[] = [];
+    private _unsubscribeAll: Subject<any> = new Subject();
     private _tree: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transformer = (node: any, level: number) => {
         node.expandable = !!node.children && node.children.length > 0;
@@ -44,9 +54,39 @@ export class TailieunguonComponent implements OnInit {
         private _tailieunguonService: TailienguonService,
         private fb: FormBuilder,
         private uploadService: FileUploadService,
-        private _cauhinhService: CauhinhService
-    ) { }
+        private _cauhinhService: CauhinhService,
+        private _userService: UserService,
+        private _nhanvienService: NhanvienService,
+        private _changeDetectorRef: ChangeDetectorRef,
+    ) {     
+          this._userService.user$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((data) => {
+          this.CUser = data;
+          this._changeDetectorRef.markForCheck();         
+        });
+    }
 
+    ngOnInit(): void {
+        this._nhanvienService.nhanviens$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((data) => {
+          this.Nhanviens = this.filterNhanviens = data;
+          this._changeDetectorRef.markForCheck();
+        });
+        this._cauhinhService.danhmucs$.subscribe((result) => {
+            this.Danhmuc =  this.files = result;
+            this._tailieunguonService.tailieunguons$.subscribe((data) => {
+                this.Tailieunguon = data;
+                this.Tailieunguon.forEach(v => {
+                    v.Type = 'file';
+                    v.pid = v.idDM
+                });
+                this.Tree = [...this.Danhmuc, ...this.Tailieunguon]
+                this.dataSource.data = this.nest(this.Tree);
+            })
+        });
+    }
     treeControl = new FlatTreeControl<any>(
         (node) => node.level,
         (node) => node.expandable
@@ -66,7 +106,7 @@ export class TailieunguonComponent implements OnInit {
     hasChild = (_: number, node: any) => node.expandable;
 
     addFolder() {
-        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0' };
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0',Module:2,idTao:this.CUser };
         this.folderList = this.fb.group({
             Tieude: ['New Folder'],
             Type: ['folder'],
@@ -76,9 +116,8 @@ export class TailieunguonComponent implements OnInit {
     }
 
     addFolderChild(node) {
-        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id };
-        console.log(this.treeControl.dataNodes);
-        
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id,Module:2,idTao:this.CUser };
+        console.log(this.treeControl.dataNodes); 
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
@@ -124,6 +163,7 @@ export class TailieunguonComponent implements OnInit {
             }
         });
     }
+    
     getFileDetail(data) {
         this.CurrentTailieu = clone(data);
         delete this.CurrentTailieu.Type
@@ -131,18 +171,28 @@ export class TailieunguonComponent implements OnInit {
         delete this.CurrentTailieu.expandable
         delete this.CurrentTailieu.level
         delete this.CurrentTailieu.pid
-        console.log(this.CurrentTailieu);
+        console.log(data);
     }
-    ChangeValue(field, e) {
-        this.CurrentTailieu[field] = e.target.value;
-        console.log(e.target.value);
+    ChangeValue(field, value) {
+        this.CurrentTailieu[field] = value;
     }
-
+    ChangeEditorValue(field,{editor}: ChangeEvent ) {   
+        this.CurrentTailieu[field] =editor.getData();
+    }
+    toggleTacgia(trigger: any) {
+        this.triggerOrigin = trigger;
+        this.isOpen = !this.isOpen
+      }
+    togglePheduyet(trigger: any) {
+        this.triggerOrigin = trigger;
+        this.isOpenPheduyet = !this.isOpenPheduyet
+      }
     CreateTailieunguon(node) {
         const tailieunguon =
         {
             Tieude: 'Tài Liệu Mới',
             idDM: node.id,
+            idTao:this.CUser.id
         }
         this._tailieunguonService.CreateTailieunguon(tailieunguon).subscribe((data) => {
             this.treeControl.expand(
@@ -160,24 +210,27 @@ export class TailieunguonComponent implements OnInit {
         );
 
     }
-
     UpdateTailieu() {
+        console.log(this.CurrentTailieu);
+        
+    this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
+
+    }
+    ChonTacgia(id) {
+        this.CurrentTailieu.Tacgia.push(id);
         this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
-
-    }
-    onSubmit() {
-        // if (!this.filedetail.id) {
-        //     alert('Vui lòng tạo file mới');
-        // } else {
-        //     this.fileList.removeControl('pid');
-        //     this.fileList.addControl('id', new FormControl(this.filedetail.id));
-        //     this.fileList.get('id').setValue(this.filedetail.id);
-        //     this._tailieunguonService
-        //         .updateFileDetail(this.fileList.value)
-        //         .subscribe();
-        // }
-    }
-
+        this.isOpen =false;
+      }
+      ChonKiemduyet(id) {
+        this.CurrentTailieu.Kiemduyet.push(id);
+        this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
+        this.isOpenPheduyet =false;
+      }
+      RemoveMang(type, value) {   
+        this.CurrentTailieu[type]=  this.CurrentTailieu[type].filter(v=>v!=value);
+        this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
+        //this.ngOnInit();
+      }
     deleteFileDetail() {
         // this._tailieunguonService
         //     .deleteFileDetail(this.filedetail.id)
@@ -219,20 +272,7 @@ export class TailieunguonComponent implements OnInit {
                 children: this.nest(items, item.id),
             }));
 
-    ngOnInit(): void {
-        this._cauhinhService.danhmucs$.subscribe((result) => {
-            this.Danhmuc =  this.files = result;
-            this._tailieunguonService.tailieunguons$.subscribe((data) => {
-                this.Tailieunguon = data;
-                this.Tailieunguon.forEach(v => {
-                    v.Type = 'file';
-                    v.pid = v.idDM
-                    //this.Tree.push(v);
-                });
-                this.Tree = [...this.Danhmuc, ...this.Tailieunguon]
-                this.dataSource.data = this.nest(this.Tree);
-            })
-        });
+
 
         // this.Tailieunguon.forEach(v => {
         //         v.Type= 'file';
@@ -243,5 +283,5 @@ export class TailieunguonComponent implements OnInit {
         // console.log(this.Danhmuc);
         // this.dataSource.data = this.nest(this._tree.value);
         // console.log(this.dataSource.data);
-    }
+    
 }

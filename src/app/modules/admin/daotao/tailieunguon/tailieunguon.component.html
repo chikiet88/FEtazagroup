@@ -19,7 +19,7 @@
                         <div>
                             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="bg-[#fafafa]">
                                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-                                    <div *ngIf="node.Type == 'file'" class="flex items center lg:hidden"
+                                    <div *ngIf="node.Type == 'file'" class="cursor-pointer flex items center lg:hidden"
                                         (click)="drawer.toggle()">
                                         <button mat-icon-button disabled></button>
                                         <span class="material-icons">
@@ -27,7 +27,7 @@
                                         </span>
                                         <p>{{ node.Tieude }}</p>
                                     </div>
-                                    <div *ngIf="node.Type == 'file'" class="items center hidden lg:flex">
+                                    <div *ngIf="node.Type == 'file'" class="cursor-pointer items center hidden lg:flex">
                                         <button mat-icon-button disabled></button>
                                         <span class="material-icons pr-4">
                                             description
@@ -118,7 +118,7 @@
                                        <div class="pb-3">
                                            <mat-form-field class="fuse-mat-emphasized-affix w-full" appearance="fill">
                                                <span matPrefix> Tài Liệu</span>
-                                               <input matInput type="text" [value]="CurrentTailieu.Tieude" (change)="ChangeValue('Tieude',$event)" class="w-full h-full text-red-500"
+                                               <input matInput type="text" [value]="CurrentTailieu.Tieude" (change)="ChangeValue('Tieude',$event.target.value)" class="w-full h-full text-red-500"
                                                    placeholder="Tài Liệu" />
                                            </mat-form-field>
                                        </div>
@@ -126,14 +126,12 @@
                                        <div class="flex justify-between flex-col lg:flex-row">
                                            <mat-form-field class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:mr-3"
                                                appearance="fill">
-                                               <span matPrefix>Chọn Menu </span>
-                                               <mat-select>
-                                                   <mat-option>a</mat-option>
+                                               <span matPrefix>Danh Mục </span>
+                                               <mat-select (selectionChange)="ChangeValue('idDM',$event.value)" [value]="CurrentTailieu.idDM">
+                                                   <mat-option *ngFor="let item of Danhmuc" [value]="item.id">
+                                                       {{item.Tieude}}
+                                                   </mat-option>
                                                </mat-select>
-                                               <div matSuffix class="flex justify-around items-center">
-                                                   <div class="h-3 w-3 rounded-sm bg-white mr-2"></div>
-                                                   <span>Sửa</span>
-                                               </div>
                                            </mat-form-field>
        
                                            <mat-form-field class="fuse-mat-emphasized-affix lg:w-1/2 w-full lg:ml-3"
@@ -149,13 +147,13 @@
                                                appearance="fill">
                                                <span matPrefix>Dự kiến triển khai
                                                </span>
-                                               <input matInput type="datetime-local" [value]="CurrentTailieu.DKTK" (change)="ChangeValue('DKTK',$event)" class="w-full h-full text-red-500"
+                                               <input matInput type="date" [value]="CurrentTailieu.DKTK" (change)="ChangeValue('DKTK',$event.target.value)" class="w-full h-full text-red-500"
                                                    placeholder="start date" />
                                            </mat-form-field>
                                            <mat-form-field class="fuse-mat-emphasized-affix lg:w-1/2 lg:ml-3 w-full"
                                                appearance="fill">
                                                <span matPrefix>Dự kiến kết thúc </span>
-                                               <input matInput type="datetime-local" class="w-full h-full text-red-500"
+                                               <input matInput type="date" class="w-full h-full text-red-500"
                                                    placeholder="end date"/>
                                            </mat-form-field>
                                        </div>
@@ -163,41 +161,57 @@
                                        <div class="flex flex-col lg:flex-row">
                                            <div class="lg:w-1/2 w-full lg:pr-3">
                                                <p>Nội dung</p>
-                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Noidung" (change)="ChangeValue('Noidung',$event)"></ckeditor>
+                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Noidung" (change)="ChangeEditorValue('Noidung',$event)"></ckeditor>
                                            </div>
                                            <div class="lg:w-1/2 w-full lg:pl-3">
                                                <p>Ghi chú</p>
-                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Ghichu"  (change)="ChangeValue('Ghichu',$event)"></ckeditor>
+                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Ghichu"  (change)="ChangeEditorValue('Ghichu',$event)"></ckeditor>
                                            </div>
                                        </div>
-                                       <div class="flex justify-between pt-3 flex-col lg:flex-row">
-                                           <div class="lg:w-2/6">
-                                               <p>Tác Giả Chính</p>
-                                               <mat-form-field class="fuse-mat-emphasized-affix w-full" appearance="fill">
-                                                   <mat-select>
-                                                       <mat-option>a</mat-option>
-                                                   </mat-select>
-                                               </mat-form-field>
-                                           </div>
-                                           <div class="lg:w-2/6 lg:mx-3">
-                                               <p>Đồng Tác Giả</p>
-                                               <mat-form-field class="fuse-mat-emphasized-affix w-full" appearance="fill">
-                                                   <input matInput type="text" class="w-full h-full text-red-500"
-                                                       placeholder="Tài Liệu"/>
-                                               </mat-form-field>
-                                           </div>
-                                           <div class="lg:w-2/6">
-                                               <p>Kiểm Duyệt</p>
-                                               <mat-form-field class="fuse-mat-emphasized-affix w-full" appearance="fill">
-                                                   <input matInput type="text" class="w-full h-full text-red-500"
-                                                       placeholder="Tài Liệu" />
-                                               </mat-form-field>
-                                           </div>
+                                       <div class="flex space-y-4 justify-between pt-3 flex-col">
+                                        <div class="flex flex-auto flex-wrap gap-4 w-full border p-4">
+                                            <div class="flex flex-col items-center p-2 my-auto border border-dashed w-30" (click)="toggleTacgia(trigger)">
+                                                <span class="material-icons" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+                                                    group_add
+                                                  </span>
+                                                  <span>Tác Giả</span>
+                                            </div>
+                                            <div *ngFor="let item of CurrentTailieu.Tacgia"
+                                              class="relative ring-bg-card p-4 border border-dashed flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-hover">
+                                              <div class="min-w-0 ml-4">
+                                                <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
+                                              </div>
+                                              <div class="absolute -top-2 -right-2" (click)="RemoveMang('Tacgia',item)">
+                                                <span class="material-icons text-red-500 text-xl">
+                                                  remove_circle
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        <div class="flex flex-auto flex-wrap gap-4 w-full border p-4">
+                                            <div class="flex flex-col items-center p-2 my-auto border border-dashed w-30" (click)="togglePheduyet(trigger)">
+                                                <span class="material-icons" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+                                                    group_add
+                                                  </span>
+                                                  <span>Kiểm Duyệt</span>
+                                            </div>
+                                            <div *ngFor="let item of CurrentTailieu.Kiemduyet"
+                                              class="relative ring-bg-card p-4 border border-dashed flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-hover">
+                                              <div class="min-w-0 ml-4">
+                                                <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
+                                              </div>
+                                              <div class="absolute -top-2 -right-2" (click)="RemoveMang('Kiemduyet',item)">
+                                                <span class="material-icons text-red-500 text-xl">
+                                                  remove_circle
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
                                        </div>
                                        <div *ngIf="filedetail">
                                            <app-upload-file [id]="filedetail.id" [deleteFile]="deleteFile"></app-upload-file>
                                        </div>
-       
+       <app-daotaoupload class="my-2" [idTailieu]="CurrentTailieu.id"></app-daotaoupload>
                                        <div class="form-group py-5 flex lg:justify-start justify-between">
                                            <button type="submit" class="btn text-white bg-indigo-900 p-3 rounded-lg"
                                                (click)="UpdateTailieu()">
@@ -215,11 +229,62 @@
                     <ng-template #elseTemplate>
                         
                     </ng-template>
-                    
-
-
                 </div>
             </div>
         </mat-drawer-container>
     </div>
 </div>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpen" (detach)="isOpen = false" (backdropClick)="isOpen = false">
+  <div class="w-84 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of Nhanviens|Unique:CurrentTailieu.Thamgia:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+              (click)="ChonTacgia(item.id)">
+              <div class="ml-1">{{item.name}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpenPheduyet" (detach)="isOpenPheduyet = false" (backdropClick)="isOpenPheduyet = false">
+  <div class="w-84 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of Nhanviens|Unique:CurrentTailieu.Kiemduyet:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+              (click)="ChonKiemduyet(item.id)">
+              <div class="ml-1">{{item.name}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

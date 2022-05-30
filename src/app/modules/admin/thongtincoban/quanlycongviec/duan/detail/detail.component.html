@@ -57,7 +57,7 @@
       <mat-tab label="Tổng Quan">
         <div class="my-4">
           <div class="text-2xl font-bold">Mô Tả Dự Án</div>
-          <ckeditor class="p-3" [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}" [data]="Duan.Mota" (ready)="onReady($event)"></ckeditor>
+          <ckeditor class="p-3" [editor]="Editor" [config]="{placeholder:'Mô Tả Dự Án'}" [data]="Duan.Mota" (change)="UpdateEditorDuan(Duan,'Mota',$event)" (ready)="onReady($event)"></ckeditor>
         </div>
         <mat-divider></mat-divider>
         <div class="my-4">

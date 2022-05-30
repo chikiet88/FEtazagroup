@@ -17,6 +17,9 @@ import { KythiComponent } from './kythi/kythi.component';
 import { DethiComponent } from './dethi/dethi.component';
 import { YeucaudaotaoComponent } from './yeucaudaotao/yeucaudaotao.component';
 import { DaotaoResolver } from './daotao.resolver';
+import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
+import { DaotaouploadComponent } from './daotaoupload/daotaoupload.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 export const DaotaoRoutes: Route[] = [
     {
         path: '',
@@ -45,7 +48,8 @@ export const DaotaoRoutes: Route[] = [
         CauhoiComponent,
         DethiComponent,
         KythiComponent,
-        YeucaudaotaoComponent
+        YeucaudaotaoComponent,
+        DaotaouploadComponent
     ],
     imports: [
         RouterModule.forChild(DaotaoRoutes),
@@ -58,6 +62,8 @@ export const DaotaoRoutes: Route[] = [
         ReactiveFormsModule,
         FormsModule,
         CustomModule,
+        FindbyidModule,
+        NgxDropzoneModule,
     ],
 })
 export class DaotaoModule {}
