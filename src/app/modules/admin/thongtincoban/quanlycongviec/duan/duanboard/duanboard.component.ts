@@ -126,8 +126,27 @@ export class DuanboardComponent implements OnInit {
      OpenEdit(card)
      {
         this._quanlycongviecService.changeTask(card);
-        this._quanlycongviecComponent.matDrawer.toggle();
-        
+        this._quanlycongviecComponent.matDrawer.toggle();     
+     }
+     DeleteCard(item)
+     {
+         console.log(item);
+         
+        const confirmation = this._fuseConfirmationService.open({
+            title  : 'Xóa Đầu Việc',
+            message: 'Bạn Có Chắc Chắn Xóa Đầu Việc Này',
+            actions: {
+                confirm: {
+                    label: 'Xóa'
+                }
+            }
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if ( result === 'confirmed' )
+            {
+                this._quanlycongviecService.DeleteTasks(item.id).subscribe();
+            }
+        });
      }
      CloseMat()
      {

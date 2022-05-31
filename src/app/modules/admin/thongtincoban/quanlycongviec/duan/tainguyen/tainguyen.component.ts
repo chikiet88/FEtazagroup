@@ -3,6 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
+import { UserService } from 'app/core/user/user.service';
 import { SharedService } from 'app/shared/shared.service';
 import { environment } from 'environments/environment';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
@@ -13,11 +14,6 @@ import { QuanlycongviecService } from '../../quanlycongviec.service';
   styleUrls: ['./tainguyen.component.scss']
 })
 export class TainguyenComponent implements OnInit {
-  constructor(
-    private _quanlycongviecService: QuanlycongviecService,
-    private _sharedService: SharedService,
-    private _httpClient: HttpClient
-  ) { }
   @Input() CurentDuan: any;
   color: ThemePalette = 'primary';
   mode: ProgressBarMode = 'determinate';
@@ -25,12 +21,23 @@ export class TainguyenComponent implements OnInit {
   uploadSuccess: boolean = false;
   uploadFiles: [];
   files: File[] = [];
+  CUser: any;
+  constructor(
+    private _quanlycongviecService: QuanlycongviecService,
+    private _sharedService: SharedService,
+    private _httpClient: HttpClient,
+    private _userService: UserService,
+  ) { 
+    this._userService.user$.subscribe((data) => {
+      this.CUser = data;    
+    });
+  }
   ngOnInit(): void {
     this._sharedService.uploads$.subscribe((data) => {     
       data.forEach(v => {
         v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;     
       });
-      this.files = data;
+      this.files = data.filter(v=>v.uuid == this.CurentDuan.id);
     }
     )
   }
@@ -56,7 +63,7 @@ export class TainguyenComponent implements OnInit {
           this.percentDone = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           this.uploadSuccess = true;
-          const upload = { uuid: this.CurentDuan.id, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
+          const upload = { idTao:this.CUser.id,uuid: this.CurentDuan.id, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
           this._sharedService.CreateUpload(upload).subscribe();
         }
       })

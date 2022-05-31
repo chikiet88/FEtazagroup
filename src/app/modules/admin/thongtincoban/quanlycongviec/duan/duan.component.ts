@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
@@ -36,6 +37,7 @@ export class DuanComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
     private _quanlycongviecComponent: QuanlycongviecComponent,
+    private _fuseConfirmationService: FuseConfirmationService,
     public dialog: MatDialog
   ) { 
     this._userService.user$
@@ -61,6 +63,24 @@ export class DuanComponent implements OnInit {
       minWidth:'50%'
     });
   }
+  RemoveDuan(item) {
+    const confirmation = this._fuseConfirmationService.open({
+      title  : 'Xóa Dự Án',
+      message: 'Bạn Có Chắc Chắn Xóa Dự Án Này',
+      actions: {
+          confirm: {
+              label: 'Xóa'
+          }
+      }
+  });
+  confirmation.afterClosed().subscribe((result) => {
+      if ( result === 'confirmed' )
+      {
+          this._quanlycongviecService.DeleteDuans(item.id).subscribe();
+      }
+  });
+  }
+
   MenuToggle()
   {
      this._quanlycongviecComponent.matDrawerMenu.toggle();

@@ -44,6 +44,8 @@ export class DetailComponent implements OnInit {
   SelectThuchien: any;
   triggerOrigin:any;
   private _unsubscribeAll: Subject<any> = new Subject();
+  view:any ;
+  listview:any;
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -100,6 +102,24 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     this.isOpen = false;
     this.ThanhvienisOpen = false;
+    this.listview = [
+      {id:1,title:"Tổng Quan",value:'info',tooltip:'Tổng Quan'},
+      {id:2,title:"Đầu Việc",value:'view_kanban',tooltip:'Đầu Việc'},
+      {id:3,title:"Timeline",value:'view_timeline',tooltip:'Timeline'},
+      {id:4,title:"Dashboard",value:'pie_chart',tooltip:'Dashboard'},
+      {id:5,title:"Tin Nhắn",value:'question_answer',tooltip:'Tin Nhắn'},
+    ]
+    this.view = 1;
+  }
+  ChangeStatusDuan(status) {
+    this.Duan.Trangthai = status;
+    delete this.Duan.sections;
+    this._quanlycongviecService.UpdateDuans(this.Duan,this.Duan.id).subscribe();
+    this.ngOnInit();
+  }
+  chosenView(view)
+  {
+    this.view = view;
   }
   changeEditorToolbar(displayValue)
   {

@@ -20,17 +20,20 @@
         <div class="font-medium leading-5 truncate">Thêm Dự Án Mới</div>
       </div>
     </div>
-        <div *ngFor="let item of Duans"
-          class="flex items-center"
-          [routerLink]="['./',item.id]">
+        <div *ngFor="let item of Duans" class="flex items-center relative">
+         <div class="flex flex-row space-x-4 items-center cursor-pointer" [routerLink]="['./',item.id]">
           <div class="flex flex-0 items-center justify-center w-20 h-20 overflow-hidden border-dashed border-2"><img
-              class="object-cover w-full h-full ng-star-inserted"
-              src="assets/images/logo/logo300.png">
-          </div>
-          <div class="min-w-0 ml-4">
-            <div class="font-medium leading-5 truncate mb-3">{{item.Tieude}}</div>
-            <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
-          </div>
+            class="object-cover w-full h-full ng-star-inserted"
+            src="assets/images/logo/logo300.png">
+        </div>
+        <div class="min-w-0 ml-4">
+          <div class="font-medium leading-5 text-ellipsis overflow-hidden mb-3">{{item.Tieude}}</div>
+          <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
+        </div>
+         </div>
+
+
+          <span class="material-icons text-xl text-red-500 absolute -right-2 -top-2" (click)="RemoveDuan(item)"> remove_circle </span>
         </div>
       </div>
   </div>

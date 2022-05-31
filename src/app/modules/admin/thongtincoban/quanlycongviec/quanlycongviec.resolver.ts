@@ -42,7 +42,6 @@ export class QuanlycongviecByUserResolver implements Resolve<boolean> {
   User;
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
    this._userService.user$.subscribe((data) => { this.User = data;
-    
   }); 
   return forkJoin([
     this._quanlycongviecService.getGrouptasksByuser(this.User.id),

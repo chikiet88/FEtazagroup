@@ -3,6 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressBarMode } from '@angular/material/progress-bar';
+import { UserService } from 'app/core/user/user.service';
 import { SharedService } from 'app/shared/shared.service';
 import { environment } from 'environments/environment';
 @Component({
@@ -11,10 +12,16 @@ import { environment } from 'environments/environment';
   styleUrls: ['./daotaoupload.component.scss']
 })
 export class DaotaouploadComponent implements OnInit {
+  CUser: any;
   constructor(
     private _sharedService: SharedService,
-    private _httpClient: HttpClient
-  ) { }
+    private _httpClient: HttpClient,
+    private _userService: UserService,
+  ) { 
+    this._userService.user$.subscribe((data) => {
+      this.CUser = data;    
+    });
+  }
   @Input() idTailieu: any;
   color: ThemePalette = 'primary';
   mode: ProgressBarMode = 'determinate';
@@ -53,7 +60,7 @@ export class DaotaouploadComponent implements OnInit {
           this.percentDone = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           this.uploadSuccess = true;
-          const upload = { uuid: this.idTailieu, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
+          const upload = {idTao:this.CUser.id, uuid: this.idTailieu, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
           this._sharedService.CreateUpload(upload).subscribe();
         }
       })

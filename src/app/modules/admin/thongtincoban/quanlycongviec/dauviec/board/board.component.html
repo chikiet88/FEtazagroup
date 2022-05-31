@@ -34,7 +34,8 @@
                                 (cdkDropListDropped)="cardDropped($event,list.tasks)">
                               <div>
                                 <ng-container *ngFor="let card of list.tasks; trackBy: trackByFn">
-                                    <a class="group flex flex-col items-start mb-3 p-2 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                    <a class="group border-t-4 flex flex-col items-start mb-3 p-2 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                                       [ngClass]="{'border-blue-500': card.Trangthai==0,'border-yellow-500': card.Trangthai==1,'border-green-500': card.Trangthai==2}"
                                         cdkDrag>
                                         <div class="flex flex-row justify-between space-x-2 w-full">
                                             <div class="w-full text-ellipsis">

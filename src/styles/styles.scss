@@ -17,3 +17,41 @@
     width: 24px;
     height: 24px;
   }
+  .cal-month-view 
+{
+	.cal-day-cell {min-height: 50px !important;}
+}
+.ck.ck-content
+	{
+		border: 1px dotted lightskyblue;
+	}
+.ck.ck-editor__editable > .ck-placeholder::before {
+		color: rgb(59 130 246)!important ;
+		font-family: Georgia;
+}
+.ck.ck-content a
+	{
+	color: blue;
+    text-decoration: underline;
+	}
+.ck-editor__editable {
+		min-height: 200px !important;
+	}
+.mat-tab-header {
+	.mat-tab-label-container {
+		.mat-tab-list {
+			.mat-tab-labels {
+				.mat-tab-label {
+					&.mat-tab-label-active {
+						background-color:lightskyblue!important ;
+					}
+				}
+			}
+		}
+	}
+}
+.mat-select-value-text
+{
+	color: rgb(59 130 246)!important ;
+	font-weight: 600;
+}
