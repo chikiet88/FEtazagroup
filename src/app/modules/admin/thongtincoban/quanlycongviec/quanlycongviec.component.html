@@ -7,7 +7,7 @@
   </mat-drawer>
 
 
-  <mat-drawer #matDrawer class="w-3/5" mode="over" position="end">
+  <mat-drawer #matDrawer class="scroll w-3/5 flex flex-auto flex-col" mode="over" position="end">
     <div class="flex flex-row justify-between p-4">
       <div>
         <h2 class="text-2xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate"> Cập Nhật</h2>
@@ -16,7 +16,7 @@
         cancel
       </span>
     </div>
-    <div class="flex flex-col flex-auto p-4 space-y-3" *ngIf="CurretTask">
+    <div class="flex flex-col flex-auto p-4 space-y-3 overflow-y-auto scroll" *ngIf="CurretTask">
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Tiêu Đề </div>
         <input [value]="CurretTask.Tieude" matInput (change)="ChangeTask(CurretTask,'Tieude',$event.target.value)">
@@ -78,17 +78,46 @@
           </button>
         </div>
       </div>
+<mat-divider></mat-divider>
+      <div class="flex flex-col space-y-4 border rounded p-3">
+        <div class="flex flex-row space-x-4">
+          <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
+        </div>
+        <div class="flex">Nooij Dung Chat</div>
+      </div>
+
 
     </div>
-
-
-
-
-
-    <div class="flex flex-row justify-end space-x-3 mr-4">
-      <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
-      <button mat-button class="bg-red-500 text-white" (click)="DeleteTask()">Xóa</button>
+      <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
+        <div class="flex items-center h-11 my-px">
+            <button mat-icon-button>
+                <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon>
+            </button>
+            <button
+                class="ml-0.5"
+                mat-icon-button>
+                <mat-icon [svgIcon]="'heroicons_outline:paper-clip'"></mat-icon>
+            </button>
+        </div>
+        <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded fuse-mat-bold w-full ml-4">
+            <textarea
+                class="min-h-5 my-0 resize-none"
+                style="margin: 11px 0 !important; padding: 0 !important;"
+                [rows]="1"
+                matInput
+                #messageInput></textarea>
+        </mat-form-field>
+        <div class="flex items-center h-11 my-px ml-4">
+            <button
+                mat-icon-button>
+                <mat-icon
+                    class="transform rotate-90"
+                    [svgIcon]="'heroicons_outline:paper-airplane'"></mat-icon>
+            </button>
+        </div>
     </div>
+      <!-- <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
+      <button mat-button class="bg-red-500 text-white" (click)="DeleteTask()">Xóa</button> -->
   </mat-drawer>
 
   <mat-drawer-content class="bg-card flex flex-col flex-auto">

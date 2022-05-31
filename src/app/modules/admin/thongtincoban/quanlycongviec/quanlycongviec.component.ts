@@ -15,7 +15,7 @@ export class QuanlycongviecComponent implements OnInit {
   public Editor = Editor;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
-    height:'200px'
+    height:'100px'
   };
 
   @ViewChild('matDrawer', {static: false}) matDrawer: MatDrawer;
