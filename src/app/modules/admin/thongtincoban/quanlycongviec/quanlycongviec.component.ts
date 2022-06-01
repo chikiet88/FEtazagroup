@@ -3,9 +3,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { QuanlycongviecService } from './quanlycongviec.service';
 import Editor from 'ckeditor5/build/ckEditor';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { UserService } from 'app/core/user/user.service';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-quanlycongviec',
   templateUrl: './quanlycongviec.component.html',
@@ -29,11 +32,17 @@ export class QuanlycongviecComponent implements OnInit {
   CurretTask:any;
   SelectDuan:any;
   isOpenDuan = false;
+  isOpenThuchien = false;
+  isOpenGroup = false;
   filteredDuans: any[];
   filteredSections: any[];
+  Nhanvien: any[];
+  filteredNhanvien: any[];
   CUser: any;
   Uutiens:any[];
   Duans:any[];
+  Groups:any[];
+  GroupbyUser:any[];
   Sections:any[];
   triggerOrigin :any;
   Duansections :any;
@@ -42,12 +51,23 @@ export class QuanlycongviecComponent implements OnInit {
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _userService: UserService,
+    private _NhanvienService: NhanvienService,
+    private _NotificationsService: NotificationsService,
+    private _router:Router,
     ) { 
       this._userService.user$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data) => {
         this.CUser = data;
         this._changeDetectorRef.markForCheck();         
+      });
+      this._NhanvienService.nhanviens$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((nhanvien) => {
+        console.log(nhanvien);
+        this.Nhanvien = nhanvien;          
+        this.filteredNhanvien = nhanvien; 
+        this._changeDetectorRef.markForCheck();
       });
     }
 
@@ -62,20 +82,61 @@ export class QuanlycongviecComponent implements OnInit {
       this.Sections = data;
       this._changeDetectorRef.markForCheck();
     })
-    this._quanlycongviecService.task$.subscribe((data)=>{this.CurretTask = data})
-    this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data;
-            
-    })
+    this._quanlycongviecService.Duansections$.subscribe((data)=>{this.Duansections = data;})
+    this._quanlycongviecService.grouptasks$.subscribe((data)=>{this.Groups = data})
+    this._quanlycongviecService.task$.subscribe((data)=>{
+      if(data)
+      {
+      this.CurretTask = data;
+      this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurretTask.Thuchien);
+      console.log(data);
+      }
+     })
   } 
   ChonDuan(item,id) {
     item.sid = id;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.isOpenDuan =false;
   }
-  toggleDuan(trigger: any,row) {
-    this.SelectDuan = row
+  ChonGroup(item,id) {
+    item.gid = id;
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+    this.isOpenGroup =false;
+  }
+  toggleDuan(trigger: any,item) {
+    this.SelectDuan = item
     this.triggerOrigin = trigger;
     this.isOpenDuan = !this.isOpenDuan
+  }
+  toggleThuchien(trigger: any,item) {
+    this.SelectDuan = item
+    this.triggerOrigin = trigger;
+    this.isOpenThuchien = !this.isOpenThuchien
+  }
+  ChonThuchien(item,id) {
+    const notifi = {
+      idFrom:  this.CUser.id,
+      idTo: id,
+      Tieude: "Quản Lý Công Việc ",
+      Noidung: item.Tieude,
+      Lienket: `${this._router.url}`,
+    };
+    this._NotificationsService.create(notifi).subscribe();
+    item.Thuchien = id;
+    item.gid ='';
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+    this.isOpenThuchien =false;
+    this.filteredNhanvien = this.Nhanvien;
+  }
+  filterThanvien(event): void
+  {
+    const value = event.target.value.toLowerCase();
+    this.filteredNhanvien = this.Nhanvien.filter(v => v.name.toLowerCase().includes(value));
+  }
+  toggleGroup(trigger: any,item) {
+    this.SelectDuan = item
+    this.triggerOrigin = trigger;
+    this.isOpenGroup = !this.isOpenGroup
   }
   UpdateDeadlineTask(item,StartValue,EndValue)
   {

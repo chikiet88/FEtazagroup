@@ -1,20 +1,175 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from 'app/core/user/user.service';
+import { ApexAxisChartSeries, ApexChart, ApexFill, ApexLegend, ApexPlotOptions, ApexXAxis, ChartComponent } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
-
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  fill: ApexFill;
+  legend: ApexLegend;
+  xaxis: ApexXAxis;
+  plotOptions: ApexPlotOptions;
+};
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss']
 })
+
 export class TimelineComponent implements OnInit {
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _userService: UserService,
   ) {
-
+    this.chartOptions = {
+      series: [
+        {
+          name: "Bob",
+          data: [
+            {
+              x: "Design",
+              y: [
+                new Date("2019-03-05").getTime(),
+                new Date("2019-03-08").getTime()
+              ]
+            },
+            {
+              x: "Code",
+              y: [
+                new Date("2019-03-02").getTime(),
+                new Date("2019-03-05").getTime()
+              ]
+            },
+            {
+              x: "Code",
+              y: [
+                new Date("2019-03-05").getTime(),
+                new Date("2019-03-07").getTime()
+              ]
+            },
+            {
+              x: "Test",
+              y: [
+                new Date("2019-03-03").getTime(),
+                new Date("2019-03-09").getTime()
+              ]
+            },
+            {
+              x: "Test",
+              y: [
+                new Date("2019-03-08").getTime(),
+                new Date("2019-03-11").getTime()
+              ]
+            },
+            {
+              x: "Validation",
+              y: [
+                new Date("2019-03-11").getTime(),
+                new Date("2019-03-16").getTime()
+              ]
+            },
+            {
+              x: "Design",
+              y: [
+                new Date("2019-03-01").getTime(),
+                new Date("2019-03-03").getTime()
+              ]
+            }
+          ]
+        },
+        {
+          name: "Joe",
+          data: [
+            {
+              x: "Design",
+              y: [
+                new Date("2019-03-02").getTime(),
+                new Date("2019-03-05").getTime()
+              ]
+            },
+            {
+              x: "Test",
+              y: [
+                new Date("2019-03-06").getTime(),
+                new Date("2019-03-16").getTime()
+              ]
+            },
+            {
+              x: "Code",
+              y: [
+                new Date("2019-03-03").getTime(),
+                new Date("2019-03-07").getTime()
+              ]
+            },
+            {
+              x: "Deployment",
+              y: [
+                new Date("2019-03-20").getTime(),
+                new Date("2019-03-22").getTime()
+              ]
+            },
+            {
+              x: "Design",
+              y: [
+                new Date("2019-03-10").getTime(),
+                new Date("2019-03-16").getTime()
+              ]
+            }
+          ]
+        },
+        {
+          name: "Dan",
+          data: [
+            {
+              x: "Code",
+              y: [
+                new Date("2019-03-10").getTime(),
+                new Date("2019-03-17").getTime()
+              ]
+            },
+            {
+              x: "Validation",
+              y: [
+                new Date("2019-03-05").getTime(),
+                new Date("2019-03-09").getTime()
+              ]
+            }
+          ]
+        }
+      ],
+      chart: {
+        height: 450,
+        type: "rangeBar"
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          barHeight: "80%"
+        }
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: "light",
+          type: "vertical",
+          shadeIntensity: 0.25,
+          gradientToColors: undefined,
+          inverseColors: true,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [50, 0, 100, 100]
+        }
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "left"
+      }
+    };
   }
   Tasks: any[] = [];
   Grouptasks: any[] = [];
@@ -30,8 +185,9 @@ export class TimelineComponent implements OnInit {
     { type: 'date', id: 'End' },
     ];
   data = [];
-
   options = {}
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   ngOnInit(): void {
     this._quanlycongviecService.getDuans();
     this._userService.user$

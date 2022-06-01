@@ -16,6 +16,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { UserService } from 'app/core/user/user.service';
+import { NotifierService } from 'angular-notifier';
 @Component({
     selector: 'app-tailieunguon',
     templateUrl: './tailieunguon.component.html',
@@ -31,6 +32,25 @@ export class TailieunguonComponent implements OnInit {
     files: any;
     filedetail: any;
     public Editor = ClassicEditor;
+    public onReady(editor) {
+        editor.ui
+            .getEditableElement()
+            .parentElement.insertBefore(
+                editor.ui.view.toolbar.element,
+                editor.ui.getEditableElement()
+            );
+    }
+    public config = {
+        htmlSupport: {
+            allow: [
+                {
+                    name: /.*/,
+                    attributes: true,
+                    classes: true,
+                },
+            ],
+        },
+    };
     showFiller = true;
     deleteFile = false;
     Danhmuc: any;
@@ -39,10 +59,12 @@ export class TailieunguonComponent implements OnInit {
     CurrentTailieu: any;
     triggerOrigin:any;
     CUser:any;
-    isOpen = false;
+    isOpenTacgia = false;
     isOpenPheduyet = false;
     filterNhanviens:any[] = [];
     Nhanviens: any[] = [];
+    filteredTacgia: any[] = [];
+    filteredKiemduyet: any[] = [];
     private _unsubscribeAll: Subject<any> = new Subject();
     private _tree: BehaviorSubject<any> = new BehaviorSubject(null);
     private _transformer = (node: any, level: number) => {
@@ -58,6 +80,8 @@ export class TailieunguonComponent implements OnInit {
         private _userService: UserService,
         private _nhanvienService: NhanvienService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _notifierService: NotifierService,
+        
     ) {     
           this._userService.user$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -71,7 +95,7 @@ export class TailieunguonComponent implements OnInit {
         this._nhanvienService.nhanviens$
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe((data) => {
-          this.Nhanviens = this.filterNhanviens = data;
+          this.Nhanviens = this.filterNhanviens = this.filteredTacgia = this.filteredKiemduyet = data;
           this._changeDetectorRef.markForCheck();
         });
         this._cauhinhService.danhmucs$.subscribe((result) => {
@@ -113,12 +137,14 @@ export class TailieunguonComponent implements OnInit {
             pid: 0,
         });
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
+        this._notifierService.notify('sucess', 'Tạo Mới Thành Công');
     }
 
     addFolderChild(node) {
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id,Module:2,idTao:this.CUser };
         console.log(this.treeControl.dataNodes); 
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
+            this._notifierService.notify('sucess', 'Tạo MớiThành Công');
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -150,10 +176,12 @@ export class TailieunguonComponent implements OnInit {
             );
             x = this.files.find((v) => v.id == x.pid);
         }
-        this._cauhinhService.UpdateDanhmuc(olddata).subscribe();     
+        this._cauhinhService.UpdateDanhmuc(olddata).subscribe();    
+        this._notifierService.notify('sucess', 'Cập Nhật Thành Công'); 
     }
     removefolder(data) {
         this._cauhinhService.Deletedanhmuc(data.id).subscribe(res => {
+            this._notifierService.notify('sucess', 'Xóa Thành Công');
             let x = this.files.find((v) => v.id == data.pid);
             while (x) {
                 this.treeControl.expand(
@@ -181,12 +209,23 @@ export class TailieunguonComponent implements OnInit {
     }
     toggleTacgia(trigger: any) {
         this.triggerOrigin = trigger;
-        this.isOpen = !this.isOpen
+        this.isOpenTacgia = !this.isOpenTacgia
       }
     togglePheduyet(trigger: any) {
         this.triggerOrigin = trigger;
         this.isOpenPheduyet = !this.isOpenPheduyet
       }
+    filterTacgia(event): void
+      {
+        const value = event.target.value.toLowerCase();
+        this.filteredTacgia= this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
+      }
+    filterKiemduyet(event): void
+      {
+        const value = event.target.value.toLowerCase();
+        this.filteredKiemduyet= this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
+      }
+      
     CreateTailieunguon(node) {
         const tailieunguon =
         {
@@ -195,6 +234,7 @@ export class TailieunguonComponent implements OnInit {
             idTao:this.CUser.id
         }
         this._tailieunguonService.CreateTailieunguon(tailieunguon).subscribe((data) => {
+            this._notifierService.notify('sucess', 'Tạo Mới Thành Công');
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -211,20 +251,21 @@ export class TailieunguonComponent implements OnInit {
 
     }
     UpdateTailieu() {
-        console.log(this.CurrentTailieu);
-        
+    console.log(this.CurrentTailieu); 
     this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
-
+    this._notifierService.notify('sucess', 'Cập Nhật Thành Công');
     }
     ChonTacgia(id) {
         this.CurrentTailieu.Tacgia.push(id);
         this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
-        this.isOpen =false;
+        this.isOpenTacgia =false;
+        this.filteredTacgia = this.Nhanviens;
       }
       ChonKiemduyet(id) {
         this.CurrentTailieu.Kiemduyet.push(id);
         this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
         this.isOpenPheduyet =false;
+        this.filteredKiemduyet = this.Nhanviens;
       }
       RemoveMang(type, value) {   
         this.CurrentTailieu[type]=  this.CurrentTailieu[type].filter(v=>v!=value);
@@ -238,29 +279,6 @@ export class TailieunguonComponent implements OnInit {
         // this.deleteFile = true;
         // this.ngOnInit();
     }
-
-
-    deleteFileUpload(fileUpload: FileUpload): void {
-        this.fileList = this.fb.group({
-            item: ['New File'],
-            type: ['file'],
-            data: this.fb.group({
-                tag: [''],
-                idmenu: [0],
-                tailieu: [''],
-                date: [''],
-                deadline: [''],
-                content: [''],
-                note: [''],
-                author: [''],
-                sameAuthor: [''],
-                censor: [''],
-            }),
-            pid: [0],
-        });
-        this.uploadService.deleteFile(fileUpload);
-    }
-
     selectFile(event: any): void {
         this.selectedFiles = event.target.files;
     }

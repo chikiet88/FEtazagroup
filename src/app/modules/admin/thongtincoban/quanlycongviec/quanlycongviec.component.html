@@ -80,40 +80,67 @@
           </button>
         </div>
       </div>
+      <div class="flex flex-row space-x-4">
+        <div class="my-auto font-bold w-1/4">Thực Hiện </div>
+        <div class="flex flex-row space-x-6 items-center text-hint">
+          <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleThuchien(trigger,CurretTask)">
+            <span class="material-icons">
+              account_circle
+              </span>
+              <ng-container *ngIf="CurretTask.Thuchien">
+                <span> {{CurretTask.Thuchien|findbyid:Nhanvien:'name'}} </span>   
+              </ng-container>
+              <ng-container *ngIf="!CurretTask.Thuchien">
+               <span>Chưa Chọn</span>
+              </ng-container>
+          </div>
+          <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleGroup(trigger,CurretTask)">
+            <span class="material-icons">
+              folder
+              </span>
+              <ng-container *ngIf="CurretTask.gid">
+                <span>{{(CurretTask.gid|findbyid:Groups:'Tieude')}}</span>   
+              </ng-container>
+              <ng-container *ngIf="!CurretTask.gid">
+                <span>Chưa Chọn</span>
+              </ng-container>
+          </div>
+        </div>
+      </div>
 <mat-divider></mat-divider>
       <div class="flex flex-col space-y-4 border rounded p-3">
         <div class="flex flex-row space-x-4">
           <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
         </div>
-        <div class="flex">Nooij Dung Chat</div>
+        <div class="flex">Text Nội Dung Chat</div>
       </div>
       <mat-divider></mat-divider>
       <div class="flex flex-col space-y-4 border rounded p-3">
         <div class="flex flex-row space-x-4">
           <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
         </div>
-        <div class="flex">Nooij Dung Chat</div>
+        <div class="flex">Text Nội Dung Chat</div>
       </div>
       <mat-divider></mat-divider>
       <div class="flex flex-col space-y-4 border rounded p-3">
         <div class="flex flex-row space-x-4">
           <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
         </div>
-        <div class="flex">Nooij Dung Chat</div>
+        <div class="flex">Text Nội Dung Chat</div>
       </div>
       <mat-divider></mat-divider>
       <div class="flex flex-col space-y-4 border rounded p-3">
         <div class="flex flex-row space-x-4">
           <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
         </div>
-        <div class="flex">Nooij Dung Chat</div>
+        <div class="flex">Text Nội Dung Chat</div>
       </div>
       <mat-divider></mat-divider>
       <div class="flex flex-col space-y-4 border rounded p-3">
         <div class="flex flex-row space-x-4">
           <span class="font-bold">Tên</span><span class="text-sm text-hint">Vài Giây Trước</span>
         </div>
-        <div class="flex">Nooij Dung Chat</div>
+        <div class="flex">Text Nội Dung Chat</div>
       </div>           
     </div>
       <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
@@ -129,11 +156,12 @@
         </div>
         <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded fuse-mat-bold w-full ml-4">
             <textarea
-                class="min-h-5 my-0 resize-none"
+                class="min-h-5 my-0 resize-none scroll"
                 style="margin: 11px 0 !important; padding: 0 !important;"
                 [rows]="1"
                 matInput
-                #messageInput></textarea>
+                #messageInput
+                cdkTextareaAutosize></textarea>
         </mat-form-field>
         <div class="flex items-center h-11 my-px ml-4">
             <button
@@ -194,6 +222,60 @@
               </ng-container>
             </div>
           </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpenThuchien" (detach)="isOpenThuchien = false" (backdropClick)="isOpenThuchien = false">
+  <div class="w-84 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterThanvien($event)">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filteredNhanvien">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+              (click)="ChonThuchien(SelectDuan,item.id)">
+              <div class="ml-1">{{item.name}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="isOpenGroup" (detach)="isOpenGroup = false" (backdropClick)="isOpenGroup = false">
+  <div class="w-84 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of GroupbyUser">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
+              (click)="ChonGroup(SelectDuan,item.id)">
+              <div class="ml-1">{{item.Tieude}}</div>
+            </div>
           </ng-container>
         </div>
       </ng-container>

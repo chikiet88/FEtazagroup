@@ -158,14 +158,14 @@
                                            </mat-form-field>
                                        </div>
        
-                                       <div class="flex flex-col lg:flex-row">
-                                           <div class="lg:w-1/2 w-full lg:pr-3">
+                                       <div class="flex flex-col space-y-2">
+                                           <div class="w-full">
                                                <p>Nội dung</p>
-                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Noidung" (change)="ChangeEditorValue('Noidung',$event)"></ckeditor>
+                                               <ckeditor [config]="config" [editor]="Editor" [data]="CurrentTailieu.Noidung" (change)="ChangeEditorValue('Noidung',$event)" (ready)="onReady($event)"></ckeditor>
                                            </div>
-                                           <div class="lg:w-1/2 w-full lg:pl-3">
+                                           <div class="w-full">
                                                <p>Ghi chú</p>
-                                               <ckeditor [editor]="Editor" [data]="CurrentTailieu.Ghichu"  (change)="ChangeEditorValue('Ghichu',$event)"></ckeditor>
+                                               <ckeditor [config]="config" [editor]="Editor" [data]="CurrentTailieu.Ghichu"  (change)="ChangeEditorValue('Ghichu',$event)" (ready)="onReady($event)"></ckeditor>
                                            </div>
                                        </div>
                                        <div class="flex space-y-4 justify-between pt-3 flex-col">
@@ -237,20 +237,20 @@
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
   [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
-  [cdkConnectedOverlayOpen]="isOpen" (detach)="isOpen = false" (backdropClick)="isOpen = false">
+  [cdkConnectedOverlayOpen]="isOpenTacgia" (detach)="isOpenTacgia = false" (backdropClick)="isOpenTacgia = false">
   <div class="w-84 rounded border shadow-md bg-card m-3">
     <div class="flex items-center m-3 mr-2">
       <div class="flex items-center">
         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
         <div class="ml-2">
-          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterTacgia($event)">
         </div>
       </div>
     </div>
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
-          <ng-container *ngFor="let item of Nhanviens|Unique:CurrentTailieu.Thamgia:'id'">
+          <ng-container *ngFor="let item of filteredTacgia|Unique:CurrentTailieu.Tacgia:'id'">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
               (click)="ChonTacgia(item.id)">
               <div class="ml-1">{{item.name}}</div>
@@ -270,14 +270,14 @@
       <div class="flex items-center">
         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
         <div class="ml-2">
-          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" #newTagInput>
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterKiemduyet($event)">
         </div>
       </div>
     </div>
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
-          <ng-container *ngFor="let item of Nhanviens|Unique:CurrentTailieu.Kiemduyet:'id'">
+          <ng-container *ngFor="let item of filteredKiemduyet|Unique:CurrentTailieu.Kiemduyet:'id'">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
               (click)="ChonKiemduyet(item.id)">
               <div class="ml-1">{{item.name}}</div>

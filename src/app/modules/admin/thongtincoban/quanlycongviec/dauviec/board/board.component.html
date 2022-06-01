@@ -6,7 +6,7 @@
                 <div class="flex flex-col flex-0 w-96 p-2 rounded-2xl h-full bg-card" cdkDrag [cdkDragLockAxis]="'x'">
                     <div class="flex items-center justify-between" cdkDragHandle>
                         <div
-                            class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                            class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">                           
                             <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                 [value]="list.Tieude"
                                 (keydown.enter)="updateListTitle($event, list);listTitleInput.blur()" #listTitleInput>
@@ -38,6 +38,45 @@
                                        [ngClass]="{'border-blue-500': card.Trangthai==0,'border-yellow-500': card.Trangthai==1,'border-green-500': card.Trangthai==2}"
                                         cdkDrag>
                                         <div class="flex flex-row justify-between space-x-2 w-full">
+                                            <div class="text-blue-500 flex space-x-2" *ngIf="card.Trangthai==0"
+                                            [matMenuTriggerFor]="menu">
+                                            <span class="material-icons m-auto text-lg">
+                                                notifications
+                                            </span>
+                                        </div>
+
+                                        <div class="text-yellow-500 flex space-x-2" *ngIf="card.Trangthai==1"
+                                            [matMenuTriggerFor]="menu">
+                                            <span class="material-icons m-auto text-lg">
+                                                hourglass_full
+                                            </span>
+                                        </div>
+
+                                        <div class="text-green-500 flex space-x-2" *ngIf="card.Trangthai==2"
+                                            [matMenuTriggerFor]="menu">
+                                            <span class="material-icons m-auto text-lg">
+                                                check_circle
+                                            </span>
+                                        </div>
+                                        <mat-menu #menu="matMenu">
+                                            <button class="text-blue-500" mat-menu-item
+                                                (click)="ChangeStatusTasks(card,0)">
+                                                <span class="material-icons my-auto text-lg">
+                                                    notifications
+                                                </span>Chưa làm</button>
+                                            <button class="text-yellow-500" mat-menu-item
+                                                (click)="ChangeStatusTasks(card,1)">
+                                                <span class="material-icons my-auto text-lg">
+                                                    hourglass_full
+                                                </span>
+                                                Đang làm</button>
+                                            <button class="text-green-500" mat-menu-item
+                                                (click)="ChangeStatusTasks(card,2)">
+                                                <span class="material-icons my-auto text-lg">
+                                                    check_circle
+                                                </span>
+                                                Hoàn Thành</button>
+                                        </mat-menu>
                                             <div class="w-full text-ellipsis">
                                                 <textarea matInput cdkTextareaAutosize class="w-full"
                                                     [value]="card.Tieude"
@@ -45,45 +84,6 @@
                                             </div>
                                             <div
                                                 class="group-hover:flex hidden flex-row justify-between items-center space-x-2">
-                                                <div class="text-blue-500 flex space-x-2" *ngIf="card.Trangthai==0"
-                                                    [matMenuTriggerFor]="menu">
-                                                    <span class="material-icons m-auto text-lg">
-                                                        notifications
-                                                    </span>
-                                                </div>
-
-                                                <div class="text-yellow-500 flex space-x-2" *ngIf="card.Trangthai==1"
-                                                    [matMenuTriggerFor]="menu">
-                                                    <span class="material-icons m-auto text-lg">
-                                                        hourglass_full
-                                                    </span>
-                                                </div>
-
-                                                <div class="text-green-500 flex space-x-2" *ngIf="card.Trangthai==2"
-                                                    [matMenuTriggerFor]="menu">
-                                                    <span class="material-icons m-auto text-lg">
-                                                        check_circle
-                                                    </span>
-                                                </div>
-                                                <mat-menu #menu="matMenu">
-                                                    <button class="text-blue-500" mat-menu-item
-                                                        (click)="ChangeStatusTasks(card,0)">
-                                                        <span class="material-icons my-auto text-lg">
-                                                            notifications
-                                                        </span>Chưa làm</button>
-                                                    <button class="text-yellow-500" mat-menu-item
-                                                        (click)="ChangeStatusTasks(card,1)">
-                                                        <span class="material-icons my-auto text-lg">
-                                                            hourglass_full
-                                                        </span>
-                                                        Đang làm</button>
-                                                    <button class="text-green-500" mat-menu-item
-                                                        (click)="ChangeStatusTasks(card,2)">
-                                                        <span class="material-icons my-auto text-lg">
-                                                            check_circle
-                                                        </span>
-                                                        Hoàn Thành</button>
-                                                </mat-menu>
                                                 <div class="cursor-pointer space-x-2">
                                                     <span class="material-icons text-lg" (click)="OpenEdit(card)">
                                                         edit

@@ -35,7 +35,7 @@ export class NavigationService {
                             nav.push(v);
                         }
                     });
-                    const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+                    const nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
                         ...item,
                         children: nest(items, item.uuid)
                     }));

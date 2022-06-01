@@ -16,5 +16,17 @@
          <h2 class="text-center text-red-500">Chưa set thời gian cho công việc</h2>
       </ng-template>
       </div>
+
+      <div id="chart">
+         <apx-chart
+           [series]="chartOptions.series"
+           [chart]="chartOptions.chart"
+           [fill]="chartOptions.fill"
+           [legend]="chartOptions.legend"
+           [plotOptions]="chartOptions.plotOptions"
+           [xaxis]="chartOptions.xaxis"
+         ></apx-chart>
+       </div>
+
       </div>
   
