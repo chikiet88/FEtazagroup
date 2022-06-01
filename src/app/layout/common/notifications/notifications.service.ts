@@ -10,18 +10,31 @@ import { environment } from 'environments/environment';
 export class NotificationsService
 {
     private _notifications: ReplaySubject<NotificationEntity[]> = new ReplaySubject<NotificationEntity[]>(1);
+    private _pushSubscriber: ReplaySubject<any> = new ReplaySubject<any>(1);
     constructor(
         private _httpClient: HttpClient,
         )
     {
     }
-    get notifications$(): Observable<NotificationEntity[]>
+    get notifications$(): Observable<any>
     {
         return this._notifications.asObservable();
+    }
+    get PushSubscriber$(): Observable<any>
+    {
+        return this._pushSubscriber.asObservable();
     }
     addPushSubscriber(data:any) {
         return this._httpClient.post(`${environment.ApiURL}/notification/subscriber`, data);
     }
+    // getAllSubscriber(): Observable<any>
+    // {
+    //     return this._httpClient.get(`${environment.ApiURL}/notification/subscriber`).pipe(
+    //         tap((response) => {
+    //             this._pushSubscriber.next(response);
+    //         })
+    //     );
+    // }
     getAll(): Observable<NotificationEntity[]>
     {
         return this._httpClient.get<NotificationEntity[]>(`${environment.ApiURL}/notification`).pipe(
@@ -30,14 +43,16 @@ export class NotificationsService
             })
         );
     }
-    
     create(notification): Observable<any>
     {
-        return this._httpClient.post(`${environment.ApiURL}/notification`,notification).pipe(
-            tap((response: any) => {
-              this._notifications.next(response);
-
-            })
+        return this.notifications$.pipe(
+            take(1),
+            switchMap(notifications => this._httpClient.post(`${environment.ApiURL}/notification`,notification).pipe(
+                map((result) => {
+                    this._notifications.next([result, ...notifications]);
+                    return result;
+                })
+            ))
         );
     }
     update(notification: NotificationEntity): Observable<NotificationEntity>

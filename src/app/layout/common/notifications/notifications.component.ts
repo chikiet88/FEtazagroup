@@ -19,13 +19,14 @@ import { SwPush } from '@angular/service-worker';
 export class NotificationsComponent implements OnInit, OnDestroy
 {
     sub: PushSubscription;
+    isChecked = true;
     readonly VAPID_PUBLIC_KEY = "BJe-03OtBqwjGbpangu282m8R_E5qtjanOUANBF-ID37Fq-V2hZoOJ5hZJlW0qeXt0prcfIsu63gNQ_xmXPCE3M";
-
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
     notifications: NotificationEntity[];
     unreadCount: number = 0;
     User:User;
+    PushSubscriber:any;
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
@@ -40,7 +41,8 @@ export class NotificationsComponent implements OnInit, OnDestroy
     }
     ngOnInit(): void
     {   
-        this.subscribeToNotifications();   
+        //this.subscribeToNotifications();   
+        this._notificationsService.getAll().subscribe();
         this._userService.user$.subscribe((data)=>this.User=data)
         this._notificationsService.notifications$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -49,12 +51,16 @@ export class NotificationsComponent implements OnInit, OnDestroy
                 this._calculateUnreadCount();
                 this._changeDetectorRef.markForCheck();
             });
+            this._notificationsService.PushSubscriber$.subscribe((data)=>{this.PushSubscriber = data
+            console.log(data);   
+            });      
     }
     subscribeToNotifications() {
       this.swPush.requestSubscription({
             serverPublicKey: this.VAPID_PUBLIC_KEY
         })
         .then(sub => {
+            console.log(sub);
            const data = {idUser:this.User.id,Subscription:sub}
             this.sub = sub;  
             console.log("Notification Subscription: ", sub);

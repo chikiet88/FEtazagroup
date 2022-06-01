@@ -1,7 +1,7 @@
 <!-- Notifications toggle -->
 <button
     mat-icon-button
-    (click)="openPanel();subscribeToNotifications()"
+    (click)="openPanel();"
     #notificationsOrigin>
     <ng-container *ngIf="unreadCount > 0">
         <span class="absolute top-0 right-0 left-0 flex items-center justify-center h-3">
@@ -29,8 +29,17 @@
                         [svgIcon]="'heroicons_solid:x'"></mat-icon>
                 </button>
             </div>
-            <div class="text-lg font-medium leading-10">Thông Báo</div>
-            <div class="ml-auto">
+            <div>           
+            <span class="material-icons" *ngIf="!sub" (click)="subscribeToNotifications()">
+                notifications_off
+                </span>
+            <span class="material-icons" *ngIf="sub">
+                notifications_active
+            </span>
+        </div>
+
+            <div class="text-lg font-medium leading-10 mx-2">Thông Báo</div>
+            <div class="ml-auto flex flex-row space-x-2 items-center">
                 <button
                     mat-icon-button
                     [matTooltip]="'Đã đọc tất cả'"
