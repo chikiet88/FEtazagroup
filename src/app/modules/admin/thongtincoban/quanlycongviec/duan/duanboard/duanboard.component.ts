@@ -128,6 +128,11 @@ export class DuanboardComponent implements OnInit {
         this._quanlycongviecService.changeTask(card);
         this._quanlycongviecComponent.matDrawer.toggle();     
      }
+     ChangeTask(item,type,value)
+     {      
+       item[type] = value;
+       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
+     }
      DeleteCard(item)
      {
          console.log(item);

@@ -43,6 +43,7 @@ import { DuantimelineComponent } from './duan/duantimeline/duantimeline.componen
 import { TainguyenComponent } from './duan/tainguyen/tainguyen.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { TooltipModule } from 'ng2-tooltip-directive';
 const quanlycongviecRoutes: Route[] = [
   {
     path: '',
@@ -86,6 +87,7 @@ const quanlycongviecRoutes: Route[] = [
 @NgModule({
   declarations: [QuanlycongviecComponent, TongquanComponent, MuctieuComponent, DauviecComponent, DuanComponent, ChitietComponent, DetailComponent, DialogComponent, BoardComponent, AddcardComponent, AddlistComponent, ListComponent, TimelineComponent, AddgroupComponent, AddtaskComponent, DuanboardComponent, DuanaddcardComponent, DuanaddlistComponent, DuantimelineComponent, TainguyenComponent],
   imports: [
+    TooltipModule,
     NgApexchartsModule,
     NgxDropzoneModule,
     GoogleChartsModule,

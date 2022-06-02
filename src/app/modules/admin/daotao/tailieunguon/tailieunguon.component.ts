@@ -17,6 +17,8 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { UserService } from 'app/core/user/user.service';
 import { NotifierService } from 'angular-notifier';
+import { MyUploadAdapter } from '../MyUploadAdapter';
+import { SharedService } from 'app/shared/shared.service';
 @Component({
     selector: 'app-tailieunguon',
     templateUrl: './tailieunguon.component.html',
@@ -33,6 +35,9 @@ export class TailieunguonComponent implements OnInit {
     filedetail: any;
     public Editor = ClassicEditor;
     public onReady(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return new MyUploadAdapter(loader, this.uploadService,this.sharedService);
+        };
         editor.ui
             .getEditableElement()
             .parentElement.insertBefore(
@@ -81,6 +86,7 @@ export class TailieunguonComponent implements OnInit {
         private _nhanvienService: NhanvienService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _notifierService: NotifierService,
+        private sharedService : SharedService,
         
     ) {     
           this._userService.user$

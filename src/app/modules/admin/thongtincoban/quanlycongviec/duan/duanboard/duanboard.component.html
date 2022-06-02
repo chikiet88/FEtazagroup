@@ -76,7 +76,7 @@
                                             </span>
                                             Hoàn Thành</button>
                                     </mat-menu>
-                                        <div class="w-full text-ellipsis">
+                                        <div class="w-full text-ellipsis overflow-hidden">
                                             <textarea matInput cdkTextareaAutosize class="w-full"
                                                 [value]="card.Tieude"
                                                 (keydown.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>

@@ -16,8 +16,6 @@ import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-//  const vitri = require('app/v1json/vitri.json');
-//  const bophan = require('app/v1json/bophan.json');
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -51,9 +49,13 @@ export class ListComponent implements OnInit, OnDestroy
     Congty: object;
     Bophan: object;
     Vitri: object;
+    filterdVitri: any;
     Chinhanh: object;
     Role:any;
     Trangthai:any;
+    triggerOrigin :any;
+    isOpenVitri = false;
+    SelectVitri: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -83,7 +85,7 @@ export class ListComponent implements OnInit, OnDestroy
              this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
              this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
              this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
-             this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+             this.Vitri = this.filterdVitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
              this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
             this._changeDetectorRef.markForCheck();
         });
@@ -238,6 +240,24 @@ export class ListComponent implements OnInit, OnDestroy
     {
          this._nhanviensService.createNhanvien().subscribe(() => {});
     }
+    toggleVitri(trigger: any,item) {
+        this.SelectVitri = item
+        this.triggerOrigin = trigger;
+        this.isOpenVitri = !this.isOpenVitri
+      }
+    ChonVitri(item,id) {
+        item.profile.Vitri = id;
+        this._nhanviensService.updateNhanvien(item.id,item).subscribe();
+        this.isOpenVitri =false;
+        this.filterdVitri = this.Vitri;
+      }
+      filterVitri(event): void
+      {
+        const value = event.target.value.toLowerCase();
+        this.filterdVitri = Object.fromEntries(Object.entries(this.Vitri).filter(([key, v]) => v.toLowerCase().includes(value)) )
+        console.log(this.filterdVitri);
+             
+      }    
     trackByFn(index: number, item: any): any
     {
         return item.id || index;

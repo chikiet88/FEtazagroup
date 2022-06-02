@@ -8,6 +8,7 @@ import { UserService } from 'app/core/user/user.service';
 import { SharedService } from 'app/shared/shared.service';
 import { catchError, forkJoin, Observable, of, takeUntil, throwError } from 'rxjs';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { QuanlycongviecService } from './quanlycongviec.service';
 
 @Injectable({
@@ -18,6 +19,7 @@ export class QuanlycongviecResolver implements Resolve<boolean> {
     private _quanlycongviecService: QuanlycongviecService,
     private _nhanvienServiceService: NhanvienService,
     private _sharedService: SharedService,
+    private _cauhinhService: CauhinhService,
     ){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
@@ -28,6 +30,7 @@ export class QuanlycongviecResolver implements Resolve<boolean> {
       this._quanlycongviecService.getAllDuans(),
       this._quanlycongviecService.getAllSection(),
       this._nhanvienServiceService.getNhanviens(),
+      this._cauhinhService.getCauhinhs(),
     ]);
   }
 }

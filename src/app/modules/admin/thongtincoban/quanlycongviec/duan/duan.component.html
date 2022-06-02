@@ -4,38 +4,60 @@
       <div class="my-auto" (click)="MenuToggle()">
         <span class="material-icons">
           dashboard
-          </span>
-       </div>
-       <div class="py-4 text-2xl font-bold m-auto">Các Dự Án</div>
-    </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-3"> 
-  <div class="flex items-center">
-     <div class="flex flex-col items-center justify-center rounded-lg cursor-pointer border-2 border-gray-300 border-dashed hover:bg-hover transition-colors duration-150 ease-in-out" (click)="CreateDuan()">
-        <mat-icon
-            class="icon-size-18 text-hint"
-            [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-            
-    </div>
-      <div class="min-w-0 ml-4">
-        <div class="font-medium leading-5 truncate">Thêm Dự Án Mới</div>
+        </span>
       </div>
+      <div class="py-4 text-2xl font-bold m-auto">Các Dự Án</div>
     </div>
-        <div *ngFor="let item of Duans" class="flex items-center relative">
-         <div class="flex flex-row space-x-4 items-center cursor-pointer" [routerLink]="['./',item.id]">
-          <div class="flex flex-0 items-center justify-center w-20 h-20 overflow-hidden border-dashed border-2"><img
-            class="object-cover w-full h-full ng-star-inserted"
-            src="assets/images/logo/logo300.png">
+    <!-- <div class=" grid grid-cols-1 md:grid-cols-3 gap-10 mt-3">  -->
+    <div class="flex flex-col space-y-4">
+      <div class="flex items-center">
+        <div
+          class="flex flex-col items-center justify-center rounded-lg cursor-pointer border-2 border-gray-300 border-dashed hover:bg-hover transition-colors duration-150 ease-in-out"
+          (click)="CreateDuan()">
+          <mat-icon class="icon-size-18 text-hint" [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+
         </div>
         <div class="min-w-0 ml-4">
-          <div class="font-medium leading-5 text-ellipsis overflow-hidden mb-3">{{item.Tieude}}</div>
-          <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
-        </div>
-         </div>
-
-
-          <span class="material-icons text-xl text-red-500 absolute -right-2 -top-2" (click)="RemoveDuan(item)"> remove_circle </span>
+          <div class="font-medium leading-5 truncate">Thêm Dự Án Mới</div>
         </div>
       </div>
+      <div *ngFor="let item of Duans" class="flex items-center relative">
+        <div class="flex flex-row justify-between space-x-4 items-center w-full border-l-4 border-red-500">
+          <div class="flex flex-row space-x-2 items-center relative">
+            <div class="flex flex-0 items-center justify-center w-20 h-20 overflow-hidden border-dashed border-2 cursor-pointer"
+              [routerLink]="['./',item.id]"><img class="object-cover w-full h-full ng-star-inserted"
+                src="assets/images/logo/logo300.png">
+            </div>
+            <div class="flex flex-col items-start space-y-2">
+              <div class="font-medium leading-5 text-ellipsis overflow-hidden mb-3">{{item.Tieude}}</div>
+              <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
+              <div class="p-2 text-hint relative">
+                  <span class="material-icons" *ngIf="item.Thamgia.length==0">
+                    people
+                  </span>
+                  <span class="material-icons" [tooltip]="HtmlContent" contentType="template" *ngIf="item.Thamgia.length!=0">
+                    people
+                  </span>
+                  <ng-template #HtmlContent>
+                    <div *ngFor="let item1 of item.Thamgia; let i = index" class="text-left">
+                      {{i+1}}.{{item1|findbyid:Nhanviens:'name'}} 
+                      ({{Vitri[(item1|findbyid:Nhanviens:'profile').Vitri]}})
+                    </div>
+                  </ng-template>
+                  <span class="absolute top-0 right-0 flex items-center justify-center flex-shrink-0 w-4 h-4 rounded-full  text-indigo-50 text-xs font-medium" [ngClass]="{'bg-blue-500': item.Thamgia.length!=0,'bg-red-500': item.Thamgia.length==0}"> {{item.Thamgia.length}} </span>                  
+              </div>
+            </div>
+            <span class="material-icons absolute -left-5 -top-2 rounded-xl bg-white" [ngClass]="{'text-yellow-500': item.Noibat}" (click)="UpdateDuan(item,'Noibat',!item.Noibat)">star</span>
+          </div>
+
+
+
+        </div>
+        <span class="material-icons text-xl text-red-500 absolute -right-2 -top-2" (click)="RemoveDuan(item)">
+          remove_circle </span>
+          <mat-divider></mat-divider>
+      </div>
+    </div>
   </div>
 
 </div>

@@ -10,6 +10,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { QuanlycongviecService } from '../../quanlycongviec.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { QuanlycongviecComponent } from '../../quanlycongviec.component';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
+import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -46,6 +49,12 @@ export class DetailComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject();
   view:any ;
   listview:any;
+  Phongban:any;
+  Khoi:any;
+  Congty:any;
+  Bophan:any;
+  Vitri:any;
+  Chinhanh:any;
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -56,6 +65,8 @@ export class DetailComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
     private _quanlycongviecComponent: QuanlycongviecComponent,
+    private _cauhinhService: CauhinhService,
+    private _notificationsService: NotificationsService,
     
   ) {
     this._userService.user$
@@ -71,7 +82,7 @@ export class DetailComponent implements OnInit {
     this.pjid = this._activatedRoute.snapshot.paramMap.get('id');   
     this._quanlycongviecService.duan$.subscribe((data) => {
       this.Duan = data;
-      this.selectedIndex = data.selectedIndex;
+      this.view = data.selectedIndex;
       this._quanlycongviecService.sections$.subscribe((data) => {
         this.Sections = this.filteredSections = data.filter(v=>v.pjid == this.Duan.id);
         this._changeDetectorRef.markForCheck();
@@ -97,6 +108,19 @@ export class DetailComponent implements OnInit {
         this.Grouptasks = data
         this._changeDetectorRef.markForCheck();
       })
+      this._cauhinhService.Cauhinhs$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data: Cauhinh[]) => {
+        console.log(data);
+           this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+           this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+           this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+           this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+           this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+           this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+          this._changeDetectorRef.markForCheck();
+      });
+
   }
 
   ngOnInit(): void {
@@ -109,7 +133,6 @@ export class DetailComponent implements OnInit {
       {id:4,title:"Dashboard",value:'pie_chart',tooltip:'Dashboard'},
       {id:5,title:"Tin Nhắn",value:'question_answer',tooltip:'Tin Nhắn'},
     ]
-    this.view = 1;
   }
   ChangeStatusDuan(status) {
     this.Duan.Trangthai = status;
@@ -120,6 +143,9 @@ export class DetailComponent implements OnInit {
   chosenView(view)
   {
     this.view = view;
+    this.Duan.selectedIndex = view;
+    delete this.Duan.sections;
+    this._quanlycongviecService.UpdateDuans(this.Duan,this.Duan.id).subscribe();
   }
   changeEditorToolbar(displayValue)
   {
@@ -140,6 +166,7 @@ export class DetailComponent implements OnInit {
   toggleThanhvien(trigger: any) {
     this.triggerOrigin = trigger;
     this.ThanhvienisOpen = !this.ThanhvienisOpen
+    this.filterNhanviens = this.Nhanviens
   }
   UpdateTask(item,type, value) {   
     item[type] = value;
@@ -184,9 +211,19 @@ export class DetailComponent implements OnInit {
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
   }
   AddMang(item, type, value) {   
-     item[type].push(value);
+    item[type].push(value);
+    delete item.sections;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
-    this.ngOnInit();
+    const notifi = {
+      idFrom:  this.CUser.id,
+      idTo: value,
+      Tieude: "Thêm Vào Dự Án",
+      Noidung: this.Duan.Tieude,
+      Lienket: `${this._router.url}`,
+    };
+    this._notificationsService.create(notifi).subscribe();
+    this.isOpen =false
+    //this.ngOnInit();
   }
   RemoveMang(item, type, value) {   
     item[type]= item[type].filter(v=>v!=value);

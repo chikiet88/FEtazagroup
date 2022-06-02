@@ -5,6 +5,8 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { Subject, takeUntil } from 'rxjs';
 import { QuanlycongviecComponent } from '../quanlycongviec.component';
 import { QuanlycongviecService } from '../quanlycongviec.service';
@@ -27,6 +29,13 @@ export class DuanComponent implements OnInit {
   CUser: any;
   Uutiens:any[]=[];
   Duans:any[]=[];
+  Nhanviens:any[]=[];
+  Phongban:any;
+  Khoi:any;
+  Congty:any;
+  Bophan:any;
+  Vitri:any;
+  Chinhanh:any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -35,9 +44,10 @@ export class DuanComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _notifierService: NotifierService,
     private _userService: UserService,
-    private _nhanvienServiceService: NhanvienService,
     private _quanlycongviecComponent: QuanlycongviecComponent,
     private _fuseConfirmationService: FuseConfirmationService,
+    private _cauhinhService: CauhinhService,
+    private _nhanvienService: NhanvienService,
     public dialog: MatDialog
   ) { 
     this._userService.user$
@@ -48,9 +58,29 @@ export class DuanComponent implements OnInit {
     }); 
     this._quanlycongviecService.duans$.subscribe((data) => {
       this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
+      this.Duans.sort((a, b) => b.Noibat - a.Noibat);
       console.log(data);
       this._changeDetectorRef.markForCheck();
     })
+    this._nhanvienService.nhanviens$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((nhanvien) => {
+        console.log(nhanvien);
+        this.Nhanviens = nhanvien;          
+        this._changeDetectorRef.markForCheck();
+      });
+    this._cauhinhService.Cauhinhs$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data: Cauhinh[]) => {
+      console.log(data);
+         this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+         this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+         this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+         this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+         this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+         this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+        this._changeDetectorRef.markForCheck();
+    });
   }
 
   ngOnInit(): void {
@@ -84,5 +114,10 @@ export class DuanComponent implements OnInit {
   MenuToggle()
   {
      this._quanlycongviecComponent.matDrawerMenu.toggle();
+  }
+  UpdateDuan(item, type, value) {      
+    item[type] = value;
+    delete item.sections
+    this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
   }
 }

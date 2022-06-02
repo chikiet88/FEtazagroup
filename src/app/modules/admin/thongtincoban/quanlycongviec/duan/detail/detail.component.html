@@ -59,29 +59,27 @@
               <ng-container>
                 <div class="flex items-center">
                   <div class="relative">
-                    <span class="material-icons">
+                    <span class="material-icons" *ngIf="Duan.Thamgia.length==0">
                       people
-                      </span>
+                    </span>
+                    <span class="material-icons" [tooltip]="HtmlContent" contentType="template" *ngIf="Duan.Thamgia.length!=0">
+                      people
+                    </span>
                       <div class="-top-2 -right-2 p-2 absolute flex flex-0 items-center justify-center w-3 h-3 rounded-full ring ring-offset-1 ring-bg-card bg-red-500 ring-offset-transparent bg-gray-200 text-white">
                         <div class="text-md font-semibold">
                           {{ Duan.Thamgia.length }}
-                        </div>
-                    </div>     
-                  </div>
 
-                  <!-- <ng-container *ngFor="let member of Duan.Thamgia.slice(0, 3)">
-                    <img
-                      class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover"
-                      [src]="'assets/images/logo/logo300.png'" matTooltip="{{member|findbyid:Nhanviens:'name'}}"
-                      matTooltipClass="example-tooltip-red">
-                  </ng-container>
-                  <ng-container *ngIf="Duan.Thamgia.length > 3">
-                                <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
-                                    <div class="text-md font-semibold">
-                                        +{{ Duan.Thamgia.slice(3).length }}
-                                    </div>
-                                </div>
-                     </ng-container> -->
+                        </div>
+                    </div>  
+                    
+                    <ng-template #HtmlContent>
+                      <div *ngFor="let item1 of Duan.Thamgia; let i = index" class="text-left">
+                        {{i+1}}.{{item1|findbyid:Nhanviens:'name'}} 
+                        ({{Vitri[(item1|findbyid:Nhanviens:'profile').Vitri]}})
+                      </div>
+                    </ng-template>
+
+                  </div>
                 </div>
               </ng-container>
             </div>  
@@ -140,6 +138,7 @@
                 </div>
                 <div class="min-w-0 ml-4">
                   <div class="font-medium leading-5 truncate">{{item|findbyid:Nhanviens:'name'}}</div>
+                  <div class="font-medium text-hint truncate">{{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}}</div>
                 </div>
                 <div class="absolute -top-2 -right-2" (click)="RemoveMang(Duan,'Thamgia',item)"
                   *ngIf="Duan.idTao == CUser.id">
@@ -159,61 +158,6 @@
       <app-duanboard *ngIf="view==2" class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden ng-star-inserted"></app-duanboard>
       <app-duantimeline *ngIf="view==3"></app-duantimeline>
    </div>
-
-
-
-
-    
-    <!-- <div class="flex flex-col w-full p-4 text-center">
-          <div class="py-2">
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle value="bold">10 Dự Án</mat-button-toggle>
-              <mat-button-toggle value="italic">20 Đầu Việc Hoàn Thành</mat-button-toggle>
-              <mat-button-toggle value="underline">5 Người Tham Gia</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-    
-        </div> -->
-    <!-- <div class="grid grid-cols-2 gap-4 w-full">
-          <fuse-card class="flex flex-col w-full p-4">
-            <div class="flex justify-between">
-            <div class="py-2 text-center flex flex-auto items-center">
-              <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden">
-                <img class="w-full h-full object-cover" src="favicon-32x32.png">
-              </div>
-              <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div>
-            </div>
-            <button mat-button class="bg-blue-100" [routerLink]="['./dauviec']">Tất Cả</button>
-          </div>
-            <div class="py-2">
-              <mat-tab-group>
-                <mat-tab label="Đang làm "> Đang làm </mat-tab>
-                <mat-tab label="Hoàn Thành"> Hoàn Thành </mat-tab>
-                <mat-tab label="Quá Hạn"> Quá Hạn </mat-tab>
-              </mat-tab-group>
-            </div>
-          </fuse-card>
-          <fuse-card class="flex flex-col w-full p-4">
-            <div class="text-xl font-bold"> Dự Án</div>
-            <div class="grid grid-cols-2 gap-4 py-2">
-              <div class="flex flex-row gap-2">
-              <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden" [routerLink]="['./duan']">
-                <span class="material-icons m-auto">
-                  add
-                  </span>
-              </div>
-              <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
-            </div>
-            <div class="flex flex-row gap-2">
-              <div class="mx-4 flex w-10 text-center rounded h-10 border-dotted border overflow-hidden">
-                <img class="w-full h-full object-cover" src="favicon-32x32.png">
-              </div>
-              <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div> 
-            </div>
-            </div>
-          </fuse-card>
-    
-        </div> -->
 
   </div>
 </div>
@@ -247,7 +191,7 @@
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
   [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="ThanhvienisOpen"
   (detach)="ThanhvienisOpen = false" (backdropClick)="ThanhvienisOpen = false">
-  <div class="w-60 rounded border shadow-md bg-card m-3">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
     <div class="flex items-center m-3 mr-2">
       <div class="flex items-center">
         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
@@ -261,7 +205,7 @@
         <div class="py-2 space-y-2">
           <ng-container *ngFor="let item of filterNhanviens|Unique:Duan.Thamgia:'id'">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
-              <div class="ml-1">{{item.name}}</div>
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span> <span class="text-sm text-hint" *ngIf="item.profile.Vitri">({{Vitri[item.profile.Vitri]}})</span></div>
             </div>
           </ng-container>
         </div>
