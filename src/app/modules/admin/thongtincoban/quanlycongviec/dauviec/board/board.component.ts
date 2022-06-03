@@ -69,7 +69,6 @@ export class BoardComponent implements OnInit {
     ngOnInit(): void
      {
         this._quanlycongviecService.grouptasks$.subscribe((data) => {
-            console.log(data);   
           this.Grouptasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
@@ -85,15 +84,13 @@ export class BoardComponent implements OnInit {
           this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id ||v.Thuchien==this.CUser.id)
           this._changeDetectorRef.markForCheck();
         })
-        this._quanlycongviecService.duans$.subscribe((data) => {
+        this._quanlycongviecService.duans$.subscribe((data) => {           
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.boards$.subscribe((data)=>
         {        
-            this.Boards =  data.filter(v=>v.idTao ==this.CUser.id || v.tasks.some(v1=>v1.idTao==this.CUser.id ||v1.Thuchien==this.CUser.id)) 
-            console.log(this.Boards);
-            
+            this.Boards =  data.filter(v=>v.idTao ==this.CUser.id || v.tasks.some(v1=>v1.idTao==this.CUser.id ||v1.Thuchien==this.CUser.id))             
         })
          this.listTitleForm = this._formBuilder.group({
              title: ['']
@@ -116,7 +113,8 @@ export class BoardComponent implements OnInit {
      ChangeTask(item,type,value)
      {      
        item[type] = value;
-       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
+       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();       
+       this._notifierService.notify('success', 'Cập Nhật Thành Công');
      }
      DeleteCard(item)
      {

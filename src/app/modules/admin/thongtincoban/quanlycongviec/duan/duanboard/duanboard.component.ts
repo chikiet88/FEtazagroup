@@ -131,7 +131,8 @@ export class DuanboardComponent implements OnInit {
      ChangeTask(item,type,value)
      {      
        item[type] = value;
-       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();
+       this._quanlycongviecService.UpdateTasks(item,item.id).subscribe();    
+       this._notifierService.notify('success', 'Cập Nhật Thành Công');
      }
      DeleteCard(item)
      {
@@ -184,6 +185,8 @@ export class DuanboardComponent implements OnInit {
          list.Tieude = element.value = newTitle.trim();
          delete list.tasks;
          this._quanlycongviecService.UpdateSection(list,list.id).subscribe();
+         this._notifierService.notify('success', 'Cập Nhật Thành Công');
+
      }
      deleteGroup(item): void
      {

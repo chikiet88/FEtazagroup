@@ -14,14 +14,20 @@
       <div>
         <h2 class="text-2xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate"> Cập Nhật</h2>
       </div>
+      <div class="flex flex-row space-x-4">
+        <span class="material-icons text-green-500" (click)="UpdateTask()">save</span>
+        <span class="material-icons text-red-500" (click)="DeleteTask()">delete_forever</span>
+      <!-- <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
+      <button mat-button class="bg-red-500 text-white" (click)="DeleteTask()">Xóa</button> -->
       <span class="material-icons pr-4" (click)="matDrawer.toggle()">
         cancel
       </span>
+      </div>
     </div>
     <div class="flex flex-col flex-auto p-4 space-y-3 overflow-y-auto scroll" *ngIf="CurretTask">
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Tiêu Đề </div>
-        <input [value]="CurretTask.Tieude" matInput (change)="ChangeTask(CurretTask,'Tieude',$event.target.value)">
+        <input [value]="CurretTask.Tieude" matInput (keydown.enter)="ChangeTask(CurretTask,'Tieude',$event.target.value)">
       </div>
       <div class="flex flex-col space-y-4">
         <div class="my-auto font-bold w-1/4"> Mô Tả </div>
@@ -63,7 +69,7 @@
       </div>
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Dự Án </div>
-        <div class="flex">
+        <div class="flex flex-row space-x-2 items-center">
           <button cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleDuan(trigger,CurretTask)">
             <div
               class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
@@ -76,8 +82,10 @@
                 </ng-container>
               </span>
             </div>
-
           </button>
+          <span class="material-icons text-red-500" (click)="RemoveDuan()">
+            cancel
+            </span>
         </div>
       </div>
       <div class="flex flex-row space-x-4">
@@ -87,8 +95,8 @@
             <span class="material-icons">
               account_circle
               </span>
-              <ng-container *ngIf="CurretTask.Thuchien">
-                <span> {{CurretTask.Thuchien|findbyid:Nhanvien:'name'}} </span>   
+              <ng-container *ngIf="CurretTask.Thuchien">  
+                <div class="flex flex-row space-x-2"><span>{{CurretTask.Thuchien|findbyid:Nhanviens:'name'}}</span> <span class="text-sm text-hint">({{Vitri[(CurretTask.Thuchien|findbyid:Nhanviens:'profile').Vitri]}})</span></div>
               </ng-container>
               <ng-container *ngIf="!CurretTask.Thuchien">
                <span>Chưa Chọn</span>
@@ -96,7 +104,7 @@
           </div>
           <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleGroup(trigger,CurretTask)">
             <span class="material-icons">
-              folder
+              assignment_turned_in
               </span>
               <ng-container *ngIf="CurretTask.gid">
                 <span>{{(CurretTask.gid|findbyid:Groups:'Tieude')}}</span>   
@@ -247,7 +255,7 @@
           <ng-container *ngFor="let item of filteredNhanvien">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" matRipple
               (click)="ChonThuchien(SelectDuan,item.id)">
-              <div class="ml-1">{{item.name}}</div>
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span> <span class="text-sm text-hint" *ngIf="item.profile.Vitri">({{Vitri[item.profile.Vitri]}})</span></div>
             </div>
           </ng-container>
         </div>

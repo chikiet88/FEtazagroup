@@ -79,7 +79,7 @@
                                         <div class="w-full text-ellipsis overflow-hidden">
                                             <textarea matInput cdkTextareaAutosize class="w-full"
                                                 [value]="card.Tieude"
-                                                (keydown.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
+                                                (keydown.control.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
                                         </div>
                                         <div
                                             class="group-hover:flex hidden flex-row justify-between items-center space-x-2">
@@ -96,8 +96,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex flex-row items-center space-x-5" (click)="OpenEdit(card)">
-                                    <span class="material-icons text-lg" [matTooltip]="card.Thuchien" *ngIf="card.Thuchien">
+               <div class="flex flex-row items-center space-x-5 text-hint" (click)="OpenEdit(card)">
+                                    <span class="material-icons text-lg" [matTooltip]="card.Thuchien|findbyid:Nhanviens:'name'" *ngIf="card.Thuchien">
                                             account_circle
                                          </span>
                                     <ng-container *ngIf="card.Batdau && card.Ketthuc">
@@ -105,7 +105,7 @@
                                                 <span class="material-icons text-base mx-2">
                                                     schedule
                                                     </span>
-                                                    <span class="text-lg">
+                                                    <span class="text-md">
                                                         {{card.Batdau |
                                                             date:'dd/MM/yyyy'}} -
                                                             {{card.Ketthuc | date:'dd/MM/yyyy'}}
@@ -113,10 +113,10 @@
                                                 </div>     
                                     </ng-container>
                                     <div class="flex items-center mx-3">
-                                    <span class="material-icons text-lg -ml-2">
+                                    <span class="material-icons text-md -ml-2">
                                         message
                                      </span>
-                                        <span class="text-lg">1</span>
+                                        <span class="text-md">1</span>
                                     </div>
                                     </div>     
                                 </a>

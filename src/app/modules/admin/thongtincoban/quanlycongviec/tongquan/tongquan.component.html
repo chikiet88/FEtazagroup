@@ -16,14 +16,63 @@
       <fuse-card class="flex flex-col w-full p-4 col-span-2 md:col-span-1">
         <div class="flex justify-between">
         <div class="py-2 text-center flex flex-auto items-center">
-          <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden">
+          <div class="mx-4 flex-0 w-16 h-16 rounded-full overflow-hidden hidden lg:flex">
             <img class="w-full h-full object-cover" src="assets/images/logo/logo300.png">
           </div>
           <div class="text-lg leading-4 font-bold">Công Việc Ưu Tiên</div>
         </div>
-        <button mat-button class="bg-blue-100" [routerLink]="['./dauviec']">Tất Cả</button>
+        <button mat-button class="bg-blue-100" [routerLink]="['../dauviec']">Tất Cả ({{Tasks.length}})</button>
       </div>
       <div class="py-2">
+        <mat-button-toggle-group (change)="FilterTask($event.value)" value="0">
+          <mat-button-toggle value="0" matTooltip="Task Mới">
+            <div class="flex flex-row space-x-2 items-center">
+              <span class="material-icons text-blue-500">new_releases</span> 
+              <span class="hidden lg:block">Task Mới</span>
+              <span>({{(Tasks|Filter:'Trangthai':'':0).length}})</span>
+            </div>
+          </mat-button-toggle>
+          <mat-button-toggle value="1" matTooltip="Đang Làm">
+            <div class="flex flex-row space-x-2 items-center">
+              <span class="material-icons text-yellow-500">hourglass_full</span> 
+              <span class="hidden lg:block">Đang Làm</span>
+              <span>({{(Tasks|Filter:'Trangthai':'':1).length}})</span>
+            </div>
+          </mat-button-toggle>
+          <mat-button-toggle value="2" matTooltip="Hoàn Thành">
+            <div class="flex flex-row space-x-2 items-center">
+              <span class="material-icons text-green-500">check_circle</span> 
+              <span class="hidden lg:block">Hoàn Thành</span>
+              <span>({{(Tasks|Filter:'Trangthai':'':2).length}})</span>
+            </div>
+          </mat-button-toggle>
+          <!-- <mat-button-toggle value="1">Đang Làm ({{(Tasks|Filter:'Trangthai':'':1).length}})</mat-button-toggle>
+          <mat-button-toggle value="2">Hoàn Thành ({{(Tasks|Filter:'Trangthai':'':2).length}})</mat-button-toggle> -->
+        </mat-button-toggle-group>
+        <mat-list class="max-h-80 overflow-y-auto scroll">
+          <mat-list-item *ngFor="let item of filterTasks" class="border-b-2 flex space-x-2"> 
+            <ng-container *ngIf="item.Trangthai==0">
+              <span class="material-icons text-xl mr-2 text-blue-500">
+                new_releases
+                </span>  {{item.Tieude}} 
+            </ng-container>
+            <ng-container *ngIf="item.Trangthai==1">
+              <span class="material-icons text-xl mr-2 text-yellow-500">
+                check_circle_outline
+                </span>  {{item.Tieude}} 
+            </ng-container>
+            <ng-container *ngIf="item.Trangthai==2">
+              <span class="material-icons text-xl mr-2 text-green-500">
+                check_circle
+                </span>  {{item.Tieude}} 
+            </ng-container>
+
+
+
+          </mat-list-item>
+         </mat-list>
+
+<!-- 
           <mat-tab-group>
             <mat-tab label="Đang làm ({{Danglam.length}})"> 
                <mat-list>
@@ -55,7 +104,7 @@
                  </span></div>
 
              </mat-list></mat-tab>
-          </mat-tab-group>
+          </mat-tab-group> -->
         </div>
       </fuse-card>
       <fuse-card class="flex flex-col w-full p-4 col-span-2 md:col-span-1">
@@ -68,14 +117,56 @@
               </div>
           </div>
           </div>
-         <div class="mr-auto"> <button mat-button class="bg-blue-100" [routerLink]="['../duan']">Tất Cả</button></div>
+         <div class="mr-auto">
+           <button mat-button class="bg-blue-100" [routerLink]="['../duan']">Tất Cả</button></div>
         </div>
-        <div class="grid grid-cols-2 gap-4 py-2">
+        <div *ngFor="let item of Duans.slice(0, 4)" class="flex items-center relative mt-4" [routerLink]="['../duan',item.id]">
+          <div class="flex flex-row justify-between space-x-4 items-center w-full border-l-4 border-red-500">
+            <div class="flex flex-row space-x-2 items-center relative">
+              <div class="flex flex-0 items-center justify-center w-20 h-20 overflow-hidden border-dashed border-2 cursor-pointer"
+                [routerLink]="['../duan',item.id]"><img class="object-cover w-full h-full ng-star-inserted"
+                  src="assets/images/logo/logo300.png">
+              </div>
+              <div class="flex flex-col items-start space-y-2">
+                <div class="font-medium leading-5 text-ellipsis overflow-hidden mb-3">{{item.Tieude}}</div>
+                <div class="leading-5 truncate text-secondary line-clamp-1" [innerHTML]="item.Mota"></div>
+                <div class="p-2 text-hint relative">
+                    <span class="material-icons" *ngIf="item.Thamgia.length==0">
+                      people
+                    </span>
+                    <span class="material-icons" [tooltip]="HtmlContent" contentType="template" *ngIf="item.Thamgia.length!=0">
+                      people
+                    </span>
+                    <ng-template #HtmlContent>
+                      <div *ngFor="let item1 of item.Thamgia; let i = index" class="text-left">
+                        {{i+1}}.{{item1|findbyid:Nhanviens:'name'}} 
+                        ({{Vitri[(item1|findbyid:Nhanviens:'profile').Vitri]}})
+                      </div>
+                    </ng-template>
+                    <span class="absolute top-0 right-0 flex items-center justify-center flex-shrink-0 w-4 h-4 rounded-full  text-indigo-50 text-xs font-medium" [ngClass]="{'bg-blue-500': item.Thamgia.length!=0,'bg-red-500': item.Thamgia.length==0}"> {{item.Thamgia.length}} </span>                  
+                </div>
+              </div>
+              <span class="material-icons absolute -left-5 -top-2 rounded-xl bg-white" [ngClass]="{'text-yellow-500': item.Noibat}">star</span>
+            </div>
+  
+  
+  
+          </div>
+            <mat-divider></mat-divider>
+        </div>
+
+
+        <!-- <div class="grid grid-cols-2 gap-4 py-2">
+
+
         <div class="flex flex-row gap-2 cursor-pointer" *ngFor="let item of Duans.slice(0, 6)" [routerLink]="['../duan',item.id]">
             <img class="w-20 h-20 object-cover" src="assets/images/logo/logo300.png">
           <div class="text-lg leading-4 font-bold my-auto truncate">{{item.Tieude}}</div> 
         </div>
-        </div>
+
+
+
+        </div> -->
       </fuse-card>
       <fuse-card class="flex flex-col w-full p-4 col-span-2">
         <div class="py-2 flex flex-row space-x-4">

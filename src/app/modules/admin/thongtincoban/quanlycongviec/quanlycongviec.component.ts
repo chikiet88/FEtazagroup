@@ -9,6 +9,9 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
 import { Router } from '@angular/router';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { Cauhinh } from '../../cauhinh/cauhinh.types';
+import { CauhinhService } from '../../cauhinh/cauhinh.service';
 @Component({
   selector: 'app-quanlycongviec',
   templateUrl: './quanlycongviec.component.html',
@@ -36,7 +39,6 @@ export class QuanlycongviecComponent implements OnInit {
   isOpenGroup = false;
   filteredDuans: any[];
   filteredSections: any[];
-  Nhanvien: any[];
   filteredNhanvien: any[];
   CUser: any;
   Uutiens:any[];
@@ -44,8 +46,15 @@ export class QuanlycongviecComponent implements OnInit {
   Groups:any[];
   GroupbyUser:any[];
   Sections:any[];
+  Nhanviens:any[]=[];
   triggerOrigin :any;
   Duansections :any;
+  Phongban:any;
+  Khoi:any;
+  Congty:any;
+  Bophan:any;
+  Vitri:any;
+  Chinhanh:any;
   private _unsubscribeAll: Subject<any> = new Subject();
   constructor(
     private _quanlycongviecService: QuanlycongviecService,
@@ -54,6 +63,8 @@ export class QuanlycongviecComponent implements OnInit {
     private _NhanvienService: NhanvienService,
     private _NotificationsService: NotificationsService,
     private _router:Router,
+    private _fuseConfirmationService: FuseConfirmationService,
+    private _cauhinhService: CauhinhService,
     ) { 
       this._userService.user$
       .pipe(takeUntil(this._unsubscribeAll))
@@ -64,10 +75,20 @@ export class QuanlycongviecComponent implements OnInit {
       this._NhanvienService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((nhanvien) => {
-        console.log(nhanvien);
-        this.Nhanvien = nhanvien;          
+        this.Nhanviens = nhanvien;          
         this.filteredNhanvien = nhanvien; 
         this._changeDetectorRef.markForCheck();
+      });
+      this._cauhinhService.Cauhinhs$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data: Cauhinh[]) => {
+           this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
+           this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
+           this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
+           this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
+           this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+           this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
+          this._changeDetectorRef.markForCheck();
       });
     }
 
@@ -98,6 +119,11 @@ export class QuanlycongviecComponent implements OnInit {
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.isOpenDuan =false;
   }
+  RemoveDuan(item) {
+    item.sid = "";
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+    this.isOpenGroup =false;
+  }
   ChonGroup(item,id) {
     item.gid = id;
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
@@ -126,12 +152,12 @@ export class QuanlycongviecComponent implements OnInit {
     item.gid ='';
     this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
     this.isOpenThuchien =false;
-    this.filteredNhanvien = this.Nhanvien;
+    this.filteredNhanvien = this.Nhanviens;
   }
   filterThanvien(event): void
   {
     const value = event.target.value.toLowerCase();
-    this.filteredNhanvien = this.Nhanvien.filter(v => v.name.toLowerCase().includes(value));
+    this.filteredNhanvien = this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
   }
   toggleGroup(trigger: any,item) {
     this.SelectDuan = item
@@ -142,14 +168,13 @@ export class QuanlycongviecComponent implements OnInit {
   {
     item.Batdau = StartValue;
     item.Ketthuc = EndValue;
-    this.CurretTask = item;
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
   }
   ChangeTask(item,type,value)
   {
     console.log(item,type,value);
-    
     item[type] = value;
-    this.CurretTask = item;
+    this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
   }
 
   UpdateTask()
@@ -159,8 +184,23 @@ export class QuanlycongviecComponent implements OnInit {
   }
   DeleteTask()
   {
-    this._quanlycongviecService.DeleteTasks(this.CurretTask.id).subscribe();
-    this.matDrawer.toggle();
+    const confirmation = this._fuseConfirmationService.open({
+      title  : 'Xóa Đầu Việc',
+      message: 'Bạn Có Chắc Chắn Xóa Đầu Việc Này',
+      actions: {
+          confirm: {
+              label: 'Xóa'
+          }
+      }
+  });
+  confirmation.afterClosed().subscribe((result) => {
+      if ( result === 'confirmed' )
+      {
+        this._quanlycongviecService.DeleteTasks(this.CurretTask.id).subscribe();
+        this.matDrawer.toggle();
+      }
+  });
+
   }
   UpdateEditor(item, type,{editor}: ChangeEvent ) {   
     item[type] = editor.getData();

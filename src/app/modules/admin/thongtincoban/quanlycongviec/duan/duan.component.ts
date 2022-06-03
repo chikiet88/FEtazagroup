@@ -57,22 +57,19 @@ export class DuanComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
     this._quanlycongviecService.duans$.subscribe((data) => {
-      this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
+      this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id || v.Thamgia.some(v1=>v1==this.CUser.id))
       this.Duans.sort((a, b) => b.Noibat - a.Noibat);
-      console.log(data);
       this._changeDetectorRef.markForCheck();
     })
     this._nhanvienService.nhanviens$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((nhanvien) => {
-        console.log(nhanvien);
         this.Nhanviens = nhanvien;          
         this._changeDetectorRef.markForCheck();
       });
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data: Cauhinh[]) => {
-      console.log(data);
          this.Phongban = data.find(v=>v.id =="1eb67802-1257-4cc9-b5f6-5ebc3c3e8e4d").detail;
          this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
          this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;

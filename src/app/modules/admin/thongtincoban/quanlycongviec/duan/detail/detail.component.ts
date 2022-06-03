@@ -208,7 +208,9 @@ export class DetailComponent implements OnInit {
   }
   UpdateDuan(item, type, value) {      
     item[type] = value;
+    delete item.sections;
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    this._notifierService.notify('success', 'Cập Nhật Thành Công');
   }
   AddMang(item, type, value) {   
     item[type].push(value);
@@ -233,6 +235,7 @@ export class DetailComponent implements OnInit {
   UpdateEditorDuan(item, type,{editor}: ChangeEvent ) {   
     item[type] = editor.getData();
     this._quanlycongviecService.UpdateDuans(item, item.id).subscribe();
+    this._notifierService.notify('success', 'Cập Nhật Thành Công');
   }
   EditTasks(event, item) {
     item.Tieude = event.target.value;
