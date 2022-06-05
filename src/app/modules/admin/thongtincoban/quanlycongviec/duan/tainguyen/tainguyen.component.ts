@@ -42,7 +42,6 @@ export class TainguyenComponent implements OnInit {
     )
   }
   onSelect(event) {
-
     event.addedFiles.forEach((v,k) => {
       setTimeout(() => {
         this.uploadAndProgress(v)
@@ -57,15 +56,16 @@ export class TainguyenComponent implements OnInit {
     console.log(file)
     var formData = new FormData();
     formData.append('file', file)
-    this._httpClient.post(`${environment.ApiURL}/upload/file`, formData, { reportProgress: true, observe: 'events' })
-      .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-          this.percentDone = Math.round(100 * event.loaded / event.total);
-        } else if (event instanceof HttpResponse) {
-          this.uploadSuccess = true;
-          const upload = { idTao:this.CUser.id,uuid: this.CurentDuan.id, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
-          this._sharedService.CreateUpload(upload).subscribe();
-        }
-      })
+    this._sharedService.UploadFile(formData,this.CUser,this.CurentDuan.id);
+    // this._httpClient.post(`${environment.ApiURL}/upload/file`, formData, { reportProgress: true, observe: 'events' })
+    //   .subscribe(event => {
+    //     if (event.type === HttpEventType.UploadProgress) {
+    //       this.percentDone = Math.round(100 * event.loaded / event.total);
+    //     } else if (event instanceof HttpResponse) {
+    //       this.uploadSuccess = true;
+    //       const upload = { idTao:this.CUser.id,uuid: this.CurentDuan.id, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
+    //       this._sharedService.CreateUpload(upload).subscribe();
+    //     }
+    //   })
   }
 }

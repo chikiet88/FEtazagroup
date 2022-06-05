@@ -13,12 +13,13 @@ import { Files } from './tailieunguon.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { clone } from 'lodash';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
+import { ChangeEvent, CKEditorComponent } from '@ckeditor/ckeditor5-angular';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { UserService } from 'app/core/user/user.service';
 import { NotifierService } from 'angular-notifier';
-//import { MyUploadAdapter } from '../MyUploadAdapter';
+import { MyUploadAdapter } from '../MyUploadAdapter';
 import { SharedService } from 'app/shared/shared.service';
+import { environment } from 'environments/environment';
 @Component({
     selector: 'app-tailieunguon',
     templateUrl: './tailieunguon.component.html',
@@ -33,11 +34,16 @@ export class TailieunguonComponent implements OnInit {
     dataList: FormGroup;
     files: any;
     filedetail: any;
+    filesTailieu: any;
+    public Tailieu = {
+        Noidung:'',
+        Ghichu:''
+    }
     public Editor = ClassicEditor;
     public onReady(editor) {
-        // editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-        //     return new MyUploadAdapter(loader, this.uploadService,this.sharedService);
-        // };
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return new MyUploadAdapter(loader, this.uploadService,this.sharedService);
+        };
         editor.ui
             .getEditableElement()
             .parentElement.insertBefore(
@@ -143,14 +149,14 @@ export class TailieunguonComponent implements OnInit {
             pid: 0,
         });
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe();
-        this._notifierService.notify('sucess', 'Tạo Mới Thành Công');
+        this._notifierService.notify('success', 'Tạo Mới Thành Công');
     }
 
     addFolderChild(node) {
         const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id,Module:2,idTao:this.CUser };
         console.log(this.treeControl.dataNodes); 
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
-            this._notifierService.notify('sucess', 'Tạo MớiThành Công');
+            this._notifierService.notify('success', 'Tạo MớiThành Công');
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -183,11 +189,11 @@ export class TailieunguonComponent implements OnInit {
             x = this.files.find((v) => v.id == x.pid);
         }
         this._cauhinhService.UpdateDanhmuc(olddata).subscribe();    
-        this._notifierService.notify('sucess', 'Cập Nhật Thành Công'); 
+        this._notifierService.notify('success', 'Cập Nhật Thành Công'); 
     }
     removefolder(data) {
         this._cauhinhService.Deletedanhmuc(data.id).subscribe(res => {
-            this._notifierService.notify('sucess', 'Xóa Thành Công');
+            this._notifierService.notify('success', 'Xóa Thành Công');
             let x = this.files.find((v) => v.id == data.pid);
             while (x) {
                 this.treeControl.expand(
@@ -200,18 +206,23 @@ export class TailieunguonComponent implements OnInit {
     
     getFileDetail(data) {
         this.CurrentTailieu = clone(data);
+        this.LoadTailieu(data.id);
         delete this.CurrentTailieu.Type
         delete this.CurrentTailieu.children
         delete this.CurrentTailieu.expandable
         delete this.CurrentTailieu.level
         delete this.CurrentTailieu.pid
-        console.log(data);
+        this.Tailieu.Noidung = this.CurrentTailieu.Noidung
+        this.Tailieu.Ghichu = this.CurrentTailieu.Ghichu
     }
     ChangeValue(field, value) {
         this.CurrentTailieu[field] = value;
     }
     ChangeEditorValue(field,{editor}: ChangeEvent ) {   
+        if(editor.getData()!=undefined)
+        {
         this.CurrentTailieu[field] =editor.getData();
+        }
     }
     toggleTacgia(trigger: any) {
         this.triggerOrigin = trigger;
@@ -240,7 +251,7 @@ export class TailieunguonComponent implements OnInit {
             idTao:this.CUser.id
         }
         this._tailieunguonService.CreateTailieunguon(tailieunguon).subscribe((data) => {
-            this._notifierService.notify('sucess', 'Tạo Mới Thành Công');
+            this._notifierService.notify('success', 'Tạo Mới Thành Công');
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -259,7 +270,7 @@ export class TailieunguonComponent implements OnInit {
     UpdateTailieu() {
     console.log(this.CurrentTailieu); 
     this._tailieunguonService.UpdateTailieunguon(this.CurrentTailieu).subscribe();
-    this._notifierService.notify('sucess', 'Cập Nhật Thành Công');
+    this._notifierService.notify('success', 'Cập Nhật Thành Công');
     }
     ChonTacgia(id) {
         this.CurrentTailieu.Tacgia.push(id);
@@ -279,11 +290,13 @@ export class TailieunguonComponent implements OnInit {
         //this.ngOnInit();
       }
     deleteFileDetail() {
-        // this._tailieunguonService
-        //     .deleteFileDetail(this.filedetail.id)
-        //     .subscribe();
-        // this.deleteFile = true;
-        // this.ngOnInit();
+        console.log(this.CurrentTailieu);
+        this._tailieunguonService.DeleteTailieunguon(this.CurrentTailieu.id).subscribe((data)=>
+        {
+            this.CurrentTailieu={};
+
+        });
+        this._notifierService.notify('success', 'Xóa Thành Công');
     }
     selectFile(event: any): void {
         this.selectedFiles = event.target.files;
@@ -308,4 +321,42 @@ export class TailieunguonComponent implements OnInit {
         // this.dataSource.data = this.nest(this._tree.value);
         // console.log(this.dataSource.data);
     
+        LoadTailieu(idTL)
+        {    
+          this.sharedService.uploads$.subscribe((data) => {     
+          console.log(data);
+          data.forEach(v => {
+            v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;     
+          });
+          this.filesTailieu = data.filter(v=>v.uuid == this.CurrentTailieu.id);
+        }
+        )
+      
+        }
+        onSelect(event) {
+          event.addedFiles.forEach((v,k) => {
+            setTimeout(() => {
+              this.uploadAndProgress(v)
+            }, k*100);
+          });
+        }
+        onRemove(item) {
+          this.sharedService.deletePath(item.Lienket).subscribe();
+          this.sharedService.DeleteUpload(item.id).subscribe();
+        }
+        uploadAndProgress(file) {
+          var formData = new FormData();
+          formData.append('file', file)    
+          this.sharedService.UploadFile(formData,this.CUser,this.CurrentTailieu.id);
+          // this._httpClient.post(`${environment.ApiURL}/upload/file`, formData, { reportProgress: true, observe: 'events' })
+          //   .subscribe(event => {
+          //     if (event.type === HttpEventType.UploadProgress) {
+          //       this.percentDone = Math.round(100 * event.loaded / event.total);
+          //     } else if (event instanceof HttpResponse) {
+          //       this.uploadSuccess = true;
+          //       const upload = {idTao:this.CUser.id, uuid: this.idTailieu, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
+          //       this._sharedService.CreateUpload(upload).subscribe();
+          //     }
+          //   })
+        }       
 }

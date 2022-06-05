@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, filter, map, Observable, switchMap, take, tap } from 'rxjs';
@@ -57,6 +57,22 @@ export class SharedService {
             return response;
       })
     );
+  }
+
+  UploadFile(formData,User,UUid)
+  {
+    this._httpClient.post(`${environment.ApiURL}/upload/file`, formData, { reportProgress: true, observe: 'events' })
+    .subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        console.log(Math.round(100 * event.loaded / event.total));
+      } else if (event instanceof HttpResponse) {
+        
+        const upload = { idTao:User.id,uuid: UUid, Tieude: event.body['originalname'], Lienket: event.body['filename'], Exten:event.body['originalname'].split('.').pop()};
+        this.CreateUpload(upload).subscribe((data)=>
+         {return data}
+        );
+      }
+    })
   }
   CreateUpload(upload): Observable<any> {
     return this.uploads$.pipe(

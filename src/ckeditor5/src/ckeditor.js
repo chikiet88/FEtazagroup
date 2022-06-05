@@ -75,19 +75,15 @@ Editor.defaultConfig = {
 			'bulletedList',
 			'numberedList',
 			'|',
-			'outdent',
-			'indent',
-			'|',
-			'imageUpload',
 			'blockQuote',
 			'insertTable',
-			'mediaEmbed',
 			'undo',
 			'redo',
-			'CKFinder',
-			'sourceEditing',
+			'|',
+			'mediaEmbed',
 			'imageInsert',
-
+			'sourceEditing',
+			'SimpleUploadAdapter'
 		]
 	},
 	language: 'en',

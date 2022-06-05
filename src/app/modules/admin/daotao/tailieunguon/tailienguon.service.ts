@@ -51,7 +51,7 @@ export class TailienguonService {
           })
       );
   }
-    CreateTailieunguon(data) {
+  CreateTailieunguon(data) {
       return this.tailieunguons$.pipe(
           take(1),
           switchMap((tailieunguons) =>
@@ -79,6 +79,19 @@ export class TailienguonService {
               )
           )
       );
+  }
+  DeleteTailieunguon(id): Observable<any> {
+    return this.tailieunguons$.pipe(
+        take(1),
+        switchMap(tailieunguons => this.http.delete(`${environment.ApiURL}/tailieunguon/${id}`).pipe(
+            map((isDeleted: boolean) => {
+                const index = tailieunguons.findIndex(item => item.id === id);
+                tailieunguons.splice(index, 1);
+                this._tailieunguons.next(tailieunguons);
+                return isDeleted;
+            })
+        ))
+    );
   }
 // updateFile(data) {
 //     return this.files$.pipe(
