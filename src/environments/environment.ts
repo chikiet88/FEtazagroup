@@ -9,13 +9,13 @@ export const environment = {
     //ApiURL:'http://192.168.1.55:3000',
    // ApiURL1:'https://tazagroup.vn/api/index.php/v1/users?page[limit]=*',
     googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
-    // characters: {
-    //   spreadsheetId: '1BhjD2orAIKfUc_juGHiA3RovXwEMaSS0qZhYYtlQag8',
-    //   worksheetName: 'Import',
-    // },
     characters: {
       spreadsheetId: '1Ax1KCdj0z10zG8jEPCmbXLmqvNy0WSxRq8etAk7yn4o',
       worksheetName: 'Realtime',
+    },
+    taza2021: {
+      spreadsheetId: '1BhjD2orAIKfUc_juGHiA3RovXwEMaSS0qZhYYtlQag8',
+      worksheetName: 'Import1',
     },
     khtimona: {
       spreadsheetId: '1j2P9KMtZiyuEMwtPROf3kIGVCGwcZL3MW7H6fEx1fJU',

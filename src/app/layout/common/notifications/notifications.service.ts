@@ -71,6 +71,8 @@ export class NotificationsService
     }
     delete(id: string): Observable<boolean>
     {
+        console.log(id);
+        
         return this.notifications$.pipe(
             take(1),
             switchMap(notifications => this._httpClient.delete<boolean>(`${environment.ApiURL}/notification/${id}`).pipe(

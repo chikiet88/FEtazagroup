@@ -142,6 +142,8 @@ getDanhmucByModule(module): Observable<any> {
     );
 }
 CreateDanhmuc(danhmuc): Observable<any> {
+    console.log(danhmuc);
+    
     return this.danhmucs$.pipe(
         take(1),
         switchMap(danhmucs => this._httpClient.post(`${environment.ApiURL}/danhmuc`, danhmuc).pipe(

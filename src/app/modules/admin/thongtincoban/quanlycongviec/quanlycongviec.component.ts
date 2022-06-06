@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
+import { MyUploadAdapter } from '../../daotao/MyUploadAdapter';
+import { FileUploadService } from '../../daotao/services/file-upload.service';
+import { SharedService } from 'app/shared/shared.service';
 @Component({
   selector: 'app-quanlycongviec',
   templateUrl: './quanlycongviec.component.html',
@@ -19,9 +22,29 @@ import { CauhinhService } from '../../cauhinh/cauhinh.service';
 })
 export class QuanlycongviecComponent implements OnInit {
   public Editor = Editor;
+  public onReady(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+          return new MyUploadAdapter(loader, this._uploadService,this._sharedService);
+      };
+      editor.ui
+          .getEditableElement()
+          .parentElement.insertBefore(
+              editor.ui.view.toolbar.element,
+              editor.ui.getEditableElement()
+          );
+  }
   public config = {
-    placeholder: 'Vui lòng nhập nội dung',
-    height:'100px'
+       placeholder: 'Vui lòng nhập nội dung',
+       height:'100px',
+      htmlSupport: {
+          allow: [
+              {
+                  name: /.*/,
+                  attributes: true,
+                  classes: true,
+              },
+          ],
+      },
   };
 
   @ViewChild('matDrawer', {static: false}) matDrawer: MatDrawer;
@@ -65,6 +88,9 @@ export class QuanlycongviecComponent implements OnInit {
     private _router:Router,
     private _fuseConfirmationService: FuseConfirmationService,
     private _cauhinhService: CauhinhService,
+
+    private _uploadService: FileUploadService,
+    private _sharedService : SharedService,
     ) { 
       this._userService.user$
       .pipe(takeUntil(this._unsubscribeAll))

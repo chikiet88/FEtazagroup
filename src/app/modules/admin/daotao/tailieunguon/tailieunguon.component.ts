@@ -42,7 +42,7 @@ export class TailieunguonComponent implements OnInit {
     public Editor = ClassicEditor;
     public onReady(editor) {
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return new MyUploadAdapter(loader, this.uploadService,this.sharedService);
+            return new MyUploadAdapter(loader, this._uploadService,this._sharedService);
         };
         editor.ui
             .getEditableElement()
@@ -86,13 +86,13 @@ export class TailieunguonComponent implements OnInit {
     constructor(
         private _tailieunguonService: TailienguonService,
         private fb: FormBuilder,
-        private uploadService: FileUploadService,
+        private _uploadService: FileUploadService,
         private _cauhinhService: CauhinhService,
         private _userService: UserService,
         private _nhanvienService: NhanvienService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _notifierService: NotifierService,
-        private sharedService : SharedService,
+        private _sharedService : SharedService,
         
     ) {     
           this._userService.user$
@@ -142,7 +142,7 @@ export class TailieunguonComponent implements OnInit {
     hasChild = (_: number, node: any) => node.expandable;
 
     addFolder() {
-        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0',Module:2,idTao:this.CUser };
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: '0',Module:2,idTao:this.CUser.id };
         this.folderList = this.fb.group({
             Tieude: ['New Folder'],
             Type: ['folder'],
@@ -153,10 +153,9 @@ export class TailieunguonComponent implements OnInit {
     }
 
     addFolderChild(node) {
-        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id,Module:2,idTao:this.CUser };
+        const danhmuc = { Tieude: 'Danh Mục Mới', Type: 'folder', pid: node.id,Module:2,idTao:this.CUser.id };
         console.log(this.treeControl.dataNodes); 
         this._cauhinhService.CreateDanhmuc(danhmuc).subscribe((res) => {
-            this._notifierService.notify('success', 'Tạo MớiThành Công');
             this.treeControl.expand(
                 this.treeControl.dataNodes.find((v) => v.id == node.id)
             );
@@ -168,6 +167,7 @@ export class TailieunguonComponent implements OnInit {
                 x = this.files.find((v) => v.id == x.pid);
             }
         });
+        this._notifierService.notify('success', 'Tạo MớiThành Công');
     }
     updateFile(data, e) {
         data.Tieude = e.target.value;
@@ -323,7 +323,7 @@ export class TailieunguonComponent implements OnInit {
     
         LoadTailieu(idTL)
         {    
-          this.sharedService.uploads$.subscribe((data) => {     
+          this._sharedService.uploads$.subscribe((data) => {     
           console.log(data);
           data.forEach(v => {
             v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;     
@@ -341,13 +341,13 @@ export class TailieunguonComponent implements OnInit {
           });
         }
         onRemove(item) {
-          this.sharedService.deletePath(item.Lienket).subscribe();
-          this.sharedService.DeleteUpload(item.id).subscribe();
+          this._sharedService.deletePath(item.Lienket).subscribe();
+          this._sharedService.DeleteUpload(item.id).subscribe();
         }
         uploadAndProgress(file) {
           var formData = new FormData();
           formData.append('file', file)    
-          this.sharedService.UploadFile(formData,this.CUser,this.CurrentTailieu.id);
+          this._sharedService.UploadFile(formData,this.CUser,this.CurrentTailieu.id);
           // this._httpClient.post(`${environment.ApiURL}/upload/file`, formData, { reportProgress: true, observe: 'events' })
           //   .subscribe(event => {
           //     if (event.type === HttpEventType.UploadProgress) {

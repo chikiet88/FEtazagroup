@@ -183,8 +183,10 @@ import { KhachhangsService } from '../khachhangs.service';
           this.DataServer = Khachhang.filter(v => new Date(v.NgayTaoDV) >= BD && new Date(v.NgayTaoDV) <= KT);
         }
       })
+    // this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
+    //   environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
     this.Khachhang$ = this.googleSheetsDbService.get<Khachhang>(
-      environment.characters.spreadsheetId, environment.characters.worksheetName, KhachhangMapping);
+      environment.taza2021.spreadsheetId, environment.taza2021.worksheetName, KhachhangMapping);
     this.Khachhang$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Khachhang: Khachhang[]) => {
