@@ -12,27 +12,33 @@ import { SharedModule } from 'app/shared/shared.module';
 import { MaterialExampleModule } from 'material.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { QuanlyadsComponent } from './quanlyads.component';
+import { TaikhoanadsComponent } from './taikhoanads/taikhoanads.component';
+import { ChiendichadsComponent } from './chiendichads/chiendichads.component';
+import { NhomquangcaoadsComponent } from './nhomquangcaoads/nhomquangcaoads.component';
+import { QuangcaoadsComponent } from './quangcaoads/quangcaoads.component';
 export const QuanlyadsRoutes: Route[] = [
   {
       path: '',
       component: QuanlyadsComponent,
-      children: [
-          { 
-            path: 'dashboard', component: DashboardComponent,
-             // resolve:{data:DaotaoResolver}
-          },
-          // { path: 'baihoc', component: BaihocComponent },
-          // { path: 'lophoc', component: LophocComponent },
-          // { path: 'cauhoi', component: CauhoiComponent },
-          // { path: 'dethi', component: DethiComponent },
-          // { path: 'kythi', component: KythiComponent },
-          // { path: 'yeucaudaotao', component: YeucaudaotaoComponent }, 
-      ],
+        children: [
+            { 
+              path: 'dashboard', component: DashboardComponent,
+              // resolve:{data:DaotaoResolver}
+            },
+            { path: 'taikhoan', component: TaikhoanadsComponent },
+            { path: 'chiendich', component: ChiendichadsComponent },
+            { path: 'nhomquangcao', component: NhomquangcaoadsComponent },
+            { path: 'quangcao', component: QuangcaoadsComponent },
+        ],
   },
 ];
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    TaikhoanadsComponent,
+    ChiendichadsComponent,
+    NhomquangcaoadsComponent,
+    QuangcaoadsComponent
   ],
   imports: [
     RouterModule.forChild(QuanlyadsRoutes),
