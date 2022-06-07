@@ -1,95 +1,138 @@
-<div class="w-full flex p-8">
-
-    <div class="w-1/2">
-        <form [formGroup]="MenuForm">
-            <div class="flex flex-col mt-4 pt-6">
-                <ng-container>
-                    <div class="columns-1 space-y-3">
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <span matPrefix>
-                                Tiêu Đề Menu
-                            </span>
-                            <input [formControlName]="'title'" matInput class="mat-select-value-text">
-                        </mat-form-field>
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <span matPrefix>
-                                ID
-                            </span>
-                            <input [formControlName]="'id'" matInput class="mat-select-value-text"
-                                placeholder="wellcome.cauhoi">
-                        </mat-form-field>
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <mat-select placeholder="Type" [formControlName]="'type'">
-                                <mat-option [value]="'aside'">Aside</mat-option>
-                                <mat-option [value]="'basic'">Basic</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <span matPrefix>
-                                Icon
-                            </span>
-                            <input [formControlName]="'icon'" matInput class="mat-select-value-text"
-                                placeholder="heroicons_outline:clipboard-check">
-                        </mat-form-field>
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <span matPrefix>
-                                Link
-                            </span>
-                            <input [formControlName]="'link'" matInput class="mat-select-value-text"
-                                placeholder="/wellcome/cauhoi">
-                        </mat-form-field>
-                        <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
-                            <mat-select placeholder="Parent" [formControlName]="'parent'">
-                                <mat-option [value]="">Root</mat-option>
-                                <mat-option [value]="item.uuid" *ngFor="let item of menus"><span class="mx-3"
-                                        *ngFor="let x of [].constructor(item.level)">-</span> {{item.title}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+<div class="w-full">
+    <mat-drawer-container class="p-6 bg-card">
+        <mat-drawer #drawer mode="over" position="end">
+            <div class="p-4">
+                <form [formGroup]="MenuForm">
+                    <div class="flex flex-col mt-4 pt-6">
+                        <ng-container>
+                            <div class="columns-1 space-y-3">
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <span matPrefix>
+                                        Tiêu Đề Menu
+                                    </span>
+                                    <input [formControlName]="'title'" matInput class="mat-select-value-text">
+                                </mat-form-field>
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <span matPrefix>
+                                        ID
+                                    </span>
+                                    <input [formControlName]="'id'" matInput class="mat-select-value-text"
+                                        placeholder="wellcome.cauhoi">
+                                </mat-form-field>
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <mat-select placeholder="Type" [formControlName]="'type'">
+                                        <mat-option [value]="'aside'">Aside</mat-option>
+                                        <mat-option [value]="'basic'">Basic</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <span matPrefix>
+                                        Icon
+                                    </span>
+                                    <input [formControlName]="'icon'" matInput class="mat-select-value-text"
+                                        placeholder="heroicons_outline:clipboard-check">
+                                </mat-form-field>
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <span matPrefix>
+                                        Link
+                                    </span>
+                                    <input [formControlName]="'link'" matInput class="mat-select-value-text"
+                                        placeholder="/wellcome/cauhoi">
+                                </mat-form-field>
+                                <mat-form-field class="fuse-mat-no-subscript fuse-mat-emphasized-affix w-full">
+                                    <mat-select placeholder="Parent" [formControlName]="'parent'">
+                                        <mat-option [value]="">Root</mat-option>
+                                        <mat-option [value]="item.uuid" *ngFor="let item of menus"><span class="mx-3"
+                                                *ngFor="let x of [].constructor(item.level)">-</span> {{item.title}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
                     </div>
-                </ng-container>
+                    <div class="flex items-center py-4">
+                        <button class="ml-auto" mat-flat-button (click)="CancelMenu()">
+                            Hủy
+                        </button>
+                        <button class="ml-2" mat-flat-button [color]="'primary'"
+                            [disabled]="MenuForm.invalid || MenuForm.disabled" (click)="CreateMenu()" *ngIf="CRUD==0">
+                            Tạo Mới
+                        </button>
+                        <button class="ml-2" mat-flat-button [color]="'primary'"
+                            [disabled]="MenuForm.invalid || MenuForm.disabled" (click)="UpdateMenu()" *ngIf="CRUD!=0">
+                            Cập Nhật
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="flex items-center py-4">
-                <button class="ml-auto" mat-flat-button (click)="CancelMenu()">
-                    Hủy
-                </button>
-                <button class="ml-2" mat-flat-button [color]="'primary'"
-                    [disabled]="MenuForm.invalid || MenuForm.disabled" (click)="CreateMenu()" *ngIf="CRUD==0">
-                    Tạo Mới
-                </button>
-                <button class="ml-2" mat-flat-button [color]="'primary'"
-                    [disabled]="MenuForm.invalid || MenuForm.disabled" (click)="UpdateMenu()" *ngIf="CRUD!=0">
-                    Cập Nhật
-                </button>
-            </div>
-        </form>
-    </div>
 
-    <div class="w-1/2 p-8">
-        <div class="flex justify-between">
-            <span class="text-center text-2xl">Danh Mục</span>
-            <!-- <button mat-button> 
-                <span class="material-icons" (click)="UpdateUserMenu()">
-                    sync
-                </span></button> -->
+        </mat-drawer>
 
-        </div>
-
-
-        <div class="mt-4 overflow-y-auto h-96">
-            <div *ngFor="let item of menus" class="p-3 flex space-x-2" [ngClass]="{'text-blue-700': item.link!=''}">
-                <div  (click)="EditMenu(item)">
-                    <span class="mx-2" *ngFor="let x of [].constructor(item.level)">-</span>
-                  </div>
-              <div>
-                <mat-slide-toggle #toggleElement class="example-margin" [checked]="item.status"
-                    (change)="Changetatus(item,$event)">
-                </mat-slide-toggle>
-                
-                  {{item.title}}
+        <div class="example-sidenav-content">
+                <div class="flex flex-auto flex-col justify-between">
+                <div class="flex flex-row space-x-2 items-center">
+                    <span class="text-center text-2xl">Danh Mục</span>
+                    <button type="button" mat-button (click)="drawer.toggle();CancelMenu()">
+                        <span class="material-icons">
+                            add_circle
+                            </span>
+                    </button>
                 </div>
-            </div>
-        </div>
-    </div>
+                    <!-- <button mat-button> 
+                    <span class="material-icons" (click)="UpdateUserMenu()">
+                        sync
+                    </span></button> -->
+                    <!-- <div class="mt-4 overflow-y-auto h-70vh p-4">
+                        <div *ngFor="let item of menus" class="p-3 flex space-x-2"
+                            [ngClass]="{'text-blue-700': item.link!=''}">
+                            <div (click)="EditMenu(item)">
+                                <span class="mx-2" *ngFor="let x of [].constructor(item.level)">-</span>
+                            </div>
+                            <div>
+                                <mat-slide-toggle #toggleElement class="example-margin" [checked]="item.status"
+                                    (change)="Changetatus(item,$event)">
+                                </mat-slide-toggle>
+                                {{item.title}}
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="mt-4 overflow-y-auto h-70vh p-4">
+                        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="space-x-2">
+                            <mat-slide-toggle #toggleElement class="example-margin" [checked]="node.status"
+                                (change)="Changetatus(node,$event)">
+                            
+                            </mat-slide-toggle>   
+                                <span (click)="EditMenu(node)" class="cursor-pointer">{{node.title}} </span>                       
+                            </mat-tree-node>
+  
+                            <!-- This is the tree node template for expandable nodes -->
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                                
 
+                                <div class="mat-tree-node">
+                                    <mat-slide-toggle #toggleElement class="example-margin" [checked]="node.status"
+                                    (change)="Changetatus(node,$event)">
+                                         </mat-slide-toggle> 
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'Toggle ' + node.title">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                  <span (click)="EditMenu(node)" class="cursor-pointer">{{node.title}}</span>
+                                </div>
+                                <!-- There is inline padding applied to this div using styles.
+                                    This padding value depends on the mat-icon-button width.  -->
+                                <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+                                    role="group">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                              </div>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                </div>
+
+        </div>
+    </mat-drawer-container>
 </div>

@@ -24,6 +24,8 @@ export class CauhoiComponent implements OnInit, OnDestroy
     Bophan: any;
     Vitri: any;
     thisUser: any;
+    Cauhois:any = [];
+    filteredCauhois:any;
     private _unsubscribeAll: Subject<any> = new Subject();
 
     constructor(
@@ -43,6 +45,7 @@ export class CauhoiComponent implements OnInit, OnDestroy
       this._cauhoiService.hotros$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((cauhois) => {
+                this.Cauhois = cauhois;
                 cauhois.forEach(v => {
                   const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
                   console.log(x);
@@ -72,7 +75,16 @@ export class CauhoiComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
+    filterByQuery(query: string): void
+    {
+        if ( !query )
+        {
+            this.filteredCauhois = this.Cauhois;
+            return;
+        }
+        this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
+        || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------

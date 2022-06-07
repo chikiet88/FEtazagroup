@@ -1,5 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDrawer } from '@angular/material/sidenav';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 import { cloneDeep } from 'lodash';
 import { Subject, takeUntil } from 'rxjs';
@@ -11,7 +14,8 @@ const FlatToNested = require('flat-to-nested');
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class MenuComponent implements OnInit {
   MenuForm:FormGroup;
@@ -26,6 +30,7 @@ export class MenuComponent implements OnInit {
   nhanviens: Nhanvien[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild("toggleElement") ref: ElementRef;
+  @ViewChild("drawer") drawer: MatDrawer;
   constructor(
     private _fb:FormBuilder,
     private _cauhinhService:CauhinhService,
@@ -33,14 +38,20 @@ export class MenuComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     ) {}
 
+   nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+      ...item,
+      children: this.nest(items, item.uuid)
+  }));
+
   ngOnInit(): void {
     this.CRUD = 0;
     this._cauhinhService.Menus$.subscribe((data)=>{ 
-        const nest = (items, id = '', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
-          ...item,
-          children: nest(items, item.uuid)
-        }));
         this.menus = data;
+        console.log(data);
+        console.log(this.nest(data));
+        this.dataSource.data = this.nest(data);
+        console.log(this.dataSource.data);
+        
       }
     )
     this.MenuForm = this._fb.group({
@@ -81,6 +92,7 @@ export class MenuComponent implements OnInit {
   }
   Changetatus(item,e) {   
       item.status = e.checked;
+      delete item.children;
        this._cauhinhService.UpdateMenu(item).subscribe(); 
       this.nhanviens.forEach(v => {
           v.Menu[item.uuid] = e.checked;
@@ -96,6 +108,7 @@ export class MenuComponent implements OnInit {
   }
   EditMenu(item)
   {
+    this.drawer.toggle();
     this.CRUD=1;
     this.MenuForm.patchValue(item);
     this.MenuForm.addControl('uuid', new FormControl(item.uuid));
@@ -113,4 +126,8 @@ export class MenuComponent implements OnInit {
     
     this.ngOnInit();
   }
+  treeControl = new NestedTreeControl<any>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<any>();
+  hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
+
 }

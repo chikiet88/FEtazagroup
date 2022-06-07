@@ -20,7 +20,7 @@ export const scrumboardRoutes: Route[] = [
         },
         children : [
             {
-                path     : 'card/:cardId',
+                path     : ':cardId',
                 component: ScrumboardCardComponent,
                 resolve  : {
                     card: ScrumboardCardResolver
