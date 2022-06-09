@@ -120,7 +120,7 @@ export class QuanlycongviecComponent implements OnInit {
 
    ngOnInit(): void {
    this._quanlycongviecService.getDuans();
-   this._quanlycongviecService.getBoards();
+   //this._quanlycongviecService.getBoards();
      this._quanlycongviecService.duans$.subscribe((data) => {
       this.Duans = this.filteredDuans = data.filter(v=>v.idTao==this.CUser.id ||v.Thamgia==this.CUser.id)
       this._changeDetectorRef.markForCheck();

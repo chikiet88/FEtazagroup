@@ -13,6 +13,9 @@ import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { cloneDeep } from 'lodash';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { ArrayDataSource } from '@angular/cdk/collections';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 export const MY_DATE_FORMATS = {
     parse: {
       dateInput: 'DD/MM/YYYY',
@@ -24,6 +27,31 @@ export const MY_DATE_FORMATS = {
       monthYearA11yLabel: 'MMMM YYYY'
     },
 };
+
+interface FoodNode {
+    name: string;
+    children?: FoodNode[];
+  }
+  
+  const TREE_DATA: FoodNode[] = [
+    {
+      name: 'Fruit',
+      children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
+    },
+    {
+      name: 'Vegetables',
+      children: [
+        {
+          name: 'Green',
+          children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+        },
+        {
+          name: 'Orange',
+          children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+        },
+      ],
+    },
+  ];
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -73,6 +101,13 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _router: Router,
     )
     {}
+    nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+      ...item,
+      children: this.nest(items, item.uuid)
+    }));
+    treeControl = new NestedTreeControl<any>(node => node.children);
+    dataSource = new MatTreeNestedDataSource<any>();
+    hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
     ngOnInit(): void
     {
        this.PQisDisabled = true;
@@ -100,6 +135,10 @@ export class DetailsComponent implements OnInit, OnDestroy
             data.forEach(v => {
                 this.PQMenu[v.uuid]=v.status;
               });
+            
+            this.dataSource.data = this.nest(data);
+             console.log(this.dataSource.data);
+
            this._changeDetectorRef.markForCheck();
        });
 
@@ -145,7 +184,9 @@ export class DetailsComponent implements OnInit, OnDestroy
         .subscribe((nhanvien: Nhanvien) => {
         this.nhanvien = nhanvien;
           this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
-          this.PQMenu= nhanvien.Menu; 
+          this.PQMenu= Object.assign(this.PQMenu, nhanvien.Menu); 
+          console.log(this.PQMenu);
+          
             this.NhanvienForm.patchValue({
                 id: nhanvien.id,
                 avatar: nhanvien.avatar,

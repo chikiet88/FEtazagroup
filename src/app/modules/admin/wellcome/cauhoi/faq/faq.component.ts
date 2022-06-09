@@ -44,7 +44,7 @@ export class FaqComponent implements OnInit {
       console.log(data);
     })
     this._cauhinhService.danhmucs$.subscribe((data) => {
-      this.Danhmucs = data;
+      this.Danhmucs = data.filter(v=>v.Module==1);
       console.log(this.Danhmucs);
       this._changeDetectorRef.markForCheck();
     })

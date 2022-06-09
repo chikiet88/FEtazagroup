@@ -44,7 +44,7 @@ export class TongquanComponent implements OnInit {
   ) {
     this._userService.user$.subscribe((data) => this.CUser = data);
     this._quanlycongviecService.getDuans(),
-    this._quanlycongviecService.getBoards(),
+    //this._quanlycongviecService.getBoards(),
     this._quanlycongviecService.duans$.subscribe((data) => 
    {
      console.log(data);

@@ -56,14 +56,14 @@ export class QuanlycongviecService {
     {
         this._task.next(task);
     }
-    getBoards() {
-        const grouptasks = this._grouptasks.value;
-        const tasks = this._tasks.value;
-        grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
-        grouptasks.sort((a, b) => a.Ordering - b.Ordering);
-        //console.log(grouptasks);
-        return this._boards.next(grouptasks);
-    }
+    // getBoards() {
+    //     const grouptasks = this._grouptasks.value;
+    //     const tasks = this._tasks.value;
+    //     grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
+    //     grouptasks.sort((a, b) => a.Ordering - b.Ordering);
+    //     //console.log(grouptasks);
+    //     return this._boards.next(grouptasks);
+    // }
     getDuanBoards() {
         const duan = this._duan.value;
         const secstions = this._sections.value.filter(v1=>v1.pjid==duan.id);
@@ -165,9 +165,8 @@ export class QuanlycongviecService {
             switchMap(grouptasks => this._httpClient.post(`${environment.ApiURL}/grouptask`, grouptask).pipe(
                 map((result) => {
                     console.log(result);
-                    
                     this._grouptasks.next([result, ...grouptasks]);
-                    this.getBoards();
+                    //this.getBoards();
                     return result;
                 })
             ))
@@ -181,7 +180,7 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks[index] = grouptask;
                     this._grouptasks.next(grouptasks);
-                    this.getBoards();
+                   // this.getBoards();
                     return grouptask;
                 }),
                 switchMap(grouptask => this.grouptask$.pipe(
@@ -203,7 +202,7 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks.splice(index, 1);
                     this._grouptasks.next(grouptasks);
-                    this.getBoards();
+                    //this.getBoards();
                     return isDeleted;
                 })
             ))
@@ -232,7 +231,7 @@ export class QuanlycongviecService {
                 map((result) => {
                     //console.log(result);
                     this._tasks.next([result, ...tasks]);
-                    this.getBoards();
+                    //this.getBoards();
                     this.getDuanBoards();
                     return result;
                 })
@@ -248,7 +247,7 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks[index] = task;
                     this._tasks.next(tasks);
-                    this.getBoards();
+                    //this.getBoards();
                     this.getDuanBoards();
                     return task;
                 }),
@@ -271,7 +270,7 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks.splice(index, 1);
                     this._tasks.next(tasks);
-                    this.getBoards();
+                    //this.getBoards();
                     this.getDuanBoards();
                     return isDeleted;
                 })
