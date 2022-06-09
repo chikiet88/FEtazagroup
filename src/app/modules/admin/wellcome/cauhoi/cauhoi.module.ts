@@ -23,6 +23,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TooltipModule } from 'ng2-tooltip-directive';
 
 import { AdminComponent } from './huongdan/admin/admin.component';
+import { CauhoidetailComponent } from './cauhoidetail/cauhoidetail.component';
 @NgModule({
     declarations: [
         CauhoiComponent,
@@ -30,7 +31,8 @@ import { AdminComponent } from './huongdan/admin/admin.component';
         HuongdanComponent,
         HotroComponent,
         CauhoiadminComponent,
-        AdminComponent
+        AdminComponent,
+        CauhoidetailComponent
     ],
     imports     : [
         TooltipModule,

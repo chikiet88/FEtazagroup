@@ -70,6 +70,7 @@ export const appRoutes: Route[] = [
                 children: [
                     { path: 'gioithieu', loadChildren: () => import('app/modules/admin/wellcome/giothieu/gioithieu.module').then(m => m.GioithieuModule) },
                     { path: 'cauhoi', loadChildren: () => import('app/modules/admin/wellcome/cauhoi/cauhoi.module').then(m => m.CauhoiModule) },
+                    { path: 'cauhoithuonggap', loadChildren: () => import('app/modules/admin/wellcome/cauhoithuonggap/cauhoithuonggap.module').then(m => m.CauhoithuonggapModule) },
 
                 ]
             },

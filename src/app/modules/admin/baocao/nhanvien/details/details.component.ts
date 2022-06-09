@@ -13,9 +13,9 @@ import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { cloneDeep } from 'lodash';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { NestedTreeControl } from '@angular/cdk/tree';
+import { FlatTreeControl, NestedTreeControl } from '@angular/cdk/tree';
 import { ArrayDataSource } from '@angular/cdk/collections';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource } from '@angular/material/tree';
 export const MY_DATE_FORMATS = {
     parse: {
       dateInput: 'DD/MM/YYYY',
@@ -105,9 +105,23 @@ export class DetailsComponent implements OnInit, OnDestroy
       ...item,
       children: this.nest(items, item.uuid)
     }));
-    treeControl = new NestedTreeControl<any>(node => node.children);
-    dataSource = new MatTreeNestedDataSource<any>();
-    hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
+
+    private transformer = (node: any, level: number) => {
+      return {
+        uuid:node.uuid,
+        expandable: !!node.children && node.children.length > 0,
+        title: node.title,
+        level: level,
+        id:node.id,
+        status:node.status
+      };
+    }
+    treeControl = new FlatTreeControl<any>(
+        node => node.level, node => node.expandable);
+    treeFlattener = new MatTreeFlattener(
+        this.transformer, node => node.level, node => node.expandable, node => node.children);
+    dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    hasChild = (_: number, node: any) => node.expandable;
     ngOnInit(): void
     {
        this.PQisDisabled = true;
@@ -134,11 +148,7 @@ export class DetailsComponent implements OnInit, OnDestroy
             this.PQMenu = {};
             data.forEach(v => {
                 this.PQMenu[v.uuid]=v.status;
-              });
-            
-            this.dataSource.data = this.nest(data);
-             console.log(this.dataSource.data);
-
+              });           
            this._changeDetectorRef.markForCheck();
        });
 
@@ -186,7 +196,7 @@ export class DetailsComponent implements OnInit, OnDestroy
           this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
           this.PQMenu= Object.assign(this.PQMenu, nhanvien.Menu); 
           console.log(this.PQMenu);
-          
+          this.dataSource.data = this.nest(this.PQMenu);
             this.NhanvienForm.patchValue({
                 id: nhanvien.id,
                 avatar: nhanvien.avatar,
@@ -224,6 +234,7 @@ export class DetailsComponent implements OnInit, OnDestroy
         this.PQisDisabled = true;
 
     }
+
     ChangeChinhanh(Chinhanh: string, isChecked: any) {
         this.PQChinhanh[Chinhanh]=isChecked.checked;
         this.NhanvienForm.get('Phanquyen').setValue(this.PQChinhanh);

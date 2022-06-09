@@ -1,0 +1,87 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Main -->
+    <div class="flex flex-col items-center p-6 sm:p-10">
+
+
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="-ml-4 sm:mt-8">
+                <a mat-button [routerLink]="['../']" [color]="'primary'">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
+                    <span class="ml-2">Trở về</span>
+                </a>
+            </div>
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Câu Hỏi Thường Gặp
+            </div>
+            <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8">
+                <input matInput [placeholder]="'Tìm Kiếm'" [placeholder]="'Tìm Kiếm'"
+                    (input)="filterByQuery(query.value)" #query>
+                <mat-icon matPrefix>
+                    <span class="material-icons">
+                        search
+                    </span>
+                </mat-icon>
+            </mat-form-field>
+        </div>
+        <ng-container>
+            <div class="flex flex-row w-full">
+                <div class="w-1/6 px-4">
+                <div
+                class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+                [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': filterStatus === 'all',
+                        'text-hint hover:bg-hover': filterStatus !== 'all'}"
+                (click)="AllDanhmuc()"
+                matRipple
+                [matRippleDisabled]="filterStatus === 'all'">
+                <mat-icon
+                    class="text-current"
+                    [svgIcon]="'heroicons_outline:archive'"></mat-icon>
+                <div class="ml-3 leading-5 select-none text-default">All</div>
+            </div>
+
+
+                    <ng-container *ngFor="let item of Danhmucs">
+                        <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+                            matRipple (click)="FilterDanhmuc(item)" [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': item.id === filterStatus,
+                        'text-hint hover:bg-hover': item.id !== filterStatus}">
+                            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:tag'"></mat-icon>
+                            <div class="ml-3 leading-5 select-none text-default">{{item.Tieude}}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="w-5/6 max-w-4xl">
+                    <mat-accordion class="mt-8">
+                        <ng-container *ngIf="filteredCauhois.length!=0; else NoCauhoi">
+                            <mat-expansion-panel *ngFor="let cauhoi of filteredCauhois; trackBy: trackByFn">
+                                <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                                    <mat-panel-title class="flex justify-between" *ngIf="cauhoi.Vitri">
+                                        <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
+                                        <div class="flex flex-row space-x-2" *ngIf="(cauhoi.Vitri|keyvalue).length-1 != (Vitri|keyvalue).length; else elseTemplate">
+                                            <!-- <button mat-button [matMenuTriggerFor]="menu" class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">{{cauhoi.Vitri.length}} Vị Trí</button> -->
+                                            <mat-menu #menu="matMenu">
+                                              <ng-container *ngFor="let item of cauhoi.Vitri">
+                                                <button mat-menu-item> {{Vitri[item]}}</button>
+                                                </ng-container>
+                                            </mat-menu>
+                                         </div>
+                                         <ng-template #elseTemplate>
+                                             <span class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">
+                                              Tất Cả
+                                              </span>
+                                           </ng-template>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div [innerHTML]="cauhoi.NoidungTraloi"></div>
+                            </mat-expansion-panel>
+                        </ng-container>
+                    </mat-accordion>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #NoCauhoi>
+            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Chưa Có Câu Hỏi</div>
+        </ng-template>
+    </div>
+
+</div>

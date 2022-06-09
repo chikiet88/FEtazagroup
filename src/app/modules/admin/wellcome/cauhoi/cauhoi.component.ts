@@ -8,6 +8,7 @@ import { HelpCenterService } from '../../apps/help-center/help-center.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { UserService } from 'app/core/user/user.service';
+import { FormControl } from '@angular/forms';
 @Component({
     selector       : 'cauhoi',
     templateUrl    : './cauhoi.component.html',
@@ -25,7 +26,7 @@ export class CauhoiComponent implements OnInit, OnDestroy
     Vitri: any;
     thisUser: any;
     Cauhois:any = [];
-    filteredCauhois:any;
+    filteredCauhois:any=[];
     private _unsubscribeAll: Subject<any> = new Subject();
 
     constructor(
@@ -47,9 +48,7 @@ export class CauhoiComponent implements OnInit, OnDestroy
             .subscribe((cauhois) => {
                 this.Cauhois = cauhois;
                 cauhois.forEach(v => {
-                  const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
-                  console.log(x);
-                  
+                  const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);                  
                    if(v.Trangthai == 3 && x!=undefined)
                    {
                        this.cauhois.push(v);
@@ -79,7 +78,7 @@ export class CauhoiComponent implements OnInit, OnDestroy
     {
         if ( !query )
         {
-            this.filteredCauhois = this.Cauhois;
+            this.filteredCauhois = [];
             return;
         }
         this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())

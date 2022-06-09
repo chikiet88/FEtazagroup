@@ -26,6 +26,9 @@ export class CauhoiadminComponent implements OnInit {
   public Editor = Editor ;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
+    link : {
+      addTargetToExternalLinks: true
+    }
   };
   displayedColumns: string[] = ['#', 'Danhmuc', 'NoidungCauhoi', 'NoidungTraloi', 'Cauhoituongtu', 'Vitri', 'idTao', 'Trangthai'];
   dataSource: MatTableDataSource<any>;
