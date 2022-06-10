@@ -38,7 +38,6 @@ export class HotroComponent implements OnInit {
   ngOnInit(): void
   { 
     this.status = true;
-
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user) => {

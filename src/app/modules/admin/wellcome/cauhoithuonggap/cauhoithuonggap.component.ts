@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from 'app/core/user/user.service';
 import { HelpCenterService } from 'app/modules/admin/apps/help-center/help-center.service';
 import { FaqCategory } from 'app/modules/admin/apps/help-center/help-center.type';
@@ -11,7 +16,6 @@ import { CauhoithuonggapService } from './cauhoithuonggap.service';
   selector: 'app-cauhoithuonggap',
   templateUrl: './cauhoithuonggap.component.html',
   styleUrls: ['./cauhoithuonggap.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class CauhoithuonggapComponent implements OnInit {
   faqCategories: FaqCategory[];
@@ -24,22 +28,30 @@ export class CauhoithuonggapComponent implements OnInit {
   Vitri: any;
   thisUser: any;
   Danhmucs: any;
+  @ViewChild('supportNgForm') supportNgForm: NgForm;
+  hotros:any;
+  supportForm: FormGroup;
+  status:boolean;
   private _unsubscribeAll: Subject<any> = new Subject();
-  filter$: BehaviorSubject<string> = new BehaviorSubject(null);
   constructor(
     private _cauhoiService: CauhoithuonggapService,
     private _cauhinhService: CauhinhService,
     private _userService: UserService,
     private _changeDetectorRef: ChangeDetectorRef,
-
+    public dialog: MatDialog,
+    private _formBuilder: FormBuilder,
     )
   {}
-  get filterStatus(): string
-  {
-      return this.filter$.value;
-  }
+  displayedColumns: string[] = ['#', 'NoidungCauhoi'];
+  dataSource: MatTableDataSource<any>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   ngOnInit(): void {
-
+    this.status = true;
+    this.supportForm = this._formBuilder.group({
+      Danhmuc  : [''],
+      NoidungCauhoi  : [''],
+  });
     this._userService.user$.subscribe((data)=>{
       this.thisUser = data;
       console.log(data);
@@ -60,6 +72,7 @@ export class CauhoithuonggapComponent implements OnInit {
          }                   
       });
       this.filteredCauhois = this.Cauhois;
+      this.dataSource = new MatTableDataSource(this.Cauhois);
     });
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -72,26 +85,47 @@ export class CauhoithuonggapComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
   }
-filterByQuery(query: string): void
-  {
-      if ( !query )
-      {
-          this.filteredCauhois = this.Cauhois;
-          return;
-      }
-      this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
-      || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+// filterByQuery(query: string): void
+//   {
+//       if ( !query )
+//       {
+//           this.filteredCauhois = this.Cauhois;
+//           return;
+//       }
+//       this.dataSource.filter = query.trim().toLowerCase();
+//       if (this.dataSource.paginator) {
+//         this.dataSource.paginator.firstPage();
+//       }
+//       this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
+//       || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
+//   }
+
+applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
+
 FilterDanhmuc(item): void
   {
-    this.filter$.next(item.id);
-    this.filteredCauhois = this.Cauhois.filter(v=>v.Danhmuc == item.id);
+    this.dataSource = new MatTableDataSource(this.Cauhois.filter(v=>v.Danhmuc == item.id));
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
-  AllDanhmuc(): void
+ AllDanhmuc(): void
   {
-    this.filter$.next('all');
-    this.filteredCauhois = this.Cauhois;
+    this.dataSource = new MatTableDataSource(this.Cauhois);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   } 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.paginator._intl.itemsPerPageLabel ="Số Lượng";
+  }
 ngOnDestroy(): void
     {
         this._unsubscribeAll.next(null);
@@ -101,4 +135,37 @@ ngOnDestroy(): void
     {
         return item.id || index;
     }
+
+ openModal(templateRef) {
+      let dialogRef = this.dialog.open(templateRef, {
+           width: '600px',
+           // data: { name: this.name, animal: this.animal }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+          // this.animal = result;
+      });
+}
+clearForm(): void
+{
+    this.status = true;
+    this.supportForm = this._formBuilder.group({
+      Danhmuc  : [''],
+      NoidungCauhoi  : [''],
+  });
+
+}
+CreateHotro(): void
+{
+    this.supportForm.addControl('Vitri', new FormControl([this.thisUser.profile.Vitri]));
+    this.supportForm.addControl('idTao', new FormControl([this.thisUser.id]))
+    const hotro = this.supportForm.getRawValue();     
+    this._cauhoiService.CreateHotro(hotro).subscribe(()=>
+      {
+          this.clearForm();
+          this.status = false;
+      }
+    )
+}
 }

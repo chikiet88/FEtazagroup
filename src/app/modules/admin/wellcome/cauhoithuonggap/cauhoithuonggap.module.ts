@@ -18,19 +18,33 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { CauhoithuonggapComponent } from './cauhoithuonggap.component';
 import { CauhoithuonggapResolver } from './cauhoithuonggap.resolver';
+import { CauhoiadminComponent } from '../cauhoi/cauhoiadmin/cauhoiadmin.component';
+import { AdmincauhoiComponent } from './admincauhoi/admincauhoi.component';
 export const cauhoiRoutes: Route[] = [
   {
       path: '',
       component: CauhoithuonggapComponent,
       resolve: {
           data: CauhoithuonggapResolver
-      }
-  }
+      },
+  },
+  {
+    path: 'cauhoiadmin', component: CauhoiadminComponent,
+    resolve: {
+        data: CauhoithuonggapResolver
+    }
+},
+  {
+    path: 'admin', component: AdmincauhoiComponent,
+    resolve: {
+        data: CauhoithuonggapResolver
+    }
+}
 ];
 
 
 @NgModule({
-  declarations: [CauhoithuonggapComponent],
+  declarations: [CauhoithuonggapComponent, AdmincauhoiComponent],
   imports: [
     TooltipModule,
     CKEditorModule,

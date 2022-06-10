@@ -2,15 +2,16 @@
     <!-- Main -->
     <mat-drawer-container class="example-container flex flex-row w-full items-center" autosize>
         <mat-drawer #drawer class="example-sidenav p-4 scroll" mode="side" opened="true">
-            <div class="scroll">
-            <div
-            class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer" (click)="AllDanhmuc()"
-            matRipple>
+     <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
+            [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': filterStatus === 'all',
+                    'text-hint hover:bg-hover': filterStatus !== 'all'}"
+            (click)="AllDanhmuc()"
+            matRipple
+            [matRippleDisabled]="filterStatus === 'all'">
                 <mat-icon
                 class="text-current"
                 [svgIcon]="'heroicons_outline:archive'"></mat-icon>
             <div class="ml-3 leading-5 select-none text-default">Tất Cả</div>
-            </div>
             </div>
 
             
@@ -23,10 +24,10 @@
                 </div>
             </ng-container>
 
-        <div class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer" matRipple [routerLink]="['admin']">
-            <span class="material-icons"> settings </span> 
-            <div class="ml-3 leading-5 select-none text-default">Admin</div>
-        </div>
+            <span class="material-icons">
+                settings
+             </span>      
+
         </mat-drawer>
       <mat-drawer-content class="w-full p-4">
         <div class="example-sidenav-content">
@@ -40,13 +41,13 @@
                      <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
                 Câu Hỏi Thường Gặp
             </div>
-            <span class="material-icons text-5xl" (click)="openModal(mytemplate)">
+            <span class="material-icons text-5xl">
                 contact_support
                 </span>
             </div>
 
             <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8 w-160 m-auto">
-                <input matInput [placeholder]="'Tìm Kiếm'" (keyup)="applyFilter($event)">
+                <input matInput [placeholder]="'Tìm Kiếm'" (change)="filterByQuery(query.value)" #query>
                 <mat-icon matPrefix>
                     <span class="material-icons">
                         search
@@ -100,9 +101,41 @@
                     <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
                   </tr>
                 </table>
-              
-                <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" itemsPerPageLabel="'Số Lượng'"></mat-paginator>
+                <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
               </div>
+
+
+
+            <mat-accordion class="mt-8">
+                <ng-container *ngIf="filteredCauhois.length!=0; else NoCauhoi">
+                    <mat-expansion-panel *ngFor="let cauhoi of filteredCauhois; trackBy: trackByFn">
+                        <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                            <mat-panel-title class="flex justify-betwee" *ngIf="cauhoi.Vitri">
+                                <div [innerHTML]="cauhoi.NoidungCauhoi"></div>
+                                <div class="flex flex-row space-x-2" *ngIf="(cauhoi.Vitri|keyvalue).length-1 != (Vitri|keyvalue).length; else elseTemplate">
+                                    <!-- <button mat-button [matMenuTriggerFor]="menu" class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">{{cauhoi.Vitri.length}} Vị Trí</button> -->
+                                    <mat-menu #menu="matMenu">
+                                      <ng-container *ngFor="let item of cauhoi.Vitri">
+                                        <button mat-menu-item> {{Vitri[item]}}</button>
+                                        </ng-container>
+                                    </mat-menu>
+                                 </div>
+                                 <ng-template #elseTemplate>
+                                     <span class="text-center p-1 m-1 rounded-full text-white bg-blue-500 dark:text-gray-300 dark:bg-gray-700">
+                                      Tất Cả
+                                      </span>
+                                   </ng-template>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div [innerHTML]="cauhoi.NoidungTraloi" class="text-blue-500"></div>
+                    </mat-expansion-panel>
+                </ng-container>
+            </mat-accordion>
+            <mat-paginator [length]="filteredCauhois.length"
+            [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            aria-label="Select page">
+                </mat-paginator>
         </div>
         </div>
     </mat-drawer-content>
@@ -189,58 +222,7 @@
             <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Chưa Có Câu Hỏi</div>
         </ng-template>
     </div> -->
+    <ng-template #NoCauhoi>
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Chưa Có Câu Hỏi</div>
+    </ng-template>
 </div>
-
-<ng-template #mytemplate>
-    <div class="w-full">
-        <form
-            class="space-y-5"
-            [formGroup]="supportForm"
-            #supportNgForm="ngForm" *ngIf="status">
-            <div class="mb-6">
-                <div class="text-2xl font-bold tracking-tight">Thông Tin</div>
-            </div>
-            <mat-form-field class="w-full">
-                <mat-label>Danh Mục</mat-label>
-                <mat-select [formControlName]="'Danhmuc'" #Danhmuc>
-                    <mat-option [value]="item.id"  *ngFor="let item of Danhmucs">{{item.Tieude}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="fuse-mat-textarea w-full">
-                <textarea
-                    matInput
-                    [formControlName]="'NoidungCauhoi'"
-                    [required]="true"
-                    [rows]="5"
-                    matTextareaAutosize></textarea>
-                <mat-label>Nội Dung Câu Hỏi</mat-label>
-                <mat-error class="py-2" *ngIf="supportForm.get('NoidungCauhoi').hasError('required')">
-                    Vui Lòng Nhập Nội Dung
-                </mat-error>
-            </mat-form-field>
-            <div class="flex items-center justify-end">
-                <button
-                    mat-button
-                    [color]="'accent'"
-                    [disabled]="supportForm.pristine || supportForm.untouched"
-                    (click)="clearForm()">
-                    Reset
-                </button>
-                <button
-                    class="ml-2"
-                    mat-flat-button
-                    [color]="'primary'"
-                    [disabled]="supportForm.pristine || supportForm.invalid"
-                    (click)="CreateHotro()">
-                    Gửi
-                </button>
-            </div>
-        </form>
-        <div class="text-center" *ngIf="!status">
-           <div class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
-               Cảm ơn bạn đã gửi câu hỏi về công ty. <br>
-               Câu hỏi của bạn sẽ được giải đáp sớm nhất.<br> Chân thành cảm ơn.</div> 
-            <button mat-raised-button [color]="'primary'" (click)="clearForm()">Gửi Thêm Câu Hỏi</button>
-        </div>
-    </div>
-</ng-template>
