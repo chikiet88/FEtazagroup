@@ -1,1 +1,34 @@
-<p>admincauhoi works!</p>
+<mat-drawer-container class="example-container flex w-full" autosize>
+    <mat-drawer #drawer class="example-sidenav w-3/4" mode="side" opened position="end">
+       <div class="p-4 flex flex-col space-y-2" *ngIf="ThisCauhoi">
+           {{ThisCauhoi|json}}
+        <div class="">Danh Mục
+        </div>
+        <div class="">
+            Nội Dung Câu Hỏi
+            <ckeditor [editor]="Editor" [config]="config" [data]="ThisCauhoi.NoidungCauhoi"></ckeditor>
+        </div>
+        <div class="">
+            Nội Dung Trả Lời
+            <ckeditor [editor]="Editor" [config]="config" [data]="ThisCauhoi.NoidungTraloi"></ckeditor>
+        </div>
+        <div class="">Câu Hỏi Tương Tự</div>
+        <div class="">Vị Trí</div>
+        <div class="">Người Tạo</div>
+        <div class="">Trạng Thái</div>
+         </div>
+    </mat-drawer>
+    <div class="example-sidenav-content overflow-auto">
+        <div class="flex flex-col space-y-2 scroll">
+            <div class="text-xl text-center text-blue-500 uppercase mt-4 font-bold">Câu Hỏi</div>
+            <div *ngFor="let item of Cauhois; let i = index" class="p-3" (click)="EditCauhoi(item);drawer.open()">
+              <div class="flex flex-row space-x-2">
+                 <span> {{i+1}}. </span>
+                <span [innerHTML]="item.NoidungCauhoi"></span>
+            </div>
+                <mat-divider></mat-divider>
+            </div>
+        </div>
+    </div>
+
+</mat-drawer-container>

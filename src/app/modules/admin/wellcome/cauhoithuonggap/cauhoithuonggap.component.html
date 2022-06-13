@@ -1,6 +1,6 @@
 <div class="flex flex-col flex-auto min-w-0">
     <!-- Main -->
-    <mat-drawer-container class="example-container flex flex-row w-full items-center" autosize>
+    <mat-drawer-container class="example-container flex flex-row w-full h-full items-center" autosize>
         <mat-drawer #drawer class="example-sidenav p-4 scroll" mode="side" opened="true">
             <div class="scroll">
             <div
@@ -66,7 +66,7 @@
                         <div class="m-auto"> Câu Hỏi</div>
                          </th>
                     <td mat-cell *matCellDef="let row"> 
-                        <mat-accordion class="mt-8 w-full">
+                        <mat-accordion class="w-full p-1">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header [collapsedHeight]="'56px'">
                                         <mat-panel-title class="flex justify-betwee" *ngIf="row.Vitri">
@@ -189,6 +189,7 @@
             <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Chưa Có Câu Hỏi</div>
         </ng-template>
     </div> -->
+
 </div>
 
 <ng-template #mytemplate>
@@ -236,11 +237,10 @@
                 </button>
             </div>
         </form>
-        <div class="text-center" *ngIf="!status">
-           <div class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">
-               Cảm ơn bạn đã gửi câu hỏi về công ty. <br>
-               Câu hỏi của bạn sẽ được giải đáp sớm nhất.<br> Chân thành cảm ơn.</div> 
-            <button mat-raised-button [color]="'primary'" (click)="clearForm()">Gửi Thêm Câu Hỏi</button>
+           <div class="flex flex-col items-center space-y-2 mt-2" *ngIf="!status">
+               <span class="text-2xl uppercase">Cảm ơn bạn đã gửi câu hỏi về công ty </span>
+               <span class="text-lg">Câu hỏi của bạn sẽ được giải đáp sớm nhất</span>
+               <button mat-raised-button [color]="'primary'" (click)="clearForm()">Gửi Thêm Câu Hỏi</button>
+               </div> 
         </div>
-    </div>
 </ng-template>
