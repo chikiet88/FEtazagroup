@@ -1,8 +1,17 @@
 <mat-drawer-container class="example-container flex w-full" autosize>
     <mat-drawer #drawer class="example-sidenav w-3/4" mode="side" opened position="end">
        <div class="p-4 flex flex-col space-y-2" *ngIf="ThisCauhoi">
-           {{ThisCauhoi|json}}
-        <div class="">Danh Mục
+           <!-- {{ThisCauhoi|json}} -->
+        <div class="">Danh Mục {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
+
+            <div class="p-4 my-auto border border-dashed w-20 h-20">
+                <button class="m-auto bg-blue-500" mat-mini-fab cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleOverlay(trigger,'Danhmuc')">
+                  <span class="material-icons">
+                    person_add
+                    </span>
+                </button>
+              </div>
+
         </div>
         <div class="">
             Nội Dung Câu Hỏi
@@ -12,16 +21,28 @@
             Nội Dung Trả Lời
             <ckeditor [editor]="Editor" [config]="config" [data]="ThisCauhoi.NoidungTraloi"></ckeditor>
         </div>
-        <div class="">Câu Hỏi Tương Tự</div>
-        <div class="">Vị Trí</div>
-        <div class="">Người Tạo</div>
-        <div class="">Trạng Thái</div>
+        <div class="">Câu Hỏi Tương Tự
+
+
+        </div>
+        <div class="">Vị Trí
+            <span *ngFor="let item of ThisCauhoi.Vitri">
+                {{Vitri[item]}}
+            </span>
+
+        </div>
+        <div class="">Người Tạo
+            {{ThisCauhoi.idTao|findbyid:Nhanviens:'name'}}
+        </div>
+        <div class="">Trạng Thái
+            {{ThisCauhoi.Trangthai}}
+        </div>
          </div>
     </mat-drawer>
     <div class="example-sidenav-content overflow-auto">
         <div class="flex flex-col space-y-2 scroll">
             <div class="text-xl text-center text-blue-500 uppercase mt-4 font-bold">Câu Hỏi</div>
-            <div *ngFor="let item of Cauhois; let i = index" class="p-3" (click)="EditCauhoi(item);drawer.open()">
+            <div *ngFor="let item of Cauhois; let i = index" class="p-3 cursor-pointer" (click)="EditCauhoi(item);drawer.open()">
               <div class="flex flex-row space-x-2">
                  <span> {{i+1}}. </span>
                 <span [innerHTML]="item.NoidungCauhoi"></span>
@@ -32,3 +53,29 @@
     </div>
 
 </mat-drawer-container>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="triggerType['Danhmuc']"
+  (detach)="triggerType['Danhmuc'] = false" (backdropClick)="triggerType['Danhmuc'] = false">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterThanvien($event)">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filterNhanviens|Unique:Duan.Thamgia:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span> <span class="text-sm text-hint" *ngIf="item.profile.Vitri">({{Vitri[item.profile.Vitri]}})</span></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

@@ -57,6 +57,8 @@ export class AdmincauhoiComponent implements OnInit {
   Danhmucs: any;
   filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
+  triggerOrigin:any;
+  triggerType:any[];
   @ViewChild('TenDanhmuc') TenDanhmuc:ElementRef;
   @ViewChild('allSelected') private allSelected: MatOption;
   private _unsubscribeAll: Subject<any> = new Subject();
@@ -72,6 +74,7 @@ export class AdmincauhoiComponent implements OnInit {
     private _viewContainerRef: ViewContainerRef
   ) { }
   ngOnInit(): void {
+    this.triggerType = [];
     this.CRUD = 0;
     this.isAddDM = false;
     this.Title = "Thêm Mới";
@@ -101,6 +104,7 @@ export class AdmincauhoiComponent implements OnInit {
     })
     this._cauhinhService.danhmucs$.subscribe((data) => {
       this.Danhmucs = data;
+      console.log(data);
       this._changeDetectorRef.markForCheck();
     })
     this._cauhinhService.Cauhinhs$
@@ -300,5 +304,8 @@ export class AdmincauhoiComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
+  toggleOverlay(trigger: any,type) {
+    this.triggerOrigin = trigger;
+    this.triggerType[type] = !this.triggerType[type]
+  }
 }

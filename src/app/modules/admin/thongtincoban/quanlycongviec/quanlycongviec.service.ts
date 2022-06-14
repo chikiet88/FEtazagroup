@@ -103,6 +103,7 @@ export class QuanlycongviecService {
                    // console.log(sections);
                     this._sections.next([result, ...sections]);
                     this.getDuanBoards();
+                    this.getDuans();
                     return result;
                 })
             ))
@@ -117,6 +118,7 @@ export class QuanlycongviecService {
                     sections[index] = section;
                     this._sections.next(sections);
                     this.getDuanBoards();
+                    this.getDuans();
                     return section;
                 }),
                 switchMap(section => this.section$.pipe(
@@ -139,6 +141,7 @@ export class QuanlycongviecService {
                     sections.splice(index, 1);
                     this._sections.next(sections);
                     this.getDuanBoards();
+                    this.getDuans();
                     return isDeleted;
                 })
             ))
@@ -166,7 +169,8 @@ export class QuanlycongviecService {
                 map((result) => {
                     console.log(result);
                     this._grouptasks.next([result, ...grouptasks]);
-                    //this.getBoards();
+                    this.getDuanBoards();
+                    this.getDuans();
                     return result;
                 })
             ))
@@ -180,7 +184,8 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks[index] = grouptask;
                     this._grouptasks.next(grouptasks);
-                   // this.getBoards();
+                    this.getDuanBoards();
+                    this.getDuans();
                     return grouptask;
                 }),
                 switchMap(grouptask => this.grouptask$.pipe(
@@ -202,7 +207,8 @@ export class QuanlycongviecService {
                     const index = grouptasks.findIndex(item => item.id === id);
                     grouptasks.splice(index, 1);
                     this._grouptasks.next(grouptasks);
-                    //this.getBoards();
+                    this.getDuanBoards();
+                    this.getDuans();
                     return isDeleted;
                 })
             ))
@@ -219,7 +225,6 @@ export class QuanlycongviecService {
         return this._httpClient.get(`${environment.ApiURL}/tasks/user/${id}`).pipe(
             tap((response: any) => {
                 //console.log(response);
-                
                 this._tasks.next(response);
             })
         );
@@ -231,8 +236,8 @@ export class QuanlycongviecService {
                 map((result) => {
                     //console.log(result);
                     this._tasks.next([result, ...tasks]);
-                    //this.getBoards();
                     this.getDuanBoards();
+                    this.getDuans();
                     return result;
                 })
             ))
@@ -247,8 +252,8 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks[index] = task;
                     this._tasks.next(tasks);
-                    //this.getBoards();
                     this.getDuanBoards();
+                    this.getDuans();
                     return task;
                 }),
                 switchMap(task => this.task$.pipe(
@@ -270,8 +275,8 @@ export class QuanlycongviecService {
                     const index = tasks.findIndex(item => item.id === id);
                     tasks.splice(index, 1);
                     this._tasks.next(tasks);
-                    //this.getBoards();
                     this.getDuanBoards();
+                    this.getDuans();
                     return isDeleted;
                 })
             ))
