@@ -72,7 +72,9 @@ export class TestingComponent implements OnInit {
   @ViewChild('DataPag', { static: false }) DataPag: MatPaginator;
   @ViewChild('DataSort', { static: false }) DataSort: MatSort;
   UniData:any
+  url:any
   ngOnInit(): void {
+    this.url = "https://trello.com";
     this._userService.user$.subscribe((data)=>
     {
         this.user = data
@@ -112,6 +114,11 @@ export class TestingComponent implements OnInit {
       Noidung      : [''], 
       Lienket         : [''],
     })
+  }
+  SetTrelloURL(e)
+  {
+    console.log(e);
+    
   }
   CreateNoti()
   {

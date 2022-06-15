@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 @Pipe({name: 'Custom'})
 export class CustomPipe implements PipeTransform {
   transform(id:any,items: any): any {
@@ -50,5 +51,12 @@ export class FindnestedPipe implements PipeTransform {
     //   return items.find(v=>v.id == id)[result];
     // }
    
+  }
+}
+@Pipe({ name: 'safeurl' })
+export class SafePipe implements PipeTransform {
+  constructor(private domSanitizer: DomSanitizer) {}
+  transform(url) {
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

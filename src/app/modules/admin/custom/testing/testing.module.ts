@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CustomModule } from 'app/pipes/custom/custom.module';
 const testingRoutes: Route[] = [
   {
       path     : '',
@@ -32,6 +33,7 @@ const testingRoutes: Route[] = [
 @NgModule({
   declarations: [TestingComponent],
   imports: [
+    CustomModule,
     HttpClientModule,
     MaterialExampleModule,
     RouterModule.forChild(testingRoutes),
