@@ -270,7 +270,6 @@ export class AdmincauhoiComponent implements OnInit {
     this.Title = "Cập Nhật";
     this.CauhoiForm.addControl('id', new FormControl(''))
     this.CauhoiForm.patchValue(data);
-    this.matDrawer.toggle();
   }
   AddCauhoi() {
     this.CRUD = 0;

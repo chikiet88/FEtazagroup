@@ -1,6 +1,6 @@
 <mat-drawer-container class="example-container flex w-full" autosize>
-    <mat-drawer #drawer class="example-sidenav w-3/4" mode="side" opened position="end">
-       <div class="p-4 flex flex-col space-y-2" *ngIf="ThisCauhoi">
+    <mat-drawer #drawer class="example-sidenav w-3/4 p-2" mode="side" opened position="end">
+       <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2" *ngIf="ThisCauhoi">
            <!-- {{ThisCauhoi|json}} -->
         <div class="">Danh Mục {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
 
@@ -69,7 +69,7 @@
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
-          <ng-container *ngFor="let item of filterNhanviens|Unique:Duan.Thamgia:'id'">
+          <ng-container *ngFor="let item of filterNhanviens">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
               <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span> <span class="text-sm text-hint" *ngIf="item.profile.Vitri">({{Vitri[item.profile.Vitri]}})</span></div>
             </div>
