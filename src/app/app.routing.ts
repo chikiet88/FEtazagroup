@@ -79,6 +79,7 @@ export const appRoutes: Route[] = [
                     children: [
                         { path: 'hoso', loadChildren: () => import('app/modules/admin/thongtincoban/hoso/hoso.module').then(m => m.HosoModule) },
                         { path: 'quanlycongviec', loadChildren: () => import('app/modules/admin/thongtincoban/quanlycongviec/quanlycongviec.module').then(m => m.QuanlycongviecModule) },
+                        { path: 'trello', loadChildren: () => import('app/modules/admin/thongtincoban/trello/trello.module').then(m => m.TrelloModule) },
                         { path: 'lichhop', loadChildren: () => import('app/modules/admin/thongtincoban/lichhop/lichhop.module').then(m => m.LichhopModule) },
 
                     ]

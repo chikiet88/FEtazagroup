@@ -1,16 +1,12 @@
 <mat-drawer-container class="example-container flex w-full" autosize>
     <mat-drawer #drawer class="example-sidenav w-3/4 p-2" mode="side" opened position="end">
        <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2" *ngIf="ThisCauhoi">
-           <!-- {{ThisCauhoi|json}} -->
-        <div class="">Danh Mục {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
-
-            <div class="p-4 my-auto border border-dashed w-20 h-20">
-                <button class="m-auto bg-blue-500" mat-mini-fab cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleOverlay(trigger,'Danhmuc')">
-                  <span class="material-icons">
-                    person_add
-                    </span>
-                </button>
-              </div>
+           <!-- {{ThisCauhoi|json}} -->           
+        <div class="flex flex-row space-x-4 items-center">
+          <span>Danh Mục </span>
+           <span cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500" (click)="toggleOverlay(trigger,'Danhmuc')">
+                {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
+              </span>
 
         </div>
         <div class="">
@@ -29,13 +25,37 @@
             <span *ngFor="let item of ThisCauhoi.Vitri">
                 {{Vitri[item]}}
             </span>
-
+            <div class="flex flex-row space-x-4 items-center flex-wrap">
+              <span>Vị Trí </span>
+               <span cdkOverlayOrigin #trigger1="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,'Vitri')">
+                <span class="material-icons">
+                  add_circle
+                  </span>
+                  </span>
+                <span *ngFor="let item of ThisCauhoi.Vitri" class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
+                    {{Vitri[item]}}
+                </span>
+    
+            </div>
         </div>
-        <div class="">Người Tạo
-            {{ThisCauhoi.idTao|findbyid:Nhanviens:'name'}}
+        <div class="flex flex-row space-x-2 items-center">
+          <span>
+             Người Tạo :
+          </span>
+          <span class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
+            {{ThisCauhoi.idTao|findbyid:Nhanviens:'name'}}</span>
         </div>
-        <div class="">Trạng Thái
+        <div class="flex flex-row space-x-2 items-center">
+          <span>
+           Trạng Thái :
+         </span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-blue-200 dark:text-gray-100 dark:bg-gray-500"> Chưa Xem</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-yellow-200 dark:text-gray-100 dark:bg-gray-500"> Trùng Lắp</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-red-200 dark:text-gray-100 dark:bg-gray-500"> Không Phù Hợp</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-green-200 dark:text-gray-100 dark:bg-gray-500"> Xuất Bản</span>
             {{ThisCauhoi.Trangthai}}
+
+
         </div>
          </div>
     </mat-drawer>
@@ -69,9 +89,35 @@
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
-          <ng-container *ngFor="let item of filterNhanviens">
+          <ng-container *ngFor="let item of Danhmucs">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
-              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span> <span class="text-sm text-hint" *ngIf="item.profile.Vitri">({{Vitri[item.profile.Vitri]}})</span></div>
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.Tieude}}</span></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="triggerType['Vitri']"
+  (detach)="triggerType['Vitri'] = false" (backdropClick)="triggerType['Vitri'] = false">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterThanvien($event)">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of Vitri|keyvalue">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddMang(Duan,'Thamgia',item.id)">
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.value}}</span></div>
             </div>
           </ng-container>
         </div>

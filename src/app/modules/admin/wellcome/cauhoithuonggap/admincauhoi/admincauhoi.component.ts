@@ -103,7 +103,7 @@ export class AdmincauhoiComponent implements OnInit {
       this._changeDetectorRef.markForCheck();
     })
     this._cauhinhService.danhmucs$.subscribe((data) => {
-      this.Danhmucs = data;
+      this.Danhmucs = data.filter(v=>v.Module == 1);
       console.log(data);
       this._changeDetectorRef.markForCheck();
     })
@@ -304,7 +304,11 @@ export class AdmincauhoiComponent implements OnInit {
     }
   }
   toggleOverlay(trigger: any,type) {
+    console.log(trigger);
+    
     this.triggerOrigin = trigger;
     this.triggerType[type] = !this.triggerType[type]
+    console.log(this.triggerType);
+    
   }
 }
