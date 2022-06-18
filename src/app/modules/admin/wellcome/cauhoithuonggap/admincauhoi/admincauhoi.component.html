@@ -49,10 +49,10 @@
           <span>
            Trạng Thái :
          </span>
-         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-blue-200 dark:text-gray-100 dark:bg-gray-500"> Chưa Xem</span>
-         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-yellow-200 dark:text-gray-100 dark:bg-gray-500"> Trùng Lắp</span>
-         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-red-200 dark:text-gray-100 dark:bg-gray-500"> Không Phù Hợp</span>
-         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-green-200 dark:text-gray-100 dark:bg-gray-500"> Xuất Bản</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200" [ngClass]="{'text-white-800 bg-blue-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==0}"> Chưa Xem</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200" [ngClass]="{'text-white-800 bg-yellow-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==1}"> Trùng Lắp</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200" [ngClass]="{'text-white-800 bg-red-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==2}"> Không Phù Hợp</span>
+         <span class="px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200" [ngClass]="{'text-white-800 bg-green-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==3}"> Xuất Bản</span>
             {{ThisCauhoi.Trangthai}}
 
 

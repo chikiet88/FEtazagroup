@@ -9,6 +9,7 @@ export class TrelloComponent implements OnInit {
 
   constructor() { }
   url:any;
+  public showurl = false;
   ngOnInit(): void {
     this.url = "https://trello.com"
     //this.url = "https://trello.com/chikiet881/boards"

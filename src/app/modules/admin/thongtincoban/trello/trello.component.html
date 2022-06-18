@@ -1,17 +1,16 @@
 <div class="flex flex-col flex-auto">
-  <mat-form-field class="w-96 mx-auto p-2">
+  <mat-form-field class="w-96 mx-auto p-2" [ngClass]="{'hidden': showurl}">
     <input matInput placeholder="Url Trello" #Urltrello (keydown.enter)="SetUrl(Urltrello.value)">
   </mat-form-field>
   <div class="w-full h-full relative">
-    <div class="absolute -top-6">
-        <span class="material-icons">
-            expand_less
-            </span>
-  <span class="material-icons">
-                expand_more
-                </span>
+    <div class="absolute -top-6 z-50">
+      <span class="material-icons" (click)="showurl=true" [ngClass]="{'hidden': showurl,'flex': !showurl}">
+        expand_less
+      </span>
+      <span class="material-icons" (click)="showurl=false" [ngClass]="{'hidden': !showurl,'flex': showurl}">
+        expand_more
+      </span>
     </div>
     <iframe [src]="url | safeurl" class="w-full h-full"></iframe>
   </div>
 </div>
-
