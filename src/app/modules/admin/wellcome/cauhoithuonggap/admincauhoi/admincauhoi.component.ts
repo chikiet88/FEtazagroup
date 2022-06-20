@@ -15,6 +15,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { UserService } from 'app/core/user/user.service';
 import { MatOption } from '@angular/material/core';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'app-admincauhoi',
@@ -37,6 +38,7 @@ export class AdmincauhoiComponent implements OnInit {
   Congty: any;
   Bophan: any;
   Vitri: any;
+  filteredVitri: any;
   thisUser: any;
   Nhanviens: any;
   Status: any;
@@ -54,7 +56,8 @@ export class AdmincauhoiComponent implements OnInit {
   CRUD: any;
   Title:any;
   isAddDM:boolean;
-  Danhmucs: any;
+  Danhmucs: any[];
+  filteredDanhmucs: any[];
   filters: {query$: BehaviorSubject<string>} = {query$ : new BehaviorSubject('')};
   private _PanelOverlayRef: OverlayRef;
   triggerOrigin:any;
@@ -94,8 +97,6 @@ export class AdmincauhoiComponent implements OnInit {
     ]
 
     this._cauhoiService.hotros$.subscribe((data) => {
-      console.log(data);
-      
       this.Cauhois = this.filteredCauhois = data;
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
@@ -104,7 +105,7 @@ export class AdmincauhoiComponent implements OnInit {
     })
     this._cauhinhService.danhmucs$.subscribe((data) => {
       this.Danhmucs = data.filter(v=>v.Module == 1);
-      console.log(data);
+      this.filteredDanhmucs = this.Danhmucs;
       this._changeDetectorRef.markForCheck();
     })
     this._cauhinhService.Cauhinhs$
@@ -114,7 +115,9 @@ export class AdmincauhoiComponent implements OnInit {
         this.Khoi = data.find(v => v.id == "295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
         this.Congty = data.find(v => v.id == "bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
         this.Bophan = data.find(v => v.id == "d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
-        this.Vitri = data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+        this.Vitri = this.filteredVitri = Object.entries(data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail).map(([id, value]) => ({id,value}));
+        console.log(this.Vitri);
+        
         this._changeDetectorRef.markForCheck();
       });
     this._nhanvienService.nhanviens$
@@ -255,6 +258,34 @@ export class AdmincauhoiComponent implements OnInit {
     this._cauhoiService.UpdateTraloi(data).subscribe();
     this._changeDetectorRef.markForCheck();
   }
+  ChangeValue(item,type,value) {
+    item[type]=value;
+    this._cauhoiService.UpdateTraloi(item).subscribe();
+    this._changeDetectorRef.markForCheck();
+    this.triggerType[type] = false;
+  }
+  AddValue(item,type,value) {
+    item[type].push(value);
+    this._cauhoiService.UpdateTraloi(item).subscribe();
+    this._changeDetectorRef.markForCheck();
+    this.triggerType[type] = false;
+  }
+  RemoveValue(item,type,value) {
+    console.log(item[type]);
+    console.log(value);
+    item[type] = item[type].filter(v=>v!=value);
+    this._cauhoiService.UpdateTraloi(item).subscribe();
+    this._changeDetectorRef.markForCheck();
+    this.triggerType[type] = false;
+  }
+  ChangeEditorValue(item,type,{editor}: ChangeEvent ) {   
+    if(editor.getData()!=undefined)
+    {
+    item[type] =editor.getData();
+    this._cauhoiService.UpdateTraloi(item).subscribe();
+    this._changeDetectorRef.markForCheck();
+    }
+}
   CreateTraloi() {
     this.matDrawer.toggle();
     const data = this.CauhoiForm.getRawValue();    
@@ -285,10 +316,16 @@ export class AdmincauhoiComponent implements OnInit {
     this.matDrawer.toggle();
 
   }
-  filterByQuery(query: string): void
+  filterDanhmuc(event): void
   {
-      this.filters.query$.next(query);
-      console.log(query);   
+    const value = event.target.value.toLowerCase();
+    this.filteredDanhmucs = this.Danhmucs.filter(v => v.name.toLowerCase().includes(value));
+  }
+  filterVitri(event): void
+  {
+    const value = event.target.value.toLowerCase();
+    console.log(value);
+    this.filteredVitri = this.Vitri.filter(v => v.value.toLowerCase().includes(value));
   }
   ngOnDestroy(): void
   {
@@ -303,12 +340,8 @@ export class AdmincauhoiComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  toggleOverlay(trigger: any,type) {
-    console.log(trigger);
-    
+  toggleOverlay(trigger: any,type) {   
     this.triggerOrigin = trigger;
-    this.triggerType[type] = !this.triggerType[type]
-    console.log(this.triggerType);
-    
+    this.triggerType[type] = !this.triggerType[type]    
   }
 }

@@ -20,6 +20,8 @@ import { CauhoithuonggapComponent } from './cauhoithuonggap.component';
 import { CauhoithuonggapResolver } from './cauhoithuonggap.resolver';
 import { CauhoiadminComponent } from '../cauhoi/cauhoiadmin/cauhoiadmin.component';
 import { AdmincauhoiComponent } from './admincauhoi/admincauhoi.component';
+import { CustomPipe } from 'app/pipes/custom/custom.pipe';
+import { CustomModule } from 'app/pipes/custom/custom.module';
 export const cauhoiRoutes: Route[] = [
   {
       path: '',
@@ -46,6 +48,7 @@ export const cauhoiRoutes: Route[] = [
 @NgModule({
   declarations: [CauhoithuonggapComponent, AdmincauhoiComponent],
   imports: [
+    CustomModule,
     TooltipModule,
     CKEditorModule,
     FindbyidModule,

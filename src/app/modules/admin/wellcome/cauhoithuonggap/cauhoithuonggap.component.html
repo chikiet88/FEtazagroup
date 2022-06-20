@@ -37,23 +37,20 @@
                         menu
                         </span>
                   </button>     
-                     <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
-                Câu Hỏi Thường Gặp
+             <div class="mt-2 ont-extrabold tracking-tight leading-tight">
+                <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8 w-160 m-auto">
+                    <input matInput [placeholder]="'Câu Hỏi Thường Gặp'" (keydown.enter)="applyFilter($event)">
+                    <mat-icon matPrefix>
+                        <span class="material-icons">
+                            search
+                        </span>
+                    </mat-icon>
+                </mat-form-field>     
             </div>
             <span class="material-icons text-5xl" (click)="openModal(mytemplate)">
                 contact_support
                 </span>
             </div>
-
-            <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-8 w-160 m-auto">
-                <input matInput [placeholder]="'Tìm Kiếm'" (keyup)="applyFilter($event)">
-                <mat-icon matPrefix>
-                    <span class="material-icons">
-                        search
-                    </span>
-                </mat-icon>
-            </mat-form-field>
-
 
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" matSort class="w-full">
