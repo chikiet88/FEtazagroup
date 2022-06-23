@@ -1,7 +1,6 @@
 <mat-drawer-container class="example-container flex w-full" autosize>
     <mat-drawer #drawer class="example-sidenav w-3/4 p-2" mode="side" opened position="end">
-       <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2" *ngIf="ThisCauhoi">
-           <!-- {{ThisCauhoi|json}} -->           
+       <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2" *ngIf="ThisCauhoi">        
         <div class="flex flex-row space-x-4 items-center">
           <span>Danh Mục </span>
            <span cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500" (click)="toggleOverlay(trigger,'Danhmuc')">
@@ -55,9 +54,9 @@
         </div>
          </div>
     </mat-drawer>
-    <div class="example-sidenav-content overflow-auto">
-        <div class="flex flex-col space-y-2 scroll">
+        <div class="flex flex-col space-y-2 h-80vh">
             <div class="text-xl text-center text-blue-500 uppercase mt-4 font-bold">Câu Hỏi</div>
+            <div class="overflow-auto scroll">
             <div *ngFor="let item of Cauhois; let i = index" class="p-3 cursor-pointer" (click)="EditCauhoi(item);drawer.open()">
               <div class="flex flex-row space-x-2">
                  <span> {{i+1}}. </span>
@@ -65,9 +64,8 @@
             </div>
                 <mat-divider></mat-divider>
             </div>
+          </div>
         </div>
-    </div>
-
 </mat-drawer-container>
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"

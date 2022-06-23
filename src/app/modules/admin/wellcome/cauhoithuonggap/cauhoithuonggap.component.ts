@@ -9,6 +9,7 @@ import { HelpCenterService } from 'app/modules/admin/apps/help-center/help-cente
 import { FaqCategory } from 'app/modules/admin/apps/help-center/help-center.type';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
+import moment from 'moment';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { CauhoithuonggapService } from './cauhoithuonggap.service';
 
@@ -28,6 +29,7 @@ export class CauhoithuonggapComponent implements OnInit {
   Vitri: any;
   thisUser: any;
   Danhmucs: any;
+  filterStatus: any;
   @ViewChild('supportNgForm') supportNgForm: NgForm;
   hotros:any;
   supportForm: FormGroup;
@@ -42,11 +44,12 @@ export class CauhoithuonggapComponent implements OnInit {
     private _formBuilder: FormBuilder,
     )
   {}
-  displayedColumns: string[] = ['#', 'NoidungCauhoi'];
+  displayedColumns: string[] = ['#', 'NoidungCauhoi','Ngaytao'];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   ngOnInit(): void {
+    moment.locale('vi');
     this.status = true;
     this.supportForm = this._formBuilder.group({
       Danhmuc  : [''],
@@ -56,24 +59,32 @@ export class CauhoithuonggapComponent implements OnInit {
       this.thisUser = data;
       console.log(data);
     })
-    this._cauhinhService.danhmucs$.subscribe((data) => {
-      this.Danhmucs = data.filter(v=>v.Module==1);
-      console.log(this.Danhmucs);
-      this._changeDetectorRef.markForCheck();
-    })
     this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((cauhois) => {
       cauhois.forEach(v => {
+        v.Ngaytao = moment(v.Ngaytao, moment.ISO_8601).fromNow();
         const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
          if(v.Trangthai == 3 && x!=undefined)
          {
              this.Cauhois.push(v);
          }                   
       });
+      console.log(this.Cauhois);
+      
       this.filteredCauhois = this.Cauhois;
       this.dataSource = new MatTableDataSource(this.Cauhois);
     });
+    
+    this._cauhinhService.danhmucs$.subscribe((data) => {
+      this.Danhmucs = data.filter(v=>v.Module==1);
+      this.Danhmucs.forEach(v => {
+        v.Soluong = this.Cauhois.filter(v1=>v1.Danhmuc == v.id).length
+      });
+      console.log(this.Danhmucs);
+      this._changeDetectorRef.markForCheck();
+    })
+
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data: Cauhinh[]) => {
@@ -111,12 +122,14 @@ applyFilter(event: Event) {
 
 FilterDanhmuc(item): void
   {
-    this.dataSource = new MatTableDataSource(this.Cauhois.filter(v=>v.Danhmuc == item.id));
+    this.filterStatus = item.id;
+    this.dataSource = new MatTableDataSource(this.Cauhois.filter(v=>v.Danhmuc == item.id));      
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
  AllDanhmuc(): void
   {
+    this.filterStatus = 0;
     this.dataSource = new MatTableDataSource(this.Cauhois);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

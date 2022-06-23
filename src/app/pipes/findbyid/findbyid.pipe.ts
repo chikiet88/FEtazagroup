@@ -20,6 +20,6 @@ export class FindbyuuidPipe implements PipeTransform {
 @Pipe({name: 'findbytype'})
 export class FindbytypePipe implements PipeTransform {
   transform(value:any,items: any,type:any): any {  
-    return items.find(v=>v[type] == value);
+    return items.filter(v=>v[type] == value);
   }
 }
