@@ -21,6 +21,7 @@ import { CauhoithuonggapService } from './cauhoithuonggap.service';
 export class CauhoithuonggapComponent implements OnInit {
   faqCategories: FaqCategory[];
   Cauhois:any = [];
+  UserCauhois:any = [];
   filteredCauhois:any;
   Phongban: any;
   Khoi: any;
@@ -70,7 +71,8 @@ export class CauhoithuonggapComponent implements OnInit {
              this.Cauhois.push(v);
          }                   
       });
-      console.log(this.Cauhois);
+      this.UserCauhois = cauhois.filter(v=>v.idTao == this.thisUser.id)
+      console.log(this.UserCauhois);
       
       this.filteredCauhois = this.Cauhois;
       this.dataSource = new MatTableDataSource(this.Cauhois);

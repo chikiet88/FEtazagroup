@@ -54,9 +54,7 @@
         </div>
          </div>
     </mat-drawer>
-
-
-  <div class="flex flex-col space-y-2 h-80vh">
+        <div class="flex flex-col space-y-2 h-80vh">
             <div class="text-xl text-center text-blue-500 uppercase mt-4 font-bold">Câu Hỏi</div>
             <div class="overflow-auto scroll">
             <div *ngFor="let item of Cauhois; let i = index" class="p-3 cursor-pointer" (click)="EditCauhoi(item);drawer.open()">
@@ -67,7 +65,7 @@
                 <mat-divider></mat-divider>
             </div>
           </div>
-   </div>
+        </div>
 </mat-drawer-container>
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
