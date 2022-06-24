@@ -126,25 +126,6 @@ export class AdmincauhoiComponent implements OnInit {
         this.Nhanviens = data;
         this._changeDetectorRef.markForCheck();
       });
-    this._userService.user$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((data) => {
-        this.thisUser = data;
-        this._changeDetectorRef.markForCheck();
-      });
-      combineLatest([this.filters.query$])
-      .subscribe(([query]) => {
-          if ( query !== '' )
-          {
-            this.filteredCauhois = this.Cauhois;
-          }
-          this.filteredCauhois = this.Cauhois.filter(v => v.NoidungCauhoi.toLowerCase().includes(query.toLowerCase())
-          || v.NoidungTraloi.toLowerCase().includes(query.toLowerCase()));
-        this.dataSource = new MatTableDataSource(this.filteredCauhois);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      });
-
   }
   // toggleAllSelection() {
   //   if (this.allSelected) {
@@ -320,6 +301,19 @@ export class AdmincauhoiComponent implements OnInit {
   {
     const value = event.target.value.toLowerCase();
     this.filteredDanhmucs = this.Danhmucs.filter(v => v.name.toLowerCase().includes(value));
+  }
+  AllCauhois()
+  {
+    this.filteredCauhois = this.Cauhois;
+  }
+  filterCauhoi(event): void
+  {
+    const value = event.target.value.toLowerCase();
+    this.filteredCauhois = this.Cauhois.filter(v=>v.NoidungCauhoi.toLowerCase().includes(value))  
+  }
+  filterTTCauhoi(value): void
+  {
+    this.filteredCauhois = this.Cauhois.filter(v=>v.Trangthai == value)  
   }
   filterVitri(event): void
   {

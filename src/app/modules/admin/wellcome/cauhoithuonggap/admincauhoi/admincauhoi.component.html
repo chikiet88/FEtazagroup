@@ -1,84 +1,151 @@
-<mat-drawer-container class="example-container flex w-full" autosize>
+<div class="absolute inset-0 flex flex-col min-w-0">
+  <mat-drawer-container class="example-container flex w-full h-full" autosize>
     <mat-drawer #drawer class="example-sidenav w-3/4 p-2" mode="side" opened position="end">
-       <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2" *ngIf="ThisCauhoi">        
-        <div class="flex flex-row space-x-4 items-center">
-          <span>Danh Mục </span>
-           <span cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500" (click)="toggleOverlay(trigger,'Danhmuc')">
-                {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
-              </span>
 
-        </div>
-        <div class="">
+      <ng-container *ngIf="ThisCauhoi; else elseTemplate">
+        <div class="flex flex-col space-y-2 bg-card rounded-lg border-2 p-2">
+          <div class="flex flex-row space-x-4 items-center">
+            <span>Danh Mục </span>
+            <span cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+              class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500"
+              (click)="toggleOverlay(trigger,'Danhmuc')">
+              {{ThisCauhoi.Danhmuc|findbyid:Danhmucs:'Tieude'}}
+            </span>
+  
+          </div>
+          <div class="">
             Nội Dung Câu Hỏi
-            <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="ThisCauhoi.NoidungCauhoi" [ngModelOptions]="{standalone: true}" (change)="ChangeEditorValue(ThisCauhoi,'NoidungCauhoi',$event)"></ckeditor>
-        </div>
-        <div class="">
+            <ckeditor cdkTextareaAutosize [editor]="Editor" [config]="config" [(ngModel)]="ThisCauhoi.NoidungCauhoi"
+              [ngModelOptions]="{standalone: true}" (change)="ChangeEditorValue(ThisCauhoi,'NoidungCauhoi',$event)">
+            </ckeditor>
+          </div>
+          <div class="">
             Nội Dung Trả Lời
-            <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="ThisCauhoi.NoidungTraloi" [ngModelOptions]="{standalone: true}" (change)="ChangeEditorValue(ThisCauhoi,'NoidungTraloi',$event)"></ckeditor>
-        </div>
-        <div class="">Câu Hỏi Tương Tự
-
-
-        </div>
-     <div class="flex flex-row space-x-4 space-y-2 items-center flex-wrap">
+            <ckeditor cdkTextareaAutosize [editor]="Editor" [config]="config" [(ngModel)]="ThisCauhoi.NoidungTraloi"
+              [ngModelOptions]="{standalone: true}" (change)="ChangeEditorValue(ThisCauhoi,'NoidungTraloi',$event)">
+            </ckeditor>
+          </div>
+          <div class="">Câu Hỏi Tương Tự
+  
+  
+          </div>
+          <div class="flex flex-row space-x-4 items-center">
+            <div class="flex flex-row space-x-2 min-w-24">
               <span>Vị Trí </span>
-               <span cdkOverlayOrigin #trigger1="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,'Vitri')">
+              <span cdkOverlayOrigin #trigger1="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,'Vitri')">
+                
                 <span class="material-icons">
                   add_circle
-                  </span>
-                  </span>
-                  <div class="relative" *ngFor="let item of ThisCauhoi.Vitri">
-                    <span class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
-                      {{item|findbyid:Vitri:'value'}}
-                  </span>
-                    <span class="material-icons absolute -top-2 -right-2 text-red-500" (click)="RemoveValue(ThisCauhoi,'Vitri',item)">
-                      cancel
-                      </span>
-                  </div>
+                </span>
+              </span>
             </div>
-        <div class="flex flex-row space-x-2 items-center">
-          <span>
-             Người Tạo :
-          </span>
-          <span class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">
-            {{ThisCauhoi.idTao|findbyid:Nhanviens:'name'}}</span>
-        </div>
-        <div class="flex flex-row space-x-2 items-center">
-          <span>
-           Trạng Thái :
-         </span>
-         <span (click)="ChangeValue(ThisCauhoi,'Trangthai',0)" class="px-4 leading-9 rounded-full cursor-pointer bg-gray-200" [ngClass]="{'text-white bg-blue-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==0}"> Chưa Xem</span>
-         <span (click)="ChangeValue(ThisCauhoi,'Trangthai',1)" class="px-4 leading-9 rounded-full cursor-pointer bg-gray-200" [ngClass]="{'text-white bg-yellow-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==1}"> Trùng Lắp</span>
-         <span (click)="ChangeValue(ThisCauhoi,'Trangthai',2)" class="px-4 leading-9 rounded-full cursor-pointer bg-gray-200" [ngClass]="{'text-white bg-red-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==2}"> Không Phù Hợp</span>
-         <span (click)="ChangeValue(ThisCauhoi,'Trangthai',3)" class="px-4 leading-9 rounded-full cursor-pointer bg-gray-200" [ngClass]="{'text-white bg-green-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==3}"> Xuất Bản</span>
-        </div>
-         </div>
-    </mat-drawer>
 
-
-  <div class="flex flex-col space-y-2 h-80vh">
-            <div class="text-xl text-center text-blue-500 uppercase mt-4 font-bold">Câu Hỏi</div>
-            <div class="overflow-auto scroll">
-            <div *ngFor="let item of Cauhois; let i = index" class="p-3 cursor-pointer" (click)="EditCauhoi(item);drawer.open()">
-              <div class="flex flex-row space-x-2">
-                 <span> {{i+1}}. </span>
-                <span [innerHTML]="item.NoidungCauhoi"></span>
-            </div>
-                <mat-divider></mat-divider>
+            <div class="w-full p-3 h-24 overflow-auto scroll flex flex-row space-x-4 space-y-2 items-center flex-wrap">
+            <div class="relative" *ngFor="let item of ThisCauhoi.Vitri">
+              <span
+                class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500">
+                {{item|findbyid:Vitri:'value'}}
+              </span>
+              <span class="material-icons absolute -top-2 -right-2 text-red-500"
+                (click)="RemoveValue(ThisCauhoi,'Vitri',item)">
+                cancel
+              </span>
             </div>
           </div>
-   </div>
-</mat-drawer-container>
+          </div>
+          <div class="flex flex-row space-x-2 items-center">
+            <span>
+              Người Tạo :
+            </span>
+            <span
+              class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500">
+              {{ThisCauhoi.idTao|findbyid:Nhanviens:'name'}}</span>
+          </div>
+          <div class="flex flex-row space-x-2 items-center">
+            <span>
+              Trạng Thái :
+            </span>
+            <span (click)="ChangeValue(ThisCauhoi,'Trangthai',0)"
+              class="px-4 leading-9 rounded-full cursor-pointer bg-gray-300"
+              [ngClass]="{'text-white bg-blue-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==0}"> Chưa
+              Xem</span>
+            <span (click)="ChangeValue(ThisCauhoi,'Trangthai',1)"
+              class="px-4 leading-9 rounded-full cursor-pointer bg-gray-300"
+              [ngClass]="{'text-white bg-yellow-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==1}"> Trùng
+              Lắp</span>
+            <span (click)="ChangeValue(ThisCauhoi,'Trangthai',2)"
+              class="px-4 leading-9 rounded-full cursor-pointer bg-gray-300"
+              [ngClass]="{'text-white bg-red-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==2}"> Không
+              Phù Hợp</span>
+            <span (click)="ChangeValue(ThisCauhoi,'Trangthai',3)"
+              class="px-4 leading-9 rounded-full cursor-pointer bg-gray-300"
+              [ngClass]="{'text-white bg-green-500 dark:text-gray-100 dark:bg-gray-500': ThisCauhoi.Trangthai==3}"> Xuất
+              Bản</span>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #elseTemplate>
+        Chưa chọn câu hỏi
+      </ng-template>
+      
 
+    </mat-drawer>
+
+<mat-drawer-content class="flex w-full">
+    <div class="flex flex-col space-y-2 w-full">
+      <div class="flex flex-row space-x-2 p-3 items-center">
+        <div class="text-xl text-center text-blue-500 uppercase font-bold">Câu Hỏi</div>
+          <span class="text-white rounded p-2 bg-blue-500" matTooltip="Chưa Xem" (click)="filterTTCauhoi(0)">
+            {{(Cauhois|Filter:'Trangthai':'':0).length}} 
+          </span>
+          <span class="text-white rounded p-2 bg-yellow-500" matTooltip="Trùng Lặp" (click)="filterTTCauhoi(1)">
+            {{(Cauhois|Filter:'Trangthai':'':1).length}} 
+          </span>
+          <span class="text-white rounded p-2 bg-red-500" matTooltip="Không Phù Hợp" (click)="filterTTCauhoi(2)">
+            {{(Cauhois|Filter:'Trangthai':'':2).length}} 
+          </span>
+          <span class="text-white rounded p-2 bg-green-500" matTooltip="Xuất Bản" (click)="filterTTCauhoi(3)">
+            {{(Cauhois|Filter:'Trangthai':'':3).length}} 
+          </span>
+          <span class="text-white rounded p-2 bg-black" matTooltip="All" (click)="AllCauhois()">
+           All
+          </span>
+      </div>
+      <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full m-auto w-full p-2">
+        <input matInput [placeholder]="'Tìm Kiếm'" (input)="filterCauhoi($event)">
+        <mat-icon matPrefix>
+          <span class="material-icons">
+            search
+          </span>
+        </mat-icon>
+      </mat-form-field>
+      <div class="overflow-auto scroll">
+        <div *ngFor="let item of filteredCauhois; let i = index" class="p-3 cursor-pointer"
+          (click)="EditCauhoi(item);drawer.open()">
+          <div class="flex flex-row space-x-2 items-center">
+            <span class="px-2 py-1 rounded text-white"
+            [ngClass]="{'bg-blue-500': item.Trangthai==0,'bg-yellow-500': item.Trangthai==1,'bg-red-500': item.Trangthai==2,'bg-green-500': item.Trangthai==3}"
+            > {{i+1}} </span>
+            <span [innerHTML]="item.NoidungCauhoi"></span>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </div>
+ </mat-drawer-content>
+  </mat-drawer-container>
+</div>
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="triggerType['Danhmuc']"
-  (detach)="triggerType['Danhmuc'] = false" (backdropClick)="triggerType['Danhmuc'] = false">
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="triggerType['Danhmuc']" (detach)="triggerType['Danhmuc'] = false"
+  (backdropClick)="triggerType['Danhmuc'] = false">
   <div class="w-96 rounded border shadow-md bg-card m-3">
     <div class="flex items-center m-3 mr-2">
       <div class="flex items-center">
         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
         <div class="ml-2">
-          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterDanhmuc($event)">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+            (input)="filterDanhmuc($event)">
         </div>
       </div>
     </div>
@@ -86,7 +153,8 @@
       <ng-container>
         <div class="py-2 space-y-2">
           <ng-container *ngFor="let item of filteredDanhmucs">
-            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="ChangeValue(ThisCauhoi,'Danhmuc',item.id)">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
+              (click)="ChangeValue(ThisCauhoi,'Danhmuc',item.id)">
               <div class="ml-1 flex flex-row space-x-2"><span>{{item.Tieude}}</span></div>
             </div>
           </ng-container>
@@ -97,23 +165,27 @@
 </ng-template>
 
 <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin" [cdkConnectedOverlayOpen]="triggerType['Vitri']"
-  (detach)="triggerType['Vitri'] = false" (backdropClick)="triggerType['Vitri'] = false">
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="triggerType['Vitri']" (detach)="triggerType['Vitri'] = false"
+  (backdropClick)="triggerType['Vitri'] = false">
   <div class="w-96 rounded border shadow-md bg-card m-3">
     <div class="flex items-center m-3 mr-2">
       <div class="flex items-center flex-row w-full justify-between">
         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
         <div class="ml-2">
-          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30" (input)="filterVitri($event)">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+            (input)="filterVitri($event)">
         </div>
-        <span class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500">All</span>
+        <span
+          class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500">All</span>
       </div>
     </div>
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
           <ng-container *ngFor="let item of filteredVitri|Unique:ThisCauhoi.Vitri:'id'">
-            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple (click)="AddValue(ThisCauhoi,'Vitri',item.id)">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
+              (click)="AddValue(ThisCauhoi,'Vitri',item.id)">
               <div class="ml-1 flex flex-row space-x-2"><span>{{item.value}}</span></div>
             </div>
           </ng-container>

@@ -36,7 +36,7 @@ export class EditcauhinhComponent implements OnInit {
   {
       // Get the cauhinhs
       this.cauhinhs$ = this._cauhinhsService.Cauhinhs$;
-
+        
       // Subscribe to cauhinh updates
       this.cauhinhChanged
           .pipe(

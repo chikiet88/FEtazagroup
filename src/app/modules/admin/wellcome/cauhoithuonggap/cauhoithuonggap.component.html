@@ -12,7 +12,7 @@
                     </div>
 
 
-                    <div class="bg-red-500 text-white rounded-full px-2 py-1"
+                    <div class="bg-red-500 text-white rounded px-2 py-1"
                         [ngClass]="{'bg-blue-500': Cauhois.length!=0}">
                         {{Cauhois.length}}
                     </div>
@@ -27,7 +27,7 @@
                         <mat-icon class="text-current" [svgIcon]="'heroicons_outline:tag'"></mat-icon>
                         <div class="ml-3 leading-5 select-none text-default">{{item.Tieude}}</div>
                     </div>
-                    <div class="bg-red-500 text-white rounded-full px-2 py-1"
+                    <div class="bg-red-500 text-white rounded px-2 py-1"
                         [ngClass]="{'bg-blue-500': item.Soluong!=0}">
                         {{item.Soluong}}
                     </div>
@@ -86,7 +86,7 @@
                     <mat-divider></mat-divider>
                     <ng-container *ngFor="let item of UserCauhois; let i=index">
                         <div class="flex flex-row space-x-2 items-center">
-                            <span class="px-2 py-1 text-white rounded-full"
+                            <span class="px-2 py-1 text-white rounded"
                                 [ngClass]="{'bg-blue-500': item.Trangthai==0,'bg-yellow-500': item.Trangthai==1,'bg-red-500': item.Trangthai==2,'bg-green-500': item.Trangthai==3}">{{i+1}}</span>
                             <span [innerHTML]="item.NoidungCauhoi"></span>
                         </div>
@@ -116,8 +116,8 @@
                                 menu
                             </span>
                         </button>
-                        <div class="mt-2 ont-extrabold tracking-tight leading-tight">
-                            <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-2 w-160 m-auto">
+                        <div class="mt-2 ont-extrabold tracking-tight leading-tight w-full">
+                            <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-2 w-full m-auto">
                                 <input matInput [placeholder]="'Câu Hỏi Thường Gặp'"
                                     (keydown.enter)="applyFilter($event)">
                                 <mat-icon matPrefix>
@@ -134,8 +134,7 @@
                     </div>
 
                     <ng-container *ngIf="dataSource.data.length!=0; else elseTemplate">
-
-                        <div class="mat-elevation-z8">
+                        <div class="overflow-auto">
                             <table mat-table [dataSource]="dataSource" matSort class="w-full">
                                 <ng-container matColumnDef="#">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
