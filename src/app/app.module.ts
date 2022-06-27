@@ -76,7 +76,6 @@ const customNotifierOptions: NotifierOptions = {
         CauhinhComponent,
         QuanlyadsComponent,
         UploadComponent,
-        CongviecComponent,
     ],
     imports     : [
       BrowserModule,

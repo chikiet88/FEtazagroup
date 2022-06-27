@@ -56,14 +56,14 @@ export class QuanlycongviecService {
     {
         this._task.next(task);
     }
-    // getBoards() {
-    //     const grouptasks = this._grouptasks.value;
-    //     const tasks = this._tasks.value;
-    //     grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
-    //     grouptasks.sort((a, b) => a.Ordering - b.Ordering);
-    //     //console.log(grouptasks);
-    //     return this._boards.next(grouptasks);
-    // }
+    getBoards() {
+        const grouptasks = this._grouptasks.value;
+        const tasks = this._tasks.value;
+        grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
+        grouptasks.sort((a, b) => a.Ordering - b.Ordering);
+        //console.log(grouptasks);
+        return this._boards.next(grouptasks);
+    }
     getDuanBoards() {
         const duan = this._duan.value;
         const secstions = this._sections.value.filter(v1=>v1.pjid==duan.id);
