@@ -321,6 +321,24 @@ export class AdmincauhoiComponent implements OnInit {
     console.log(value);
     this.filteredVitri = this.Vitri.filter(v => v.value.toLowerCase().includes(value));
   }
+
+  AllVitri()
+  {
+    this.Vitri.forEach(v => {
+      this.ThisCauhoi.Vitri.push(v.id);
+    });
+    this._cauhoiService.UpdateTraloi(this.ThisCauhoi).subscribe();
+    this.triggerType['Vitri'] = false;
+    this._changeDetectorRef.markForCheck();
+  }
+  ClearVitri()
+  {
+    this.ThisCauhoi.Vitri = [];
+    this._cauhoiService.UpdateTraloi(this.ThisCauhoi).subscribe();
+    this.triggerType['Vitri'] = false;
+    this._changeDetectorRef.markForCheck();
+  }
+
   ngOnDestroy(): void
   {
       this._unsubscribeAll.next(null);
@@ -338,4 +356,5 @@ export class AdmincauhoiComponent implements OnInit {
     this.triggerOrigin = trigger;
     this.triggerType[type] = !this.triggerType[type]    
   }
+
 }

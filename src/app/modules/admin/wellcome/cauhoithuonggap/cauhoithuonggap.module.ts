@@ -22,6 +22,8 @@ import { CauhoiadminComponent } from '../cauhoi/cauhoiadmin/cauhoiadmin.componen
 import { AdmincauhoiComponent } from './admincauhoi/admincauhoi.component';
 import { CustomPipe } from 'app/pipes/custom/custom.pipe';
 import { CustomModule } from 'app/pipes/custom/custom.module';
+import { CauhoiuploadfileComponent } from './admincauhoi/cauhoiuploadfile/cauhoiuploadfile.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 export const cauhoiRoutes: Route[] = [
   {
       path: '',
@@ -46,8 +48,9 @@ export const cauhoiRoutes: Route[] = [
 
 
 @NgModule({
-  declarations: [CauhoithuonggapComponent, AdmincauhoiComponent],
+  declarations: [CauhoithuonggapComponent, AdmincauhoiComponent, CauhoiuploadfileComponent],
   imports: [
+    NgxDropzoneModule,
     CustomModule,
     TooltipModule,
     CKEditorModule,

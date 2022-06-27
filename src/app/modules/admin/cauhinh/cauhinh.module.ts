@@ -20,6 +20,7 @@ import { MaterialExampleModule } from 'material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CauhinhMenuResolver } from './cauhinh.resolver';
 import { DanhmucComponent } from './danhmuc/danhmuc.component';
+import { ListcauhinhComponent } from './listcauhinh/listcauhinh.component';
 const CauhinhRoutes: Route[] = [
   {
       path     : '',
@@ -43,6 +44,11 @@ const CauhinhRoutes: Route[] = [
             path     : 'caidat',
             component: CaidatchungComponent
         }
+        ,
+        {
+            path     : 'cauhinh',
+            component: ListcauhinhComponent
+        }
     ]
   }
 ];
@@ -54,6 +60,7 @@ const CauhinhRoutes: Route[] = [
        EditcauhinhComponent,
        CaidatchungComponent,
        DanhmucComponent,
+       ListcauhinhComponent,
   ],
   imports: [
     RouterModule.forChild(CauhinhRoutes),

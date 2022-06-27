@@ -101,11 +101,10 @@ export class DetailsComponent implements OnInit, OnDestroy
         private _router: Router,
     )
     {}
-    nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
-      ...item,
-      children: this.nest(items, item.uuid)
-    }));
-
+    // nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+    //   ...item,
+    //   children: this.nest(items, item.uuid)
+    // }));
     private transformer = (node: any, level: number) => {
       return {
         uuid:node.uuid,
@@ -196,7 +195,7 @@ export class DetailsComponent implements OnInit, OnDestroy
           this.PQChinhanh= Object.assign(this.PQChinhanh,nhanvien.Phanquyen); 
           this.PQMenu= Object.assign(this.PQMenu, nhanvien.Menu); 
           console.log(this.PQMenu);
-          this.dataSource.data = this.nest(this.PQMenu);
+          //this.dataSource.data = this.nest(this.PQMenu);
             this.NhanvienForm.patchValue({
                 id: nhanvien.id,
                 avatar: nhanvien.avatar,

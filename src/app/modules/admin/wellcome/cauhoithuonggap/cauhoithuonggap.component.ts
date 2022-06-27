@@ -9,6 +9,8 @@ import { HelpCenterService } from 'app/modules/admin/apps/help-center/help-cente
 import { FaqCategory } from 'app/modules/admin/apps/help-center/help-center.type';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
+import { SharedService } from 'app/shared/shared.service';
+import { environment } from 'environments/environment';
 import moment from 'moment';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { CauhoithuonggapService } from './cauhoithuonggap.service';
@@ -43,13 +45,25 @@ export class CauhoithuonggapComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     public dialog: MatDialog,
     private _formBuilder: FormBuilder,
+    private _sharedService: SharedService,
     )
   {}
   displayedColumns: string[] = ['#', 'NoidungCauhoi','Ngaytao'];
   dataSource: MatTableDataSource<any>;
+  files: File[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   ngOnInit(): void {
+    this._sharedService.getAllUpload().subscribe();
+    this._sharedService.uploads$.subscribe((data) => {         
+      data?.forEach(v => {
+        v.path = `${environment.ApiURL}/upload/path/${v.Lienket}`;     
+      });
+      this.files = data;
+      console.log(data);
+      
+    }
+    )
     moment.locale('vi');
     this.status = true;
     this.supportForm = this._formBuilder.group({
@@ -98,6 +112,12 @@ export class CauhoithuonggapComponent implements OnInit {
       this._changeDetectorRef.markForCheck();         
     }); 
   }
+  LoadFileUpload(item)
+  {
+    console.log(item);
+    
+  }
+
 // filterByQuery(query: string): void
 //   {
 //       if ( !query )

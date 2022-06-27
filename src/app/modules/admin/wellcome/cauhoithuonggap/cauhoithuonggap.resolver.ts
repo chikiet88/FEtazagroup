@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { SharedService } from 'app/shared/shared.service';
 import { forkJoin, Observable } from 'rxjs';
 import { HelpCenterService } from '../../apps/help-center/help-center.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
@@ -18,6 +19,7 @@ export class CauhoithuonggapResolver implements Resolve<any>
         private _cauhoiService: CauhoithuonggapService,
         private _cauhinhService: CauhinhService,
         private _nhanvienService: NhanvienService,
+        private _sharedService: SharedService,
         )
     {
     }
@@ -29,6 +31,7 @@ export class CauhoithuonggapResolver implements Resolve<any>
             this._cauhinhService.getCauhinhs(),
             this._cauhinhService.getAllDanhmuc(),
             this._nhanvienService.getNhanviens(),
+            this._sharedService.getAllUpload(),
         ]);
     }
 }
