@@ -1,6 +1,6 @@
 <mat-drawer-container class="flex w-full" autosize>
     <mat-drawer #drawer class="p-3 w-auto hover:w-full" mode="side" opened="true">
-      <div class="flex flex-row justify-between items-center space-x-2">
+      <div class="flex flex-row justify-between items-center space-x-2 px-4">
         <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
           <input matInput [placeholder]="'Tìm Kiếm'">
           <mat-icon matPrefix>
@@ -20,11 +20,15 @@
       </div>
     </mat-drawer>
   
+
+    <mat-drawer #drawer1 class="p-3 md:w-3/4 w-full" mode="over" position="end">
+       <app-edittask></app-edittask>
+    </mat-drawer>
+
     <mat-drawer-content class="flex flex-col flex-auto p-3">
       <div class="flex flex-row">
         <span class="material-icons" (click)="drawer.toggle()">menu</span>    
-      </div>
-           
+      </div>           
       <div class="flex flex-col flex-auto">
         <app-congviecboard class="absolute inset-0 top-8 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
         <!-- <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1" type="dauviec"></app-congviecboard> -->

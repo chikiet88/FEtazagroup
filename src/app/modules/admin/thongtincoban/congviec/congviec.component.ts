@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
@@ -19,7 +20,10 @@ export class CongviecComponent implements OnInit {
   filteredDuans: any[];
   Groups: any[];
   filteredGroups: any[];
+  GroupbyUser:any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @ViewChild('drawer1', {static: false}) drawer1: MatDrawer;
+  CurretTask:any;
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -58,5 +62,5 @@ export class CongviecComponent implements OnInit {
       this._unsubscribeAll.next(null);
       this._unsubscribeAll.complete();
   }
-
+  
 }

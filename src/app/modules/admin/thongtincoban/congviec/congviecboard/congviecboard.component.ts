@@ -14,6 +14,7 @@ import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.serv
 import { QuanlycongviecService } from '../../quanlycongviec/quanlycongviec.service';
 import { CongviecService } from '../congviec.service';
 import { SharedService } from 'app/shared/shared.service';
+import { CongviecComponent } from '../congviec.component';
 @Component({
   selector: 'app-congviecboard',
   templateUrl: './congviecboard.component.html',
@@ -60,6 +61,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         private _userService: UserService,
         private _nhanvienServiceService: NhanvienService,
         private _formBuilder: FormBuilder,
+        private _congviecComponent: CongviecComponent,
     ) {
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -100,6 +102,11 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     }
     ngAfterViewInit() {
 
+    }
+    OpenEdit(item) {
+        console.log(item);
+        //this._quanlycongviecService.changeTask(card);
+        this._congviecComponent.drawer1.toggle();
     }
     ChangeTask(item, type, value) {
         item[type] = value;

@@ -36,14 +36,21 @@ get task$(): Observable<any> {
 get boards$(): Observable<any> {
   return this._boards.asObservable();
 }
+changeTask(task)
+{
+    this._task.next(task);
+}
 getBoards() {
   const duan = this._duan.value;
+  if(duan)
+  {
   const grouptasks = this._grouptasks.value.filter(v1=>v1.pid==duan.id);
   const tasks = this._tasks.value;
   grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
   grouptasks.sort((a, b) => a.Ordering - b.Ordering);
   console.log(grouptasks);
   return this._boards.next(grouptasks);
+  }
 }
 getAllDuans(): Observable<any> {
     return this._httpClient.get(`${environment.ApiURL}/project`).pipe(
@@ -184,10 +191,18 @@ DeleteGrouptasks(id): Observable<any> {
         ))
     );
   }
-  getAllTasks(): Observable<any> {
+getAllTasks(): Observable<any> {
     return this._httpClient.get(`${environment.ApiURL}/tasks`).pipe(
         tap((response: any) => {
             this._tasks.next(response);
+        })
+    );
+}
+getTasksByid(id): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/tasks/${id}`).pipe(
+        tap((response: any) => {
+            this._task.next(response);
+            this.getBoards();
         })
     );
 }

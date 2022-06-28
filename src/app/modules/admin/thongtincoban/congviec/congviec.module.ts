@@ -10,7 +10,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { SharedModule } from 'app/shared/shared.module';
 import { QuanlycongviecComponent } from '../quanlycongviec/quanlycongviec.component';
-import { CongvecsDuanResolver, CongviecResolver } from './congviec.resolver';
+import { CongvecsDuanResolver, CongvecsEdittaskResolver, CongviecResolver } from './congviec.resolver';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRippleModule } from '@angular/material/core';
@@ -27,23 +27,55 @@ import { CustomModule } from 'app/pipes/custom/custom.module';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { TooltipModule } from 'ng2-tooltip-directive';
 import { NgxDropzoneModule } from 'ngx-dropzone';
-const congviecRoutes: Route[] = [
+import { EdittaskComponent } from './edittask/edittask.component';
+// const congviecRoutes: Route[] = [
+//   {
+//     path: '',
+//     component: CongviecComponent,
+//     resolve: { tasks: CongviecResolver }
+//   },
+//   {
+//     path: ':id',
+//     component: CongviecboardComponent,
+//     resolve: { Duan: CongvecsDuanResolver },
+//     children: [
+//       {
+//         path: ':id',
+//         component: EdittaskComponent,
+//         resolve: { tasks: CongvecsEdittaskResolver }
+//       },
+//     ]
+//   },
+// ];
+export const congviecRoutes: Route[] = [
   {
-    path: '',
-    component: CongviecComponent,
-    resolve:{tasks:CongviecResolver},
-    children: [
-      {
-        path: ':id',
-        component: CongviecboardComponent,
-        resolve:{tasks:CongvecsDuanResolver}
+      path     : '',
+      component: CongviecComponent,
+      resolve  : {
+          boards: CongviecResolver
       },
-    ]
-  }
-];
+      children:[
+        {
+          path     : ':id',
+          component: CongviecboardComponent,
+          resolve  : {
+              board: CongvecsDuanResolver
+          },
+          children : [
+              {
+                  path     : ':id',
+                  component: EdittaskComponent,
+                  resolve  : {
+                      card: CongvecsEdittaskResolver
+                  }
+              }
+          ]
+      },
+      ]
 
+  },
+];
 
 @NgModule({
   declarations: [
@@ -51,9 +83,9 @@ const congviecRoutes: Route[] = [
     CongviecboardComponent,
     AddcardComponent,
     AddlistComponent,
+    EdittaskComponent,
   ],
   imports: [
-    TooltipModule,
     NgApexchartsModule,
     NgxDropzoneModule,
     GoogleChartsModule,

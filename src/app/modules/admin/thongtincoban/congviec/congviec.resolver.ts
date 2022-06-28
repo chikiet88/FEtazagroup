@@ -56,3 +56,27 @@ export class CongvecsDuanResolver implements Resolve<any>
                  );
   }
 }
+@Injectable({
+  providedIn: 'root'
+})
+export class CongvecsEdittaskResolver implements Resolve<any>
+{
+  constructor(
+      private _congviecService: CongviecService,
+      private _router: Router
+  )
+  {
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
+  {
+      return this._congviecService.getTasksByid(route.paramMap.get('id'))
+                 .pipe(
+                     catchError((error) => {
+                         console.error(error);
+                         const parentUrl = state.url.split('/').slice(0, -1).join('/');
+                         this._router.navigateByUrl(parentUrl);
+                         return throwError(error);
+                     })
+                 );
+  }
+}
