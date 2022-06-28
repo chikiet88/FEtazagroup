@@ -17,105 +17,103 @@ import { environment } from '../environments/environment';
 import { CauhinhComponent } from './modules/admin/cauhinh/cauhinh.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { MaterialExampleModule } from 'material.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuanlyadsComponent } from './modules/admin/quanlyads/quanlyads.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { UploadComponent } from './modules/admin/upload/upload.component';
-import { AngularFireModule} from '@angular/fire/compat'
-import {AngularFireDatabaseModule} from '@angular/fire/compat/database';
-import {AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { CongviecComponent } from './modules/admin/thongtincoban/congviec/congviec.component';
+import { AngularFireModule } from '@angular/fire/compat'
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 const routerConfig: ExtraOptions = {
-    preloadingStrategy       : PreloadAllModules,
-    scrollPositionRestoration: 'enabled'
+  preloadingStrategy: PreloadAllModules,
+  scrollPositionRestoration: 'enabled'
 };
 const customNotifierOptions: NotifierOptions = {
-    position: {
-          horizontal: {
-              position: 'right',
-              distance: 12
-          },
-          vertical: {
-              position: 'top',
-              distance: 12,
-              gap: 10
-          }
-      },
-    theme: 'material',
-    behaviour: {
-      autoHide: 5000,
-      onClick: 'hide',
-      onMouseover: 'pauseAutoHide',
-      showDismissButton: true,
-      stacking: 4
+  position: {
+    horizontal: {
+      position: 'right',
+      distance: 12
     },
-    animations: {
-      enabled: true,
-      show: {
-        preset: 'slide',
-        speed: 300,
-        easing: 'ease'
-      },
-      hide: {
-        preset: 'fade',
-        speed: 300,
-        easing: 'ease',
-        offset: 50
-      },
-      shift: {
-        speed: 300,
-        easing: 'ease'
-      },
-      overlap: 150
+    vertical: {
+      position: 'top',
+      distance: 12,
+      gap: 10
     }
-  };
-  
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 5000,
+    onClick: 'hide',
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+      preset: 'fade',
+      speed: 300,
+      easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    },
+    overlap: 150
+  }
+};
+
 @NgModule({
-    declarations: [
-        AppComponent,
-        CauhinhComponent,
-        QuanlyadsComponent,
-        UploadComponent,
-    ],
-    imports     : [
-      BrowserModule,
-      CKEditorModule,
-      HttpClientModule,
-      BrowserAnimationsModule,
-        MaterialExampleModule,
-        NotifierModule.withConfig(customNotifierOptions),
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterModule.forRoot(appRoutes, routerConfig),
-        // Fuse, FuseConfig & FuseMockAPI
-        FuseModule,
-        FuseConfigModule.forRoot(appConfig),
-        FuseMockApiModule.forRoot(mockApiServices),
+  declarations: [
+    AppComponent,
+    CauhinhComponent,
+    QuanlyadsComponent,
+    UploadComponent,
+  ],
+  imports: [
+    BrowserModule,
+    CKEditorModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialExampleModule,
+    NotifierModule.withConfig(customNotifierOptions),
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(appRoutes, routerConfig),
+    // Fuse, FuseConfig & FuseMockAPI
+    FuseModule,
+    FuseConfigModule.forRoot(appConfig),
+    FuseMockApiModule.forRoot(mockApiServices),
 
-        // Core module of your application
-        CoreModule,
+    // Core module of your application
+    CoreModule,
 
-        // Layout module of your application
-        LayoutModule,
+    // Layout module of your application
+    LayoutModule,
 
-        // 3rd party modules that require global configuration via forRoot
-        MarkdownModule.forRoot({}),
-        AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireDatabaseModule,
-        AngularFireStorageModule,
-         ServiceWorkerModule.register('ngsw-worker.js', {
-           enabled: environment.production,
-           // Register the ServiceWorker as soon as the app is stable
-           // or after 30 seconds (whichever comes first).
-           registrationStrategy: 'registerWhenStable:30000'
-         })
+    // 3rd party modules that require global configuration via forRoot
+    MarkdownModule.forRoot({}),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireStorageModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
 
-         
-    ],
-    bootstrap   : [
-        AppComponent
-    ],
+
+  ],
+  bootstrap: [
+    AppComponent
+  ],
 })
-export class AppModule
-{
+export class AppModule {
 }

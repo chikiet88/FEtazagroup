@@ -1,20 +1,33 @@
 <mat-drawer-container class="flex w-full" autosize>
     <mat-drawer #drawer class="p-3 w-auto hover:w-full" mode="side" opened="true">
+      <div class="flex flex-row justify-between items-center space-x-2">
+        <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
+          <input matInput [placeholder]="'Tìm Kiếm'">
+          <mat-icon matPrefix>
+            <span class="material-icons">
+              search
+            </span>
+          </mat-icon>
+        </mat-form-field>
+        <span class="material-icons">
+          start
+          </span>
+      </div>
       <div class="flex flex-col justify-start items-start">
-        <button mat-button *ngFor="let item of Duans; let i=index">
-         <span class="truncate w-36 hover:w-full text-left" [matTooltip]="item.Tieude">{{item.Tieude}}</span> 
+        <button mat-button *ngFor="let item of Duans; let i=index" [routerLink]="['./', item.id]">
+         <span class="truncate text-left" [matTooltip]="item.Tieude">{{item.Tieude}}</span> 
         </button>
       </div>
     </mat-drawer>
   
-    <mat-drawer-content class="flex flex-row flex-auto p-3">
+    <mat-drawer-content class="flex flex-col flex-auto p-3">
       <div class="flex flex-row">
         <span class="material-icons" (click)="drawer.toggle()">menu</span>    
       </div>
            
       <div class="flex flex-col flex-auto">
+        <app-congviecboard class="absolute inset-0 top-8 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
         <!-- <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1" type="dauviec"></app-congviecboard> -->
-        <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
         <!-- <app-qlcvboard></app-qlcvboard> -->
         <!-- <app-list *ngIf="view==2"></app-list>
         <app-timeline *ngIf="view==3"></app-timeline> -->

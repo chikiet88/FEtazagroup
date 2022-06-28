@@ -107,6 +107,8 @@ export class BoardComponent implements OnInit {
             }
 
         });
+        console.log(this.Boards);
+        
         this.listTitleForm = this._formBuilder.group({
             title: ['']
         });

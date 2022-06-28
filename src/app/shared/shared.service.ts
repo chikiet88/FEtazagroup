@@ -27,6 +27,7 @@ export class SharedService {
   get upload$(): Observable<any> {
     return this._upload.asObservable();
   }
+
   getAllUpload(): Observable<any> {
     return this._httpClient.get(`${environment.ApiURL}/upload`).pipe(
       tap((response) => {

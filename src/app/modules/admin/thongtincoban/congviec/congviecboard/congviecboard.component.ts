@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { Board, Card, List } from 'app/modules/admin/apps/scrumboard/scrumboard.models';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
@@ -12,13 +12,15 @@ import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import { QuanlycongviecService } from '../../quanlycongviec/quanlycongviec.service';
+import { CongviecService } from '../congviec.service';
+import { SharedService } from 'app/shared/shared.service';
 @Component({
   selector: 'app-congviecboard',
   templateUrl: './congviecboard.component.html',
   styleUrls: ['./congviecboard.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class CongviecboardComponent implements OnInit {
+export class CongviecboardComponent implements OnInit,OnDestroy {
     listTitleForm: FormGroup;
     @ViewChild('titleInput') titleInput: ElementRef;
     BoardGrouptasks: any;
@@ -33,8 +35,10 @@ export class CongviecboardComponent implements OnInit {
     triggerOrigin: any;
     isOpenDuan = false;
     SelectDuan: any;
+    ThisDuan: any;
     TasksNoGroup: any;
     Grouptasks: any[] = [];
+    filteredGroups: any[] = [];
     Boards: any[] = [];
     Tasks: any[] = [];
     Sections: any[] = [];
@@ -43,17 +47,19 @@ export class CongviecboardComponent implements OnInit {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
     Duansections: any;
+    isLoading: boolean;
     constructor(
+        private _sharedService: SharedService,
         private _scrumboardService: ScrumboardService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
-        private _quanlycongviecService: QuanlycongviecService,
+        private _congviecService: CongviecService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _notifierService: NotifierService,
         private _userService: UserService,
         private _nhanvienServiceService: NhanvienService,
+        private _formBuilder: FormBuilder,
     ) {
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -61,53 +67,30 @@ export class CongviecboardComponent implements OnInit {
                 this.CUser = data;
                 this._changeDetectorRef.markForCheck();
             });
-        this._quanlycongviecService.getAllTasks().subscribe();
-        this._quanlycongviecService.getAllDuans().subscribe();
-        this._quanlycongviecService.getAllGrouptasks().subscribe();
-        this._quanlycongviecService.getAllSection().subscribe();
-        this._quanlycongviecService.getDuans();
-        this._quanlycongviecService.grouptasks$.subscribe((data) => {
-            this.Grouptasks = this.filteredTasks = data;
-            this._changeDetectorRef.markForCheck();
-        })
-        this._quanlycongviecService.tasks$.subscribe((data) => {
-            this.Tasks = this.filteredTasks = data
-            this._changeDetectorRef.markForCheck();
-        })
-        this._quanlycongviecService.sections$.subscribe((data) => {
-            this.Sections = data;
-            this._changeDetectorRef.markForCheck();
-        })
-        this._quanlycongviecService.duans$.subscribe((data) => {
-            this.Duans = this.filteredDuans = data
-            this._changeDetectorRef.markForCheck();
-        })
-        this._quanlycongviecService.boards$.subscribe((data)=>
-          {        
-              this.Boards =  data;     
-              console.log(this.Boards);
-
-          })
-        this._quanlycongviecService.Duansections$.subscribe((data) => { this.Duansections = data; })
-
-
-    }
-    ngOnInit(): void {
-        // console.log(this.Grouptasks);
-        // console.log(this.Tasks);
-        // const Unique = [... new Set(this.Tasks.map(v => v.gid))].map(v => this.Grouptasks.find(v1 => v1.id == v));
-        // console.log(Unique);
-        // Unique.forEach(v => {
-        //     if (v != undefined) {
-        //         v.tasks = this.Tasks.filter(v1 => v1.gid == v.id)
-        //         this.Boards.push(v);
-        //     }
-        //     else {
-        //         const data = { "Tieude": "Chưa Có Nhóm", "tasks": this.Tasks.filter(v1 => v1.gid == 0) };
-        //         this.Boards.push(data);
-        //     }
-
-        // });
+            this._congviecService.getAllDuans().subscribe();
+            this._congviecService.duans$.subscribe((data) => {
+                this.Duans = this.filteredDuans = data
+                this._changeDetectorRef.markForCheck();
+            })
+            this._congviecService.getAllTasks().subscribe();
+            this._congviecService.tasks$.subscribe((data) => {
+                this.Tasks = this.filteredTasks  = data                         
+                this._changeDetectorRef.markForCheck();
+            }) 
+            this._congviecService.duan$.subscribe((data) => {
+                this.ThisDuan = data; 
+                this._changeDetectorRef.markForCheck();
+            }) 
+            this._congviecService.getAllGrouptasks().subscribe();
+            this._congviecService.grouptasks$.subscribe((data) => {  
+                this.Grouptasks = this.filteredGroups = data;
+            })      
+            this._congviecService.getBoards();
+            this._congviecService.boards$.subscribe((data) => {  
+                this.Boards = data
+            })      
+         }
+    ngOnInit(): void {      
         this.listTitleForm = this._formBuilder.group({
             title: ['']
         });
@@ -118,13 +101,9 @@ export class CongviecboardComponent implements OnInit {
     ngAfterViewInit() {
 
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
-    }
     ChangeTask(item, type, value) {
         item[type] = value;
-        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this._congviecService.UpdateTasks(item, item.id).subscribe();
         this._notifierService.notify('success', 'Cập Nhật Thành Công');
     }
     DeleteCard(item) {
@@ -141,7 +120,7 @@ export class CongviecboardComponent implements OnInit {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._quanlycongviecService.DeleteTasks(item.id).subscribe();
+                this._congviecService.DeleteTasks(item.id).subscribe();
             }
         });
     }
@@ -153,8 +132,8 @@ export class CongviecboardComponent implements OnInit {
     addList(title: string): void {
         let ordering = 0;
         if (this.Grouptasks.length != 0) { ordering = Math.max(...this.Grouptasks.map(o => o.Ordering)) + 1 }
-        let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id, Ordering: ordering }
-        this._quanlycongviecService.CreateGrouptasks(group).subscribe();
+        let group = { Tieude: title, IsOpen: true, idTao: this.CUser.id, Ordering: ordering,pid:this.ThisDuan.id }
+        this._congviecService.CreateGrouptasks(group).subscribe();
     }
     updateListTitle(event: any, list): void {
         const element: HTMLInputElement = event.target;
@@ -165,7 +144,7 @@ export class CongviecboardComponent implements OnInit {
         }
         list.Tieude = element.value = newTitle.trim();
         delete list.tasks;
-        this._quanlycongviecService.UpdateGrouptasks(list, list.id).subscribe();
+        this._congviecService.UpdateGrouptasks(list, list.id).subscribe();
     }
     deleteGroup(item): void {
         console.log(item.tasks.length);
@@ -182,7 +161,7 @@ export class CongviecboardComponent implements OnInit {
             });
             confirmation.afterClosed().subscribe((result) => {
                 if (result === 'confirmed') {
-                    this._quanlycongviecService.DeleteGrouptasks(item.id).subscribe();
+                    this._congviecService.DeleteGrouptasks(item.id).subscribe();
                 }
             });
         }
@@ -190,8 +169,8 @@ export class CongviecboardComponent implements OnInit {
     }
     addCard(list: any, title: string): void {
         const task = { Tieude: title, gid: list.id, idTao: this.CUser.id }
-        this._quanlycongviecService.CreateTasks(task).subscribe(
-        );
+        this._congviecService.CreateTasks(task).subscribe();
+        this.ngOnInit();
     }
 
     listDropped(event: CdkDragDrop<List[]>): void {
@@ -212,7 +191,7 @@ export class CongviecboardComponent implements OnInit {
             transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
             event.container.data[event.currentIndex].gid = event.container.id;
             const item = event.container.data[event.currentIndex]
-            this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+            this._congviecService.UpdateTasks(item, item.id).subscribe();
 
         }
 
@@ -232,13 +211,13 @@ export class CongviecboardComponent implements OnInit {
     }
     ChangeStatusTasks(item, status) {
         item.Trangthai = status;
-        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this._congviecService.UpdateTasks(item, item.id).subscribe();
         this.ngOnInit();
     }
     UpdateDeadlineTask(item, StartValue, EndValue) {
         item.Batdau = StartValue;
         item.Ketthuc = EndValue;
-        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this._congviecService.UpdateTasks(item, item.id).subscribe();
     }
     toggleDuan(trigger: any, row) {
         this.SelectDuan = row
@@ -247,8 +226,13 @@ export class CongviecboardComponent implements OnInit {
     }
     ChonDuan(item, id) {
         item.sid = id;
-        this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+        this._congviecService.UpdateTasks(item, item.id).subscribe();
         this.isOpenDuan = false;
+    }
+    ngOnDestroy(): void
+    {
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
     }
 
 }

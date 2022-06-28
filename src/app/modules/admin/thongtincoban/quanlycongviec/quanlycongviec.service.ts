@@ -77,7 +77,7 @@ export class QuanlycongviecService {
         const duans = this._duans.value||[];
         const secstions = this._sections.value;
         duans.forEach(v => {v.sections = secstions.filter(v1=>v1.pjid==v.id)});
-        //console.log(duans);
+        console.log(duans);
        return this._duansections.next(duans);
     }
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
@@ -14,8 +14,11 @@ import { CongviecService } from './congviec.service';
 })
 export class CongviecComponent implements OnInit {
   CUser: any;
+  ThisDuan: any;
   Duans: any[];
   filteredDuans: any[];
+  Groups: any[];
+  filteredGroups: any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _scrumboardService: ScrumboardService,
@@ -37,12 +40,23 @@ export class CongviecComponent implements OnInit {
       this._congviecService.getAllDuans().subscribe();
       this._congviecService.duans$.subscribe((data) => {
           this.Duans = this.filteredDuans = data
-          console.log(this.Duans);
           this._changeDetectorRef.markForCheck();
       })
   }
 
   ngOnInit(): void {
+
+  }
+  ChosenDuan(item)
+  {
+    this.ThisDuan = item;
+    console.log(item);
+    
+  }
+  ngOnDestroy(): void
+  {
+      this._unsubscribeAll.next(null);
+      this._unsubscribeAll.complete();
   }
 
 }
