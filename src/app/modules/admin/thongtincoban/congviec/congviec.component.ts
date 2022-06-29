@@ -23,7 +23,7 @@ export class CongviecComponent implements OnInit {
   filteredGroups: any[];
   GroupbyUser:any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  @ViewChild('drawer1', {static: false}) drawer1: MatDrawer;
+  @ViewChild('drawer1', {static: true}) drawer1: MatDrawer;
   CurretTask:any;
   Menuwidth:any;
   constructor(
@@ -56,7 +56,13 @@ export class CongviecComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+      this.drawer1.openedChange.subscribe((opened) => {
+        if (!opened)
+        {
+          this._router.navigate(['./',this.ThisDuan.id], {relativeTo: this._activatedRoute});
+            this._changeDetectorRef.markForCheck();
+        }
+    });
   }
   Menutoggle()
   {

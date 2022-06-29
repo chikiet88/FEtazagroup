@@ -85,11 +85,11 @@
                                             </div>
                                             <div
                                                 class="group-hover:flex hidden flex-row justify-between items-center space-x-2">
-                                                <div class="cursor-pointer space-x-2"  [routerLink]="[ThisDuan.id, card.id]">
+                                                <a class="cursor-pointer space-x-2"  [routerLink]="[ThisDuan.id, card.id]">
                                                     <span class="material-icons text-lg" (click)="OpenEdit(card)">
                                                         edit
                                                     </span>
-                                                </div>
+                                                </a>
                                                 <div>
                                                     <span class="material-icons text-lg text-red-500"
                                                         (click)="DeleteCard(card)">

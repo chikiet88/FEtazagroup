@@ -19,9 +19,9 @@
         </div>
       </div>
       <div class="flex flex-col justify-start items-start">
-        <button mat-button *ngFor="let item of Duans; let i=index" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+        <a mat-button *ngFor="let item of Duans; let i=index" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
          <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}" [matTooltip]="item.Tieude">{{item.Tieude}}</span> 
-        </button>
+        </a>
       </div>
     </mat-drawer>
   

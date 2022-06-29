@@ -50,31 +50,27 @@ export class EdittaskComponent implements OnInit {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
       })
+      this._congviecService.duan$.subscribe((data) => {
+          this.ThisDuan =  data
+          this._changeDetectorRef.markForCheck();
+      })
       this._congviecService.task$.subscribe((data)=>{
-        if(data)
-        {
         this.CurrentTask = data;
         this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurrentTask.Thuchien);
-        console.log(data);
-        }
        })
-
   }
 
 
   ngOnInit(): void {
-
-    this._matDialog.open(ScrumboardCardDetailsComponent, {autoFocus: false})
-    .afterClosed()
-    .subscribe(() => {
-
-        // Go up twice because card routes are setup like this; "card/CARD_ID"
-        this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
-    });
+    if(this.CurrentTask)
+    {
+    this._congviecComponent.drawer1.open();
+    }
   }
   CloseDraw1()
   {
-    this._congviecComponent.drawer1.toggle();
+    this._congviecComponent.drawer1.close();
+    this._router.navigate(['./',this.ThisDuan.id], {relativeTo: this._activatedRoute});
   }
 
 
