@@ -82,6 +82,7 @@ getAllDuans(): Observable<any> {
       switchMap(duans => this._httpClient.post(`${environment.ApiURL}/project`, duan).pipe(
         map((result) => {
           this._duans.next([result, ...duans]);
+          this._duan.next(result);
           this.getBoards();
           return result;
         })

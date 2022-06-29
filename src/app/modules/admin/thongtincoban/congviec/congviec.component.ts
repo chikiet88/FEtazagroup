@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -24,6 +25,7 @@ export class CongviecComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('drawer1', {static: false}) drawer1: MatDrawer;
   CurretTask:any;
+  Menuwidth:any;
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -34,6 +36,7 @@ export class CongviecComponent implements OnInit {
     private _notifierService: NotifierService,
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
+    private _dialog: MatDialog
   ) {
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -46,16 +49,34 @@ export class CongviecComponent implements OnInit {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
       })
+      this._congviecService.duan$.subscribe((data) => {
+          this.ThisDuan = data
+          this._changeDetectorRef.markForCheck();
+      })
   }
 
   ngOnInit(): void {
 
   }
+  Menutoggle()
+  {
+    this.Menuwidth = !this.Menuwidth;
+  }
+  OpenDialog(myDialog: TemplateRef<any>)
+  {
+    this._dialog.open(myDialog,{autoFocus: false});
+  }
+  CreateDuan(item)
+  {
+    console.log(item.value);
+    this.ThisDuan = { "Tieude": item.value,"idTao": this.CUser.id };
+    this._congviecService.CreateDuans(this.ThisDuan).subscribe();
+    this._dialog.closeAll();
+  }
   ChosenDuan(item)
   {
     this.ThisDuan = item;
     console.log(item);
-    
   }
   ngOnDestroy(): void
   {

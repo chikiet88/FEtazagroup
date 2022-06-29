@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -36,6 +37,7 @@ export class EdittaskComponent implements OnInit {
     private _userService: UserService,
     private _nhanvienServiceService: NhanvienService,
     private _congviecComponent: CongviecComponent,
+    private _matDialog: MatDialog,
   ) {
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -61,6 +63,14 @@ export class EdittaskComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    this._matDialog.open(ScrumboardCardDetailsComponent, {autoFocus: false})
+    .afterClosed()
+    .subscribe(() => {
+
+        // Go up twice because card routes are setup like this; "card/CARD_ID"
+        this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+    });
   }
   CloseDraw1()
   {

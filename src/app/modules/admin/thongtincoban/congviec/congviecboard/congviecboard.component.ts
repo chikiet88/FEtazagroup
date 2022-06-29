@@ -103,6 +103,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     ngAfterViewInit() {
 
     }
+
     OpenEdit(item) {
         console.log(item);
         //this._quanlycongviecService.changeTask(card);

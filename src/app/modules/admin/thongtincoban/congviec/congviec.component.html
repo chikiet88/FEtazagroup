@@ -1,5 +1,5 @@
 <mat-drawer-container class="flex w-full" autosize>
-    <mat-drawer #drawer class="p-3 w-auto hover:w-full" mode="side" opened="true">
+    <mat-drawer #drawer class="p-3" [ngClass]="{'w-auto': Menuwidth}" mode="side" opened="true">
       <div class="flex flex-row justify-between items-center space-x-2 px-4">
         <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
           <input matInput [placeholder]="'Tìm Kiếm'">
@@ -9,13 +9,18 @@
             </span>
           </mat-icon>
         </mat-form-field>
-        <span class="material-icons">
-          start
-          </span>
+        <div (click)="Menutoggle()">
+          <span class="material-icons" *ngIf="!Menuwidth">
+            east
+            </span>
+          <span class="material-icons" *ngIf="Menuwidth">
+            west
+            </span>
+        </div>
       </div>
       <div class="flex flex-col justify-start items-start">
-        <button mat-button *ngFor="let item of Duans; let i=index" [routerLink]="['./', item.id]">
-         <span class="truncate text-left" [matTooltip]="item.Tieude">{{item.Tieude}}</span> 
+        <button mat-button *ngFor="let item of Duans; let i=index" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+         <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}" [matTooltip]="item.Tieude">{{item.Tieude}}</span> 
         </button>
       </div>
     </mat-drawer>
@@ -25,9 +30,16 @@
        <app-edittask></app-edittask>
     </mat-drawer>
 
-    <mat-drawer-content class="flex flex-col flex-auto p-3">
-      <div class="flex flex-row">
-        <span class="material-icons" (click)="drawer.toggle()">menu</span>    
+    <mat-drawer-content class="flex flex-col flex-auto p-3 w-full">
+      <div class="flex flex-row justify-between">
+        <div class="flex flex-row space-x-4 items-center">
+          <span class="material-icons" (click)="drawer.toggle()">menu</span> 
+            <div class="text-2xl" *ngIf="ThisDuan">{{ThisDuan.Tieude}}</div>
+        </div>
+
+        <span class="material-icons mr-4" (click)="OpenDialog(myDialog)">
+          add_circle
+          </span>
       </div>           
       <div class="flex flex-col flex-auto">
         <app-congviecboard class="absolute inset-0 top-8 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
@@ -37,5 +49,24 @@
         <app-timeline *ngIf="view==3"></app-timeline> -->
      </div>   
     </mat-drawer-content>
+
+
+  <div class="flex flex-col flex-auto min-w-160">
+  <ng-template #myDialog>
+    <div class="flex flex-col flex-auto min-w-160">
+    <h2 matDialogTitle>Tạo Mới Dự Án</h2>
+    <mat-dialog-content>
+      <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
+        <input matInput [placeholder]="'Nhập Tên Dự Án'" #Tenduan>
+      </mat-form-field>     
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button class="bg-green-500 text-white" (click)="CreateDuan(Tenduan)">Tạo Mới</button>
+      <button mat-button matDialogClose class="bg-red-500 text-white">Hủy</button>
+    </mat-dialog-actions>
+  </div>
+  </ng-template>
+  </div>
+
 
   </mat-drawer-container>

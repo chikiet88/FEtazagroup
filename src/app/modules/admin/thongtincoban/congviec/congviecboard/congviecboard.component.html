@@ -1,4 +1,5 @@
-<div class="scroll flex-auto overflow-y-hidden" cdkScrollable>
+<div *ngIf="!ThisDuan">Chưa Chọn Dự Án</div>
+<div *ngIf="ThisDuan" class="scroll flex-auto overflow-y-hidden" cdkScrollable>
     <div class="flex h-full" cdkDropList [cdkDropListData]="Boards" [cdkDropListOrientation]="'horizontal'"
         (cdkDropListDropped)="listDropped($event)">
         <div class="flex items-start space-x-4" cdkDropListGroup>
@@ -84,7 +85,7 @@
                                             </div>
                                             <div
                                                 class="group-hover:flex hidden flex-row justify-between items-center space-x-2">
-                                                <div class="cursor-pointer space-x-2"  [routerLink]="['task', card.id]">
+                                                <div class="cursor-pointer space-x-2"  [routerLink]="[ThisDuan.id, card.id]">
                                                     <span class="material-icons text-lg" (click)="OpenEdit(card)">
                                                         edit
                                                     </span>

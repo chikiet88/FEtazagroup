@@ -70,11 +70,13 @@ export class BoardComponent implements OnInit {
             this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.tasks$.subscribe((data) => {
-            this.Tasks = this.filteredTasks = data.filter(v => v.idTao == this.CUser.id || v.Thuchien == this.CUser.id)
+            //this.Tasks = this.filteredTasks = data.filter(v => v.idTao == this.CUser.id || v.Thuchien == this.CUser.id)
+            this.Tasks = this.filteredTasks = data
             this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.sections$.subscribe((data) => {
-            this.Sections = data.filter(v => v.idTao == this.CUser.id)
+            //this.Sections = data.filter(v => v.idTao == this.CUser.id)
+            this.Sections = data
             this._changeDetectorRef.markForCheck();
         })
         this._quanlycongviecService.duans$.subscribe((data) => {
