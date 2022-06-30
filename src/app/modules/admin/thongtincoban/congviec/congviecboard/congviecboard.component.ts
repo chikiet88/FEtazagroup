@@ -32,14 +32,17 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     filteredDuans: any;
     CUser: any;
     Uutiens: any[];
+    Nhanviens: any[];
     Duans: any[];
     triggerOrigin: any;
     isOpenDuan = false;
     SelectDuan: any;
     ThisDuan: any;
+    ThisTask: any;
     TasksNoGroup: any;
     Grouptasks: any[] = [];
     filteredGroups: any[] = [];
+    filteredNhanviens: any[] = [];
     Boards: any[] = [];
     Tasks: any[] = [];
     Sections: any[] = [];
@@ -49,6 +52,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     @Output() readonly GetTask: EventEmitter<any> = new EventEmitter<any>();
     Duansections: any;
     isLoading: boolean;
+    triggerType:any[]=[];
     constructor(
         private _sharedService: SharedService,
         private _scrumboardService: ScrumboardService,
@@ -67,6 +71,11 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 this.CUser = data;
+                this._changeDetectorRef.markForCheck();
+            });
+        this._nhanvienServiceService.nhanviens$
+            .subscribe((data) => {
+                this.Nhanviens =  this.filteredNhanviens = data;
                 this._changeDetectorRef.markForCheck();
             });
             this._congviecService.getAllDuans().subscribe();
@@ -242,5 +251,22 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
+    toggleOverlay(trigger: any,item,type) {  
+        console.log(item);
+        this.ThisTask = item; 
+        this.triggerOrigin = trigger;
+        this.triggerType[type] = !this.triggerType[type]    
+      }
+    filterVitri(event): void
+    {
+        const value = event.target.value.toLowerCase();
+        console.log(value);
+        this.filteredNhanviens = this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
+    }
+    ChangeValue(item,type,value) {
+        item[type]=value;
+        this._congviecService.UpdateTasks(item,item.id).subscribe();
+        this._changeDetectorRef.markForCheck();
+        this.triggerType[type] = false;
+      }
 }

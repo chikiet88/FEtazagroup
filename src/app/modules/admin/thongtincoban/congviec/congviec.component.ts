@@ -46,7 +46,7 @@ export class CongviecComponent implements OnInit {
     });
       this._congviecService.getAllDuans().subscribe();
       this._congviecService.duans$.subscribe((data) => {
-          this.Duans = this.filteredDuans = data
+          this.Duans = this.filteredDuans = data.filter(v=>v.Thamgia.some(v1=>v1==this.CUser.id))
           this._changeDetectorRef.markForCheck();
       })
       this._congviecService.duan$.subscribe((data) => {
@@ -84,10 +84,16 @@ export class CongviecComponent implements OnInit {
     this.ThisDuan = item;
     console.log(item);
   }
+  UpdateDuan(item, type, value) {      
+    item[type] = value;
+    this._congviecService.UpdateDuans(item, item.id).subscribe();
+    this._notifierService.notify('success', 'Cập Nhật Thành Công');
+  }
   ngOnDestroy(): void
   {
       this._unsubscribeAll.next(null);
       this._unsubscribeAll.complete();
   }
+
   
 }
