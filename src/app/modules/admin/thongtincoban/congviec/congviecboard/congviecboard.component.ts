@@ -268,5 +268,6 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         this._congviecService.UpdateTasks(item,item.id).subscribe();
         this._changeDetectorRef.markForCheck();
         this.triggerType[type] = false;
+        this._notifierService.notify('success', 'Cập Nhật Thành Công');
       }
 }

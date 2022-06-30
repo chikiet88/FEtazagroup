@@ -75,7 +75,7 @@ export class CongviecComponent implements OnInit {
   CreateDuan(item)
   {
     console.log(item.value);
-    this.ThisDuan = { "Tieude": item.value,"idTao": this.CUser.id };
+    this.ThisDuan = { "Tieude": item.value,"idTao": this.CUser.id,"Thamgia": [this.CUser.id],"Trangthai":0 };
     this._congviecService.CreateDuans(this.ThisDuan).subscribe();
     this._dialog.closeAll();
   }
@@ -88,6 +88,23 @@ export class CongviecComponent implements OnInit {
     item[type] = value;
     this._congviecService.UpdateDuans(item, item.id).subscribe();
     this._notifierService.notify('success', 'Cập Nhật Thành Công');
+  }
+  DeleteDuan(item) {   
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Xóa Dự Án',
+      message: 'Bạn Có Chắc Chắn Xóa Dự Án Này',
+      actions: {
+          confirm: {
+              label: 'Xóa'
+          }
+      }
+  });
+  confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+          this._congviecService.DeleteDuans(item.id).subscribe();
+          this._notifierService.notify('success', 'Xóa Thành Công');
+      }
+  });   
   }
   ngOnDestroy(): void
   {

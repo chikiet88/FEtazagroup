@@ -22,9 +22,13 @@
         </div>
       </div>
       <div class="flex flex-col justify-start items-start">
-        <a mat-button *ngFor="let item of Duans; let i=index" class="flex flex-row space-x-2">
-          <span>{{item.Trangthai}}</span>
-         <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}" [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">{{item.Tieude}}</span> 
+        <a mat-button *ngFor="let item of Duans; let i=index" class="flex flex-row space-x-4" [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+          <div *ngIf="item.Trangthai==0" class="mx-2 text-blue-500"><span class="material-icons my-auto text-xl">new_releases</span></div>
+          <div *ngIf="item.Trangthai==1" class="mx-2 text-yellow-500"><span class="material-icons my-auto text-xl">hourglass_full</span></div>
+          <div *ngIf="item.Trangthai==2" class="mx-2 text-green-500"><span class="material-icons my-auto text-xl">check_circle</span></div>        
+         <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}">
+          {{item.Tieude}}
+        </span> 
         </a>
       </div>
     </mat-drawer>
@@ -36,33 +40,34 @@
 
     <mat-drawer-content class="flex flex-col flex-auto p-3 w-full">
       <div class="flex flex-row justify-between">
-        <div class="flex flex-row space-x-4 items-center">
+        <div class="flex flex-row space-x-4 items-center" *ngIf="ThisDuan">
           <span class="material-icons" (click)="drawer.toggle()">menu</span> 
             <div class="text-2xl" *ngIf="ThisDuan">{{ThisDuan.Tieude}}</div>
 
-            <span class="material-icons">
+            <span class="material-icons text-hint">
               groups
               </span>
               <div class="font-bold m-auto">
                 <ng-container *ngIf="ThisDuan.Noibat==0; else elseTemplate">
-                  <span class="material-icons" (click)="UpdateDuan(ThisDuan,'Noibat',true)">star_border</span>
+                  <span class="material-icons  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',true)">star_border</span>
                 </ng-container>
                 <ng-template #elseTemplate>
-                  <span class="material-icons text-yellow-500" (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
+                  <span class="material-icons text-yellow-500  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
                 </ng-template>
               </div>
               <div class="flex space-x-2">
                 <div class="m-auto">
                   <div mat-button [matMenuTriggerFor]="menu" >
-                    <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"> 
-                      <span class="material-icons my-auto">notifications</span></div>
-                    <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span class="material-icons my-auto">hourglass_full</span></div>
-                    <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span class="material-icons my-auto">check_circle</span></div>
+                    <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"><span class="material-icons my-auto text-xl">new_releases</span></div>
+                    <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span class="material-icons my-auto text-xl">hourglass_full</span></div>
+                    <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span class="material-icons my-auto text-xl">check_circle</span></div>
                     </div>
                 </div>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item class="text-yellow-500" (click)="UpdateDuan(ThisDuan,'Trangthai',1)"><span class="material-icons my-auto">hourglass_full</span> Đang Làm</button>
-                    <button mat-menu-item class="text-green-500" (click)="UpdateDuan(ThisDuan,'Trangthai',2)"><span class="material-icons my-auto">check_circle</span> Hoàn Thành</button>
+                    <button mat-menu-item class="text-blue-500" (click)="UpdateDuan(ThisDuan,'Trangthai',0)"><span class="material-icons mx-2 text-xl">new_releases</span> Mới</button>
+                    <button mat-menu-item class="text-yellow-500" (click)="UpdateDuan(ThisDuan,'Trangthai',1)"><span class="material-icons mx-2 text-xl">hourglass_full</span> Đang Làm</button>
+                    <button mat-menu-item class="text-green-500" (click)="UpdateDuan(ThisDuan,'Trangthai',2)"><span class="material-icons mx-2 text-xl">check_circle</span> Hoàn Thành</button>
+                    <button mat-menu-item class="text-red-500" (click)="DeleteDuan(ThisDuan)"><span class="material-icons mx-2 text-xl">delete</span> Xóa Dự Án</button>
                   </mat-menu>
                 </div>
 

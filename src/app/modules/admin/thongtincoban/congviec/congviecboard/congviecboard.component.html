@@ -100,7 +100,7 @@
                                 </div>       
                                 <div class="flex items-center">
                                         <div class="flex items-center rounded cursor-pointer"
-                                        [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !card.Batdau&&!card.Ketthuc,
+                                        [ngClass]="{'text-gray-500 dark:text-gray-300 dark:bg-gray-700': !card.Batdau&&!card.Ketthuc,
                                                   'text-white bg-blue-500 dark:text-green-100 dark:bg-green-500': card.Batdau && card.Ketthuc}" (click)="DeadlinePicker.open()">
                                         <span class="p-1 text-xs w-full">
                                           <ng-container *ngIf="card.Batdau || card.Ketthuc">
