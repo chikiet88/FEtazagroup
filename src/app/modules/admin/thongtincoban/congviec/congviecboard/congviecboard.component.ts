@@ -257,6 +257,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         this.triggerOrigin = trigger;
         this.triggerType[type] = !this.triggerType[type]    
       }
+
     filterVitri(event): void
     {
         const value = event.target.value.toLowerCase();

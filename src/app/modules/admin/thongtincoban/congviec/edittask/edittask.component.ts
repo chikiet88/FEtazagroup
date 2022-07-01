@@ -56,7 +56,7 @@ export class EdittaskComponent implements OnInit {
       })
       this._congviecService.task$.subscribe((data)=>{
         this.CurrentTask = data;
-        this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurrentTask.Thuchien);
+        //this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurrentTask.Thuchien);
        })
   }
 

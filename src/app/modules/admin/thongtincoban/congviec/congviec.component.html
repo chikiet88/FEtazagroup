@@ -39,42 +39,53 @@
     </mat-drawer>
 
     <mat-drawer-content class="flex flex-col flex-auto p-3 w-full">
-      <div class="flex flex-row justify-between">
-        <div class="flex flex-row space-x-4 items-center" *ngIf="ThisDuan">
-          <span class="material-icons" (click)="drawer.toggle()">menu</span> 
-            <div class="text-2xl" *ngIf="ThisDuan">{{ThisDuan.Tieude}}</div>
-
-            <span class="material-icons text-hint">
-              groups
-              </span>
-              <div class="font-bold m-auto">
-                <ng-container *ngIf="ThisDuan.Noibat==0; else elseTemplate">
-                  <span class="material-icons  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',true)">star_border</span>
-                </ng-container>
-                <ng-template #elseTemplate>
-                  <span class="material-icons text-yellow-500  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
-                </ng-template>
+      <div class="flex flex-row justify-between"  *ngIf="ThisDuan">
+        <div class="flex flex-row space-x-4 items-center">
+          <span class="material-icons" (click)="drawer.toggle()">menu</span>
+          <div class="text-2xl" *ngIf="ThisDuan">{{ThisDuan.Tieude}}</div>
+          <div class="flex flex-row items-center space-x-2">
+            <span matTooltip="abc" class="p-2 rounded hover:bg-gray-300" [matMenuTriggerFor]="Thamgia">{{ThisDuan.Thamgia.length ||'0'}} Tham Gia </span>
+                <mat-menu #Thamgia="matMenu">
+                  <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia">{{item|findbyid:Nhanviens:'name'}} ({{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}})</button>
+                </mat-menu>
+            <span class="material-icons text-hint p-2 rounded hover:bg-gray-300" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
+            (click)="toggleOverlay(trigger1,ThisDuan,'Thamgia')">
+            group_add
+          </span>
+          </div>
+          <div class="flex items-center p-2 rounded hover:bg-gray-300">
+            <ng-container *ngIf="ThisDuan.Noibat==0; else elseTemplate">
+              <span class="material-icons text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',true)">star_border</span>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <span class="material-icons text-yellow-500  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
+            </ng-template>
+          </div>
+          <div class="flex items-center p-2 rounded hover:bg-gray-300">
+              <div mat-button [matMenuTriggerFor]="menu">
+                <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"><span
+                    class="material-icons my-auto text-xl">new_releases</span></div>
+                <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span
+                    class="material-icons my-auto text-xl">hourglass_full</span></div>
+                <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span
+                    class="material-icons my-auto text-xl">check_circle</span></div>
               </div>
-              <div class="flex space-x-2">
-                <div class="m-auto">
-                  <div mat-button [matMenuTriggerFor]="menu" >
-                    <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"><span class="material-icons my-auto text-xl">new_releases</span></div>
-                    <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span class="material-icons my-auto text-xl">hourglass_full</span></div>
-                    <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span class="material-icons my-auto text-xl">check_circle</span></div>
-                    </div>
-                </div>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item class="text-blue-500" (click)="UpdateDuan(ThisDuan,'Trangthai',0)"><span class="material-icons mx-2 text-xl">new_releases</span> Mới</button>
-                    <button mat-menu-item class="text-yellow-500" (click)="UpdateDuan(ThisDuan,'Trangthai',1)"><span class="material-icons mx-2 text-xl">hourglass_full</span> Đang Làm</button>
-                    <button mat-menu-item class="text-green-500" (click)="UpdateDuan(ThisDuan,'Trangthai',2)"><span class="material-icons mx-2 text-xl">check_circle</span> Hoàn Thành</button>
-                    <button mat-menu-item class="text-red-500" (click)="DeleteDuan(ThisDuan)"><span class="material-icons mx-2 text-xl">delete</span> Xóa Dự Án</button>
-                  </mat-menu>
-                </div>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item class="text-blue-500" (click)="UpdateDuan(ThisDuan,'Trangthai',0)"><span
+                  class="material-icons mx-2 text-xl">new_releases</span> Mới</button>
+              <button mat-menu-item class="text-yellow-500" (click)="UpdateDuan(ThisDuan,'Trangthai',1)"><span
+                  class="material-icons mx-2 text-xl">hourglass_full</span> Đang Làm</button>
+              <button mat-menu-item class="text-green-500" (click)="UpdateDuan(ThisDuan,'Trangthai',2)"><span
+                  class="material-icons mx-2 text-xl">check_circle</span> Hoàn Thành</button>
+              <button mat-menu-item class="text-red-500" (click)="DeleteDuan(ThisDuan)"><span
+                  class="material-icons mx-2 text-xl">delete</span> Xóa Dự Án</button>
+            </mat-menu>    
+            </div>
 
         </div>
       </div>           
       <div class="flex flex-col flex-auto">
-        <app-congviecboard class="absolute inset-0 top-8 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
+        <app-congviecboard class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
         <!-- <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1" type="dauviec"></app-congviecboard> -->
         <!-- <app-qlcvboard></app-qlcvboard> -->
         <!-- <app-list *ngIf="view==2"></app-list>
@@ -102,3 +113,63 @@
 
 
   </mat-drawer-container>
+
+
+  <!-- <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="triggerType['Thamgia']" (detach)="triggerType['Thamgia'] = false"
+  (backdropClick)="triggerType['Thamgia'] = false">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center flex-row space-x-2 w-full justify-between">
+         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+            (input)="filterVitri($event)">
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filteredNhanviens">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple>
+              <div class="ml-1 flex flex-row space-x-2" (click)="ChangeValue(ThisDuan,'Thamgia',item.id)"><span>{{item.name}}</span></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template> -->
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="triggerType['Thamgia']" (detach)="triggerType['Thamgia'] = false"
+  (backdropClick)="triggerType['Thamgia'] = false">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center flex-row w-full justify-between">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+            (input)="filterVitri($event)">
+        </div>
+        <span (click)="AllThamgia()"
+          class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500">All</span>
+        <span (click)="ClearThamgia()"
+          class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer text-gray-800 bg-gray-300 dark:text-gray-100 dark:bg-gray-500">Clear</span>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of filteredNhanviens|Unique:ThisDuan.Thamgia:'id'">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
+              (click)="AddValue(ThisDuan,'Thamgia',item.id)">
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span></div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
