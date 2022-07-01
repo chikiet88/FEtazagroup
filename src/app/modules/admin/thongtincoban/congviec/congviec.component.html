@@ -42,13 +42,27 @@
       <div class="flex flex-row justify-between"  *ngIf="ThisDuan">
         <div class="flex flex-row space-x-4 items-center">
           <span class="material-icons" (click)="drawer.toggle()">menu</span>
-          <div class="text-2xl" *ngIf="ThisDuan">{{ThisDuan.Tieude}}</div>
+          <div class="text-2xl p-1 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900" *ngIf="ThisDuan">
+            <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+            [value]="ThisDuan.Tieude"
+            (keydown.enter)="UpdateDuan(ThisDuan, 'Tieude', $event.target.value);TieudeDuan.blur()" #TieudeDuan>
+          </div>
           <div class="flex flex-row items-center space-x-2">
-            <span matTooltip="abc" class="p-2 rounded hover:bg-gray-300" [matMenuTriggerFor]="Thamgia">{{ThisDuan.Thamgia.length ||'0'}} Tham Gia </span>
+            <span class="p-2 rounded bg-gray-200 hover:bg-gray-300" [matMenuTriggerFor]="Thamgia">
+              <span class="font-bold text-blue-500"> {{ThisDuan.Thamgia.length ||'0'}}</span>  
+             
+               Tham Gia </span>
                 <mat-menu #Thamgia="matMenu">
-                  <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia">{{item|findbyid:Nhanviens:'name'}} ({{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}})</button>
+                  <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia"> 
+                     <span class="w-48 truncate" matTooltip="{{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}}">
+                      {{item|findbyid:Nhanviens:'name'}}
+                     </span>
+                     <span class="material-icons text-xl text-red-500" (click)="RemoveValue(ThisDuan,'Thamgia',item)">
+                      remove_circle
+                      </span> 
+                    </button>
                 </mat-menu>
-            <span class="material-icons text-hint p-2 rounded hover:bg-gray-300" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
+            <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
             (click)="toggleOverlay(trigger1,ThisDuan,'Thamgia')">
             group_add
           </span>
@@ -165,7 +179,9 @@
           <ng-container *ngFor="let item of filteredNhanviens|Unique:ThisDuan.Thamgia:'id'">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
               (click)="AddValue(ThisDuan,'Thamgia',item.id)">
-              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span></div>
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span>
+                ({{Vitri[(item.id|findbyid:Nhanviens:'profile').Vitri]}})
+              </div>
             </div>
           </ng-container>
         </div>

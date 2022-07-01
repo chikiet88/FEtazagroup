@@ -15,6 +15,8 @@ import { QuanlycongviecService } from '../../quanlycongviec/quanlycongviec.servi
 import { CongviecService } from '../congviec.service';
 import { SharedService } from 'app/shared/shared.service';
 import { CongviecComponent } from '../congviec.component';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 @Component({
   selector: 'app-congviecboard',
   templateUrl: './congviecboard.component.html',
@@ -53,6 +55,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     Duansections: any;
     isLoading: boolean;
     triggerType:any[]=[];
+    Vitri: any;
     constructor(
         private _sharedService: SharedService,
         private _scrumboardService: ScrumboardService,
@@ -66,11 +69,19 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         private _nhanvienServiceService: NhanvienService,
         private _formBuilder: FormBuilder,
         private _congviecComponent: CongviecComponent,
+        private _cauhinhService: CauhinhService,
     ) {
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 this.CUser = data;
+                this._changeDetectorRef.markForCheck();
+            });
+            this._cauhinhService.getCauhinhs().subscribe();
+            this._cauhinhService.Cauhinhs$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((data: Cauhinh[]) => {
+                 this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
                 this._changeDetectorRef.markForCheck();
             });
         this._nhanvienServiceService.nhanviens$
@@ -162,6 +173,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         list.Tieude = element.value = newTitle.trim();
         delete list.tasks;
         this._congviecService.UpdateGrouptasks(list, list.id).subscribe();
+        this._notifierService.notify('success', 'Cập Nhật Thành Công'); 
     }
     deleteGroup(item): void {
         console.log(item.tasks.length);

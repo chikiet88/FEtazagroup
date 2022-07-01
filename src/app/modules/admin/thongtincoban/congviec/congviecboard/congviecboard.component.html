@@ -189,9 +189,11 @@
     <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
       <ng-container>
         <div class="py-2 space-y-2">
-          <ng-container *ngFor="let item of filteredNhanviens">
+          <ng-container *ngFor="let item of ThisDuan.Thamgia">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple>
-              <div class="ml-1 flex flex-row space-x-2" (click)="ChangeValue(ThisTask,'Thuchien',item.id)"><span>{{item.name}}</span></div>
+              <div class="ml-1 flex flex-row space-x-2" (click)="ChangeValue(ThisTask,'Thuchien',item)"><span>{{item|findbyid:Nhanviens:'name'}}</span>
+                ({{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}})
+              </div>
             </div>
           </ng-container>
         </div>

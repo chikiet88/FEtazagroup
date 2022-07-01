@@ -103,7 +103,7 @@ export class CongviecComponent implements OnInit {
     this.ThisDuan = item;
     console.log(item);
   }
-  UpdateDuan(item, type, value) {      
+  UpdateDuan(item, type, value) {          
     item[type] = value;
     this._congviecService.UpdateDuans(item, item.id).subscribe();
     this._notifierService.notify('success', 'Cập Nhật Thành Công');
@@ -128,18 +128,39 @@ export class CongviecComponent implements OnInit {
 
   toggleOverlay(trigger: any,item,type) {  
     this.triggerOrigin = trigger;
-    this.triggerType[type] = !this.triggerType[type]    
+    this.triggerType[type] = !this.triggerType[type]
+    this.filteredNhanviens = this.Nhanviens;    
   }
   filterVitri(event): void
   {
       const value = event.target.value.toLowerCase();
       this.filteredNhanviens = this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
   }
-  AddValue(item,type,value) {
+ AddValue(item,type,value) {
     item[type].push(value);
     this._congviecService.UpdateDuans(item,item.id).subscribe();
     this._changeDetectorRef.markForCheck();
     this.triggerType[type] = false;
+}
+RemoveValue(item,type,value) {
+  const confirmation = this._fuseConfirmationService.open({
+    title: 'Xóa Dự Án',
+    message: 'Bạn Có Chắc Chắn Xóa',
+    actions: {
+        confirm: {
+            label: 'Xóa'
+        }
+    }
+});
+confirmation.afterClosed().subscribe((result) => {
+    if (result === 'confirmed') {
+      item[type] = item[type].filter(v=>v!=value);
+      this._congviecService.UpdateDuans(item,item.id).subscribe();
+      this._changeDetectorRef.markForCheck();
+      this.triggerType[type] = false;
+        this._notifierService.notify('success', 'Xóa Thành Công');
+    }
+}); 
 }
 AllThamgia()
 {
@@ -152,7 +173,7 @@ AllThamgia()
 }
 ClearThamgia()
 {
-  this.ThisDuan.Thamgia = [];
+  this.ThisDuan.Thamgia = [this.CUser.id];
   this._congviecService.UpdateDuans(this.ThisDuan,this.ThisDuan.id).subscribe();
   this.triggerType['Thamgia'] = false;
   this._changeDetectorRef.markForCheck();
