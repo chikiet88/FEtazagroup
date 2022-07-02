@@ -7,10 +7,12 @@ import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
 import { ScrumboardService } from 'app/modules/admin/apps/scrumboard/scrumboard.service';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
+import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
+import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
 import { Subject, takeUntil } from 'rxjs';
 import { CongviecComponent } from '../congviec.component';
 import { CongviecService } from '../congviec.service';
-
+import Editor from 'ckeditor5/build/ckEditor';
 @Component({
   selector: 'app-edittask',
   templateUrl: './edittask.component.html',
@@ -26,6 +28,7 @@ export class EdittaskComponent implements OnInit {
   GroupbyUser:any[];
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   CurrentTask:any;
+  Vitri: any;
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -38,11 +41,19 @@ export class EdittaskComponent implements OnInit {
     private _nhanvienServiceService: NhanvienService,
     private _congviecComponent: CongviecComponent,
     private _matDialog: MatDialog,
+    private _cauhinhService: CauhinhService,
   ) {
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
         this.CUser = data;
+        this._changeDetectorRef.markForCheck();
+    });
+    this._cauhinhService.getCauhinhs().subscribe();
+    this._cauhinhService.Cauhinhs$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((data: Cauhinh[]) => {
+         this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
         this._changeDetectorRef.markForCheck();
     });
       this._congviecService.getAllDuans().subscribe();
@@ -59,8 +70,13 @@ export class EdittaskComponent implements OnInit {
         //this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurrentTask.Thuchien);
        })
   }
-
-
+  public Editor = Editor ;
+  public config = {
+    placeholder: 'Vui lòng nhập nội dung',
+    link : {
+      addTargetToExternalLinks: true
+    }
+  };
   ngOnInit(): void {
     if(this.CurrentTask)
     {
@@ -72,7 +88,11 @@ export class EdittaskComponent implements OnInit {
     this._congviecComponent.drawer1.close();
     this._router.navigate(['./',this.ThisDuan.id], {relativeTo: this._activatedRoute});
   }
-
+  UpdateTask(item,type,value)
+  {
+    // this._congviecService.UpdateTasks(this.CurretTask, this.CurretTask.id).subscribe();
+    // this.matDrawer.toggle();
+  }
 
 
   ChonDuan(item,id) {
@@ -127,21 +147,16 @@ export class EdittaskComponent implements OnInit {
   }
   UpdateDeadlineTask(item,StartValue,EndValue)
   {
-    // item.Batdau = StartValue;
-    // item.Ketthuc = EndValue;
-    // this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
+    item.Batdau = StartValue;
+    item.Ketthuc = EndValue;
+    this._congviecService.UpdateTasks(item, item.id).subscribe();
   }
   ChangeTask(item,type,value)
   {
-    // console.log(item,type,value);
-    // item[type] = value;
-    // this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
-  }
-
-  UpdateTask()
-  {
-    // this._quanlycongviecService.UpdateTasks(this.CurretTask, this.CurretTask.id).subscribe();
-    // this.matDrawer.toggle();
+    console.log(item,type,value);
+    item[type] = value;
+    this._congviecService.UpdateTasks(item, item.id).subscribe();
+    this._notifierService.notify('success', 'Cập Nhật Thành Công')
   }
   DeleteTask()
   {

@@ -1,14 +1,11 @@
 <div class="flex flex-col flex-0 p-2 rounded-2xl h-full bg-card" *ngIf="CurrentTask">
-    <div class="flex flex-row justify-between p-4">
-      <div>
-        <h2 class="text-2xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate"> {{CurrentTask.Tieude}}</h2>
+    <div class="flex flex-row justify-between p-2 border-b">
+      <div class="text-2xl p-1 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+        <input matInput class="w-full"
+        [value]="CurrentTask.Tieude"
+        (keydown.enter)="ChangeTask(CurrentTask,'Tieude',$event.target.value)">
       </div>
       <div class="flex flex-row space-x-4">
-        <!-- <span class="material-icons text-green-500" (click)="UpdateTask()">save</span>
-        <span class="material-icons text-red-500" (click)="DeleteTask()">delete_forever</span> -->
-      <!-- <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
-      <button mat-button class="bg-red-500 text-white" (click)="DeleteTask()">Xóa</button> -->
-      <!-- <span class="material-icons pr-4" (click)="CloseDraw1()"> -->
       <a class="material-icons pr-4" (click)="CloseDraw1()">
         cancel
       </a>
@@ -18,18 +15,17 @@
       <div class="flex flex-col space-y-4">
         <div class="my-auto font-bold w-1/4"> Mô Tả </div>
         <ckeditor [editor]="Editor" [config]="config" [data]="CurrentTask.Mota"
-          (change)="UpdateEditor(CurrentTask,'Mota',$event)" (ready)="onReady($event)"></ckeditor>
+          (change)="UpdateEditor(CurrentTask,'Mota',$event)"></ckeditor>
       </div>
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Deadline </div>
-        <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+        <div class="relative flex items-center p-2 rounded cursor-pointer"
           [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !CurrentTask.Batdau&&!CurrentTask.Ketthuc,
                     'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': CurrentTask.Batdau && CurrentTask.Ketthuc}" (click)="DeadlinePicker.open()">
-          <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
           <span class="ml-2 text-md font-medium">
             <ng-container *ngIf="CurrentTask.Batdau || CurrentTask.Ketthuc">{{CurrentTask.Batdau | date:'dd/MM/yyyy'}} -
               {{CurrentTask.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
-            <ng-container *ngIf="!CurrentTask.Batdau && !CurrentTask.Ketthuc">Chưa Chọn</ng-container>
+            <ng-container *ngIf="!CurrentTask.Batdau && !CurrentTask.Ketthuc"><mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon></ng-container>
           </span>
           <mat-form-field
             class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
@@ -62,21 +58,12 @@
               account_circle
               </span>
               <ng-container *ngIf="CurrentTask.Thuchien">  
-                <div class="flex flex-row space-x-2"><span>{{CurrentTask.Thuchien|findbyid:Nhanviens:'name'}}</span> <span class="text-sm text-hint">({{Vitri[(CurrentTask.Thuchien|findbyid:Nhanviens:'profile').Vitri]}})</span></div>
+                <div class="flex flex-row space-x-2"><span>{{CurrentTask.Thuchien|findbyid:Nhanviens:'name'}}</span> 
+                  <!-- <span class="text-sm text-hint">({{Vitri[(CurrentTask.Thuchien|findbyid:Nhanviens:'profile').Vitri] ||'0'}})</span> -->
+                </div>
               </ng-container>
               <ng-container *ngIf="!CurrentTask.Thuchien">
                <span>Chưa Chọn</span>
-              </ng-container>
-          </div>
-          <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleGroup(trigger,CurrentTask)">
-            <span class="material-icons">
-              assignment_turned_in
-              </span>
-              <ng-container *ngIf="CurrentTask.gid">
-                <span>{{(CurrentTask.gid|findbyid:Groups:'Tieude')}}</span>   
-              </ng-container>
-              <ng-container *ngIf="!CurrentTask.gid">
-                <span>Chưa Chọn</span>
               </ng-container>
           </div>
         </div>
@@ -117,7 +104,7 @@
         <div class="flex">Text Nội Dung Chat</div>
       </div>           
     </div>
-      <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
+    <div class="flex items-end p-4 border-t bg-gray-50 dark:bg-transparent">
         <div class="flex items-center h-11 my-px">
             <button mat-icon-button>
                 <mat-icon [svgIcon]="'heroicons_outline:emoji-happy'"></mat-icon>
