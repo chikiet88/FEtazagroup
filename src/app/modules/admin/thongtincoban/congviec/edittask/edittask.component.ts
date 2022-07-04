@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CongviecComponent } from '../congviec.component';
 import { CongviecService } from '../congviec.service';
 import Editor from 'ckeditor5/build/ckEditor';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 @Component({
   selector: 'app-edittask',
   templateUrl: './edittask.component.html',
@@ -33,6 +34,8 @@ export class EdittaskComponent implements OnInit {
   triggerType:any[]=[];
   Nhanviens: any[];
   filteredNhanviens: any[];
+  Thamgias: any[]=[];
+  filteredThamgias: any[]=[];
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -71,6 +74,12 @@ export class EdittaskComponent implements OnInit {
       })
       this._congviecService.duan$.subscribe((data) => {
           this.ThisDuan =  data
+          this.ThisDuan.Thamgia.forEach(v => {
+             const x = this.Nhanviens.find(v1=>v1.id==v)
+              this.Thamgias.push(x);
+          });
+          this.filteredThamgias =  this.Thamgias;
+          
           this._changeDetectorRef.markForCheck();
       })
       this._congviecService.task$.subscribe((data)=>{
@@ -96,13 +105,20 @@ export class EdittaskComponent implements OnInit {
     this._congviecComponent.drawer1.close();
     this._router.navigate(['./',this.ThisDuan.id], {relativeTo: this._activatedRoute});
   }
+  filterThamgia(event): void
+  {    
+      const value = event.target.value.toLowerCase();
+      this.filteredThamgias = this.Thamgias.filter(v => v.name.toLowerCase().includes(value));
+  }
+  UpdateEditor(item, type,{editor}: ChangeEvent ) {   
+    item[type] = editor.getData();
+    this._congviecService.UpdateTasks(item, item.id).subscribe();
+  }
   UpdateTask(item,type,value)
   {
     // this._congviecService.UpdateTasks(this.CurretTask, this.CurretTask.id).subscribe();
     // this.matDrawer.toggle();
   }
-
-
   ChonDuan(item,id) {
     // item.sid = id;
     // this._quanlycongviecService.UpdateTasks(item, item.id).subscribe();
@@ -170,6 +186,7 @@ export class EdittaskComponent implements OnInit {
     item[type] = value;
     this._congviecService.UpdateTasks(item, item.id).subscribe();
     this._notifierService.notify('success', 'Cập Nhật Thành Công')
+    this.triggerType[type] =false;
   }
   DeleteTask()
   {

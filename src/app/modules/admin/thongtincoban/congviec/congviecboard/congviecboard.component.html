@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-             <div class="scroll mt-2 overflow-auto bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+             <div class="scroll mt-2 overflow-auto border-dashed bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
                             <div [id]="list.id" class="px-3 py-5" cdkDropList [cdkDropListData]="list.tasks"
                                 (cdkDropListDropped)="cardDropped($event,list.tasks)">
                               <div>
@@ -35,9 +35,12 @@
                                        [ngClass]="{'border-blue-500': card.Trangthai==0,'border-yellow-500': card.Trangthai==1,'border-green-500': card.Trangthai==2}"
                                         cdkDrag>
                                         <div class="flex flex-row justify-between space-x-2 w-full items-center">
-                                            <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
-                                                open_with
-                                              </span>  
+                                          <div class="w-full py-1 px-2 rounded-md text-ellipsis overflow-hidden cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                            <textarea matInput cdkTextareaAutosize class="w-full"
+                                                [value]="card.Tieude"
+                                                (keydown.control.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
+                                        </div>
+                                           
                                        <div class="text-blue-500 flex space-x-2" *ngIf="card.Trangthai==0"
                                             [matMenuTriggerFor]="menu">
                                             <span class="material-icons m-auto text-lg p-2 rounded hover:bg-gray-300">
@@ -77,12 +80,12 @@
                                                 </span>
                                                 Hoàn Thành</button>
                                         </mat-menu>
-                                        
-                                            <div class="w-full py-1 px-2 rounded-md text-ellipsis overflow-hidden cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                                                <textarea matInput cdkTextareaAutosize class="w-full"
-                                                    [value]="card.Tieude"
-                                                    (keydown.control.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
-                                            </div>
+                                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
+                                          expand_more
+                                          </span>
+                                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
+                                          open_with
+                                        </span> 
 
                                         </div>
                               <div class="flex flex-row justify-between items-center space-x-4 text-hint w-full">
@@ -120,12 +123,11 @@
                                                   (click)="UpdateDeadlineTask(card,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
                                               </mat-date-range-picker-actions>
                                             </mat-date-range-picker>
-                                          </mat-form-field>
-                              
-                              
+                                          </mat-form-field>                              
                                         </mat-form-field>
                                       </div>
-                                </div>       
+                                </div> 
+
                                 <div class="flex items-center">
                                     <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
                                         message

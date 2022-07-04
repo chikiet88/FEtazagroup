@@ -83,6 +83,11 @@ export class CongviecComponent implements OnInit {
         }
     });
   }
+  filterDuan(event): void
+  {
+    const value = event.target.value.toLowerCase();
+    this.filteredDuans = this.Duans.filter(v => v.Tieude.toLowerCase().includes(value));
+  }
   Menutoggle()
   {
     this.Menuwidth = !this.Menuwidth;

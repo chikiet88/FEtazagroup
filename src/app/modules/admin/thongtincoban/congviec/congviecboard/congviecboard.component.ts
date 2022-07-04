@@ -55,6 +55,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     Duansections: any;
     isLoading: boolean;
     triggerType:any[]=[];
+    Showmore:any[]=[];
     Vitri: any;
     constructor(
         private _sharedService: SharedService,

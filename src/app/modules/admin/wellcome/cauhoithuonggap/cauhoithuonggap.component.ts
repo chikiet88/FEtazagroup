@@ -77,6 +77,9 @@ export class CauhoithuonggapComponent implements OnInit {
     this._cauhoiService.hotros$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((cauhois) => {
+      cauhois.sort(function (a, b) {
+        return a.Ngaytao - b.Ngaytao;
+      });
       cauhois.forEach(v => {
         v.Ngaytao = moment(v.Ngaytao, moment.ISO_8601).fromNow();
         const x =  v.Vitri.find(v1=>v1==this.thisUser.profile.Vitri);
@@ -85,8 +88,8 @@ export class CauhoithuonggapComponent implements OnInit {
              this.Cauhois.push(v);
          }                   
       });
-      this.UserCauhois = cauhois.filter(v=>v.idTao == this.thisUser.id)
-      console.log(this.UserCauhois);
+      this.UserCauhois = cauhois.filter(v=>v.idTao == this.thisUser.id) 
+      console.log(this.Cauhois);
       
       this.filteredCauhois = this.Cauhois;
       this.dataSource = new MatTableDataSource(this.Cauhois);

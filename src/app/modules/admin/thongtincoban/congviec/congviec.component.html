@@ -5,7 +5,8 @@
           add_circle
           </span>
         <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
-          <input matInput [placeholder]="'Tìm Kiếm'">
+          <input matInput class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+          (input)="filterDuan($event)">
           <mat-icon matPrefix>
             <span class="material-icons">
               search
@@ -13,16 +14,24 @@
           </mat-icon>
         </mat-form-field>
         <div (click)="Menutoggle()">
-          <span class="material-icons" *ngIf="!Menuwidth">
+          <span class="material-icons" *ngIf="Menuwidth">
             east
             </span>
-          <span class="material-icons" *ngIf="Menuwidth">
+          <span class="material-icons" *ngIf="!Menuwidth">
             west
             </span>
         </div>
       </div>
       <div class="flex flex-col justify-start items-start">
-        <a mat-button *ngFor="let item of Duans; let i=index" class="flex flex-row space-x-4" [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+        <a mat-button *ngFor="let item of filteredDuans; let i=index" class="flex flex-row space-x-4" [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+          <div class="flex items-center p-2 rounded">
+            <ng-container *ngIf="item.Noibat==0; else elseTemplate">
+              <span class="material-icons text-xl">star_border</span>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <span class="material-icons text-yellow-500  text-xl">star</span>
+            </ng-template>
+          </div>
           <div *ngIf="item.Trangthai==0" class="mx-2 text-blue-500"><span class="material-icons my-auto text-xl">new_releases</span></div>
           <div *ngIf="item.Trangthai==1" class="mx-2 text-yellow-500"><span class="material-icons my-auto text-xl">hourglass_full</span></div>
           <div *ngIf="item.Trangthai==2" class="mx-2 text-green-500"><span class="material-icons my-auto text-xl">check_circle</span></div>        
@@ -118,7 +127,7 @@
       </mat-form-field>     
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button class="bg-green-500 text-white" (click)="CreateDuan(Tenduan)">Tạo Mới</button>
+      <button mat-button class="bg-green-500 text-white" (click)="CreateDuan(Tenduan)" (keydown.enter)="CreateDuan(Tenduan)">Tạo Mới</button>
       <button mat-button matDialogClose class="bg-red-500 text-white">Hủy</button>
     </mat-dialog-actions>
   </div>
