@@ -20,13 +20,18 @@
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4"> Deadline </div>
         <div class="relative flex items-center p-2 rounded cursor-pointer"
-          [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !CurrentTask.Batdau&&!CurrentTask.Ketthuc,
-                    'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': CurrentTask.Batdau && CurrentTask.Ketthuc}" (click)="DeadlinePicker.open()">
-          <span class="ml-2 text-md font-medium">
-            <ng-container *ngIf="CurrentTask.Batdau || CurrentTask.Ketthuc">{{CurrentTask.Batdau | date:'dd/MM/yyyy'}} -
-              {{CurrentTask.Ketthuc | date:'dd/MM/yyyy'}}</ng-container>
-            <ng-container *ngIf="!CurrentTask.Batdau && !CurrentTask.Ketthuc"><mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon></ng-container>
-          </span>
+          [ngClass]="{'text-hint bg-gray-300 dark:text-gray-300 dark:bg-gray-700': !CurrentTask.Batdau&&!CurrentTask.Ketthuc,
+                    'text-white bg-blue-500 dark:text-green-100 dark:bg-green-500': CurrentTask.Batdau && CurrentTask.Ketthuc}" (click)="DeadlinePicker.open()">
+            <ng-container *ngIf="CurrentTask.Batdau || CurrentTask.Ketthuc">
+              <span class="text-sm">
+                {{CurrentTask.Batdau | date:'dd/MM/yyyy'}} - {{CurrentTask.Ketthuc | date:'dd/MM/yyyy'}}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="!CurrentTask.Batdau && !CurrentTask.Ketthuc">
+              <span class="material-icons text-xl">
+              event
+              </span>
+            </ng-container>
           <mat-form-field
             class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
             <mat-form-field appearance="fill" class="example-form-field">
@@ -53,17 +58,16 @@
       <div class="flex flex-row space-x-4">
         <div class="my-auto font-bold w-1/4">Thực Hiện </div>
         <div class="flex flex-row space-x-6 items-center text-hint">
-          <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleThuchien(trigger,CurrentTask)">
-            <span class="material-icons">
-              account_circle
-              </span>
+          <div class="flex flex-row space-x-2 items-center" cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,CurrentTask,'Thuchien')">
               <ng-container *ngIf="CurrentTask.Thuchien">  
                 <div class="flex flex-row space-x-2"><span>{{CurrentTask.Thuchien|findbyid:Nhanviens:'name'}}</span> 
                   <!-- <span class="text-sm text-hint">({{Vitri[(CurrentTask.Thuchien|findbyid:Nhanviens:'profile').Vitri] ||'0'}})</span> -->
                 </div>
               </ng-container>
               <ng-container *ngIf="!CurrentTask.Thuchien">
-               <span>Chưa Chọn</span>
+                <span class="material-icons">
+                  account_circle
+                  </span>
               </ng-container>
           </div>
         </div>
@@ -136,3 +140,33 @@
       <!-- <button mat-button class="bg-green-500 text-white" (click)="UpdateTask()">Lưu</button>
       <button mat-button class="bg-red-500 text-white" (click)="DeleteTask()">Xóa</button> -->
     </div>
+    <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
+  [cdkConnectedOverlayOpen]="triggerType['Thuchien']" (detach)="triggerType['Thuchien'] = false"
+  (backdropClick)="triggerType['Thuchien'] = false">
+  <div class="w-96 rounded border shadow-md bg-card m-3">
+    <div class="flex items-center m-3 mr-2">
+      <div class="flex items-center flex-row w-full justify-between">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <div class="ml-2">
+          <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+            (input)="filterVitri($event)">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+      <ng-container>
+        <div class="py-2 space-y-2">
+          <ng-container *ngFor="let item of ThisDuan.Thamgia">
+            <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
+              (click)="AddValue(ThisDuan,'Thamgia',item.id)">
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item|findbyid:Nhanviens:'name'}}</span>
+                ({{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]||'0'}})
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

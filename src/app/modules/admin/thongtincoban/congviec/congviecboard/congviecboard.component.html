@@ -5,31 +5,24 @@
         <div class="flex items-start space-x-4" cdkDropListGroup>
             <ng-container *ngFor="let list of Boards; trackBy: trackByFn; let i = index">
                 <div class="flex flex-col flex-0 w-96 p-2 rounded border h-full bg-card" cdkDrag [cdkDragLockAxis]="'x'">
-                    <div class="flex items-center justify-between">
-                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
-                            open_with
-                          </span>  
+                    <div class="flex items-center justify-between space-x-2"> 
                         <div
-                            class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">                           
-                            <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                            class="flex items-center w-auto py-1 px-2 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">                           
+                            <input class="w-auto font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                 [value]="list.Tieude"
                                 (keydown.enter)="updateListTitle($event, list);listTitleInput.blur()" #listTitleInput>
-                        </div>
-                        <div
-                            class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
-                            {{list.tasks.length}}
-                        </div>
-                        <div class="ml-1">
-                            <button class="w-8 h-8 min-h-8" mat-icon-button [matMenuTriggerFor]="listMenu">
-                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
-                            </button>
 
-                            <mat-menu #listMenu="matMenu">
-                                <button mat-menu-item (click)="deleteGroup(list)">
-                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
-                                    Xóa Group
-                                </button>
-                            </mat-menu>
+                        </div>
+                        <div class="flex flex-row space-x-2">
+                          <span class="px-2 py-1 rounded bg-gray-300">
+                            {{list.tasks.length}}
+                            </span>
+                          <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" (click)="deleteGroup(list)">
+                            delete
+                            </span>
+                          <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
+                            open_with
+                          </span> 
                         </div>
                     </div>
 

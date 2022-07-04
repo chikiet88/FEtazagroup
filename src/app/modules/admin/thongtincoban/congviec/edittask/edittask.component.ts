@@ -29,6 +29,10 @@ export class EdittaskComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   CurrentTask:any;
   Vitri: any;
+  triggerOrigin: any;
+  triggerType:any[]=[];
+  Nhanviens: any[];
+  filteredNhanviens: any[];
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -56,6 +60,10 @@ export class EdittaskComponent implements OnInit {
          this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
         this._changeDetectorRef.markForCheck();
     });
+    this._nhanvienServiceService.nhanviens$.subscribe((data) => {
+      this.Nhanviens = this.filteredNhanviens = data
+      this._changeDetectorRef.markForCheck();
+  })
       this._congviecService.getAllDuans().subscribe();
       this._congviecService.duans$.subscribe((data) => {
           this.Duans = this.filteredDuans = data
@@ -115,10 +123,15 @@ export class EdittaskComponent implements OnInit {
     // this.triggerOrigin = trigger;
     // this.isOpenDuan = !this.isOpenDuan
   }
-  toggleThuchien(trigger: any,item) {
-    // this.SelectDuan = item
-    // this.triggerOrigin = trigger;
-    // this.isOpenThuchien = !this.isOpenThuchien
+  // toggleThuchien(trigger: any,item) {
+  //   this.SelectDuan = item
+  //   this.triggerOrigin = trigger;
+  //   this.isOpenThuchien = !this.isOpenThuchien
+  // }
+  toggleOverlay(trigger: any,item,type) {  
+    this.triggerOrigin = trigger;
+    this.triggerType[type] = !this.triggerType[type]
+    //this.filteredNhanviens = this.Nhanviens;    
   }
   ChonThuchien(item,id) {
     // const notifi = {
