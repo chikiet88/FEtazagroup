@@ -27,6 +27,7 @@ export class VersionComponent implements OnInit {
     Changelogs: any;
     Changelog: any;
     ThisUser: any;
+    version:any;
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
@@ -36,18 +37,32 @@ export class VersionComponent implements OnInit {
         private _userService: UserService,
         private _formbuilder: FormBuilder
     ) {
+        this.version = localStorage.getItem('Version') ?? '';
     }
-    version = environment.version;
+    //version = environment.version;
     public Editor = Editor ;
     public config = {
         placeholder: 'Vui lòng nhập nội dung'
     };
     ngOnInit(): void {
-        this._versionService.getAllChanglog().subscribe(
-            ()=>{
-                this._versionService.changelogs$.pipe(takeUntil(this._unsubscribeAll)).subscribe
-                ((res) => { this.Changelogs = res; })
-            }
+        this._versionService.getAllChanglog().subscribe(()=>
+        {
+            this._versionService.changelogs$.subscribe((res) => { 
+                this.Changelogs = res;               
+                if(!this.version)
+                {
+                    localStorage.setItem('Version', res[0].Version);
+                }
+                else
+                {
+                    if(this.version != res[0].Version)
+                    {
+                        console.log("Phiên Bản Cũ");
+                        
+                    }
+                }
+             })
+        }
         );
         this._userService.user$
             .pipe(takeUntil(this._unsubscribeAll))

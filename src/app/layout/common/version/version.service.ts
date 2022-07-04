@@ -17,7 +17,6 @@ export class VersionService {
   get changelog$(): Observable<any> {
       return this._changelog.asObservable();
   }
- 
   getAllChanglog(): Observable<any> {
       return this._httpClient.get(`${environment.ApiURL}/changelog`).pipe(
           tap((response: any) => {

@@ -55,7 +55,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     Duansections: any;
     isLoading: boolean;
     triggerType:any[]=[];
-    Showmore:any[]=[];
+    isShowmore:any[]=[];
     Vitri: any;
     constructor(
         private _sharedService: SharedService,
@@ -124,7 +124,10 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     ngAfterViewInit() {
 
     }
-
+    Showmore(item)
+    {
+        this.isShowmore[item.id] = !this.isShowmore[item.id];
+    }
     OpenEdit(item) {
         console.log(item);
         //this._quanlycongviecService.changeTask(card);

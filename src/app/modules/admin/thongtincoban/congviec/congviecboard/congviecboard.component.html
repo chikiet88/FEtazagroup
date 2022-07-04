@@ -80,15 +80,22 @@
                                                 </span>
                                                 Hoàn Thành</button>
                                         </mat-menu>
-                                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
-                                          expand_more
+                                        <ng-container *ngIf="!isShowmore[card.id]">
+                                          <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" (click)="Showmore(card)">
+                                            expand_more
+                                          </span> 
+                                        </ng-container>
+                                        <ng-container  *ngIf="isShowmore[card.id]">
+                                          <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" (click)="Showmore(card)">
+                                            expand_less
                                           </span>
-                                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
+                                          </ng-container>
+                                         <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
                                           open_with
                                         </span> 
 
                                         </div>
-                              <div class="flex flex-row justify-between items-center space-x-4 text-hint w-full">
+                              <div class="flex flex-row justify-between items-center space-x-4 text-hint w-full" *ngIf="isShowmore[card.id]">
                                 <div class="flex items-center" cdkOverlayOrigin #trigger1="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,card,'Thuchien')">
                                     <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" [ngClass]="{'text-blue-500': card.Thuchien}" [matTooltip]="card.Thuchien|findbyid:Nhanviens:'name'">
                                         account_circle
