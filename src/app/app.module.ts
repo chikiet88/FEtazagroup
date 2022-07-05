@@ -24,6 +24,7 @@ import { UploadComponent } from './modules/admin/upload/upload.component';
 import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { QuanlynhanvienComponent } from './modules/admin/baocao/quanlynhanvien/quanlynhanvien.component';
 const routerConfig: ExtraOptions = {
   preloadingStrategy: PreloadAllModules,
   scrollPositionRestoration: 'enabled'
@@ -75,6 +76,7 @@ const customNotifierOptions: NotifierOptions = {
     CauhinhComponent,
     QuanlyadsComponent,
     UploadComponent,
+    QuanlynhanvienComponent,
   ],
   imports: [
     BrowserModule,

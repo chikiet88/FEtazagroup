@@ -1,10 +1,17 @@
 <button mat-icon-button color="accent" (click)="openPanel()" #notificationsOrigin>
-   <ng-container *ngIf="Changelogs">{{Changelogs[0].Version}}</ng-container>
+   <ng-container *ngIf="Changelogs">{{version}}</ng-container>
 </button>
-
+<ng-template #customNotification let-notificationData="notification">
+    <my-custom-alert type="notificationData.type"> 
+        <div class="mr-2 flex flex-row space-x-2 items-center">
+            <span>{{ notificationData.message }}</span> 
+            <span class="material-icons p-2 rounded bg-blue-500" (click)="Capnhatphienban()">update</span>
+           </div>
+    </my-custom-alert>
+  </ng-template>
 <ng-template #notificationsPanel>
     <div
-        class="fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-120 sm:w-120 sm:rounded-2xl overflow-hidden shadow-lg">
+        class="fixed inset-0 sm:static sm:inset-auto flex flex-col sm:min-w-120 sm:w-120 sm:rounded overflow-hidden shadow-lg">
         <div class="flex flex-shrink-0 items-center py-4 pr-4 pl-6 bg-primary text-on-primary">
             <div class="sm:hidden -ml-1 mr-3">
                 <button mat-icon-button (click)="closePanel()">
@@ -14,7 +21,7 @@
             <div class="text-lg font-medium leading-10">Bảng Cập Nhật</div>
         </div>
 
-        <div class="relative flex flex-col flex-auto sm:max-h-120 divide-y overflow-y-auto bg-card">
+        <div class="relative flex flex-col flex-auto sm:max-h-120 divide-y overflow-y-auto bg-card scroll">
             <div class="flex group hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5">
 
                 <div class="flex-auto p-4">

@@ -115,6 +115,7 @@ export const appRoutes: Route[] = [
                 //canActivate: [AdminGuard],
                 children: [
                     { path: 'nhanvien', loadChildren: () => import('app/modules/admin/baocao/nhanvien/nhanvien.module').then(m => m.NhanvienModule) },
+                    { path: 'quanlynhanvien', loadChildren: () => import('app/modules/admin/baocao/quanlynhanvien/quanlynhanvien.module').then(m => m.QuanlynhanvienModule) },
                 ]
             },
             {

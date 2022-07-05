@@ -28,6 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialExampleModule } from 'material.module';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
+import { CustomModule } from 'app/pipes/custom/custom.module';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
@@ -67,6 +68,7 @@ const nhanvienRoutes: Route[] = [
     MaterialExampleModule,
     RouterModule.forChild(nhanvienRoutes),
     ReactiveFormsModule,
+    CustomModule,
     CommonModule,
     MatButtonModule,
     MatCheckboxModule,

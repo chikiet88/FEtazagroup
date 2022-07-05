@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import Editor from 'ckeditor5/build/ckEditor';
 import { VersionService } from './version.service';
 import { UserService } from 'app/core/user/user.service';
+import { NotifierService } from 'angular-notifier';
 @Component({
     selector: 'app-version',
     templateUrl: './version.component.html',
@@ -28,6 +29,8 @@ export class VersionComponent implements OnInit {
     Changelog: any;
     ThisUser: any;
     version:any;
+    Cversion:any;
+    @ViewChild('customNotification', { static: true }) customNotificationTmpl;
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
@@ -35,7 +38,8 @@ export class VersionComponent implements OnInit {
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
         private _userService: UserService,
-        private _formbuilder: FormBuilder
+        private _formbuilder: FormBuilder,
+        private _notifierService: NotifierService,
     ) {
         this.version = localStorage.getItem('Version') ?? '';
     }
@@ -48,17 +52,24 @@ export class VersionComponent implements OnInit {
         this._versionService.getAllChanglog().subscribe(()=>
         {
             this._versionService.changelogs$.subscribe((res) => { 
-                this.Changelogs = res;               
+                this.Changelogs = res;  
+                this.Cversion = res[0].Version;             
                 if(!this.version)
                 {
-                    localStorage.setItem('Version', res[0].Version);
+                    localStorage.setItem('Version', this.Cversion);
                 }
                 else
                 {
-                    if(this.version != res[0].Version)
+                    if(this.version != this.Cversion)
                     {
-                        console.log("Phiên Bản Cũ");
-                        
+                        //this._notifierService.notify('error', 'Phiên Bản Mới');
+                        this._notifierService.getConfig().behaviour.autoHide = false;
+                        this._notifierService.show({
+                            message: `Có Phiên Bản Mới ${this.Cversion}. Vui lòng cập nhật`,
+                            type: 'warning',
+                            template: this.customNotificationTmpl, 
+                          });
+                        console.log("Phiên Bản Cũ");  
                     }
                 }
              })
@@ -86,6 +97,11 @@ export class VersionComponent implements OnInit {
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
+    }
+    Capnhatphienban()
+    {
+        localStorage.setItem('Version', this.Cversion);
+        window.location.href = window.location.href;
     }
     CreateChangelog(): void {
         const changelog = this.VerForm.getRawValue();

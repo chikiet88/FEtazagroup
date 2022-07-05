@@ -38,7 +38,7 @@
                                           <div class="w-full py-1 px-2 rounded-md text-ellipsis overflow-hidden cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                             <textarea matInput cdkTextareaAutosize class="w-full"
                                                 [value]="card.Tieude"
-                                                (keydown.control.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
+                                                (keydown.enter)="ChangeTask(card,'Tieude',$event.target.value)"></textarea>
                                         </div>
                                            
                                        <div class="text-blue-500 flex space-x-2" *ngIf="card.Trangthai==0"
