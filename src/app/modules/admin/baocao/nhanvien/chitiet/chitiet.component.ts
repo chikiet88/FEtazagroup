@@ -1,44 +1,25 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { NotifierService } from 'angular-notifier';
 import { CauhinhService } from 'app/modules/admin/cauhinh/cauhinh.service';
 import { Cauhinh } from 'app/modules/admin/cauhinh/cauhinh.types';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, toArray } from 'lodash';
 import { NhanvienService } from '../nhanvien.service';
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
-
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
-  },
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-      },
-      {
-        name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-      },
-    ],
-  },
-];
 @Component({
   selector: 'app-chitiet',
   templateUrl: './chitiet.component.html',
   styleUrls: ['./chitiet.component.scss'],
 })
 export class ChitietComponent implements OnInit {
-  treeControl = new NestedTreeControl<FoodNode>(node => node.children);
-  dataTreeSource = new MatTreeNestedDataSource<FoodNode>();
+    nest = (items, id = '0', link = 'parent') => items.filter(item => item[link] == id).map(item => ({
+      ...item,
+      children: this.nest(items, item.uuid)
+    }));
+  treeControl = new NestedTreeControl<any>(node => node.children);
+  dataTreeSource = new MatTreeNestedDataSource<any>();
   CNhanvien: any;
   Phongban: any;
   Khoi: any;
@@ -50,6 +31,7 @@ export class ChitietComponent implements OnInit {
   PQMenu:any;
   Menu:any;
   PQisDisabled:boolean;
+  @ViewChild('tree') treeMenu;
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -57,10 +39,10 @@ export class ChitietComponent implements OnInit {
     private _cauhinhService: CauhinhService,
     private _fuseConfirmationService: FuseConfirmationService,
     private _router: Router,
-  ) { 
-    this.dataTreeSource.data = TREE_DATA;
+    private _notifierService: NotifierService,
+  ) {     
   }
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
   ngOnInit(): void {
     this.PQisDisabled = true;
     this._cauhinhService.Cauhinhs$.subscribe((data: Cauhinh[]) => {
@@ -78,17 +60,22 @@ export class ChitietComponent implements OnInit {
     });
     this._cauhinhService.Menus$.subscribe((data) => {
         console.log(data);
-         this.Menu = data;
-         this.PQMenu = {};
-         data.forEach(v => {
-             this.PQMenu[v.uuid]=v.status;
-           });           
+         this.Menu = data;                   
         this._changeDetectorRef.markForCheck();
     });
 
     this._nhanvienService.nhanvien$.subscribe((nhanvien) => {
-        this.CNhanvien = nhanvien;
+        this.CNhanvien = nhanvien;       
+        this.Menu.forEach(v => {
+            v.status = nhanvien.Menu[v.uuid];
+            v.isExpandable = true;
+        });
+        this.dataTreeSource.data = this.nest(this.Menu);  
     }
     )}
-
+    ChangeMenu(item, e) {
+      this.CNhanvien.Menu[item.uuid] = e.checked
+      this._nhanvienService.updateNhanvien(this.CNhanvien.id,this.CNhanvien).subscribe();
+      this._notifierService.notify('success', 'Cập Nhật Thành Công');
+    }   
 }

@@ -189,15 +189,11 @@
     <div class="font-bold">Phân Quyền</div> 
     <div class="grid grid-cols-2 gap-4 w-full">
         <div>
-        <div>Menu</div>
-        <mat-tree [dataSource]="dataTreeSource" [treeControl]="treeControl" class="example-tree">
-            <!-- This is the tree node template for leaf nodes -->
-            <!-- There is inline padding applied to this node using styles.
-              This padding value depends on the mat-icon-button width. -->
+        <div>Menu </div>
+        <mat-tree #treeMenu [dataSource]="dataTreeSource" [treeControl]="treeControl" class="example-tree">
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-                {{node.name}}
+               <mat-slide-toggle [checked]="node.status" (change)="ChangeMenu(node, $event)">{{node.title}}</mat-slide-toggle>
             </mat-tree-node>
-            <!-- This is the tree node template for expandable nodes -->
             <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
                 <div class="mat-tree-node">
                   <button mat-icon-button matTreeNodeToggle
@@ -206,10 +202,8 @@
                       {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                     </mat-icon>
                   </button>
-                  {{node.name}}
+                  <mat-slide-toggle [checked]="node.status">{{node.title}}</mat-slide-toggle>
                 </div>
-                <!-- There is inline padding applied to this div using styles.
-                    This padding value depends on the mat-icon-button width.  -->
                 <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
                     role="group">
                   <ng-container matTreeNodeOutlet></ng-container>
@@ -217,57 +211,16 @@
             </mat-nested-tree-node>
           </mat-tree>
         </div>
-        <div>
-              <div *ngFor="let item of CNhanvien.Phanquyen; let i=index">
-                    {{i+1}}
+        <div class="flex flex-col space-y-4">
+          <div>Chi Nhánh</div>
+              <div *ngFor="let item of CNhanvien.Phanquyen|keyvalue; let i=index">
+                <mat-slide-toggle (change)="ChangeChinhanh(item.key, $event)" [checked]="item.value">{{Chinhanh[item.key]}}</mat-slide-toggle>
+                <!-- <div *ngFor="let item of PQMenu |keyvalue">
+                 <mat-checkbox [disabled]="PQisDisabled"
+                      (change)="ChangeMenu(item.key, $event)" [checked]="item.value">
+                      {{item.key|findbyuuid:Menu:'title'}}</mat-checkbox>
+              </div> -->
               </div>  
         </div>
-        <!-- <div class="w-full flex flex-row items-center justify-between space-x-4">
-            <div class="flex items-center space-x-2">
-                <span class="material-icons">
-                    account_circle
-                    </span> 
-                 <span>Họ Và Tên</span>
-            </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.name}}</span>
-           </div>
-        </div>
-
-        <div class="w-full flex flex-row items-center justify-between space-x-4">
-            <div class="flex items-center space-x-2">
-                <span class="material-icons">
-                    phone_iphone
-                    </span> 
-                 <span>Số Điện Thoại</span>
-            </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.SDT}}</span>
-           </div>
-        </div>
-        <div class="w-full flex flex-row items-center justify-between space-x-4">
-            <div class="flex items-center space-x-2">
-                <span class="material-icons">
-                    phone_iphone
-                    </span> 
-                 <span>Email</span>
-            </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.email}}</span>
-           </div>
-        </div>
-        <div class="w-full flex flex-row items-center justify-between space-x-4">
-            <div class="flex items-center space-x-2">
-                <span class="material-icons">
-                    phone_iphone
-                    </span> 
-                 <span>Role</span>
-            </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.Role}}</span>
-           </div>
-        </div> -->
     </div> 
-
-    {{CNhanvien|json}}
 </div>
