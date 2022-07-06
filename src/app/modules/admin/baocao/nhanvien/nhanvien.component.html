@@ -1,14 +1,14 @@
 <mat-drawer-container class="flex w-full" autosize>
     <mat-drawer #drawer class="p-3 w-1/2" mode="side" [opened]="true" [position]="'end'">
-        <div class="text-center p-2 font-bold text-2xl">Danh Sách Nhân Viên</div>
-      
+        <div class="text-center p-4 font-bold text-2xl">Nhân Viên</div>
+        <router-outlet></router-outlet>
     </mat-drawer>
 <mat-drawer-content class="flex flex-col flex-auto p-3 w-1/2">
 <div class="w-full absolute inset-0 flex flex-col min-w-0">
       <!-- <button type="button" mat-button (click)="drawer.toggle()">
         Toggle sidenav
       </button> -->
-<div class="text-center p-2 font-bold text-2xl">Nhân Viên</div>
+<div class="text-center p-2 font-bold text-2xl">Danh Sách Nhân Viên</div>
 
 <div class="flex flex-row justify-between items-center space-x-2 px-4">
     <span class="material-icons">
@@ -16,7 +16,7 @@
       </span>
     <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
       <input matInput class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
-      (input)="filterNhanvien($event)">
+      (input)="filterNhanvien($event.target.value)" #input>
       <mat-icon matPrefix>
         <span class="material-icons">
           search
@@ -46,15 +46,13 @@
       </ng-container>
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Họ Tên </th>
-        <td mat-cell *matCellDef="let row"> 
+        <td mat-cell *matCellDef="let row" [routerLink]="['./', row.id]"> 
             <div class="flex flex-col space-y-1 justify-start text-md py-2">
                 <span class="font-bold"> {{row.name}}  </span>
                 <span> {{row.SDT}}</span>
                 <span> {{row.email}}</span>
                
             </div>
-           
-
         </td>
       </ng-container>
       <ng-container matColumnDef="Role">
@@ -73,7 +71,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        <td class="mat-cell" colspan="4">Không Tìm Thấy Nhân Viên "{{input.value}}"</td>
       </tr>
     </table>
   </div>

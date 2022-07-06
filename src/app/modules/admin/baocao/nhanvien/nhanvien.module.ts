@@ -29,29 +29,50 @@ import { MaterialExampleModule } from 'material.module';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { CustomModule } from 'app/pipes/custom/custom.module';
+import { ChitietComponent } from './chitiet/chitiet.component';
 const nhanvienRoutes: Route[] = [
   {
       path     : '',
       component: NhanvienComponent,
+       resolve  : {
+                cauhinhs :NhanviensCauhinhResolver,
+       },
       children : [
         {
-            path     : '',
-            component: ListComponent,
-            resolve  : {
-                cauhinhs :NhanviensCauhinhResolver,
-            },
-            children : [
-                {
-                    path         : ':id',
-                    component    : DetailsComponent,
-                    resolve      : {
-                       task     : NhanviensNhanvienResolver,
-                       cauhinhs :NhanviensCauhinhResolver,
-                    },
-                    canDeactivate: [CanDeactivateNhanviensDetails]
-                }
-            ]
+        path         : ':id',
+        component    : ChitietComponent,
+        resolve      : {
+           task     : NhanviensNhanvienResolver,
+           cauhinhs :NhanviensCauhinhResolver,
         }
+      }
+        // {
+          
+        //     path     : '',
+        //     component: ListComponent,
+        //     resolve  : {
+        //         cauhinhs :NhanviensCauhinhResolver,
+        //     },
+        //     children : [
+        //         // {
+        //         //     path         : ':id',
+        //         //     component    : DetailsComponent,
+        //         //     resolve      : {
+        //         //        task     : NhanviensNhanvienResolver,
+        //         //        cauhinhs :NhanviensCauhinhResolver,
+        //         //     },
+        //         //     canDeactivate: [CanDeactivateNhanviensDetails]
+        //         // },
+        //         {
+        //             path         : ':id',
+        //             component    : ChitietComponent,
+        //             resolve      : {
+        //                task     : NhanviensNhanvienResolver,
+        //                cauhinhs :NhanviensCauhinhResolver,
+        //             }
+        //         }
+        //     ]
+        // }
     ]
 
   }
@@ -61,6 +82,7 @@ const nhanvienRoutes: Route[] = [
     ListComponent,
     DetailsComponent,
     NhanvienComponent,
+    ChitietComponent,
   ],
   imports: [
     TimkiemModule,

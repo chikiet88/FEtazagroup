@@ -119,7 +119,7 @@
                         <div class="mt-2 ont-extrabold tracking-tight leading-tight w-full">
                             <mat-form-field class="fuse-mat-no-subscript flex-auto rounded-full my-2 w-full m-auto">
                                 <input matInput [placeholder]="'Câu Hỏi Thường Gặp'"
-                                    (keydown.enter)="applyFilter($event)">
+                                    (input)="applyFilter($event)">
                                 <mat-icon matPrefix>
                                     <span class="material-icons">
                                         search

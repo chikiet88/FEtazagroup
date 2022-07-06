@@ -138,11 +138,13 @@ export class CauhoithuonggapComponent implements OnInit {
 
 applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    if(filterValue.length>=3)
+    {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
   }
 
 FilterDanhmuc(item): void

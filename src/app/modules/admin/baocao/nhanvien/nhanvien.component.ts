@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { NotifierService } from 'angular-notifier';
+import { includes } from 'lodash';
 import { ContactsService } from '../../apps/contacts/contacts.service';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
@@ -130,7 +131,10 @@ export class NhanvienComponent implements OnInit {
   }
   filterNhanvien(e)
   {
-
+    this.dataSource = new MatTableDataSource(this.nhanviens.filter(v=>v.name.toLowerCase().includes(e)));   
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }      
   }
   Menutoggle()
   {}
