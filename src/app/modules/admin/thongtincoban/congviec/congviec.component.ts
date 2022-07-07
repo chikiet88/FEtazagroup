@@ -24,6 +24,8 @@ export class CongviecComponent implements OnInit {
   filteredDuans: any[];
   Groups: any[];
   filteredGroups: any[];
+  Tasks: any[];
+  filteredTasks: any[];
   Nhanviens: any[];
   filteredNhanviens: any[];
   GroupbyUser:any[];
@@ -33,6 +35,7 @@ export class CongviecComponent implements OnInit {
   Menuwidth:any;
   triggerOrigin: any;
   triggerType:any[]=[];
+  CBoards:any[]=[];
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -68,6 +71,17 @@ export class CongviecComponent implements OnInit {
           this.ThisDuan = data
           this._changeDetectorRef.markForCheck();
       })
+
+      this._congviecService.getAllGrouptasks().subscribe();
+      this._congviecService.grouptasks$.subscribe((data) => {
+        this.Groups = this.filteredGroups = data;
+        this._changeDetectorRef.markForCheck();
+      })
+        this._congviecService.getAllTasks().subscribe();
+        this._congviecService.tasks$.subscribe((data) => {
+          this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id||v.Thuchien==this.CUser.id);
+          this._changeDetectorRef.markForCheck();
+      })
       this._nhanvienServiceService.nhanviens$.subscribe((data) => {
           this.Nhanviens = this.filteredNhanviens = data
           this._changeDetectorRef.markForCheck();
@@ -75,6 +89,16 @@ export class CongviecComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.Groups = [
+      {id: '0',Tieude: 'Chưa Làm'},
+      {id: '1',Tieude: 'Đang Làm'},
+      {id: '2',Tieude: 'Hoàn Thành'}
+    ]
+    this.Groups.forEach(v => {v.tasks = this.Tasks.filter(v1=>v1.Trangthai==v.id)});
+    this.CBoards = this.Groups;  
+    console.log(this.Tasks);
+    console.log(this.Groups);
+    
       this.drawer1.openedChange.subscribe((opened) => {
         if (!opened)
         {

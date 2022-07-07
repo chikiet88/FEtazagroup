@@ -98,7 +98,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
             this._congviecService.getAllTasks().subscribe();
             this._congviecService.tasks$.subscribe((data) => {
                 this.Tasks = this.filteredTasks  = data;         
-                this._congviecService.setTask(data.filter(v=>v.Trangthai!=2));             
+                // this._congviecService.setTask(data.filter(v=>v.Trangthai!=2));             
                 this._changeDetectorRef.markForCheck();
             }) 
             this._congviecService.duan$.subscribe((data) => {

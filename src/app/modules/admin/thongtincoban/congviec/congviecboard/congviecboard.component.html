@@ -1,7 +1,6 @@
 
 <div class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3">
-<div *ngIf="!ThisDuan">Chưa Chọn Dự Án</div>
-<div *ngIf="ThisDuan" class="scroll flex-auto overflow-y-hidden" cdkScrollable>
+<div class="scroll flex-auto overflow-y-hidden" cdkScrollable>
     <div class="flex h-full" cdkDropList [cdkDropListData]="Boards" [cdkDropListOrientation]="'horizontal'"
         (cdkDropListDropped)="listDropped($event)">
         <div class="flex items-start space-x-4" cdkDropListGroup>

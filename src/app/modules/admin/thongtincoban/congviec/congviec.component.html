@@ -1,98 +1,108 @@
 <mat-drawer-container class="flex w-full" autosize>
-    <mat-drawer #drawer class="p-3" [ngClass]="{'w-auto': Menuwidth}" mode="side" opened="true">
-      <div class="flex flex-row justify-between items-center space-x-2 px-4">
-        <span class="material-icons" (click)="OpenDialog(myDialog)">
-          add_circle
-          </span>
-        <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
-          <input matInput class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
+  <mat-drawer #drawer class="p-3" [ngClass]="{'w-auto': Menuwidth}" mode="side" opened="true">
+    <div class="flex flex-row justify-between items-center space-x-2 px-4">
+      <span class="material-icons" (click)="OpenDialog(myDialog)">
+        add_circle
+      </span>
+      <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
+        <input matInput class="w-full min-w-0 py-1 border-0" type="text" placeholder="Tìm Kiếm" [maxLength]="30"
           (input)="filterDuan($event)">
-          <mat-icon matPrefix>
-            <span class="material-icons">
-              search
-            </span>
-          </mat-icon>
-        </mat-form-field>
-        <div (click)="Menutoggle()">
-          <span class="material-icons" *ngIf="Menuwidth">
-            east
-            </span>
-          <span class="material-icons" *ngIf="!Menuwidth">
-            west
-            </span>
+        <mat-icon matPrefix>
+          <span class="material-icons">
+            search
+          </span>
+        </mat-icon>
+      </mat-form-field>
+      <span class="material-icons" (click)="ThisDuan=null" [routerLink]="['./']">
+        account_circle
+      </span>
+      <div (click)="Menutoggle()">
+        <span class="material-icons" *ngIf="Menuwidth">
+          east
+        </span>
+        <span class="material-icons" *ngIf="!Menuwidth">
+          west
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-col justify-start items-start">
+      <a mat-button *ngFor="let item of filteredDuans; let i=index" class="flex flex-row space-x-4"
+        [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
+        <div class="flex items-center p-2 rounded">
+          <ng-container *ngIf="item.Noibat==0; else elseTemplate">
+            <span class="material-icons text-xl">star_border</span>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <span class="material-icons text-yellow-500  text-xl">star</span>
+          </ng-template>
         </div>
-      </div>
-      <div class="flex flex-col justify-start items-start">
-        <a mat-button *ngFor="let item of filteredDuans; let i=index" class="flex flex-row space-x-4" [matTooltip]="item.Tieude" [routerLink]="['./',item.id]" (click)="ChosenDuan(item)">
-          <div class="flex items-center p-2 rounded">
-            <ng-container *ngIf="item.Noibat==0; else elseTemplate">
-              <span class="material-icons text-xl">star_border</span>
-            </ng-container>
-            <ng-template #elseTemplate>
-              <span class="material-icons text-yellow-500  text-xl">star</span>
-            </ng-template>
-          </div>
-          <div *ngIf="item.Trangthai==0" class="mx-2 text-blue-500"><span class="material-icons my-auto text-xl">new_releases</span></div>
-          <div *ngIf="item.Trangthai==1" class="mx-2 text-yellow-500"><span class="material-icons my-auto text-xl">hourglass_full</span></div>
-          <div *ngIf="item.Trangthai==2" class="mx-2 text-green-500"><span class="material-icons my-auto text-xl">check_circle</span></div>        
-         <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}">
+        <div *ngIf="item.Trangthai==0" class="mx-2 text-blue-500"><span
+            class="material-icons my-auto text-xl">new_releases</span></div>
+        <div *ngIf="item.Trangthai==1" class="mx-2 text-yellow-500"><span
+            class="material-icons my-auto text-xl">hourglass_full</span></div>
+        <div *ngIf="item.Trangthai==2" class="mx-2 text-green-500"><span
+            class="material-icons my-auto text-xl">check_circle</span></div>
+        <span class="truncate text-left w-50" [ngClass]="{'w-auto':Menuwidth}">
           {{item.Tieude}}
-        </span> 
-        </a>
-      </div>
-    </mat-drawer>
-  
+        </span>
+      </a>
+    </div>
+  </mat-drawer>
 
-    <mat-drawer #drawer1 class="p-3 md:w-3/4 w-full" mode="over" position="end">
-       <app-edittask></app-edittask>
-    </mat-drawer>
 
-    <mat-drawer-content class="flex flex-col flex-auto p-3 w-full">
-      <div class="flex flex-row justify-between"  *ngIf="ThisDuan">
+  <mat-drawer #drawer1 class="p-3 md:w-3/4 w-full" mode="over" position="end">
+    <app-edittask></app-edittask>
+  </mat-drawer>
+
+  <mat-drawer-content class="flex flex-col flex-auto p-3 w-full">
+    <ng-container *ngIf="ThisDuan">
+      <div class="flex flex-row justify-between">
         <div class="flex flex-row space-x-4 items-center">
           <span class="material-icons" (click)="drawer.toggle()">menu</span>
-          <div class="text-2xl p-1 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900" *ngIf="ThisDuan">
-            <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-            [value]="ThisDuan.Tieude"
-            (keydown.enter)="UpdateDuan(ThisDuan, 'Tieude', $event.target.value);TieudeDuan.blur()" #TieudeDuan>
+          <div
+            class="text-2xl p-1 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900"
+            *ngIf="ThisDuan">
+            <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [value]="ThisDuan.Tieude"
+              (keydown.enter)="UpdateDuan(ThisDuan, 'Tieude', $event.target.value);TieudeDuan.blur()" #TieudeDuan>
           </div>
           <div class="flex flex-row items-center space-x-2">
             <span class="p-2 rounded bg-gray-200 hover:bg-gray-300" [matMenuTriggerFor]="Thamgia">
-              <span class="font-bold text-blue-500"> {{ThisDuan.Thamgia.length ||'0'}}</span>  
-             
-               Tham Gia </span>
-                <mat-menu #Thamgia="matMenu">
-                  <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia"> 
-                     <span class="w-48 truncate" matTooltip="{{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}}">
-                      {{item|findbyid:Nhanviens:'name'}}
-                     </span>
-                     <span class="material-icons text-xl text-red-500" (click)="RemoveValue(ThisDuan,'Thamgia',item)">
-                      remove_circle
-                      </span> 
-                    </button>
-                </mat-menu>
-            <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
-            (click)="toggleOverlay(trigger1,ThisDuan,'Thamgia')">
-            group_add
-          </span>
+              <span class="font-bold text-blue-500"> {{ThisDuan.Thamgia.length ||'0'}}</span>
+
+              Tham Gia </span>
+            <mat-menu #Thamgia="matMenu">
+              <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia">
+                <span class="w-48 truncate" matTooltip="{{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}}">
+                  {{item|findbyid:Nhanviens:'name'}}
+                </span>
+                <span class="material-icons text-xl text-red-500" (click)="RemoveValue(ThisDuan,'Thamgia',item)">
+                  remove_circle
+                </span>
+              </button>
+            </mat-menu>
+            <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" cdkOverlayOrigin
+              #trigger1="cdkOverlayOrigin" (click)="toggleOverlay(trigger1,ThisDuan,'Thamgia')">
+              group_add
+            </span>
           </div>
           <div class="flex items-center p-2 rounded hover:bg-gray-300">
             <ng-container *ngIf="ThisDuan.Noibat==0; else elseTemplate">
               <span class="material-icons text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',true)">star_border</span>
             </ng-container>
             <ng-template #elseTemplate>
-              <span class="material-icons text-yellow-500  text-xl" (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
+              <span class="material-icons text-yellow-500  text-xl"
+                (click)="UpdateDuan(ThisDuan,'Noibat',false)">star</span>
             </ng-template>
           </div>
           <div class="flex items-center p-2 rounded hover:bg-gray-300">
-              <div mat-button [matMenuTriggerFor]="menu">
-                <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"><span
-                    class="material-icons my-auto text-xl">new_releases</span></div>
-                <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span
-                    class="material-icons my-auto text-xl">hourglass_full</span></div>
-                <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span
-                    class="material-icons my-auto text-xl">check_circle</span></div>
-              </div>
+            <div mat-button [matMenuTriggerFor]="menu">
+              <div *ngIf="ThisDuan.Trangthai==0" class="text-blue-500"><span
+                  class="material-icons my-auto text-xl">new_releases</span></div>
+              <div *ngIf="ThisDuan.Trangthai==1" class="text-yellow-500"><span
+                  class="material-icons my-auto text-xl">hourglass_full</span></div>
+              <div *ngIf="ThisDuan.Trangthai==2" class="text-green-500"><span
+                  class="material-icons my-auto text-xl">check_circle</span></div>
+            </div>
             <mat-menu #menu="matMenu">
               <button mat-menu-item class="text-blue-500" (click)="UpdateDuan(ThisDuan,'Trangthai',0)"><span
                   class="material-icons mx-2 text-xl">new_releases</span> Mới</button>
@@ -102,50 +112,230 @@
                   class="material-icons mx-2 text-xl">check_circle</span> Hoàn Thành</button>
               <button mat-menu-item class="text-red-500" (click)="DeleteDuan(ThisDuan)"><span
                   class="material-icons mx-2 text-xl">delete</span> Xóa Dự Án</button>
-            </mat-menu>    
-            </div>
-          <div class="flex items-center p-2 rounded hover:bg-gray-300">
-            <span class="material-icons text-green-500" [routerLink]="['./luutru',CUser.id]">
-              archive
-              </span>   
-            </div>
-
+            </mat-menu>
+          </div>
         </div>
-      </div>           
+      </div>
       <div class="flex flex-col flex-auto">
-        <router-outlet></router-outlet>
-        
-        <!-- <app-congviecboard class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard> -->
+        <app-congviecboard class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3">
+        </app-congviecboard>
         <!-- <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1" type="dauviec"></app-congviecboard> -->
         <!-- <app-qlcvboard></app-qlcvboard> -->
         <!-- <app-list *ngIf="view==2"></app-list>
-        <app-timeline *ngIf="view==3"></app-timeline> -->
-     </div>   
-    </mat-drawer-content>
+          <app-timeline *ngIf="view==3"></app-timeline> -->
+      </div>
+    </ng-container>
+
+    <div *ngIf="!ThisDuan">
+      <div class="flex flex-row justify-between">
+        <div class="flex flex-row space-x-4 items-center">
+          <span class="material-icons" (click)="drawer.toggle()">menu</span>
+          <span class="text-2xl font-bold">Công Việc Của Tôi</span>
+        </div>
+        <div class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3">
+          <div class="scroll flex-auto overflow-y-hidden" cdkScrollable>
+            <div class="flex h-full" cdkDropList [cdkDropListData]="CBoards" [cdkDropListOrientation]="'horizontal'"
+              (cdkDropListDropped)="listDropped($event)">
+              <div class="flex items-start space-x-4" cdkDropListGroup>
+                <ng-container *ngFor="let list of CBoards; trackBy: trackByFn; let i = index">
+                  <div class="flex flex-col flex-0 w-96 p-2 rounded border h-full bg-card" cdkDrag
+                    [cdkDragLockAxis]="'x'">
+                    <div class="flex items-center justify-between space-x-2">
+                      <div
+                        class="flex items-center w-auto py-1 px-2 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                        <!-- <input class="w-auto font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                          [value]="list.Tieude" #listTitleInput> -->
+                      <span>{{list.Tieude}}</span>
+                      </div>
+                      <div class="flex flex-row space-x-2">
+                        <span class="px-2 py-1 rounded bg-gray-300">
+                          {{list.tasks.length}}
+                        </span>
+                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
+                          open_with
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      class="scroll mt-2 overflow-auto border-dashed bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+                      <div [id]="list.id" class="px-3 py-5" cdkDropList [cdkDropListData]="list.tasks"
+                        (cdkDropListDropped)="cardDropped($event,list.tasks)">
+                        <div>
+                          <ng-container *ngFor="let card of list.tasks; trackBy: trackByFn">
+                            <a class="group border-l-4 flex flex-col items-start mb-3 p-2 space-y-3 shadow rounded overflow-hidden bg-card"
+                              [ngClass]="{'border-blue-500': card.Trangthai==0,'border-yellow-500': card.Trangthai==1,'border-green-500': card.Trangthai==2}"
+                              cdkDrag>
+                              <div class="flex flex-row justify-between space-x-2 w-full items-center">
+                                <div
+                                  class="w-full py-1 px-2 rounded-md text-ellipsis overflow-hidden cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                  <!-- <textarea matInput cdkTextareaAutosize class="w-full" [value]="card.Tieude"></textarea> -->
+                                  <span>{{card.Tieude}}</span>
+                                </div>
+
+                                <!-- <div class="text-blue-500 flex space-x-2" *ngIf="card.Trangthai==0"
+                                  [matMenuTriggerFor]="menu">
+                                  <span class="material-icons m-auto text-lg p-2 rounded hover:bg-gray-300">
+                                    notifications
+                                  </span>
+                                </div>
+
+                                <div class="text-yellow-500 flex space-x-2" *ngIf="card.Trangthai==1"
+                                  [matMenuTriggerFor]="menu">
+                                  <span class="material-icons m-auto text-lg p-2 rounded hover:bg-gray-300">
+                                    hourglass_full
+                                  </span>
+                                </div>
+
+                                <div class="text-green-500 flex space-x-2" *ngIf="card.Trangthai==2"
+                                  [matMenuTriggerFor]="menu">
+                                  <span class="material-icons m-auto text-lg p-2 rounded hover:bg-gray-300">
+                                    check_circle
+                                  </span>
+                                </div>
+                                <mat-menu #menu="matMenu">
+                                  <button class="text-blue-500" mat-menu-item (click)="ChangeStatusTasks(card,0)">
+                                    <span class="material-icons my-auto text-lg">
+                                      notifications
+                                    </span>Chưa làm</button>
+                                  <button class="text-yellow-500" mat-menu-item (click)="ChangeStatusTasks(card,1)">
+                                    <span class="material-icons my-auto text-lg">
+                                      hourglass_full
+                                    </span>
+                                    Đang làm</button>
+                                  <button class="text-green-500" mat-menu-item (click)="ChangeStatusTasks(card,2)">
+                                    <span class="material-icons my-auto text-lg">
+                                      check_circle
+                                    </span>
+                                    Hoàn Thành</button>
+                                </mat-menu> -->
+                                <!-- <ng-container *ngIf="!isShowmore[card.id]">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300"
+                                    (click)="Showmore(card)">
+                                    expand_more
+                                  </span>
+                                </ng-container>
+                                <ng-container *ngIf="isShowmore[card.id]">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300"
+                                    (click)="Showmore(card)">
+                                    expand_less
+                                  </span>
+                                </ng-container> -->
+                                <span class="material-icons text-lg p-2 rounded hover:bg-gray-300" cdkDragHandle>
+                                  open_with
+                                </span>
+
+                              </div>
+                              <!-- <div class="flex flex-row justify-between items-center space-x-4 text-hint w-full"
+                                *ngIf="isShowmore[card.id]">
+                                <div class="flex items-center" cdkOverlayOrigin #trigger1="cdkOverlayOrigin"
+                                  (click)="toggleOverlay(trigger1,card,'Thuchien')">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300"
+                                    [ngClass]="{'text-blue-500': card.Thuchien}"
+                                    [matTooltip]="card.Thuchien|findbyid:Nhanviens:'name'">
+                                    account_circle
+                                  </span>
+                                </div>
+                                <div class="flex items-center">
+                                  <div class="flex items-center rounded cursor-pointer"
+                                    [ngClass]="{'text-gray-500 dark:text-gray-300 dark:bg-gray-700': !card.Batdau&&!card.Ketthuc,
+                                                              'text-white bg-blue-500 dark:text-green-100 dark:bg-green-500': card.Batdau && card.Ketthuc}"
+                                    (click)="DeadlinePicker.open()">
+                                    <span class="p-1 text-xs w-full">
+                                      <ng-container *ngIf="card.Batdau || card.Ketthuc">
+                                        {{card.Batdau | date:'dd/MM'}} - {{card.Ketthuc | date:'dd/MM'}}
+                                      </ng-container>
+                                      <ng-container *ngIf="!card.Batdau && !card.Ketthuc">
+                                        <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
+                                          event
+                                        </span>
+                                      </ng-container>
+                                    </span>
+                                    <mat-form-field
+                                      class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                                      <mat-form-field appearance="fill" class="example-form-field">
+                                        <mat-date-range-input [rangePicker]="DeadlinePicker">
+                                          <input matStartDate placeholder="Start date" #DeadlineBg>
+                                          <input matEndDate placeholder="End date" #DeadlineKt>
+                                        </mat-date-range-input>
+                                        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #DeadlinePicker>
+                                          <mat-date-range-picker-actions>
+                                            <button mat-button matDateRangePickerCancel
+                                              (click)="UpdateDeadlineTask(card,null,null)">xóa</button>
+                                            <button mat-raised-button color="primary" matDateRangePickerApply
+                                              (click)="UpdateDeadlineTask(card,DeadlineBg.value,DeadlineKt.value)">Chọn</button>
+                                          </mat-date-range-picker-actions>
+                                        </mat-date-range-picker>
+                                      </mat-form-field>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+
+                                <div class="flex items-center">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
+                                    message
+                                  </span>
+                                </div>
+                                <div class="flex items-center">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300">
+                                    checklist
+                                  </span>
+                                </div>
+                                <div class="flex items-center" [routerLink]="[ThisDuan.id, card.id]">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300 cursor-pointer"
+                                    (click)="OpenEdit(card)">
+                                    edit
+                                  </span>
+                                </div>
+                                <div class="flex items-center">
+                                  <span class="material-icons text-lg p-2 rounded hover:bg-gray-300 hover:text-red-500"
+                                    (click)="DeleteCard(card)">
+                                    delete
+                                  </span>
+                                </div>
+                              </div> -->
+                            </a>
+                          </ng-container>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  </ng-container>
+          </div>
+       
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </mat-drawer-content>
 
 
   <div class="flex flex-col flex-auto min-w-160">
-  <ng-template #myDialog>
-    <div class="flex flex-col flex-auto min-w-160">
-    <h2 matDialogTitle>Tạo Mới Dự Án</h2>
-    <mat-dialog-content>
-      <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
-        <input matInput [placeholder]="'Nhập Tên Dự Án'" #Tenduan>
-      </mat-form-field>     
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button class="bg-green-500 text-white" (click)="CreateDuan(Tenduan)" (keydown.enter)="CreateDuan(Tenduan)">Tạo Mới</button>
-      <button mat-button matDialogClose class="bg-red-500 text-white">Hủy</button>
-    </mat-dialog-actions>
+    <ng-template #myDialog>
+      <div class="flex flex-col flex-auto min-w-160">
+        <h2 matDialogTitle>Tạo Mới Dự Án</h2>
+        <mat-dialog-content>
+          <mat-form-field class="fuse-mat-no-subscript rounded-full m-auto w-full p-2">
+            <input matInput [placeholder]="'Nhập Tên Dự Án'" #Tenduan>
+          </mat-form-field>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button mat-button class="bg-green-500 text-white" (click)="CreateDuan(Tenduan)"
+            (keydown.enter)="CreateDuan(Tenduan)">Tạo Mới</button>
+          <button mat-button matDialogClose class="bg-red-500 text-white">Hủy</button>
+        </mat-dialog-actions>
+      </div>
+    </ng-template>
   </div>
-  </ng-template>
-  </div>
 
 
-  </mat-drawer-container>
+</mat-drawer-container>
 
 
-  <!-- <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+<!-- <ng-template cdkConnectedOverlay cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
   [cdkConnectedOverlayHasBackdrop]="true" [cdkConnectedOverlayOrigin]="triggerOrigin"
   [cdkConnectedOverlayOpen]="triggerType['Thamgia']" (detach)="triggerType['Thamgia'] = false"
   (backdropClick)="triggerType['Thamgia'] = false">

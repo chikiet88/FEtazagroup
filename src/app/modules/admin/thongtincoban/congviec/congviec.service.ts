@@ -52,6 +52,7 @@ setTask(tasks)
 {
   this._tasks.next(tasks);
 }
+
 getBoards() {
   const duan = this._duan.value;
   if(duan)

@@ -75,7 +75,9 @@ export class EdittaskComponent implements OnInit {
           this._changeDetectorRef.markForCheck();
       })
       this._congviecService.duan$.subscribe((data) => {
-          this.ThisDuan =  data
+        if(data!=null)
+        {
+          this.ThisDuan =  data;
           this.ThisDuan.Thamgia.forEach(v => {
              const x = this.Nhanviens.find(v1=>v1.id==v)
               this.Thamgias.push(x);
@@ -83,6 +85,7 @@ export class EdittaskComponent implements OnInit {
           this.filteredThamgias =  this.Thamgias;
           
           this._changeDetectorRef.markForCheck();
+        }
       })
       this._congviecService.task$.subscribe((data)=>{
         this.CurrentTask = data;
