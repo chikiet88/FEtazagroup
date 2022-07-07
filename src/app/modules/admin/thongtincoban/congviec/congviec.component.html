@@ -43,7 +43,7 @@
     </mat-drawer>
   
 
-    <mat-drawer #drawer1 class="p-3 md:w-2/4 w-full" mode="over" position="end">
+    <mat-drawer #drawer1 class="p-3 md:w-3/4 w-full" mode="over" position="end">
        <app-edittask></app-edittask>
     </mat-drawer>
 
@@ -104,11 +104,18 @@
                   class="material-icons mx-2 text-xl">delete</span> Xóa Dự Án</button>
             </mat-menu>    
             </div>
+          <div class="flex items-center p-2 rounded hover:bg-gray-300">
+            <span class="material-icons text-green-500" [routerLink]="['./luutru',CUser.id]">
+              archive
+              </span>   
+            </div>
 
         </div>
       </div>           
       <div class="flex flex-col flex-auto">
-        <app-congviecboard class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard>
+        <router-outlet></router-outlet>
+        
+        <!-- <app-congviecboard class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3"></app-congviecboard> -->
         <!-- <app-congviecboard class="absolute inset-0 top-14 flex flex-col min-w-0 overflow-hidden" *ngIf="view==1" type="dauviec"></app-congviecboard> -->
         <!-- <app-qlcvboard></app-qlcvboard> -->
         <!-- <app-list *ngIf="view==2"></app-list>

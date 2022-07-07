@@ -22,6 +22,8 @@ import { ChangeEvent } from '@ckeditor/ckeditor5-angular';
 export class EdittaskComponent implements OnInit {
   CUser: any;
   ThisDuan: any;
+  CComment: any;
+  Comments: any[]=[];
   Duans: any[];
   filteredDuans: any[];
   Groups: any[];
@@ -86,15 +88,39 @@ export class EdittaskComponent implements OnInit {
         this.CurrentTask = data;
         //this.GroupbyUser = this.Groups.filter(v=>v.idTao==this.CurrentTask.Thuchien);
        })
+       this._cauhinhService.Cauhinhs$
+       .pipe(takeUntil(this._unsubscribeAll))
+       .subscribe((data: Cauhinh[]) => {
+            this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+           this._changeDetectorRef.markForCheck();
+       });  
+       this._congviecService.getAllcomments().subscribe();
+       this._congviecService.comments$.subscribe((data) => {    
+        if(data!=null&&this.CurrentTask!=null)
+        {
+         this.Comments = data.filter(v=>v.idTask == this.CurrentTask.id);
+           this._changeDetectorRef.markForCheck();
+        }
+       });  
   }
   public Editor = Editor ;
   public config = {
     placeholder: 'Vui lòng nhập nội dung',
     link : {
       addTargetToExternalLinks: true
-    }
+    },
+    toolbar: [ 'bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList','imageUpload' ]
+
+  };
+  public config1 = {
+    placeholder: 'Vui lòng nhập nội dung',
+    link : {
+      addTargetToExternalLinks: true
+    },
+
   };
   ngOnInit(): void {
+    this.CComment = {};
     if(this.CurrentTask)
     {
     this._congviecComponent.drawer1.open();
@@ -113,6 +139,16 @@ export class EdittaskComponent implements OnInit {
   UpdateEditor(item, type,{editor}: ChangeEvent ) {   
     item[type] = editor.getData();
     this._congviecService.UpdateTasks(item, item.id).subscribe();
+  }
+  ChangeComment({editor}: ChangeEvent ) {   
+    this.CComment.Noidung = editor.getData();
+  }
+  CreateComment()
+  {
+    this.CComment.idTask = this.CurrentTask.id;
+    this.CComment.idTao = this.CUser.id;
+    this._congviecService.Createcomments(this.CComment).subscribe();
+    this.CComment = {};
   }
   UpdateTask(item,type,value)
   {

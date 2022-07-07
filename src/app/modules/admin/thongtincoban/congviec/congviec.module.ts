@@ -29,25 +29,7 @@ import { TimkiemModule } from 'app/pipes/timkiem/timkiem.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { EdittaskComponent } from './edittask/edittask.component';
-// const congviecRoutes: Route[] = [
-//   {
-//     path: '',
-//     component: CongviecComponent,
-//     resolve: { tasks: CongviecResolver }
-//   },
-//   {
-//     path: ':id',
-//     component: CongviecboardComponent,
-//     resolve: { Duan: CongvecsDuanResolver },
-//     children: [
-//       {
-//         path: ':id',
-//         component: EdittaskComponent,
-//         resolve: { tasks: CongvecsEdittaskResolver }
-//       },
-//     ]
-//   },
-// ];
+import { ChitiettaskComponent } from './chitiettask/chitiettask.component';
 export const congviecRoutes: Route[] = [
   {
       path     : '',
@@ -57,6 +39,7 @@ export const congviecRoutes: Route[] = [
       },
       children:[
         {
+          
           path     : ':id',
           component: CongviecboardComponent,
           resolve  : {
@@ -72,6 +55,10 @@ export const congviecRoutes: Route[] = [
               }
           ]
       },
+        // {
+        // path     : 'luutru',
+        // component: ChitiettaskComponent,
+        // }
       ]
 
   },
@@ -84,6 +71,7 @@ export const congviecRoutes: Route[] = [
     AddcardComponent,
     AddlistComponent,
     EdittaskComponent,
+    ChitiettaskComponent,
   ],
   imports: [
     NgApexchartsModule,

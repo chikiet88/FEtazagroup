@@ -8,6 +8,8 @@ import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, thr
 export class CongviecService {
   private _duans: BehaviorSubject<any> = new BehaviorSubject(null);
   private _duan: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _comments: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _comment: BehaviorSubject<any> = new BehaviorSubject(null);
   private _grouptasks: BehaviorSubject<any> = new BehaviorSubject(null);
   private _grouptask: BehaviorSubject<any> = new BehaviorSubject(null);
   private _tasks: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -15,10 +17,16 @@ export class CongviecService {
   private _boards: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private _httpClient: HttpClient) {
   }
+get comments$(): Observable<any> {
+    return this._comments.asObservable();
+  }
+get comment$(): Observable<any> {
+    return this._comment.asObservable();
+  }
 get duans$(): Observable<any> {
     return this._duans.asObservable();
   }
-  get duan$(): Observable<any> {
+get duan$(): Observable<any> {
     return this._duan.asObservable();
   }
   get grouptasks$(): Observable<any> {
@@ -39,6 +47,10 @@ get boards$(): Observable<any> {
 changeTask(task)
 {
     this._task.next(task);
+}
+setTask(tasks)
+{
+  this._tasks.next(tasks);
 }
 getBoards() {
   const duan = this._duan.value;
@@ -265,5 +277,77 @@ DeleteTasks(id): Observable<any> {
     );
   }
 
-
+  getAllcomments(): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/comment`).pipe(
+      tap((response: any) => {       
+        this._comments.next(response);
+      })
+    );
+  }
+  getcommentById(id): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/comment/${id}`).pipe(
+      tap((response: any) => {
+        console.log(response); 
+        this._comment.next(response);
+        this.getBoards();
+      })
+    );
+  }
+  getcommentByuser(id): Observable<any> {
+    return this._httpClient.get(`${environment.ApiURL}/comment/user/${id}`).pipe(
+      tap((response: any) => {
+        this._comments.next(response);
+        this.getBoards();
+      })
+    );
+  }
+  Createcomments(comment): Observable<any> {
+    return this.comments$.pipe(
+      take(1),
+      switchMap(comments => this._httpClient.post(`${environment.ApiURL}/comment`, comment).pipe(
+        map((result) => {
+          this._comments.next([result, ...comments]);
+          this._comment.next(result);
+          return result;
+        })
+      ))
+    );
+  }
+  Updatecomments(comment, id): Observable<any> {
+    return this.comments$.pipe(
+      take(1),
+      switchMap(comments => this._httpClient.patch(`${environment.ApiURL}/comment/${id}`, comment).pipe(
+        map((comment) => {
+          const index = comments.findIndex(item => item.id === id);
+          comments[index] = comment;
+          this._comments.next(comments);
+          this.getBoards();
+          return comment;
+        }),
+        switchMap(comment => this.comment$.pipe(
+          take(1),
+          filter(item => item && item.id === id),
+          tap(() => {
+            this._comment.next(comment);
+            this.getBoards();
+            return comment;
+          })
+        ))
+      ))
+    );
+  }
+  Deletecomments(id): Observable<any> {
+    return this.comments$.pipe(
+      take(1),
+      switchMap(comments => this._httpClient.delete(`${environment.ApiURL}/comment/${id}`).pipe(
+        map((isDeleted: boolean) => {
+          const index = comments.findIndex(item => item.id === id);
+          comments.splice(index, 1);
+          this._comments.next(comments);
+          this.getBoards();
+          return isDeleted;
+        })
+      ))
+    );
+  }
 }
