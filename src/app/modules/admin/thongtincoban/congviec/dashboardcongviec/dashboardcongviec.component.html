@@ -1,0 +1,20 @@
+<div class="flex flex-col w-full space-y-5 overflow-auto scroll">
+<div id="chart" class="w-160">
+  <div>Tổng Quan</div>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [labels]="chartOptions.labels"
+      [responsive]="chartOptions.responsive"
+    ></apx-chart>
+  </div>
+<div id="chart" class="w-120 p-20">
+  <div>TimeLine</div>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [labels]="chartOptions.labels"
+      [responsive]="chartOptions.responsive"
+    ></apx-chart>
+  </div>
+</div>

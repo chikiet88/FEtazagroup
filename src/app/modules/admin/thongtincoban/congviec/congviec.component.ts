@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -36,6 +37,7 @@ export class CongviecComponent implements OnInit {
   triggerOrigin: any;
   triggerType:any[]=[];
   CBoards:any[]=[];
+  ShowChart:number = 1;
   constructor(
     private _scrumboardService: ScrumboardService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -89,16 +91,14 @@ export class CongviecComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ShowChart =1;
     this.Groups = [
       {id: '0',Tieude: 'Chưa Làm'},
       {id: '1',Tieude: 'Đang Làm'},
       {id: '2',Tieude: 'Hoàn Thành'}
     ]
     this.Groups.forEach(v => {v.tasks = this.Tasks.filter(v1=>v1.Trangthai==v.id)});
-    this.CBoards = this.Groups;  
-    console.log(this.Tasks);
-    console.log(this.Groups);
-    
+    this.CBoards = this.Groups;      
       this.drawer1.openedChange.subscribe((opened) => {
         if (!opened)
         {
@@ -208,11 +208,28 @@ ClearThamgia()
   this._changeDetectorRef.markForCheck();
 }
 
+
+cardDropped(event: CdkDragDrop<any[]>, list): void {
+  console.log(event.container.data);
+  if (event.previousContainer === event.container) {
+      console.log('true');
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
+  }
+  else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      event.container.data[event.currentIndex].Trangthai = event.container.id;
+      const item = event.container.data[event.currentIndex]
+      console.log(item);
+        this._congviecService.UpdateTasks(item, item.id).subscribe();
+
+  }
+
+}
+
   ngOnDestroy(): void
   {
       this._unsubscribeAll.next(null);
       this._unsubscribeAll.complete();
-  }
-
-  
+  } 
 }

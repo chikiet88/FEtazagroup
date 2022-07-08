@@ -131,8 +131,12 @@
         <div class="flex flex-row space-x-4 items-center">
           <span class="material-icons" (click)="drawer.toggle()">menu</span>
           <span class="text-2xl font-bold">Công Việc Của Tôi</span>
+          <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" [ngClass]="{'text-white bg-blue-500': ShowChart==1}" (click)="ShowChart=1">view_kanban</span>
+          <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" [ngClass]="{'text-white bg-blue-500': ShowChart==2}" (click)="ShowChart=2">pie_chart</span>
+          <span class="material-icons text-hint text-xl p-2 rounded hover:bg-gray-300" [ngClass]="{'text-white bg-blue-500': ShowChart==3}" (click)="ShowChart=3">view_timeline</span>
         </div>
-        <div class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3">
+        <app-dashboardcongviec [Dashboard]="CBoards" class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3" *ngIf="ShowChart==2"></app-dashboardcongviec>
+        <div class="absolute inset-0 top-12 flex flex-col min-w-0 overflow-hidden p-3" *ngIf="!ShowChart==1">
           <div class="scroll flex-auto overflow-y-hidden" cdkScrollable>
             <div class="flex h-full" cdkDropList [cdkDropListData]="CBoards" [cdkDropListOrientation]="'horizontal'"
               (cdkDropListDropped)="listDropped($event)">
