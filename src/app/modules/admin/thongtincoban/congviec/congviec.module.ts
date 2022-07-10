@@ -31,6 +31,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { EdittaskComponent } from './edittask/edittask.component';
 import { ChitiettaskComponent } from './chitiettask/chitiettask.component';
 import { DashboardcongviecComponent } from './dashboardcongviec/dashboardcongviec.component';
+import { TimelineComponent } from './timeline/timeline.component';
 export const congviecRoutes: Route[] = [
   {
       path     : '',
@@ -74,6 +75,7 @@ export const congviecRoutes: Route[] = [
     EdittaskComponent,
     ChitiettaskComponent,
     DashboardcongviecComponent,
+    TimelineComponent,
   ],
   imports: [
     NgApexchartsModule,

@@ -84,6 +84,12 @@ export class CongviecComponent implements OnInit {
           this.Tasks = this.filteredTasks = data.filter(v=>v.idTao==this.CUser.id||v.Thuchien==this.CUser.id);
           this._changeDetectorRef.markForCheck();
       })
+      this._congviecService.Showchart$.subscribe((data) => {
+        this.ShowChart = data;
+        console.log(data);
+        
+        this._changeDetectorRef.markForCheck();
+    })
       this._nhanvienServiceService.nhanviens$.subscribe((data) => {
           this.Nhanviens = this.filteredNhanviens = data
           this._changeDetectorRef.markForCheck();
@@ -91,7 +97,6 @@ export class CongviecComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ShowChart =1;
     this.Groups = [
       {id: '0',Tieude: 'Chưa Làm'},
       {id: '1',Tieude: 'Đang Làm'},
@@ -106,6 +111,10 @@ export class CongviecComponent implements OnInit {
             this._changeDetectorRef.markForCheck();
         }
     });
+  }
+  SetChart(value)
+  {
+    this._congviecService.setShowchart(value);
   }
   filterDuan(event): void
   {

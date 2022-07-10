@@ -57,6 +57,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     triggerType:any[]=[];
     isShowmore:any[]=[];
     Vitri: any;
+    ShowChart:any;
     constructor(
         private _sharedService: SharedService,
         private _scrumboardService: ScrumboardService,
@@ -112,7 +113,13 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
             this._congviecService.getBoards();
             this._congviecService.boards$.subscribe((data) => {  
                 this.Boards = data                
-            })      
+            }) 
+            this._congviecService.Showchart$.subscribe((data) => {
+                this.ShowChart = data;
+                console.log(data);
+                
+                this._changeDetectorRef.markForCheck();
+            })     
          }
     ngOnInit(): void {     
         this.listTitleForm = this._formBuilder.group({

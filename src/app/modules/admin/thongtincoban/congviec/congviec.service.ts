@@ -15,6 +15,7 @@ export class CongviecService {
   private _tasks: BehaviorSubject<any> = new BehaviorSubject(null);
   private _task: BehaviorSubject<any> = new BehaviorSubject(null);
   private _boards: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _showchart: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private _httpClient: HttpClient) {
   }
 get comments$(): Observable<any> {
@@ -52,6 +53,14 @@ setTask(tasks)
 {
   this._tasks.next(tasks);
 }
+get Showchart$(): Observable<any> {
+  return this._showchart.asObservable();
+}
+setShowchart(value)
+{
+  this._showchart.next(value);
+}
+
 getBoards() {
   const duan = this._duan.value;
   if(duan)
