@@ -25,6 +25,7 @@ import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { QuanlynhanvienComponent } from './modules/admin/baocao/quanlynhanvien/quanlynhanvien.component';
+import { DashboardtuyendungComponent } from './modules/admin/tuyendung/dashboardtuyendung/dashboardtuyendung.component';
 const routerConfig: ExtraOptions = {
   preloadingStrategy: PreloadAllModules,
   scrollPositionRestoration: 'enabled'
@@ -77,6 +78,7 @@ const customNotifierOptions: NotifierOptions = {
     QuanlyadsComponent,
     UploadComponent,
     QuanlynhanvienComponent,
+    DashboardtuyendungComponent,
   ],
   imports: [
     BrowserModule,

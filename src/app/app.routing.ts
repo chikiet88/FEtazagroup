@@ -89,6 +89,7 @@ export const appRoutes: Route[] = [
                 path: 'tuyendung',
                 //canActivate: [AdminGuard],
                 children: [
+                    { path: 'dashboard', loadChildren: () => import('app/modules/admin/tuyendung/dashboardtuyendung/dashboardtuyendung.module').then(m => m.DashboardtuyendungModule) },
                     { path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule) },
                     { path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule) },
                     { path: 'formtuyendung', loadChildren: () => import('app/modules/admin/tuyendung/formtuyendung/formtuyendung.module').then(m => m.FormtuyendungModule) },

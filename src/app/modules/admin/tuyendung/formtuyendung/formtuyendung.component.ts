@@ -10,13 +10,7 @@ export class FormtuyendungComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-      this.FormDulieu = [
-        {id:1,value:'',icon:''},
-        {id:2,value:'',icon:''},
-        {id:3,value:'',icon:''},
-        {id:4,value:'',icon:''},
-        {id:5,value:'',icon:''}
-      ]
+
   }
 
 }
