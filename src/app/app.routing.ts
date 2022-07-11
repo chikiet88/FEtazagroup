@@ -91,6 +91,7 @@ export const appRoutes: Route[] = [
                 children: [
                     { path: 'vetuyendung', loadChildren: () => import('app/modules/admin/tuyendung/vetuyendung/vetuyendung.module').then(m => m.VetuyendungModule) },
                     { path: 'hosotuyendung', loadChildren: () => import('app/modules/admin/tuyendung/hosotuyendung/hosotuyendung.module').then(m => m.HosotuyendungModule) },
+                    { path: 'formtuyendung', loadChildren: () => import('app/modules/admin/tuyendung/formtuyendung/formtuyendung.module').then(m => m.FormtuyendungModule) },
 
                 ]
             },

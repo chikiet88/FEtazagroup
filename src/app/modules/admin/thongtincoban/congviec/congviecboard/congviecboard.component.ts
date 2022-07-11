@@ -115,9 +115,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
                 this.Boards = data                
             }) 
             this._congviecService.Showchart$.subscribe((data) => {
-                this.ShowChart = data;
-                console.log(data);
-                
+                this.ShowChart = data||1;
                 this._changeDetectorRef.markForCheck();
             })     
          }

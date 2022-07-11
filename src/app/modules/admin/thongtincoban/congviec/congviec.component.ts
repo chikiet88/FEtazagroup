@@ -6,18 +6,32 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NotifierService } from 'angular-notifier';
 import { UserService } from 'app/core/user/user.service';
+import moment from 'moment';
+import { ApexAxisChartSeries, ApexChart, ApexFill, ApexDataLabels, ApexGrid, ApexYAxis, ApexXAxis, ApexPlotOptions, ChartComponent } from 'ng-apexcharts';
 import { Subject,takeUntil } from 'rxjs';
 import { ScrumboardService } from '../../apps/scrumboard/scrumboard.service';
 import { NhanvienService } from '../../baocao/nhanvien/nhanvien.service';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { CongviecService } from './congviec.service';
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  fill: ApexFill;
+  dataLabels: ApexDataLabels;
+  grid: ApexGrid;
+  yaxis: ApexYAxis;
+  xaxis: ApexXAxis;
+  plotOptions: ApexPlotOptions;
+};
 @Component({
   selector: 'app-congviec',
   templateUrl: './congviec.component.html',
   styleUrls: ['./congviec.component.scss']
 })
 export class CongviecComponent implements OnInit {
+  @ViewChild("chart") chart: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   Vitri: any;
   CUser: any;
   ThisDuan: any;
@@ -51,6 +65,92 @@ export class CongviecComponent implements OnInit {
     private _cauhinhService: CauhinhService,
     private _dialog: MatDialog
   ) {
+    this.chartOptions = {
+      series: [
+        {
+          data: [
+            {
+              x: "Analysis",
+              y: [
+                new Date("2019-02-27").getTime(),
+                new Date("2019-03-04").getTime()
+              ],
+              fillColor: "#008FFB"
+            },
+            {
+              x: "Design",
+              y: [
+                new Date("2019-03-04").getTime(),
+                new Date("2019-03-08").getTime()
+              ],
+              fillColor: "#00E396"
+            },
+            {
+              x: "Coding",
+              y: [
+                new Date("2019-03-07").getTime(),
+                new Date("2019-03-10").getTime()
+              ],
+              fillColor: "#775DD0"
+            },
+            {
+              x: "Testing",
+              y: [
+                new Date("2019-03-08").getTime(),
+                new Date("2019-03-12").getTime()
+              ],
+              fillColor: "#FEB019"
+            },
+            {
+              x: "Deployment",
+              y: [
+                new Date("2019-03-12").getTime(),
+                new Date("2019-03-17").getTime()
+              ],
+              fillColor: "#FF4560"
+            }
+          ]
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "rangeBar"
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          distributed: true,
+          dataLabels: {
+            hideOverflowingLabels: false
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function(val, opts) {
+          var label = opts.w.globals.labels[opts.dataPointIndex];
+          var a = moment(val[0]);
+          var b = moment(val[1]);
+          var diff = b.diff(a, "days");
+          return label + ": " + diff + (diff > 1 ? " days" : " day");
+        },
+        style: {
+          colors: ["#f3f4f5", "#fff"]
+        }
+      },
+      xaxis: {
+        type: "datetime"
+      },
+      yaxis: {
+        show: false
+      },
+      grid: {
+        row: {
+          colors: ["#f3f4f5", "#fff"],
+          opacity: 1
+        }
+      }
+    };
     this._userService.user$
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) => {
@@ -85,9 +185,8 @@ export class CongviecComponent implements OnInit {
           this._changeDetectorRef.markForCheck();
       })
       this._congviecService.Showchart$.subscribe((data) => {
-        this.ShowChart = data;
+        this.ShowChart = data||1;
         console.log(data);
-        
         this._changeDetectorRef.markForCheck();
     })
       this._nhanvienServiceService.nhanviens$.subscribe((data) => {
