@@ -45,6 +45,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     Grouptasks: any[] = [];
     filteredGroups: any[] = [];
     filteredNhanviens: any[] = [];
+    filteredThuchien: any[] = [];
     Boards: any[] = [];
     Tasks: any[] = [];
     Sections: any[] = [];
@@ -104,6 +105,11 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
             }) 
             this._congviecService.duan$.subscribe((data) => {
                 this.ThisDuan = data; 
+                const newthamgia = []
+                this.ThisDuan.Thamgia.forEach(v => {
+                    newthamgia.push(this.Nhanviens.find(v1=>v1.id==v))
+                });
+                this.ThisDuan.Thamgia = this.filteredThuchien = newthamgia
                 this._changeDetectorRef.markForCheck();
             }) 
             this._congviecService.getAllGrouptasks().subscribe();
@@ -280,11 +286,11 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
         this.triggerType[type] = !this.triggerType[type]    
       }
 
-    filterVitri(event): void
+    filterThuchien(event): void
     {
         const value = event.target.value.toLowerCase();
         console.log(value);
-        this.filteredNhanviens = this.Nhanviens.filter(v => v.name.toLowerCase().includes(value));
+        this.filteredThuchien = this.ThisDuan.Thamgia.filter(v => v.name.toLowerCase().includes(value));
     }
     ChangeValue(item,type,value) {
         item[type]=value;

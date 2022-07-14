@@ -186,7 +186,6 @@ export class CongviecComponent implements OnInit {
       })
       this._congviecService.Showchart$.subscribe((data) => {
         this.ShowChart = data||1;
-        console.log(data);
         this._changeDetectorRef.markForCheck();
     })
       this._nhanvienServiceService.nhanviens$.subscribe((data) => {
