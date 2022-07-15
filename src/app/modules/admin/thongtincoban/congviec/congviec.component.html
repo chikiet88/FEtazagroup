@@ -72,8 +72,8 @@
               Tham Gia </span>
             <mat-menu #Thamgia="matMenu">
               <button mat-menu-item *ngFor="let item of ThisDuan.Thamgia">
-                <span class="w-48 truncate" matTooltip="{{Vitri[item.profile.Vitri]}}">
-                  {{item.name}}
+                <span class="w-48 truncate" matTooltip="{{Vitri[(item|findbyid:Nhanviens:'profile').Vitri]}}">
+                  {{item|findbyid:Nhanviens:'name'}}
                 </span>
                 <span class="material-icons text-xl text-red-500" (click)="RemoveValue(ThisDuan,'Thamgia',item)">
                   remove_circle
@@ -407,8 +407,8 @@
           <ng-container *ngFor="let item of filteredNhanviens|Unique:ThisDuan.Thamgia:'id'">
             <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" mat-ripple
               (click)="AddValue(ThisDuan,'Thamgia',item.id)">
-              <div class="ml-1 flex flex-row space-x-2"><span>{{item.name}}</span>
-                ({{Vitri[(item.id|findbyid:Nhanviens:'profile').Vitri]}})
+              <div class="ml-1 flex flex-row space-x-2"><span>{{item.id|findbyid:Nhanviens:'name'}}</span>
+                ({{Vitri[(item.id|findbyid:Nhanviens:'profile').Vitri]||'0'}})
               </div>
             </div>
           </ng-container>

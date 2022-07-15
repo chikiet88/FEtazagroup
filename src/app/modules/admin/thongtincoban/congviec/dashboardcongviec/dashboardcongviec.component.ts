@@ -15,6 +15,11 @@ export type ChartOptions = {
 export class DashboardcongviecComponent implements OnInit {
   series:any[] = [];
   labels:any[] = [];
+  gtitle:string
+  gtype:string
+  gdata:any[]=[];
+  gcols:any[]=[];
+  goptions:any;
   @ViewChild("chart") chart: ChartComponent;
   @Input() Dashboard: any;
   public chartOptions: Partial<ChartOptions>;
@@ -23,10 +28,28 @@ export class DashboardcongviecComponent implements OnInit {
   }
   ngOnInit(): void {
     console.log(this.Dashboard);
+    this.gdata = this.Dashboard.map(v=>{
+    return [v.Tieude, v.tasks.length];
+    });
+  console.log( this.gdata);
+    this.gtitle = 'Browser market shares at a specific website, 2014';
+    this.gtype = 'PieChart';
+    // this.gdata = [
+
+    //    ['Chưa Làm', 45.0],
+    //    ['Đang Làm', 26.8],
+    //    ['Hoàn Thành', 12.8],
+    // ];
+    //his.gcols = ['Browser', 'Percentage'];
+    this.goptions = {    
+       pieHole:0.4
+    };
+
     this.LoadDashboard(this.Dashboard);
   }
   LoadDashboard(data)
   {
+
     data.forEach(v => {
       this.series.push(v.tasks.length);
       this.labels.push(`${v.tasks.length} ${v.Tieude}`);

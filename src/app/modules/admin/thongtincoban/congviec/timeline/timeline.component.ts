@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChartType } from 'angular-google-charts';
 import { NhanvienService } from 'app/modules/admin/baocao/nhanvien/nhanvien.service';
 import moment from 'moment';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexLegend, ApexXAxis, ApexPlotOptions, ChartComponent } from 'ng-apexcharts';
@@ -48,7 +49,9 @@ export class TimelineComponent implements OnInit {
           uniqueName.forEach(v1 => {
             if(v1==v.Thuchien&&v1!=''&&v.Batdau!=null&&v.Ketthuc!=null)
             {
-              this.series.push({name:v1,data:{x:v.Tieude,y:[
+              this.series.push(
+                {name:v1,
+                data:{x:v.Tieude,y:[
                 new Date("2019-03-05").getTime(),
                 new Date("2019-03-07").getTime()
                 // new Date(v.Batdau).getTime(),new Date(v.Ketthuc).getTime()
@@ -89,8 +92,33 @@ export class TimelineComponent implements OnInit {
       }
     };
   }
+
+  daysToMilliseconds(days) {
+    return days * 24 * 60 * 60 * 1000;
+  }
+
+  cols = ["Task ID","Task Name","Start Date", 'End Date', 'Duration', 'Percent Complete', 'Dependencies'];
+  title = '';
+  type = 'Gantt';
+  data = [
+    ['Research', 'Find sources',
+     new Date(2015, 0, 1), new Date(2015, 0, 5), null,  100,  null],
+    ['Write', 'Write paper',
+     null, new Date(2015, 0, 9), this.daysToMilliseconds(3), 25, 'Research,Outline'],
+    ['Cite', 'Create bibliography',
+     null, new Date(2015, 0, 7), this.daysToMilliseconds(1), 20, 'Research'],
+    ['Complete', 'Hand in paper',
+     null, new Date(2015, 0, 10), this.daysToMilliseconds(1), 0, 'Cite,Write'],
+    ['Outline', 'Outline paper',
+     null, new Date(2015, 0, 6), this.daysToMilliseconds(1), 100, 'Research']
+  ];
+  options = {
+    height: 400,
+    gantt: {
+      trackHeight: 30
+   }
+  }
   ngOnInit(): void {
-  
     
   }
 

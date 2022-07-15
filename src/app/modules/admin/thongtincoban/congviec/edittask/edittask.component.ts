@@ -73,19 +73,11 @@ export class EdittaskComponent implements OnInit {
       this._congviecService.duans$.subscribe((data) => {
           this.Duans = this.filteredDuans = data
           this._changeDetectorRef.markForCheck();
-      })
+      })      
       this._congviecService.duan$.subscribe((data) => {
-        if(data!=null)
-        {
           this.ThisDuan =  data;
-          this.ThisDuan.Thamgia.forEach(v => {
-             const x = this.Nhanviens.find(v1=>v1.id==v)
-              this.Thamgias.push(x);
-          });
-          this.filteredThamgias =  this.Thamgias;
-          
+          this.filteredThamgias = this.Thamgias = data.Thamgia;                
           this._changeDetectorRef.markForCheck();
-        }
       })
       this._congviecService.task$.subscribe((data)=>{
         this.CurrentTask = data;

@@ -157,6 +157,12 @@ export class CongviecComponent implements OnInit {
         this.CUser = data;
         this._changeDetectorRef.markForCheck();
     });
+
+    this._nhanvienServiceService.nhanviens$
+    .subscribe((data) => {
+        this.Nhanviens =  this.filteredNhanviens = data;
+        this._changeDetectorRef.markForCheck();
+    });
     this._cauhinhService.getCauhinhs().subscribe();
     this._cauhinhService.Cauhinhs$
     .pipe(takeUntil(this._unsubscribeAll))
@@ -170,8 +176,8 @@ export class CongviecComponent implements OnInit {
           this._changeDetectorRef.markForCheck();
       })
       this._congviecService.duan$.subscribe((data) => {
-          this.ThisDuan = data
-          this._changeDetectorRef.markForCheck();
+        this.ThisDuan = data; 
+        this._changeDetectorRef.markForCheck();
       })
 
       this._congviecService.getAllGrouptasks().subscribe();
@@ -188,10 +194,6 @@ export class CongviecComponent implements OnInit {
         this.ShowChart = data||1;
         this._changeDetectorRef.markForCheck();
     })
-      this._nhanvienServiceService.nhanviens$.subscribe((data) => {
-          this.Nhanviens = this.filteredNhanviens = data
-          this._changeDetectorRef.markForCheck();
-      })
   }
 
   ngOnInit(): void {

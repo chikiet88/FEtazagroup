@@ -92,6 +92,7 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
                 this.Nhanviens =  this.filteredNhanviens = data;
                 this._changeDetectorRef.markForCheck();
             });
+
             this._congviecService.getAllDuans().subscribe();
             this._congviecService.duans$.subscribe((data) => {
                 this.Duans = this.filteredDuans = data
@@ -105,11 +106,6 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
             }) 
             this._congviecService.duan$.subscribe((data) => {
                 this.ThisDuan = data; 
-                const newthamgia = []
-                this.ThisDuan.Thamgia.forEach(v => {
-                    newthamgia.push(this.Nhanviens.find(v1=>v1.id==v))
-                });
-                this.ThisDuan.Thamgia = this.filteredThuchien = newthamgia
                 this._changeDetectorRef.markForCheck();
             }) 
             this._congviecService.getAllGrouptasks().subscribe();

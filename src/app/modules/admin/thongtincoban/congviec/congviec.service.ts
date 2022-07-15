@@ -69,7 +69,7 @@ getBoards() {
   const tasks = this._tasks.value;
   grouptasks.forEach(v => {v.tasks = tasks.filter(v1=>v1.gid==v.id)});
   grouptasks.sort((a, b) => a.Ordering - b.Ordering);
-  console.log(grouptasks);
+ // console.log(grouptasks);
   return this._boards.next(grouptasks);
   }
 }
@@ -83,7 +83,7 @@ getAllDuans(): Observable<any> {
   getDuanById(id): Observable<any> {
     return this._httpClient.get(`${environment.ApiURL}/project/${id}`).pipe(
       tap((response: any) => {
-        console.log(response); 
+       // console.log(response); 
         this._duan.next(response);
         this.getBoards();
       })
