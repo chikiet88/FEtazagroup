@@ -29,10 +29,10 @@ export class DashboardcongviecComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.Dashboard);
     this.gdata = this.Dashboard.map(v=>{
-    return [v.Tieude, v.tasks.length];
+    return [`${v.tasks.length} ${v.Tieude}`, v.tasks.length];
     });
   console.log( this.gdata);
-    this.gtitle = 'Browser market shares at a specific website, 2014';
+    this.gtitle = 'Data';
     this.gtype = 'PieChart';
     // this.gdata = [
 
@@ -40,9 +40,11 @@ export class DashboardcongviecComponent implements OnInit {
     //    ['Đang Làm', 26.8],
     //    ['Hoàn Thành', 12.8],
     // ];
-    //his.gcols = ['Browser', 'Percentage'];
+    this.gcols = ['Browser', 'Percentage'];
     this.goptions = {    
-       pieHole:0.4
+       pieHole:0.4,
+       height:400,
+       legend:{position: 'top', textStyle: {color: 'blue', fontSize: 12}}
     };
 
     this.LoadDashboard(this.Dashboard);
