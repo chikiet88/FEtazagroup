@@ -1,8 +1,13 @@
 <div class="flex flex-col w-full space-y-5 overflow-auto scroll">
-  <div class="p-4 bg-white">
-    <div>Tổng Quan</div>
-    <google-chart [type]="gtype" [columns]="gcols" [data]="gdata" [options]="goptions" class="w-full h-full">
-      
-    </google-chart>
+  <div class="w-full text-center text-2xl font-bold">Tổng Quan</div>
+  <div class="flex flex-row w-full">
+    <div class="p-4 bg-white w-1/2">
+      <google-chart [type]="gtype" [columns]="gcols" [data]="gdata" [options]="goptions" class="w-full h-full"></google-chart>
+    </div>
+    <div class="p-4 bg-white w-1/2">
+      <google-chart [type]="gtype1" [columns]="gcols1" [data]="gdata1" [options]="goptions1" class="w-full h-full"></google-chart>
+    </div>
   </div>
+
+
 </div>

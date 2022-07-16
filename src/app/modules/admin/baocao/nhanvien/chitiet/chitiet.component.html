@@ -1,4 +1,4 @@
-<div class="w-full flex flex-col space-y-4 p-4">
+<div class="w-full flex flex-col space-y-4 p-4 break-all">
     <div class="font-bold">Thông Tin Cá Nhân</div>
     <div class="grid grid-cols-2 gap-4 w-full">
         <div class="w-full flex flex-row items-center justify-between space-x-4">
@@ -8,7 +8,7 @@
                     </span> 
                  <span>Họ Và Tên</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.name,'bg-blue-400 hover:bg-blue-600': CNhanvien.name}">
              <span>{{CNhanvien.name}}</span>
            </div>
         </div>
@@ -20,7 +20,7 @@
                     </span> 
                  <span>Số Điện Thoại</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.congty,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.congty}">
              <span>{{CNhanvien.SDT}}</span>
            </div>
         </div>
@@ -31,7 +31,7 @@
                     </span> 
                  <span>Email</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.email,'bg-blue-400 hover:bg-blue-600': CNhanvien.email}">
              <span>{{CNhanvien.email}}</span>             
            </div>
         </div>
@@ -42,7 +42,7 @@
                     </span> 
                  <span>Role</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.Role,'bg-blue-400 hover:bg-blue-600': CNhanvien.Role}">
              <span>{{CNhanvien.Role}}</span>
            </div>
         </div>
@@ -53,7 +53,7 @@
                     </span> 
                  <span>Mã Nhân Viên</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.MaNV,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.MaNV}">
              <span>{{CNhanvien.profile.MaNV}}</span>
            </div>
         </div>
@@ -64,7 +64,7 @@
                     </span> 
                  <span>Giới Tính</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Gioitinh,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Gioitinh}">
              <span>{{CNhanvien.profile.Gioitinh}}</span>
            </div>
         </div>
@@ -75,7 +75,7 @@
                     </span> 
                  <span>Ngày Sinh</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Ngaysinh,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Ngaysinh}">
              <span>{{CNhanvien.profile.Ngaysinh|date:'dd/MM/yyyy'}}</span>
            </div>
         </div>
@@ -86,7 +86,7 @@
                     </span> 
                  <span>CMND/CCCD</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.CMND,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.CMND}">
              <span>{{CNhanvien.profile.CMND}}</span>
            </div>
         </div>
@@ -97,7 +97,7 @@
                     </span> 
                  <span>Địa Chỉ</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Diachi,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Diachi}">
              <span>{{CNhanvien.profile.Diachi}}</span>
            </div>
         </div>
@@ -108,7 +108,7 @@
                     </span> 
                  <span>Zalo</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Zalo,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Zalo}">
              <span>{{CNhanvien.profile.Zalo}}</span>
            </div>
         </div>
@@ -119,7 +119,7 @@
                     </span> 
                  <span>Facebook</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Fb,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Fb}">
              <span>{{CNhanvien.profile.Fb}}</span>
            </div>
         </div>
@@ -135,8 +135,8 @@
                     </span> 
                  <span>Công Ty</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.profile.congty}}</span>
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.congty,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.congty}">
+             <span>{{CNhanvien.profile.congty||'Trống'}}</span>
            </div>
         </div>
 
@@ -147,7 +147,7 @@
                     </span> 
                  <span>Khối</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Khoi,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Khoi}">
              <span>{{CNhanvien.profile.Khoi}}</span>
            </div>
         </div>
@@ -158,7 +158,7 @@
                     </span> 
                  <span>Phòng Ban</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Phongban,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Phongban}">
              <span>{{CNhanvien.profile.Phongban}}</span>
            </div>
         </div>
@@ -169,7 +169,7 @@
                     </span> 
                  <span>Bộ Phận</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Bophan,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Bophan}">
              <span>{{CNhanvien.profile.Bophan}}</span>
            </div>
         </div>
@@ -180,8 +180,8 @@
                     </span> 
                  <span>Vị trí</span>
             </div>
-           <div class="p-2 rounded bg-gray-200 hover:bg-gray-300">
-             <span>{{CNhanvien.profile.Vitri}}</span>
+           <div class="max-w-2/3 p-2 rounded text-white" [ngClass]="{'bg-red-400 hover:bg-red-600': !CNhanvien.profile.Vitri,'bg-blue-400 hover:bg-blue-600': CNhanvien.profile.Vitri}">
+             <span>{{Vitri[CNhanvien.profile.Vitri]}}</span>
            </div>
         </div>
     </div>

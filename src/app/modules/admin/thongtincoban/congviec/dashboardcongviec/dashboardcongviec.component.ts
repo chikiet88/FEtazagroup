@@ -20,62 +20,49 @@ export class DashboardcongviecComponent implements OnInit {
   gdata:any[]=[];
   gcols:any[]=[];
   goptions:any;
+  gtitle1:string
+  gtype1:string
+  gdata1:any[]=[];
+  gcols1:any[]=[];
+  goptions1:any;
+  Tasks:any[] = [];
   @ViewChild("chart") chart: ChartComponent;
   @Input() Dashboard: any;
   public chartOptions: Partial<ChartOptions>;
-  constructor(
-  ) {
-  }
+  constructor() {}
   ngOnInit(): void {
-    console.log(this.Dashboard);
+    this.Dashboard.forEach(v => {
+      v.tasks.forEach(v1 => {
+        this.Tasks.push(v1);
+      });
+    });
     this.gdata = this.Dashboard.map(v=>{
     return [`${v.tasks.length} ${v.Tieude}`, v.tasks.length];
     });
-  console.log( this.gdata);
     this.gtitle = 'Data';
     this.gtype = 'PieChart';
-    // this.gdata = [
-
-    //    ['Chưa Làm', 45.0],
-    //    ['Đang Làm', 26.8],
-    //    ['Hoàn Thành', 12.8],
-    // ];
     this.gcols = ['Browser', 'Percentage'];
     this.goptions = {    
        pieHole:0.4,
        height:400,
        legend:{position: 'top', textStyle: {color: 'blue', fontSize: 12}}
     };
-
-    this.LoadDashboard(this.Dashboard);
+    console.log(this.Dashboard);
+    console.log(this.Tasks);
+    const chualam = this.Tasks.filter(v=>v.Trangthai==0).length;
+    const danglam = this.Tasks.filter(v=>v.Trangthai==1).length;
+    const hoanthanh = this.Tasks.filter(v=>v.Trangthai==2).length;
+    console.log(chualam);
+    console.log(danglam);
+    console.log(hoanthanh);
+    this.gdata1 =     [
+      [`${chualam} Chưa Làm`, chualam],
+      [`${danglam} Đang Làm`,danglam],
+      [`${hoanthanh} Hoàn Thành`,hoanthanh],
+    ]
+      this.gtitle1 = 'Data';
+      this.gtype1 = 'PieChart';
+      this.gcols1 = ['Browser', 'Percentage'];
+      this.goptions1 = {height:400,};
   }
-  LoadDashboard(data)
-  {
-
-    data.forEach(v => {
-      this.series.push(v.tasks.length);
-      this.labels.push(`${v.tasks.length} ${v.Tieude}`);
-    });
-    this.chartOptions = {
-      series:this.series,
-      chart: {
-        type: "pie"
-      },
-      labels: this.labels,
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: "bottom"
-            }
-          }
-        }
-      ]
-    };
-  }
-
 }
