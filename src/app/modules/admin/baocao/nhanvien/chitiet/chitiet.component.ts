@@ -26,11 +26,15 @@ export class ChitietComponent implements OnInit {
   Congty: any;
   Bophan: any;
   Vitri: any;
+  FilterVitri: any;
   Chinhanh: any;
   PQChinhanh:any;
   PQMenu:any;
   Menu:any;
   PQisDisabled:boolean;
+  triggerOrigin: any;
+  triggerType:any[]=[];
+  nhanviens:any[]=[];
   @ViewChild('tree') treeMenu;
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -50,7 +54,10 @@ export class ChitietComponent implements OnInit {
          this.Khoi = data.find(v=>v.id =="295ec0c7-3d76-405b-80b9-7819ea52831d").detail;
          this.Congty = data.find(v=>v.id =="bf076b63-3a2c-47e3-ab44-7f3c35944369").detail;
          this.Bophan = data.find(v=>v.id =="d0694b90-6b8b-4d67-9528-1e9c315d815a").detail;
-         this.Vitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+        // this.Vitri = this.FilterVitri = data.find(v=>v.id =="ea424658-bc53-4222-b006-44dbbf4b5e8b").detail;
+         this.Vitri = this.FilterVitri = Object.entries(data.find(v => v.id == "ea424658-bc53-4222-b006-44dbbf4b5e8b").detail).map(([id, value]) => ({id,value}));
+         console.log(this.Vitri);
+         
          this.Chinhanh = data.find(v=>v.id =="6e2ea777-f6e8-4738-854b-85e60655f335").detail;
          this.PQChinhanh = cloneDeep(this.Chinhanh);
          Object.keys(this.PQChinhanh).forEach(key => {
@@ -63,7 +70,12 @@ export class ChitietComponent implements OnInit {
          this.Menu = data;                   
         this._changeDetectorRef.markForCheck();
     });
-
+    this._nhanvienService.nhanviens$
+    .subscribe((nhanviens: any[]) => {
+        this.nhanviens = nhanviens;
+        console.log(this.nhanviens);
+        
+    });
     this._nhanvienService.nhanvien$.subscribe((nhanvien) => {
         this.CNhanvien = nhanvien;       
         this.Menu.forEach(v => {
@@ -77,5 +89,20 @@ export class ChitietComponent implements OnInit {
       this.CNhanvien.Menu[item.uuid] = e.checked
       this._nhanvienService.updateNhanvien(this.CNhanvien.id,this.CNhanvien).subscribe();
       this._notifierService.notify('success', 'Cập Nhật Thành Công');
-    }   
+    }
+    toggleOverlay(trigger: any,item,type) {  
+      this.triggerOrigin = trigger;
+      this.triggerType[type] = !this.triggerType[type]  
+    }  
+    filterVitri(event): void
+    {      
+        const value = event.target.value.toLowerCase();
+        this.FilterVitri = this.Vitri.filter(v => v.value.toLowerCase().includes(value));
+    } 
+    UpdateProfileNhanvien(item, type, value) {          
+      item.profile[type] = value;
+      this._nhanvienService.updateNhanvien(item.id, item).subscribe();
+      this._notifierService.notify('success', 'Cập Nhật Thành Công');
+      this.triggerType[type] = !this.triggerType[type]  
+    }
 }

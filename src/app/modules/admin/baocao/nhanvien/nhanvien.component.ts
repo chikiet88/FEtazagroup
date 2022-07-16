@@ -10,45 +10,6 @@ import { ContactsService } from '../../apps/contacts/contacts.service';
 import { CauhinhService } from '../../cauhinh/cauhinh.service';
 import { Cauhinh } from '../../cauhinh/cauhinh.types';
 import { NhanvienService } from './nhanvien.service';
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
-
-/** Constants used to fill up our data base. */
-const FRUITS: string[] = [
-  'blueberry',
-  'lychee',
-  'kiwi',
-  'mango',
-  'peach',
-  'lime',
-  'pomegranate',
-  'pineapple',
-];
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth',
-];
 @Component({
   selector: 'app-nhanvien',
   templateUrl: './nhanvien.component.html',
@@ -56,7 +17,7 @@ const NAMES: string[] = [
 })
 export class NhanvienComponent implements OnInit {
   displayedColumns: string[] = ['avatar', 'name', 'Role', 'Trangthai'];
-  dataSource: MatTableDataSource<UserData>;
+  dataSource: MatTableDataSource<any>;
   Menuwidth:any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -121,7 +82,10 @@ export class NhanvienComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    if(filterValue.length>2)
+    {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

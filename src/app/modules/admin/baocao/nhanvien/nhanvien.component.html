@@ -48,7 +48,8 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Họ Tên </th>
         <td mat-cell *matCellDef="let row" [routerLink]="['./', row.id]"> 
             <div class="flex flex-col space-y-1 justify-start text-md py-2">
-                <span class="font-bold"> {{row.name}}  </span>
+                <span class="font-bold text-blue-500"> {{row.name}}  </span>
+                <span [ngClass]="{'text-red-500': !row.profile.Vitri,'text-blue-500': row.profile.Vitri}"> {{Vitri[row.profile.Vitri]}} </span>
                 <span> {{row.SDT}}</span>
                 <span> {{row.email}}</span>
                
@@ -58,13 +59,13 @@
       <ng-container matColumnDef="Role">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
         <td mat-cell *matCellDef="let row">
-           <span class="text-md">{{Role[row.Role]}}</span>
+           <span class="p-2 rounded text-white text-md" [ngClass]="{'bg-red-400 hover:bg-red-600': !row.Role,'bg-blue-400 hover:bg-blue-600': row.Role}">{{Role[row.Role]}}</span>
              </td>
       </ng-container>
       <ng-container matColumnDef="Trangthai">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Trạng Thái </th>
         <td mat-cell *matCellDef="let row"> 
-            <span class="text-md"> {{row.Trangthai|findbyid:Trangthai:'value'}}</span>
+            <span class="p-2 rounded text-white text-md" [ngClass]="{'bg-red-400 hover:bg-red-600': row.Trangthai==1,'bg-blue-400 hover:bg-blue-600': row.Trangthai==0,'bg-yellow-400 hover:bg-yellow-600': row.Trangthai==2}"> {{row.Trangthai|findbyid:Trangthai:'value'}}</span>
             </td>
       </ng-container>
   
