@@ -47,14 +47,9 @@ export class DashboardcongviecComponent implements OnInit {
        height:400,
        legend:{position: 'top', textStyle: {color: 'blue', fontSize: 12}}
     };
-    console.log(this.Dashboard);
-    console.log(this.Tasks);
     const chualam = this.Tasks.filter(v=>v.Trangthai==0).length;
     const danglam = this.Tasks.filter(v=>v.Trangthai==1).length;
     const hoanthanh = this.Tasks.filter(v=>v.Trangthai==2).length;
-    console.log(chualam);
-    console.log(danglam);
-    console.log(hoanthanh);
     this.gdata1 =     [
       [`${chualam} Chưa Làm`, chualam],
       [`${danglam} Đang Làm`,danglam],
