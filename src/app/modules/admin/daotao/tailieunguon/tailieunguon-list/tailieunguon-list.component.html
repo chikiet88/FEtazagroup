@@ -1,0 +1,57 @@
+<div class="example-sidenav-content w-full flex h-full overflow-hidden">
+    <div class="w-full p-5 bg-card shadow">
+        <button type="button" class="px-0 pb-5">
+            <div class="flex flex-row space-x-2 items-center justify-between">
+                <span class="material-icons"> menu </span>
+                <h2 class="text-center my-3">Thư Mục</h2>
+            </div>
+        </button>
+        <div>
+            <div class="flex justify-center">
+                <div
+                    class="w-1/3 h-48 flex items-center rounded-xl shadow card border border-gray-400 p-5 md:mr-5"
+                >
+                    <div class="w-3/5 flex items-center">
+                        <div class="">
+                            <p class="text-2xl leading-10">Số lượng Folder</p>
+                            <p class="text-5xl text-center">10</p>
+                        </div>
+                    </div>
+                    <div class="w-2/5">
+                        <span class="material-icons" style="font-size: 70px">
+                            folder_copy
+                        </span>
+                    </div>
+                </div>
+                <div
+                    class="w-1/3 h-48 flex items-center rounded-xl shadow card border border-gray-400 p-5 md:ml-5"
+                >
+                    <div class="w-3/5 flex items-center">
+                        <div class="">
+                            <p class="text-2xl leading-10">Số lượng File</p>
+                            <p class="text-5xl text-center">10</p>
+                        </div>
+                    </div>
+                    <div class="w-2/5">
+                        <span class="material-icons" style="font-size: 70px">
+                            description
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center pt-10">
+                <google-chart
+                    #chart
+                    [title]="title"
+                    [type]="type"
+                    [data]="data"
+                    [columnNames]="columnNames"
+                    [options]="options"
+                    [width]="width"
+                    [height]="height"
+                >
+                </google-chart>
+            </div>
+        </div>
+    </div>
+</div>

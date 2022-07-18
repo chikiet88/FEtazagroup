@@ -1,0 +1,117 @@
+<div class="example-sidenav-content w-full flex h-full overflow-hidden h-full">
+    <div class="w-full p-5 bg-card shadow">
+        <button type="button" class="px-0 pb-5">
+            <div class="flex flex-row space-x-2 items-center justify-between">
+                <span class="material-icons"> menu </span>
+                <h2 class="text-center my-3">Thư Mục</h2>
+            </div>
+        </button>
+        <div>
+            <div class="flex justify-center">
+                <div
+                    class="w-1/3 h-48 flex cursor-pointer items-center rounded-xl shadow card border border-gray-400 p-5 md:mr-5"
+                (click)="isFolder = true; isFile = false"
+                    >
+                    <div class="w-3/5 flex items-center">
+                        <div class="">
+                            <p class="text-2xl leading-10">Số lượng Folder</p>
+                            <p class="text-5xl text-center">10</p>
+                        </div>
+                    </div>
+                    <div class="w-2/5">
+                        <span class="material-icons" style="font-size: 70px">
+                            folder_copy
+                        </span>
+                    </div>
+                </div>
+                <div
+                    class="w-1/3 h-48 flex cursor-pointer items-center rounded-xl shadow card border border-gray-400 p-5 md:ml-5"
+                    (click)="isFolder = false; isFile = true"
+                
+                    >
+                    <div class="w-3/5 flex items-center">
+                        <div class="">
+                            <p class="text-2xl leading-10">Số lượng File</p>
+                            <p class="text-5xl text-center">10</p>
+                        </div>
+                    </div>
+                    <div class="w-2/5">
+                        <span class="material-icons" style="font-size: 70px">
+                            description
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class=" pt-10">
+                <div class="grid grid-cols-5 gap-10" *ngIf="isFolder">
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder1
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder2
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder3
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder4
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder5
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder6
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder7
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder8
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder9
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        Folder10
+                    </div>
+
+                    
+                </div>
+                <div class="grid grid-cols-5 gap-10" *ngIf="isFile">
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File1
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File2
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File3
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File4
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File5
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File6
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File7
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File8
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File9
+                    </div>
+                    <div class="flex flex-col w-full items-center border border-gray-400 rounded-xl py-3">
+                        File10
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

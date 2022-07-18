@@ -9,7 +9,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CustomModule } from 'app/pipes/custom/custom.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { DaotaoComponent } from './daotao.component';
-import { TailieunguonComponent } from './tailieunguon/tailieunguon.component';
 import { BaihocComponent } from './baihoc/baihoc.component';
 import { LophocComponent } from './lophoc/lophoc.component';
 import { CauhoiComponent } from './cauhoi/cauhoi.component';
@@ -20,29 +19,25 @@ import { DaotaoResolver } from './daotao.resolver';
 import { FindbyidModule } from 'app/pipes/findbyid/findbyid.module';
 import { DaotaouploadComponent } from './daotaoupload/daotaoupload.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+
 export const DaotaoRoutes: Route[] = [
     {
         path: '',
         component: DaotaoComponent,
         children: [
-            { path: 'tailieunguon', component: TailieunguonComponent,
-                resolve:{data:DaotaoResolver}
-            },
             { path: 'baihoc', component: BaihocComponent },
             { path: 'lophoc', component: LophocComponent },
             { path: 'cauhoi', component: CauhoiComponent },
             { path: 'dethi', component: DethiComponent },
             { path: 'kythi', component: KythiComponent },
             { path: 'yeucaudaotao', component: YeucaudaotaoComponent },
-
-            
+            { path: 'tailieunguon', loadChildren: () => import('app/modules/admin/daotao/tailieunguon/tailieunguon.module').then(m => m.TailieunguonModule) },
         ],
     },
 ];
 @NgModule({
     declarations: [
         DaotaoComponent,
-        TailieunguonComponent,
         BaihocComponent,
         LophocComponent,
         CauhoiComponent,
