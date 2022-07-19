@@ -1,0 +1,186 @@
+<div class="relative">
+    <div
+        class="text-indigo-900 px-10 pt-5 cursor-pointer flex justify-center relative"
+    >
+        <h3 (click)="isDangky = true">
+            Vui lòng
+            <strong class="font-bold text-indigo-900 hover:text-yellow-500">
+                Đăng ký</strong
+            >
+            tham gia để xoay vòng xoay may mắn
+        </h3>
+    </div>
+    <div class="absolute left-10 top-5">
+        <img
+            src="../../../../assets/images/logo/taza-skin-clinic-logo.svg"
+            class="w-20 h-16"
+            alt=""
+        />
+    </div>
+    <div class="flex justify-around items-center">
+        <div class="mt-5">
+            <ngx-wheel
+                width="700"
+                height="700"
+                spinDuration="8"
+                [items]="items"
+                [disableSpinOnClick]="isSpin ? false : true"
+                [innerRadius]="20"
+                [spinAmount]="10"
+                [textOrientation]="textOrientation"
+                [textAlignment]="textAlignment"
+                pointerStrokeColor="black"
+                pointerFillColor="gold"
+                [idToLandOn]="idToLandOn"
+                (onSpinStart)="before()"
+                (onSpinComplete)="after()"
+                (click)="spin()"
+            ></ngx-wheel>
+        </div>
+        <div class="flex flex-col">
+            <div class="overflow-auto" style="height: 300px">
+                <table class="table-fill">
+                    <thead>
+                        <tr>
+                            <th class="left">Mã giải thưởng</th>
+                            <th class="left">Giải thưởng</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-hover">
+                        <tr *ngFor="let item of seed">
+                            <td
+                                class="text-center left {{
+                                    idToLandOn.id == item.id
+                                        ? 'bg-indigo-900 text-white'
+                                        : ''
+                                }}"
+                            >
+                                {{ item.id }}
+                            </td>
+                            <td
+                                class="left {{
+                                    idToLandOn.id == item.id
+                                        ? 'bg-indigo-900 text-white'
+                                        : ''
+                                }}"
+                            >
+                                {{ item.name }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="overflow-auto mt-10" style="height: 300px">
+                <table class="table-fill">
+                    <thead>
+                        <tr>
+                            <th class="left">Tên người nhận</th>
+                            <th class="left">Giải thưởng</th>
+                            <th class="left">Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-hover">
+                        <tr *ngFor="let item of userListTrungthuong">
+                            <td class="text-center left">{{ item.Hoten }}</td>
+                            <td class="left">{{ item.Giaithuong }}</td>
+                            <td class="left text-sm">{{ item.Date }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div
+        class="absolute left-1/2 top-1/2 bg-indigo-900 rounded-xl center z-10"
+        *ngIf="isPopup"
+    >
+        <div class="p-5 flex flex-col items-center justify-between">
+            <h1 class="text-white upercase text-2xl">
+                Chúc mừng bạn
+                <strong class="text-yellow-500">{{ user.Hoten }}</strong> đã
+                trúng giải:
+            </h1>
+            <h1 class="text-white py-2 upercase text-2xl">
+                {{ idToLandOn.name }}
+            </h1>
+            <div
+                class="text-white w-28 py-2 rounded-xl cursor-pointer bg-yellow-500 text-center"
+                (click)="isPopup = false"
+            >
+                Xác nhận
+            </div>
+        </div>
+    </div>
+    <div
+        class="absolute w-full h-full left-0 top-0 bg-black opacity-50 z-0"
+        *ngIf="isPopup"
+    ></div>
+    <div
+        class="absolute w-full h-full left-0 top-0 bg-black opacity-50 z-0"
+        *ngIf="isDangky"
+        (click)="isDangky = false"
+    ></div>
+    <div class="absolute left-1/2 top-1/2 center z-20" *ngIf="isDangky">
+        <div class="bg-white rounded-xl p-5">
+            <form class="mt-8" [formGroup]="signInForm">
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Họ và tên</mat-label>
+                    <input
+                        id="email"
+                        matInput
+                        type="text"
+                        class="border border-gray-400 pl-3 rounded-2xl text-black"
+                        placeholder="Nguyễn Văn A"
+                        [formControlName]="'Hoten'"
+                    />
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Số điện thoại</mat-label>
+                    <input
+                        id="email"
+                        matInput
+                        type="text"
+                        class="border border-gray-400 pl-3 rounded-2xl text-black"
+                        placeholder="0912345678"
+                        [formControlName]="'SDT'"
+                    />
+                </mat-form-field>
+
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full mt-6 border boder-gray-400 bg-gray-400"
+                    mat-flat-button
+                    (click)="dangky(); isDangky=false"
+                >
+                    <span> Đăng ký </span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div
+        class="absolute w-full h-full left-0 top-0 bg-black opacity-50 z-0"
+        *ngIf="isDadangky"
+        (click)="isDadangky = false"
+    ></div>
+    <div
+        class="absolute left-1/2 top-1/2 bg-indigo-900 rounded-xl center z-10"
+        *ngIf="isDadangky"
+    >
+        <div class="p-5 flex flex-col items-center justify-between">
+            <h1 class="text-white upercase text-2xl">
+                Bạn đã quay xoay vòng xoay may mắn và đã nhận giải thưởng:
+               
+            </h1>
+            <h1 class="text-white py-2 upercase text-2xl">
+                {{ userDadangky.Giaithuong }}
+            </h1>
+            <div
+                class="text-white w-28 py-2 rounded-xl cursor-pointer bg-yellow-500 text-center"
+                (click)="isDadangky = false"
+            >
+                Xác nhận
+            </div>
+        </div>
+    </div>
+</div>
