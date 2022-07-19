@@ -25,6 +25,11 @@ export class DashboardcongviecComponent implements OnInit {
   gdata1:any[]=[];
   gcols1:any[]=[];
   goptions1:any;
+  gtitle2:string
+  gtype2:string
+  gdata2:any[]=[];
+  gcols2:any[]=[];
+  goptions2:any;
   Tasks:any[] = [];
   @ViewChild("chart") chart: ChartComponent;
   @Input() Dashboard: any;
@@ -59,5 +64,25 @@ export class DashboardcongviecComponent implements OnInit {
       this.gtype1 = 'PieChart';
       this.gcols1 = ['Browser', 'Percentage'];
       this.goptions1 = {height:400,};
+
+
+      this.gdata2 = [["", chualam, danglam,hoanthanh]]
+      this.gcols2 = ['Label',`${chualam} Chưa Làm`,`${danglam} Đang Làm`,`${hoanthanh} Hoàn Thành`];
+      this.gtitle2 = 'Tổng Quan Công Việc';
+      this.gtype2 = 'BarChart';
+      this.goptions2 = { 
+          colors:['#3b82f6','#eab308','#22c55e'],
+          isStacked: 'percent',
+          legend: {position: 'top', maxLines: 3},
+          hAxis: {
+            minValue: 0,
+            ticks: [0, .25, .5, .75, 1]
+          },
+          chartArea:
+          {
+              height:'auto'
+          }
+      
+       };
   }
 }

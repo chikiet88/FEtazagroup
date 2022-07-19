@@ -59,6 +59,11 @@ export class CongviecboardComponent implements OnInit,OnDestroy {
     isShowmore:any[]=[];
     Vitri: any;
     ShowChart:any;
+    gdata: any[] = [];
+    gcols: any[] = [];
+    gtitle: any;
+    gtype: any;
+    goptions: any;
     constructor(
         private _sharedService: SharedService,
         private _scrumboardService: ScrumboardService,
