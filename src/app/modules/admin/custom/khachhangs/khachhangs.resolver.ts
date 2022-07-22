@@ -26,3 +26,22 @@ export class KhachhangsResolver implements Resolve<boolean> {
     ]);
   }
 }
+@Injectable({
+  providedIn: 'root'
+})
+export class VongquayResolver implements Resolve<boolean> {
+  constructor(
+    private _khachhangsService: KhachhangsService,
+    private _cauhinhService: CauhinhService,
+    ){}
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    return forkJoin([
+     //this._khachhangsService.GetData(),
+    // this._khachhangsService.GetKhachhang(),
+     // this._khachhangsService.CountData(),
+      this._cauhinhService.getCauhinhs(),
+     // this._khachhangsService.GetMember(),
+    //this._khachhangsService.GetAllDataTaza()
+    ]);
+  }
+}

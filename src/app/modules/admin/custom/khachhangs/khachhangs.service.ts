@@ -11,6 +11,9 @@ export class KhachhangsService {
   private _datastimona: BehaviorSubject<any> = new BehaviorSubject(null);
   private _khachhangstaza: BehaviorSubject<any> = new BehaviorSubject(null);
   private _khachhangstimona: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _giaithuongchitiets: BehaviorSubject<any[]> = new BehaviorSubject(null);
+  private _giaithuongs: BehaviorSubject<any[]> = new BehaviorSubject(null);
+  private _dataraws: BehaviorSubject<any[]> = new BehaviorSubject(null);
  constructor(private _httpClient: HttpClient)
   {}
   get datastaza$(): Observable<any>
@@ -28,6 +31,42 @@ export class KhachhangsService {
   get khachhangstimona$(): Observable<any>
   {
       return this._khachhangstimona.asObservable();
+  }
+  get giaithuongchitiets$(): Observable<any[]>
+  {
+      return this._giaithuongchitiets.asObservable();
+  }
+  get giaithuongs$(): Observable<any[]>
+  {
+      return this._giaithuongs.asObservable();
+  }
+  get dataraws$(): Observable<any[]>
+  {
+      return this._dataraws.asObservable();
+  }
+  GetAllGiaithuongchitiets():  Observable<any[]>
+  {
+      return this._httpClient.get(`${environment.ApiURL2}/giaithuongchitiet`).pipe(
+          tap((res:any[]) => {             
+            this._giaithuongchitiets.next(res);
+          })
+      );
+  }
+  GetAllGiaithuong():  Observable<any[]>
+  {
+      return this._httpClient.get(`${environment.ApiURL2}/giaithuong`).pipe(
+          tap((res:any[]) => {             
+            this._giaithuongs.next(res);
+          })
+      );
+  }
+  GetAllDataraws():  Observable<any[]>
+  {
+      return this._httpClient.get(`${environment.ApiURL2}/dataraw`).pipe(
+          tap((res:any[]) => {             
+            this._dataraws.next(res);
+          })
+      );
   }
   GetAllDataTaza():  Observable<Khachhang[]>
   {

@@ -47,11 +47,7 @@ export class MenuComponent implements OnInit {
     this.CRUD = 0;
     this._cauhinhService.Menus$.subscribe((data)=>{ 
         this.menus = data;
-        console.log(data);
-        console.log(this.nest(data));
-        this.dataSource.data = this.nest(data);
-        console.log(this.dataSource.data);
-        
+        this.dataSource.data = this.nest(data);        
       }
     )
     this.MenuForm = this._fb.group({
@@ -85,7 +81,7 @@ export class MenuComponent implements OnInit {
     }); 
   this._nhanvienService.nhanviens$
   .pipe(takeUntil(this._unsubscribeAll))
-  .subscribe((nhanviens: Nhanvien[]) => {               
+  .subscribe((nhanviens: Nhanvien[]) => {                   
       this.nhanviens = nhanviens;
       this._changeDetectorRef.markForCheck();
   });
@@ -95,7 +91,7 @@ export class MenuComponent implements OnInit {
       delete item.children;
        this._cauhinhService.UpdateMenu(item).subscribe(); 
       this.nhanviens.forEach(v => {
-          v.Menu[item.uuid] = e.checked;
+          v.Menu[item.uuid] = e.checked;        
         this._nhanvienService.updateNhanvien(v.id,v).subscribe();
       }); 
   }

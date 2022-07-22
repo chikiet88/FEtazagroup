@@ -2,6 +2,7 @@ export const environment = {
     version:"v2.4",
     production: true,
     ApiURL:'https://v2api.tazagroup.vn',
+    ApiURL2:'https://v1api.tazaskinclinic.com',
     // googleSheetsApiKey: 'AIzaSyCqpCiE9x4D7P3M1QI1UMfcWwOZ4Dcv5js',
     // characters: {
     //   spreadsheetId: '1anVnNF8EPeh4_9qyCQaXdreGqcoYUcM9LC7bioe0mvU',
